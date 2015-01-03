@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5A2159CB-2DF4-4B08-9E21-F772B7B03540}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TDSQASystemAPI</RootNamespace>
+    <AssemblyName>TDSQASystemAPI</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Testing|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Testing\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Dev|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Dev\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DataAccess\Libraries\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DataAccess\Libraries\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DataAccess\Libraries\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder2, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DataAccess\Libraries\Microsoft.Practices.ObjectBuilder2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DataAccess\Libraries\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.configuration">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml">
+      <RequiredTargetFramework>4.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Acknowledgement\Message.cs" />
+    <Compile Include="Acknowledgement\RESTAcknowledgementTarget.cs" />
+    <Compile Include="BL\LockingTestCollection.cs" />
+    <Compile Include="BL\Sandlot.cs" />
+    <Compile Include="BL\TestOpportunity.cs" />
+    <Compile Include="BL\XmlRepository.cs" />
+    <Compile Include="Config\AdministrationInfo.cs" />
+    <Compile Include="Config\IProjectMetaDataLoader.cs" />
+    <Compile Include="Config\ISystemConfigurationManager.cs" />
+    <Compile Include="Config\ProjectMetaDataLoader.cs" />
+    <Compile Include="Config\RTSAttribute.cs" />
+    <Compile Include="Config\SerializationConfig.cs" />
+    <Compile Include="Config\ProjectMetaData.cs" />
+    <Compile Include="Config\TestEnvironment.cs" />
+    <Compile Include="DAL\ArchiveDB.cs" />
+    <Compile Include="DAL\EmbeddedResource.cs" />
+    <Compile Include="DAL\Sandlot.cs" />
+    <Compile Include="DAL\TDSInterface.cs" />
+    <Compile Include="DAL\TestMergeDataAccess.cs" />
+    <Compile Include="DAL\TestOpportunity.cs" />
+    <Compile Include="DAL\TISScoreMergerDAL.cs" />
+    <Compile Include="DAL\XmlRepository.cs" />
+    <Compile Include="Data\QASystemConfigSettings.cs" />
+    <Compile Include="Acknowledgement\IAcknowledgementTargetFactory.cs" />
+    <Compile Include="Acknowledgement\IAcknowledgementTarget.cs" />
+    <Compile Include="ITISExtender.cs" />
+    <Compile Include="Routing\ItemScoring\IItemScoringTargetFactory.cs" />
+    <Compile Include="Routing\ItemScoring\ItemScoringConfig.cs" />
+    <Compile Include="Routing\ItemScoring\ItemScoringManager.cs" />
+    <Compile Include="Routing\ItemScoring\ItemScoringDaemonTarget.cs" />
+    <Compile Include="Routing\ItemScoring\ItemScoringTarget.cs" />
+    <Compile Include="Routing\ItemScoring\PretendItemScoringTarget.cs" />
+    <Compile Include="Routing\ItemScoring\TSSFileTransformArgs.cs" />
+    <Compile Include="Routing\ItemScoring\TSSResponse.cs" />
+    <Compile Include="Routing\ItemScoring\TSSTarget.cs" />
+    <Compile Include="Routing\RESTMultipartTarget.cs" />
+    <Compile Include="Routing\SendToModifiers.cs" />
+    <Compile Include="Data\XmlRepositoryItem.cs" />
+    <Compile Include="ExceptionHandling\Messages.cs" />
+    <Compile Include="ExceptionHandling\QAException.cs" />
+    <Compile Include="Extensions\ExtensionMethods.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="QASystemMainThread.cs" />
+    <Compile Include="QASystemWorkerThread.cs" />
+    <Compile Include="Routing\FileTransformSpec.cs" />
+    <Compile Include="Routing\ITargetFactory.cs" />
+    <Compile Include="Routing\ITargetResult.cs" />
+    <Compile Include="Routing\RESTTarget.cs" />
+    <Compile Include="Routing\SFTPTarget.cs" />
+    <Compile Include="Routing\Target.cs" />
+    <Compile Include="Routing\TargetResult.cs" />
+    <Compile Include="Routing\IFileTransformArgs.cs" />
+    <Compile Include="TestMerge\MergeConfig.cs" />
+    <Compile Include="TestMerge\RelatedTestOpportunity.cs" />
+    <Compile Include="TestMerge\TestMerge.cs" />
+    <Compile Include="TestMerge\TestMergeConfiguration.cs" />
+    <Compile Include="TestResults\Comment.cs" />
+    <Compile Include="TestResults\ErasureResponse.cs" />
+    <Compile Include="TestResults\GenericVariable.cs" />
+    <Compile Include="TestResults\HandScore.cs" />
+    <Compile Include="TestResults\HandScoreInfo.cs" />
+    <Compile Include="TestResults\ItemScore.cs" />
+    <Compile Include="TestResults\ItemScoreInfo.cs" />
+    <Compile Include="TestResults\ITestResultSerializerFactory.cs" />
+    <Compile Include="TestResults\Response.cs" />
+    <Compile Include="TestResults\ScoreRationale.cs" />
+    <Compile Include="TestResults\Scores.cs" />
+    <Compile Include="TestResults\ScoringStatus.cs" />
+    <Compile Include="TestResults\Test.cs" />
+    <Compile Include="TestResults\TesteeAttribute.cs" />
+    <Compile Include="TestResults\TesteeProperty.cs" />
+    <Compile Include="TestResults\TesteeRelationship.cs" />
+    <Compile Include="TestResults\TestResultSerializerFactory.cs" />
+    <Compile Include="TestResults\ToolPage.cs" />
+    <Compile Include="TestResults\ToolUsage.cs" />
+    <Compile Include="TestResults\XMLAdapterOSS.cs" />
+    <Compile Include="TestResults\XmlSerializer.cs" />
+    <Compile Include="TestResults\XmlSerializerOSS.cs" />
+    <Compile Include="Utilities\XmlWriterDynamicOutputDecorator.cs" />
+    <Compile Include="TIS\TestOpportunityItemScore.cs" />
+    <Compile Include="TIS\TISScoreMerger.cs" />
+    <Compile Include="Utilities\Logger.cs" />
+    <Compile Include="Utilities\Serialization.cs" />
+    <Compile Include="Utilities\TimePeriod.cs" />
+    <Compile Include="Config\ConfigurationHolder.cs" />
+    <Compile Include="Config\MetaDataEntry.cs" />
+    <Compile Include="DAL\ConfigDB.cs" />
+    <Compile Include="DAL\ConfigDBConstants.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QASystem.cs" />
+    <Compile Include="TestResults\ItemResponse.cs" />
+    <Compile Include="TestResults\Opportunity.cs" />
+    <Compile Include="TestResults\Score.cs" />
+    <Compile Include="TestResults\TestResult.cs" />
+    <Compile Include="TestResults\Testee.cs" />
+    <Compile Include="TestResults\ValidationRecord.cs" />
+    <Compile Include="TestResults\XMLAdapter.cs" />
+    <Compile Include="Utilities\Utility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ItemScoreRequest.xslt">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\TDS\Common\AIR.Common\AIR.Common.csproj">
+      <Project>{e11c4060-59b5-401d-bf72-1f52156e64db}</Project>
+      <Name>AIR.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TestScoringEngine\ScoringEngine\ScoringEngine.csproj">
+      <Project>{C7954359-0FA0-444E-87AC-07069CE64E21}</Project>
+      <Name>ScoringEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CommonUtilities\CommonUtilities.csproj">
+      <Project>{2EA7168E-0377-4703-B970-491F12EF6A09}</Project>
+      <Name>CommonUtilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

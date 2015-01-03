@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CF02DEF3-1CF9-4541-A605-C016F5E67E26}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OSS.TIS</RootNamespace>
+    <AssemblyName>OSS.TIS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Acknowledgement\AcknowledgementTargetFactory.cs" />
+    <Compile Include="Config\SystemConfigurationManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Routing\ItemScoring\ItemScoringTargetFactory.cs" />
+    <Compile Include="Routing\TISTargetFactory.cs" />
+    <Compile Include="TISExtender.cs" />
+    <Compile Include="TISMainThread.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SQL\TDSConfigs\Inserts1.sql" />
+    <Content Include="SQL\TDSConfigs\Inserts2.sql" />
+    <Content Include="SQL\TDSConfigs\Inserts3.sql" />
+    <Content Include="SQL\TDSConfigs\StoredProcedures.sql" />
+    <Content Include="SQL\TDSConfigs\Tables.sql" />
+    <Content Include="SQL\TDSConfigs\UDFs.sql" />
+    <Content Include="SQL\TDSConfigs\Views.sql" />
+    <Content Include="SQL\TDSItemBank\Drop_Tables.sql" />
+    <Content Include="SQL\TDSItemBank\Schemas.sql" />
+    <Content Include="SQL\TDSItemBank\StoredProcedures.sql" />
+    <Content Include="SQL\TDSItemBank\Synonyms.sql" />
+    <Content Include="SQL\TDSItemBank\Tables.sql" />
+    <Content Include="SQL\TDSItemBank\Test Package Extraction Code.sql" />
+    <Content Include="SQL\TDSItemBank\UDFs.sql" />
+    <Content Include="SQL\TDSItemBank\Views.sql" />
+    <None Include="SQL\TISDB\Deployment\TODO.sql" />
+    <None Include="SQL\TISDB\Views.sql" />
+    <None Include="SQL\TISDB\Tables.sql" />
+    <None Include="SQL\TISDB\Updates.sql" />
+    <None Include="SQL\TISDB\Selects.sql" />
+    <None Include="SQL\TISDB\Inserts.sql" />
+    <None Include="SQL\TISDB\Deletes.sql" />
+    <Content Include="SQL\TestScoringConfigs\StoredProcedures.sql" />
+    <Content Include="SQL\TestScoringConfigs\Tables.sql" />
+    <Content Include="SQL\TestScoringConfigs\Views.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\TDSQASystemAPI\TDSQASystemAPI.csproj">
+      <Project>{5a2159cb-2df4-4b08-9e21-f772b7b03540}</Project>
+      <Name>TDSQASystemAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TDS\Common\AIR.Common\AIR.Common.csproj">
+      <Project>{e11c4060-59b5-401d-bf72-1f52156e64db}</Project>
+      <Name>AIR.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TestScoringEngine\ScoringEngine\ScoringEngine.csproj">
+      <Project>{c7954359-0fa0-444e-87ac-07069ce64e21}</Project>
+      <Name>ScoringEngine</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

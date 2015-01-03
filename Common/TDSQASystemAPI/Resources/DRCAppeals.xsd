@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="test">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="demographic" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="context" type="DemographicContext" use="required" />
+						<xs:attribute name="name" type="DemographicName" use="required" />
+						<xs:attribute name="value" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="segment" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+						</xs:sequence>
+						<xs:attribute name="position" type="SegmentPosition" use="required" />
+						<xs:attribute name="formID" type="xs:string" />
+					</xs:complexType>
+				</xs:element>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="item">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="response" type="xs:string" maxOccurs="1" minOccurs="1" />
+              <xs:element name="ScoreInfo" type="ScoreInfoType" minOccurs="1" maxOccurs="1" />
+						</xs:sequence>
+						<xs:attribute name="ID" type="xs:unsignedLong" use="required" />
+						<xs:attribute name="type" type="xs:string" use="required" />
+						<xs:attribute name="format" type="ItemFormat" use="required" />
+						<xs:attribute name="selected" type="Bit" use="required" />
+						<xs:attribute name="dropped" type="Bit" use="required" />
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="projectID" type="xs:unsignedInt" use="required" />
+			<xs:attribute name="name" type="xs:string" use="required" />
+			<xs:attribute name="opportunityID" type="xs:unsignedLong" use="required" />
+			<xs:attribute name="subject" type="xs:string" use="required" />
+			<xs:attribute name="grade" type="xs:string" use="required" />
+			<xs:attribute name="status" type="TestStatus" use="required" />
+			<xs:attribute name="statusdate" type="xs:dateTime" use="required" />
+			<xs:attribute name="datecompleted" type="NullableDateTime" use="optional" />
+			<xs:attribute name="dateprocessed" type="xs:dateTime" use="required" />
+			<xs:attribute name="operational" type="Bit" use="required" />
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="TestStatus">
+		<xs:restriction base="xs:string">
+      <xs:enumeration value="completed" />
+      <xs:enumeration value="submitted" />
+      <xs:enumeration value="reset" />
+      <xs:enumeration value="invalidated" />
+      <xs:enumeration value="expired" />
+      <xs:enumeration value="reported" />
+			<xs:enumeration value="appeal" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ItemFormat">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="text/plain" />
+			<xs:enumeration value="text/xml" />
+      <xs:enumeration value="text/html" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Bit">
+		<xs:restriction base="xs:unsignedByte">
+			<xs:minInclusive value="0" />
+			<xs:maxInclusive value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="SegmentPosition">
+		<xs:restriction base="xs:unsignedInt">
+			<xs:minInclusive value="1" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Empty">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NullableDateTime">
+		<xs:union memberTypes="xs:dateTime Empty ">
+		</xs:union>
+	</xs:simpleType>
+	<xs:simpleType name="DemographicContext">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="INITIAL" />
+			<xs:enumeration value="FINAL" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DemographicName">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SchoolID" />
+		</xs:restriction>
+	</xs:simpleType>
+  <xs:simpleType name="NegativeOne">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="-1" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="UFloat">
+    <xs:restriction base="xs:float">
+      <xs:minInclusive value="0" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="UFloatAllowNegativeOne">
+    <xs:union memberTypes="UFloat NegativeOne  ">
+    </xs:union>
+  </xs:simpleType>
+  <xs:complexType name="ScoreInfoType">
+    <xs:sequence>
+      <xs:element name="ScoreRationale" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="Message" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="SubScoreList" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="ScoreInfo" type="ScoreInfoType" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="scorePoint" type="UFloatAllowNegativeOne" />
+    <xs:attribute name="maxScore" type="xs:unsignedInt" />
+    <!-- top level will always be "overall" (if not null); this represents the item score.  Nested ScoreInfo nodes will have dimension level scores
+    if applicable, so this will be the dimension name. -->
+    <xs:attribute name="scoreDimension" />
+    <xs:attribute name="confLevel" />
+    <xs:attribute name="scoreStatus">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <!-- Removed other statuses, as this is the only one that will be sent to DRC -->
+          <xs:enumeration value="Scored" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+</xs:schema>
