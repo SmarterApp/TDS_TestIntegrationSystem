@@ -39,9 +39,76 @@ This is a web application that talks to the THSS (Teacher HandScoring system) an
 ## Build & Deploy
 TIS requires Visual Studios 2012 to build. The Deployment steps are as follows - 
 
-![2386678942-DeploymnetSteps_Draft-0.png](https://bitbucket.org/repo/AyMdK5/images/2766033395-2386678942-DeploymnetSteps_Draft-0.png)
-![1333802654-DeploymnetSteps_Draft-1.png](https://bitbucket.org/repo/AyMdK5/images/3023217018-1333802654-DeploymnetSteps_Draft-1.png)
-![3713494634-DeploymnetSteps_Draft-2.png](https://bitbucket.org/repo/AyMdK5/images/3357799014-3713494634-DeploymnetSteps_Draft-2.png)
+1) Create the following databases [DB Server]:
+
+* `OSS_QC`
+* `OSS_Itembank`
+* `OSS_Configs`
+* `OSS_TestScoringConfigs`
+* Set `TRUSTWORTHY ON` for database `OSS_QC`
+
+Create an App User account and grant that account dbo access on the above DBs. [DB server]
+
+2) Create these folders on the application server (if they don't already exist): [Web server]
+
+* `/Services/tis_opentestsystem`
+* `/oss_tis_itemscoring`
+* `/oss_tisservices`
+
+3) Create the following subfolder structure within the Services folder created above (if they do not exist): [Web server]
+/Services/:
+
+* `/tis_common/WinSCP`
+* `/tis_opentestsystem/Service`
+
+4) Deploy the [Db server].OSS_QC database objects by running the following scripts in order: [DB server]
+
+* `<root>\OSS.TIS\SQL\TISDB\Tables.sql`
+* `<root>\OSS.TIS\SQL\TISDB\Views.sql`
+* `<root>\OSS.TIS\SQL\TISDB\Deletes.sql`
+* `<root>\OSS.TIS\SQL\TISDB\Inserts.sql`
+* `<root>\OSS.TIS\SQL\TISDB\Selects.sql`
+* `<root>\OSS.TIS\SQL\TISDB\Updates.sql`
+* `<root>\OSS.TIS\SQL\TISDB\Deletes.sql`
+
+5) Deploy the [Db server].OSS_Configs database objects by running the following scripts in order:
+
+* `<root>\OSS.TIS\SQL\TDSConfigs\Tables.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\Views.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\UDFs.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\StoredProcedures.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\Inserts1.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\Inserts2.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\Inserts3.sql`
+ 	
+6) Deploy the [Db server].OSS_TestScoringConfigs database objects by running the following scripts in order:
+
+* `<root>\OSS.TIS\SQL\TDSConfigs\Tables.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\Views.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\StoredProcedures.sql`
+	
+7) Deploy the [Db server].OSS_Itembank database objects by running the following scripts in order:
+
+* `<root>\OSS.TIS\SQL\TDSConfigs\Schemas.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\Tables.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\Views.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\UDFs.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\StoredProcedures.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\Synonyms.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\Test Package Extraction Code.sql`
+	
+8) Load the test Package by running the stored Procedure `[tp].[spLoader_Main]`
+
+9) Run QA configuration script: at `<root>\OSS.TIS\SQL\TISDB\Deployment\QACoreConfiguration.sql` [Db server]
+
+10) Deploy TISService code at `tis_opentestsystem/Service` [Web server]
+
+11) Run InstallUtil for .Net 4.5, 32-bit on `_tis_opentestsystem/Service/TDSQAService.exe` [Web server]
+
+12) Verify that the QA system installed in the previous step has access to execute `/_Services/tis_common/WinSCP/WinSCP.exe`. [Web server]
+
+13) Verify that the QA service has privileges to write to the event log and to the `/_Services/tis_opentestsystem_org/` dir and subdirs. [Web server]
+
 ## Dependencies
 Test Integration System has the following dependencies that are necessary for it to compile and run. 
 
