@@ -93,10 +93,10 @@ namespace TDSQASystemAPI.Utilities
             else
                 errorFile = "ResultLog.txt"; //Default Log location.
 
-            fatalErrorTos = ConfigurationManager.AppSettings["FatalErrorsTo"];// ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "FatalErrorsTo");
-            fatalErrorCc = ConfigurationManager.AppSettings["FatalErrorsCc"]; //ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "FatalErrorsCc");
-            warningTos = ConfigurationManager.AppSettings["WarningsTo"]; //ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "WarningsTo");
-            warningCc = ConfigurationManager.AppSettings["WarningsCc"]; //ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "WarningsCc");
+            fatalErrorTos = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "FatalErrorsTo");
+            fatalErrorCc = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "FatalErrorsCc");
+            warningTos = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "WarningsTo");
+            warningCc = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "WarningsCc");
                 
             _logFile = new StreamWriter(errorFile, true);
 			qaSystemEventLog.Source = ConfigurationManager.AppSettings["EventLogSource"];

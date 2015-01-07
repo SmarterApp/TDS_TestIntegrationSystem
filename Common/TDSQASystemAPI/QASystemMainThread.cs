@@ -93,8 +93,9 @@ namespace TDSQASystemAPI
         /// <param name="startThreads"></param>
         public QASystemMainThread()
         {
-            //ServiceLocator.Register<Routing.ITargetFactory>(() => new Routing.QATargetFactory());
             InitializeServices();
+
+            Utilities.Logger.Log(true, "Initializing the QASystem", EventLogEntryType.Information, false, true);
    
             QASystem qa = new QASystem("TDSQC", "TDSQC");
             //TODO: also make QASystemConfigSettings pluggable
@@ -146,6 +147,8 @@ namespace TDSQASystemAPI
             string environment = QASystemConfigSettings.Instance.Environment;
             timeToSendWarnings = TimeSpan.FromHours(QASystemConfigSettings.Instance.HourToSendWarningSummary);
             sentWarnings = false;
+
+            Utilities.Logger.Log(true, "Created the main thread", EventLogEntryType.Information, false, true);
         }
 
         /// <summary>

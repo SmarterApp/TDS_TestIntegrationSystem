@@ -62,13 +62,12 @@ namespace TISService
             try
             {
                 // Thread.Sleep(30000);
-                Logger.Log(true, ServiceName + " Service started.", EventLogEntryType.Information, true, true);
-
                 mainQASystemThread = new TISMainThread();
-                Logger.Log(true, "Initialized the QASystemMainThread", EventLogEntryType.Information, false, true);
-
+                
                 thread = new Thread(mainQASystemThread.DoWork);
                 thread.Start();
+
+                Logger.Log(true, ServiceName + " Service started.", EventLogEntryType.Information, true, true);
             }
             catch (Exception e)
             {

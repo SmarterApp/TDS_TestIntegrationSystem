@@ -9,11 +9,10 @@ The Test Integration System is responsible for
 * Sending the scored test to downstream systems via SFTP 
 
 The TIS (Test Integration System) is broken down into the following 3 modules/parts  
-#####1.) TDS Receiver
-#####2.) TIS Service 
-#####3.) TIS Scoring Daemon      
+1. TDS Receiver
+1. TIS Service 
+1. TIS Scoring Daemon      
 
-   
 ## License ##
 This project is licensed under the [AIR Open Source License v1.0](http://www.smarterapp.org/documents/American_Institutes_for_Research_Open_Source_Software_License.pdf).
 
@@ -61,7 +60,7 @@ Create an App User account and grant that account dbo access on the above DBs. [
 * `/tis_common/WinSCP`
 * `/tis_opentestsystem/Service`
 
-4) Deploy the [Db server].OSS_QC database objects by running the following scripts in order: [DB server]
+4) Deploy the `[Db server].OSS_QC` database objects by running the following scripts in order: [DB server]
 
 * `<root>\OSS.TIS\SQL\TISDB\Tables.sql`
 * `<root>\OSS.TIS\SQL\TISDB\Views.sql`
@@ -96,8 +95,8 @@ Create an App User account and grant that account dbo access on the above DBs. [
 * `<root>\OSS.TIS\SQL\TDSConfigs\StoredProcedures.sql`
 * `<root>\OSS.TIS\SQL\TDSConfigs\Synonyms.sql`
 * `<root>\OSS.TIS\SQL\TDSConfigs\Test Package Extraction Code.sql`
-	
-8) Load the test Package by running the stored Procedure `[tp].[spLoader_Main]`
+
+8) Load the test Package by running the Stored Procedure `[tp].[spLoader_Main]`
 
 9) Run QA configuration script: at `<root>\OSS.TIS\SQL\TISDB\Deployment\QACoreConfiguration.sql` [Db server]
 
@@ -118,15 +117,16 @@ Test Integration System has the following dependencies that are necessary for it
 * WinSCPNet
 
 ### Runtime Dependencies
-* WinSCPNet
+* WinSCPNet - *see note below*
+#### WinSCPNet is not included in the released source code.  It must be acquired and added as a third party library in order for all 3 projects to compile and run.
 
-NOTE:  WinSCPNet is not included in the released source code.  It must be acquired and added as a third party library in order for all 3 projects to compile and run.
 Following are instructions to add this third party library:
-####1) Download the winscp552automation.zip package from http://sourceforge.net/projects/winscp/files/WinSCP/5.5.2/winscp552automation.zip/download.
-####2) Copy the WinSCPnet.dll file from the downloaded winscp552automation.zip archive to “\Common\DataAccess\Libraries”.
-####3) Download the winscp552.zip package from http://sourceforge.net/projects/winscp/files/WinSCP/5.5.2/winscp552.zip/download.
-####4) Copy the WinSCP.com and WinSCP.exe files from the downloaded winscp552.zip archive to “\Common\DataAccess\Libraries”.
-####5) Compile the applications.
+
+1. Download the winscp552automation.zip package from http://sourceforge.net/projects/winscp/files/WinSCP/5.5.2/winscp552automation.zip/download.
+2. Copy the WinSCPnet.dll file from the downloaded winscp552automation.zip archive to “\Common\DataAccess\Libraries”.
+3. Download the winscp552.zip package from http://sourceforge.net/projects/winscp/files/WinSCP/5.5.2/winscp552.zip/download.
+4. Copy the WinSCP.com and WinSCP.exe files from the downloaded winscp552.zip archive to “\Common\DataAccess\Libraries”.
+5. Compile the applications.
 
 ## Future Enhancements 
 The following features and tasks are not included in the 1/2/2015 release:
@@ -141,4 +141,4 @@ Currently the TDS Receiver does not allow for secured communication between othe
 The Test Integration System has not undergone system testing or integration testing with the Test Delivery System, Teacher Hand Scoring System, and Data Warehouse.  System and integration testing will be complete (with the features identified above) as of the 01/31/2015 release.
 
 ###4) README Documentation
-This README documentation is not complete.  It will be updated with additional detail in the 01/31/2015 release.
+This README documentation is not complete.  It will be updated with additional detail by the 01/31/2015 release.
