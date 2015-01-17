@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -116,7 +116,7 @@ namespace TDSQASystemAPI.TestResults
                 if (isValid)
                 {
                     bool ignoreWrongServer = false;
-                    MetaDataEntry metaDataIgnoreWrongServer = ConfigurationHolder.GetFromMetaData(tr.ProjectID, "QA", "IgnoreWrongServer");
+                    MetaDataEntry metaDataIgnoreWrongServer = ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(tr.ProjectID, "QA", "IgnoreWrongServer");
                     if (metaDataIgnoreWrongServer != null && metaDataIgnoreWrongServer.IntVal == 1)
                         ignoreWrongServer = true;
 
@@ -125,12 +125,12 @@ namespace TDSQASystemAPI.TestResults
                         !environment.StartsWith("local", StringComparison.InvariantCultureIgnoreCase) &&
                         !environment.StartsWith("dev", StringComparison.InvariantCultureIgnoreCase) &&
                         !tr.Mode.Equals("scanned", StringComparison.InvariantCultureIgnoreCase) &&
-                        !ConfigurationHolder.IsSessionDatabaseConfigured(tr.Opportunity.ServerName, tr.Opportunity.DatabaseName))
+                        !ServiceLocator.Resolve<ConfigurationHolder>().IsSessionDatabaseConfigured(tr.Opportunity.ServerName, tr.Opportunity.DatabaseName))
                     {
                         isValid = false;
                         AddValidationRecord(ValidationRecord.ValidationType.Semantic, ValidateResult.Unknown, "server/database",
                             string.Format("Posted file to wrong Server. Given server {0}, Given DB:{1}, Configured Servers/databases: {2}",
-                            tr.Opportunity.ServerName, tr.Opportunity.DatabaseName, ConfigurationHolder.TDSSessionDatabasesValue()));
+                            tr.Opportunity.ServerName, tr.Opportunity.DatabaseName, ServiceLocator.Resolve<ConfigurationHolder>().TDSSessionDatabasesValue()));
                     }
                 }
 

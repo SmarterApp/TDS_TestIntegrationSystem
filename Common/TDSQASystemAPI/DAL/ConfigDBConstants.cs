@@ -12,7 +12,7 @@ using System.Text;
 
 namespace TDSQASystemAPI.DAL
 { 
-    internal class ConfigDBConstants
+    public class ConfigDBConstants
     {
         #region Configuration constants
 

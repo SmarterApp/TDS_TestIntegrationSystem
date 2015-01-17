@@ -24,18 +24,18 @@ namespace TIS.ScoringDaemon.Web
             ServiceLocator.Register<ItemScoreRequestFactory>(() => new ItemScoreRequestFactory());
         }
 
-        //protected override Action CallbackInitAction
-        //{
-        //    get
-        //    {
-        //        return delegate
-        //        {
-        //            // create the thread pool and assign it to the callback handler
-        //            ItemScoringCallbackHandler.WorkerPool = new BoundedThreadPool(
-        //                ScoringDaemonSettings.CallbackThreadPoolCount, "Item Scoring Callback",
-        //                ScoringDaemonSettings.CallbackThreadPoolHighWaterMark, ScoringDaemonSettings.CallbackThreadPoolLowWaterMark);
-        //        };
-        //    }
-        //}
+        protected override Action CallbackInitAction
+        {
+            get
+            {
+                return delegate
+                {
+                    // create the thread pool and assign it to the callback handler
+                    ItemScoringCallbackHandler.WorkerPool = new BoundedThreadPool(
+                        ScoringDaemonSettings.CallbackThreadPoolCount, "Item Scoring Callback",
+                        ScoringDaemonSettings.CallbackThreadPoolHighWaterMark, ScoringDaemonSettings.CallbackThreadPoolLowWaterMark);
+                };
+            }
+        }
     }
 }

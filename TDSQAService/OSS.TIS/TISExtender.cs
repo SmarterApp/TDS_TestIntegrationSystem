@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -12,10 +12,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
+using System.Xml;
 using TDSQASystemAPI;
 using TDSQASystemAPI.Config;
 using TDSQASystemAPI.Data;
+using TDSQASystemAPI.TestResults;
 using ScoringEngine.ConfiguredTests;
+using AIR.Configuration;
+using AIR.Common;
+using OSS.TIS.DAL;
+using OSS.TIS.ART;
+using TDSQASystemAPI.Routing.Authorization;
 
 namespace OSS.TIS
 {
@@ -28,59 +35,56 @@ namespace OSS.TIS
             return new NoTISExtenderState();
         }
 
-        //TODO: refactor
-        //TODO: ART
         public void PreScore(QASystem tis, TDSQASystemAPI.TestResults.TestResult tr, TDSQASystemAPI.Data.XmlRepositoryItem xmlRepoItem, TDSQASystemAPI.Config.ProjectMetaData projectMetaData, ITISExtenderState state)
         {
             //add accommodations if we're supposed to
-            if (tr.Testee != null && ConfigurationHolder.GetFromMetaData(tr.ProjectID, "Accommodations").Exists(x => x.IntVal.Equals(1)))
+            ConfigurationHolder configHolder = ServiceLocator.Resolve<ConfigurationHolder>();
+            if (tr.Testee != null && configHolder.GetFromMetaData(tr.ProjectID, "Accommodations").Exists(x => x.IntVal.Equals(1)))
             {
-                //the date to use to grab accommodations from RTS is configurable based on project, so check if it was
-                //configured. If not then use opp startDate
-                List<MetaDataEntry> accomDateEntry = ConfigurationHolder.GetFromMetaData(tr.ProjectID, "AccommodationDate");
-                DateTime accomDate = tr.Opportunity.StartDate; // startDate is default value
-                if (accomDateEntry != null && accomDateEntry.Count > 0)
-                {
-                    string date = accomDateEntry[0].TextVal ?? "null";
-                    if (date.Equals("OpportunityStartDate", StringComparison.InvariantCultureIgnoreCase))
-                        accomDate = tr.Opportunity.StartDate;
-                    else if (date.Equals("OpportunityEndDate", StringComparison.InvariantCultureIgnoreCase))
-                        accomDate = tr.Opportunity.StartDate;
-                    else
-                    {
-                        if (!DateTime.TryParse(date, out accomDate))
-                            throw new FormatException(string.Format("Could not parse configured AccommodationDate from project metadata for project ID {0}, value '{1}'", tr.ProjectID, date));
-                    }
-                }
-                //TODO: fetch accoms from ART
-                DataTable accomsDT = new DataTable();// = new TDSQASystemAPI.DAL.RtsDB().GetAccommodations(tr.Testee.EntityKey, QASystemConfigSettings.Instance.Client, accomDate);
-                Dictionary<string, List<TestAccomodation>> accomsDict = ConfigurationHolder.GetTestAccommodations(tis.dbHandleConfig, tr.TestID);
-                //bool addedAccommodation = false; // Zach 11/20/2014: We are only adding RTS accommodations, which don't get output in the XML. No need to archive.
+                TesteeAttribute ssid = tr.Testee.GetAttribute("AlternateSSID", TesteeProperty.PropertyContext.INITIAL);
+                List<TesteeRelationship> stateAbbrevsList = tr.Testee.GetRelationships("StateAbbreviation", TesteeProperty.PropertyContext.INITIAL);
+                if (ssid == null)
+                    throw new NullReferenceException("AlternateSSID was not an ExamineeAttribute in the XML with context = INITIAL. This is required to get accommodations from ART. OppID = " + tr.Opportunity.OpportunityID);
+                if (stateAbbrevsList.Count != 1)
+                    throw new MissingMemberException(string.Format("StateAbbreviation ExamineeRelationship with context = INITIAL appeared {0} times, but it was exepected to appear only 1 time. OppID = {1}", stateAbbrevsList.Count, tr.Opportunity.OpportunityID));
 
-                foreach (DataRow row in accomsDT.Rows)
-                {
-                    //todo: how should we handle null values in the datatable from RTS?
-                    string type = row["Type"].ToString();
-                    string code = row["Code"].ToString();
-                    string description = "";
-                    int segment = 0;
-                    string source = "";
-                    if (accomsDict != null && accomsDict.ContainsKey(type))
+                WebService webservice = Settings.WebService["ART"];
+                if (webservice == null)
+                    throw new NullReferenceException("ART web service is not defined in config file. This is required for getting accommodations from ART");
+                
+                XmlDocument doc = new ARTDAL(webservice).GetStudentPackageXML(ssid.Value, stateAbbrevsList[0].Value);
+                if (doc == null)
+                    throw new NullReferenceException("ART Student package could not be retrieved for OppID " + tr.Opportunity.OpportunityID);
+
+                ARTStudentPackage package = new ARTStudentPackage(doc);
+                Dictionary<string, ARTAccommodation> artAccs = package.GetAccommodations(tr.Subject);
+                //TODO: should we throw an exception if no accommodations are found?
+                if (artAccs == null)
+                    return;
+
+                //now grab the values from TDS configs DB. Key = type, value = list of accoms.
+                Dictionary<string, List<TestAccomodation>> accomsDict = configHolder.GetTestAccommodations(tis.dbHandleConfig, tr.test.TestName);
+                //now convert this to be key = code, value = list of accoms with distinct type / code
+                Dictionary<string, List<TestAccomodation>> myAccomsDict = new Dictionary<string, List<TestAccomodation>>(StringComparer.InvariantCultureIgnoreCase);
+                foreach (List<TestAccomodation> acclist in accomsDict.Values)
+                    foreach (TestAccomodation acc in acclist)
                     {
-                        TestAccomodation acc = accomsDict[type].FirstOrDefault(x => x.Code.Equals(code));
-                        if (acc != null)
-                        {
-                            description = acc.Description;
-                            segment = acc.Segment;
-                            source = acc.Source;
-                        }
+                        if (!myAccomsDict.ContainsKey(acc.Code))
+                            myAccomsDict.Add(acc.Code, new List<TestAccomodation>() { acc });
+                        //get only the list of distinct accom code / types (this is all that is needed for scoring)
+                        if (!myAccomsDict[acc.Code].Any(x => x.Code.Equals(acc.Code) && x.Type.Equals(acc.Type)))
+                            myAccomsDict[acc.Code].Add(acc);
                     }
-                    tr.Opportunity.AddRTSAccomodation(type, description, code, segment, source);
-                    //    addedAccommodation = true;
+
+                //now add new accommodations to the Opportunity combining values from each
+                foreach (ARTAccommodation accom in artAccs.Values)
+                {
+                    if (!myAccomsDict.ContainsKey(accom.AccomCode))
+                        throw new NullReferenceException(string.Format("ART Accommodation code {0} was not found in TDS Configs DB.", accom.AccomCode));
+                    //add all distinct type/code accommodations. Note that we hardcode segment to 0
+                    foreach (TestAccomodation tdsAccom in myAccomsDict[accom.AccomCode])
+                        tr.Opportunity.AddRTSAccomodation(tdsAccom.Type, tdsAccom.Description, tdsAccom.Code, 0/*tdsAccom.Segment*/, "");
                 }
-                //archive if we added any accommodations
-                //if (addedAccommodation)
-                //    SetArchiveStrategy(ArchiveStrategy.ArchiveAndInsert);
             }
         }
 

@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -19,10 +19,10 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
 using System.Configuration;
-using CommonUtilities;
-using CommonUtilities.Configuration;
+using AIR.Configuration;
 using TDSQASystemAPI.ExceptionHandling;
 using TDSQASystemAPI.Utilities;
+using TDSQASystemAPI.Routing.Authorization;
 
 namespace TDSQASystemAPI.Routing
 {
@@ -61,7 +61,30 @@ namespace TDSQASystemAPI.Routing
                 if (!ConfigurationManager.AppSettings["Environment"].Equals("Production", StringComparison.InvariantCultureIgnoreCase))
                     ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(SSLResult);
 
-                Post(wsSettings, tr, xml, outputProcessor, inputArgs);
+                bool authTokenFoundInCache = false;
+                OAuthResponse oauthToken = null;
+
+                if(wsSettings.Authorization != null)
+                    oauthToken = OAuth.GetResponse(wsSettings.Authorization, out authTokenFoundInCache);
+
+                HttpResponseMessage response = Post(wsSettings, tr, xml, oauthToken, inputArgs);
+
+                if ((response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden) && authTokenFoundInCache)
+                {
+                    // try again with a fresh token; may have expired
+                    OAuth.RemoveFromCache(wsSettings.Authorization, oauthToken);
+                    oauthToken = OAuth.GetResponse(wsSettings.Authorization, out authTokenFoundInCache);
+                    response = Post(wsSettings, tr, xml, oauthToken, inputArgs);
+                }
+
+                string result = response.Content.ReadAsStringAsync().Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new QAException(String.Format("Error posting file for oppID: {0} to Target: {1}.  Status Code: {2}, Result: {3}", tr.Opportunity.OpportunityID, base.Name, response.StatusCode, result), QAException.ExceptionType.General);
+                }
+
+                if (outputProcessor != null)
+                    outputProcessor(result);
             }
             catch (Exception ex)
             {
@@ -71,8 +94,9 @@ namespace TDSQASystemAPI.Routing
             return new TargetResult() { Sent = true };
         }
 
-        protected virtual void Post(WebService wsSettings, TestResult tr, string xml, Action<object> outputProcessor, params object[] inputArgs)
+        protected virtual HttpResponseMessage Post(WebService wsSettings, TestResult tr, string xml, OAuthResponse accessToken, params object[] inputArgs)
         {
+            HttpResponseMessage response = null;
             using (HttpClient client = new HttpClient())
             {
                 using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
@@ -80,18 +104,29 @@ namespace TDSQASystemAPI.Routing
                     using (StreamContent fileContent = new StreamContent(ms))
                     {
                         fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/xml");
-                        //TODO: auth
-                        HttpResponseMessage response = client.PostAsync(wsSettings.URL, fileContent).Result;
-                        string result = response.Content.ReadAsStringAsync().Result;
-                        if (response.StatusCode != System.Net.HttpStatusCode.OK)
+
+                        // if there's an oauth config associated with this service, add the auth key to the header.
+                        if (wsSettings.Authorization != null)
                         {
-                            throw new QAException(String.Format("Error posting file for oppID: {0} to Target: {1}.  Status Code: {2}, Result: {3}", tr.Opportunity.OpportunityID, base.Name, response.StatusCode, result), QAException.ExceptionType.General);
+                            if (accessToken == null)
+                                throw new NullReferenceException(String.Format("A valid oauth token is required because Authorization is configured for this service.  Service config name: {0},  Auth config name: {1}", 
+                                    wsSettings.Name, wsSettings.Authorization.Name));
+                            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(accessToken.token_type, accessToken.access_token.ToString());
                         }
-                        if (outputProcessor != null)
-                            outputProcessor(result);
+
+                        response = client.PostAsync(GetRequestUri(wsSettings, tr, inputArgs), fileContent).Result;
                     }
                 }
             }
+            return response;
+        }
+
+        protected virtual string GetRequestUri(WebService wsSettings, TestResult tr, params object[] inputArgs)
+        {
+            if (inputArgs == null || inputArgs.Length == 0)
+                return wsSettings.URL;
+            else
+                return String.Format(wsSettings.URL, inputArgs.Select(a => Uri.EscapeDataString(a.ToString())));
         }
 
         private bool SSLResult(object sender, X509Certificate c, X509Chain chain, SslPolicyErrors sslPolicyErrors)

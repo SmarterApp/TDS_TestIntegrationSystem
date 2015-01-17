@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -12,6 +12,7 @@ using System.Linq;
 using System.Web;
 using System.IO;
 using System.Configuration;
+using System.Text;
 
 namespace TISServices.Utilities
 {
@@ -63,19 +64,24 @@ namespace TISServices.Utilities
         /// <param name="e"></param>
         internal static void Log(Exception e)
         {
-            string message = "Message: " + e.Message + Environment.NewLine + "Stack Trace: " + e.StackTrace;
-            Log(message);
+            LogException(e, new StringBuilder());
         }
 
         /// <summary>
-        /// Recursively grab the inner most InnerException and log it
+        /// Handles nested exceptions
         /// </summary>
         /// <param name="e"></param>
-        internal static void LogInnerMostException(Exception e)
+        private static void LogException(Exception e, StringBuilder sb)
         {
-            if (e.InnerException == null)
-                Log(e);
-            LogInnerMostException(e);
+            if (e != null)
+            {
+                sb.AppendLine(String.Format("Message: {0}, Stack Trace: {1}", e.Message, e.StackTrace));
+                LogException(e.InnerException, sb);
+            }
+            else
+            {
+                Log(sb.ToString());
+            }
         }
     }
 }

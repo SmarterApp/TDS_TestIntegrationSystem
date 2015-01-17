@@ -12,12 +12,12 @@ using System.Text;
 
 namespace TDSQASystemAPI.Utilities
 {
-    internal class TimePeriod
+    public class TimePeriod
     {
         private DateTime _start;
         private DateTime _end;
 
-        internal TimePeriod(DateTime start, DateTime end)
+        public TimePeriod(DateTime start, DateTime end)
         {
             _start = start;
             _end = end;
@@ -25,7 +25,7 @@ namespace TDSQASystemAPI.Utilities
 
         #region properties
 
-        internal DateTime Start
+        public DateTime Start
         {
             get
             {
@@ -33,7 +33,7 @@ namespace TDSQASystemAPI.Utilities
             }
         }
 
-        internal DateTime End
+        public DateTime End
         {
             get
             {
@@ -44,7 +44,7 @@ namespace TDSQASystemAPI.Utilities
 
         #region operations
 
-        internal bool Encompasses(TimePeriod tp)
+        public bool Encompasses(TimePeriod tp)
         {
             return ((tp.Start >= this.Start) && (tp.End <= this.End));
         }

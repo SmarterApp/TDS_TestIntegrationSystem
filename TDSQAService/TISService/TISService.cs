@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -62,8 +62,9 @@ namespace TISService
             try
             {
                 // Thread.Sleep(30000);
-                mainQASystemThread = new TISMainThread();
                 
+                mainQASystemThread = new TISMainThread();
+
                 thread = new Thread(mainQASystemThread.DoWork);
                 thread.Start();
 

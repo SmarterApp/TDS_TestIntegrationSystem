@@ -116,5 +116,10 @@ namespace ScoringEngine.ConfiguredTests
             else
                 throw new ScoringEngineException("multipleSelect for accomodations must be 0 or 1");
         }
+
+        public string ToTypeCodeString()
+        {
+            return Type + "|" + Code;
+        }
     }
 }

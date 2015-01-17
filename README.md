@@ -1,5 +1,6 @@
-# Welcome to the Test Integration System #
-The Test Integration System is responsible for 
+# Welcome to the Test Integration System (TIS)
+
+The TIS is responsible for 
 
 * Receiving a test result from TDS (Test Delivery System) 
 * Sending it to THSS (Teacher HandScoring System) for hand scoring of items that require human scoring
@@ -8,7 +9,8 @@ The Test Integration System is responsible for
 * Scoring the test
 * Sending the scored test to downstream systems via SFTP 
 
-The TIS (Test Integration System) is broken down into the following 3 modules/parts  
+The TIS consists of the following 3 modules/parts:
+
 1. TDS Receiver
 1. TIS Service 
 1. TIS Scoring Daemon      
@@ -35,6 +37,10 @@ The TIS Service solution can be found here:  TDSQAService\OSSTIS.sln.
 ### TIS Scoring Daemon      
 This is a web application that talks to the THSS (Teacher HandScoring system) and is responsible for receiving item scores from THSS and sending it to the TIS Service for further processing.  The TIS Scoring Daemon solution can be found here:  TISScoringDaemon\TISScoringDaemon.sln.
 
+### REST EndPoint communication with [TDS, ART & Data warehouse]
+The Test Integration System is built to communicate with all the peer and down-stream systems using a secured REST APIs (using OAuth). The token for secured communiation would be supported/provided by the OpenAM system.
+
+
 ## Build & Deploy
 TIS requires Visual Studios 2012 to build. The Deployment steps are as follows - 
 
@@ -44,7 +50,6 @@ TIS requires Visual Studios 2012 to build. The Deployment steps are as follows -
 * `OSS_Itembank`
 * `OSS_Configs`
 * `OSS_TestScoringConfigs`
-* Set `TRUSTWORTHY ON` for database `OSS_QC`
 
 Create an App User account and grant that account dbo access on the above DBs. [DB server]
 
@@ -57,28 +62,18 @@ Create an App User account and grant that account dbo access on the above DBs. [
 3) Create the following subfolder structure within the Services folder created above (if they do not exist): [Web server]
 /Services/:
 
-* `/tis_common/WinSCP`
+* `/tis_common/`
 * `/tis_opentestsystem/Service`
 
 4) Deploy the `[Db server].OSS_QC` database objects by running the following scripts in order: [DB server]
 
-* `<root>\OSS.TIS\SQL\TISDB\Tables.sql`
-* `<root>\OSS.TIS\SQL\TISDB\Views.sql`
-* `<root>\OSS.TIS\SQL\TISDB\Deletes.sql`
-* `<root>\OSS.TIS\SQL\TISDB\Inserts.sql`
-* `<root>\OSS.TIS\SQL\TISDB\Selects.sql`
-* `<root>\OSS.TIS\SQL\TISDB\Updates.sql`
-* `<root>\OSS.TIS\SQL\TISDB\Deletes.sql`
+* `<root>\OSS.TIS\SQL\TISDB\1_Create_Objects.sql`
+* `<root>\OSS.TIS\SQL\TISDB\2_Configuration.sql`
 
 5) Deploy the [Db server].OSS_Configs database objects by running the following scripts in order:
 
-* `<root>\OSS.TIS\SQL\TDSConfigs\Tables.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\Views.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\UDFs.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\StoredProcedures.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\Inserts1.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\Inserts2.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\Inserts3.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\1_Create_Objects.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\2_Configuration.sql`
  	
 6) Deploy the [Db server].OSS_TestScoringConfigs database objects by running the following scripts in order:
 
@@ -88,13 +83,8 @@ Create an App User account and grant that account dbo access on the above DBs. [
 	
 7) Deploy the [Db server].OSS_Itembank database objects by running the following scripts in order:
 
-* `<root>\OSS.TIS\SQL\TDSConfigs\Schemas.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\Tables.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\Views.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\UDFs.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\StoredProcedures.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\Synonyms.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\Test Package Extraction Code.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\1_Create_Objects.sql`
+* `<root>\OSS.TIS\SQL\TDSConfigs\2_Configuration.sql`
 
 8) Load the test Package by running the Stored Procedure `[tp].[spLoader_Main]`
 
@@ -114,31 +104,40 @@ Test Integration System has the following dependencies that are necessary for it
 ### Compile Time Dependencies
 * .Net Framework 4.5
 * Microsoft.Practices.EnterpriseLibrary.Data
-* WinSCPNet
 
 ### Runtime Dependencies
-* WinSCPNet - *see note below*
-#### WinSCPNet is not included in the released source code.  It must be acquired and added as a third party library in order for all 3 projects to compile and run.
+None
 
-Following are instructions to add this third party library:
+## Items included in this release (01/16) -
+1) DB scripts to create and configure the following databases - 
 
-1. Download the winscp552automation.zip package from http://sourceforge.net/projects/winscp/files/WinSCP/5.5.2/winscp552automation.zip/download.
-2. Copy the WinSCPnet.dll file from the downloaded winscp552automation.zip archive to “\Common\DataAccess\Libraries”.
-3. Download the winscp552.zip package from http://sourceforge.net/projects/winscp/files/WinSCP/5.5.2/winscp552.zip/download.
-4. Copy the WinSCP.com and WinSCP.exe files from the downloaded winscp552.zip archive to “\Common\DataAccess\Libraries”.
-5. Compile the applications.
+         - OSS_QC
+         - OSS_Itembank
+         - OSS_Configs
+         - OSS_TestScoringConfigs
+
+2) Code Update to add the following items [Listed as Future Enhancements in the last release]- 
+
+         - Fetching initial accommodations 
+         - Secure the REST endpoints
+
+3) Code update to the SendTo Data-warehouse module to use secured REST End-Point API (instead of SFTP). 
+
+4) Sample Config files (Web-Config & App-Config) 
+
 
 ## Future Enhancements 
-The following features and tasks are not included in the 1/2/2015 release:
 
-###1) Fetching initial accommodations
-The TIS will be updated to fetch the initial list of accommodations for a student (from the ART system) so that the Scoring Engine can calculate the accommodation codes needed by the open source data warehouse and reporting system.  This is targeted to be in the 01/31/2015 release.
+The following features and tasks are not included in the 1/16/2015 release:
 
-###2) Secure the REST endpoints
-Currently the TDS Receiver does not allow for secured communication between other systems.  We will be updating this module (TDS Receiver) using OAuth to make sure all the communication uses secure authorization.  This is targeted to be in the 01/31/2015 release.
+####1) System and Integration Testing - 
 
-###3) System and Integration Testing
-The Test Integration System has not undergone system testing or integration testing with the Test Delivery System, Teacher Hand Scoring System, and Data Warehouse.  System and integration testing will be complete (with the features identified above) as of the 01/31/2015 release.
+The Test Integration System has not undergone a complete system testing or integration testing with the Test Delivery System, Teacher Hand Scoring System, and Data Warehouse.  System and integration testing will be complete (with the features identified above) as of the 01/31/2015 release.
 
-###4) README Documentation
+####2) ItemID and BankID mismatch across systems (known issue) - 
+ItemIDs and BankIDs are currently auto generated when loading the Admin package, which is causing an issue between TDS and TIS.
+We are working deriving these values from the Keys in the Test package, so that they are always in sync across all systems. We intend to fix this bug ASAP and have the fix released by 01/31/2015.
+
+
+####3) README Documentation - 
 This README documentation is not complete.  It will be updated with additional detail by the 01/31/2015 release.

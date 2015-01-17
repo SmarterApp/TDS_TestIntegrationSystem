@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -18,9 +18,11 @@ using TDSQASystemAPI.TestResults;
 using TISServices.Extensions;
 using TISServices.Utilities;
 using OSS.TIS;
+using TISServices.Authorization;
 
 namespace TISServices.Services
-{
+{    
+    [AuthorizeOpenAM]
     public class TestResultController : ApiController
     {
         /// <summary>
@@ -57,7 +59,10 @@ namespace TISServices.Services
             //Dictionary<string, string> qsParams = Request.GetQueryStringParams();
 
             if (String.IsNullOrEmpty(statusCallback))
+            {
+                TISServicesLogger.Log("Empty statusCallback.");
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "This request is not properly formatted.");
+            }
 
             try
             {
@@ -66,6 +71,7 @@ namespace TISServices.Services
             }
             catch
             {
+                TISServicesLogger.Log(String.Format("statusCallback could not be converted to a Uri: {0}", statusCallback));
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Illegal statusCallback format.");
             }
 
@@ -87,7 +93,10 @@ namespace TISServices.Services
             // sanity check to make sure we're getting the right files
             //TODO: want to add any other validation?  Note that if we do decide to validate against the XSD above, this isn't needed.
             if (!doc.DocumentElement.Name.Equals("TDSReport"))
+            {
+                TISServicesLogger.Log(String.Format("Unexpected document element: {0}", doc.DocumentElement.Name));
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, String.Format("Invalid test result: {0}", doc.DocumentElement.Name));
+            }
 
             try
             {

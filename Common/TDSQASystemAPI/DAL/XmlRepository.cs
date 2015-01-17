@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -77,10 +77,10 @@ namespace TDSQASystemAPI.DAL
                 contents.Save(ms);
                 SqlXml sqlXml = new SqlXml(ms);
                 _db.AddInParameter(cmd, "@Contents", DbType.Xml, sqlXml);
-                fileId = Convert.ToInt64(_db.ExecuteScalar(cmd));
                 //Zach 12-5-2014: added for open source TDS->TIS
                 if (!string.IsNullOrEmpty(callbackURL))
                     _db.AddInParameter(cmd, "@CallbackURL", DbType.String, callbackURL);
+                fileId = Convert.ToInt64(_db.ExecuteScalar(cmd));
             }
             return fileId;
         }

@@ -93,11 +93,11 @@ namespace TDSQASystemAPI.Utilities
             else
                 errorFile = "ResultLog.txt"; //Default Log location.
 
-            fatalErrorTos = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "FatalErrorsTo");
-            fatalErrorCc = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "FatalErrorsCc");
-            warningTos = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "WarningsTo");
-            warningCc = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(ConfigurationHolder.Instance.ClientName, "WarningsCc");
-                
+            fatalErrorTos = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(clientName, "FatalErrorsTo");
+            fatalErrorCc = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(clientName, "FatalErrorsCc");
+            warningTos = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(clientName, "WarningsTo");
+            warningCc = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(clientName, "WarningsCc");
+
             _logFile = new StreamWriter(errorFile, true);
 			qaSystemEventLog.Source = ConfigurationManager.AppSettings["EventLogSource"];
 
@@ -374,7 +374,7 @@ namespace TDSQASystemAPI.Utilities
             // Get all exceptions that were logged to the QC_ValidationExceptions table.  This includes
             //  validation biz rule failures as well as general exceptions.  It may also include warnings and possibly
             //  informational records depending on the minimumSeverity.
-            DataTable valExceptions = TDSInterface.GetQC_ValidationExceptions(fileId, startDateTime, (int)minimumSeverity, connectionString);
+            DataTable valExceptions = TDSQC.GetQC_ValidationExceptions(fileId, startDateTime, (int)minimumSeverity, connectionString);
             
             // if there are no records, do not generate the email.  Just return null.
             if (valExceptions.Rows.Count == 0)
@@ -488,9 +488,9 @@ namespace TDSQASystemAPI.Utilities
         /// </summary>
         public static void SendWarningSummaryEmail(DateTime startDate)
         {
-            string tdsQCConnectionString = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValue(ConfigurationHolder.Instance.ClientName, "TDSQCConnectionString");
+            string tdsQCConnectionString = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValue(clientName, "TDSQCConnectionString");
             //getting the tables from QC_ValidationExceptions table. The first table is a summary, the second is a detailed report of all warnings.
-            DataSet ds = TDSInterface.GetWarningsSummary(startDate, 100, false, serviceName, tdsQCConnectionString);
+            DataSet ds = TDSQC.GetWarningsSummary(startDate, 100, false, serviceName, tdsQCConnectionString);
             DataTable summaryTable = ds.Tables["Summary"].Copy();
             //get the list of all test IDs that have warnings, so we can separate them out and report them each in their own table in the email
             List<String> testIDs = new List<string>();

@@ -1,0 +1,24 @@
+INSERT INTO client_timelimits VALUES ('0AED6C36-2DBD-49B2-931D-2A02B84C2BEC',NULL,1,10,-1,10,'SBAC_PT',1,30,20,20,'2012-12-21 00:02:53.000','2012-12-21 00:02:53.000',NULL,8,15,2);
+INSERT INTO client_timelimits VALUES ('9773D898-3514-4EF4-BD79-ABC90F9944C2',NULL,1,10,-1,15,'SBAC',0,20,20,20,'2010-07-07 15:39:31.433',NULL,NULL,8,120,2);
+
+INSERT INTO client_testtooltype VALUES ('SBAC','Color Choices',1,0,'TDSAcc-ColorChoices',0,0,1,1,1,NULL,0,'2013-12-13 13:53:31.687','TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','StudentGlobal',NULL,0,1,'ALL');
+INSERT INTO client_testtooltype VALUES ('SBAC_PT','Color Choices',0,1,'TDSAcc-ColorChoices',0,0,1,1,1,NULL,0,'2014-01-16 11:13:34.067','TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','StudentGlobal','Language',0,1,'ALL');
+INSERT INTO client_testtooltype VALUES ('SBAC_PT','Language',1,0,'TDSAcc-Language',1,0,1,1,1,NULL,-1,'2012-12-27 09:33:33.513','jf','jf','FAMILY','StudentGlobal',NULL,0,1,'ALL');
+INSERT INTO client_testtooltype VALUES ('SBAC_PT','Print Size',1,0,'TDSAcc-PrintSize',1,0,1,1,0,NULL,0,'2013-05-13 14:05:26.573','TDSCore_Staging_Configs_2012','TDSCore_Staging_Configs_2012','FAMILY','StudentGlobal','Language',0,1,'ALL');
+
+INSERT INTO client_testtool VALUES ('SBAC','Color Choices','TDS_CC0','Black on White',1,0,'Color Choices feature is disabled','StudentGlobal',-1,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC','Color Choices','TDS_CCInvert','Reverse Contrast',0,0,'White text with a Black background','StudentGlobal',15,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC','Color Choices','TDS_CCMagenta','Black on Rose',0,0,'Magenta','StudentGlobal',8,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC','Color Choices','TDS_CCMedGrayLtGray','Medium Gray on Light Gray',0,0,'Medium Gray on Light Gray','StudentGlobal',17,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC','Color Choices','TDS_CCYellowB','Yellow on Blue',0,0,'Yellow text with a Blue background','StudentGlobal',14,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Color Choices','TDS_CC0','Black on White',1,0,'Color Choices feature is disabled','StudentGlobal',-1,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Color Choices','TDS_CCInvert','Reverse Contrast',0,0,'White text with a Black background','StudentGlobal',15,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Color Choices','TDS_CCMagenta','Black on Rose',0,0,'Magenta','StudentGlobal',8,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Color Choices','TDS_CCMedGrayLtGray','Medium Gray on Light Gray',0,0,'Medium Gray on Light Gray','StudentGlobal',17,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Color Choices','TDS_CCYellowB','Yellow on Blue',0,0,'Yellow text with a Blue background','StudentGlobal',14,'TDSCore_Staging_Configs_2013','TDSCore_Staging_Configs_2013','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Language','ENU','English',1,0,'English language test','StudentGlobal',0,'jf','jf','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Print Size','TDS_PS_L0','No default zoom applied',1,0,'There is no default zoom','StudentGlobal',-1,'TDSCore_Staging_Configs_2012','TDSCore_Staging_Configs_2012','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Print Size','TDS_PS_L1','Level 1',0,0,'Default level of zoom is set to 1','StudentGlobal',1,'TDSCore_Staging_Configs_2012','TDSCore_Staging_Configs_2012','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Print Size','TDS_PS_L2','Level 2',0,0,'Default level of zoom is set to 2','StudentGlobal',2,'TDSCore_Staging_Configs_2012','TDSCore_Staging_Configs_2012','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Print Size','TDS_PS_L3','Level 3',0,0,'Default level of zoom is set to 3','StudentGlobal',3,'TDSCore_Staging_Configs_2012','TDSCore_Staging_Configs_2012','FAMILY','ALL',NULL);
+INSERT INTO client_testtool VALUES ('SBAC_PT','Print Size','TDS_PS_L4','Level 4',0,0,'Default level of zoom is set to 4','StudentGlobal',4,'TDSCore_Staging_Configs_2012','TDSCore_Staging_Configs_2012','FAMILY','ALL',NULL);

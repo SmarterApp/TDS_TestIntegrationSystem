@@ -78,11 +78,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ConfigFiles\Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Configuration\database.config" />
   </ItemGroup>
   <ItemGroup>
@@ -116,56 +111,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ConfigFiles\Testing.Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\Testing\database.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\Testing\logging.config">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\Testing\settings.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\Dev\database.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\Dev\logging.config">
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\Dev\settings.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ConfigFiles\Dev.Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ConfigFiles\CA\Release.Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\CA\Release\database.config" />
-    <Content Include="Configuration\CA\Release\logging.config" />
-    <Content Include="Configuration\CA\Release\settings.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ConfigFiles\ID\Release.Web.config" />
-    <Content Include="ConfigFiles\ME\Release.Web.config" />
-    <Content Include="ConfigFiles\WA\Release.Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\ID\Release\database.config" />
-    <Content Include="Configuration\ID\Release\logging.config" />
-    <Content Include="Configuration\ID\Release\settings.config" />
-    <Content Include="Configuration\ME\Release\database.config" />
-    <Content Include="Configuration\ME\Release\logging.config" />
-    <Content Include="Configuration\ME\Release\settings.config" />
-    <Content Include="Configuration\WA\Release\database.config" />
-    <Content Include="Configuration\WA\Release\logging.config" />
-    <Content Include="Configuration\WA\Release\settings.config" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

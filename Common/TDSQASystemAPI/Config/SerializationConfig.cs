@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -29,14 +29,15 @@ namespace TDSQASystemAPI.Config
         }
 
         /// <summary>
-        /// returns true if it finds an attribute with the same name and context
+        /// returns true if nothing is configured, or it finds an attribute with the same name and context
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
         public bool IncludeAttribute(TesteeProperty property)
         {
-            return IncludedAttributes != null && IncludedAttributes.Exists(x => x.XMLName.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase)
-                                                                                && x.Context.Equals(property.Context, StringComparison.InvariantCultureIgnoreCase));
+            return IncludedAttributes == null
+                   || IncludedAttributes.Count == 0
+                   || IncludedAttributes.Exists(x => x.XMLName.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase) && x.Context.Equals(property.Context, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

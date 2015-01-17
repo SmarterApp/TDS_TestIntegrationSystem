@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -23,7 +23,7 @@ namespace TDSQASystemAPI.Routing
 
         protected SendToModifiersTyped()
         {
-            sendToModifiers = new Dictionary<string, bool>();
+            sendToModifiers = new Dictionary<string, bool>(StringComparer.InvariantCultureIgnoreCase);
         }
 
         public bool this[SendTo key]

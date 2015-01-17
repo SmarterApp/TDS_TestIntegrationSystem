@@ -39,6 +39,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -48,6 +51,7 @@
       <HintPath>packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -76,8 +80,15 @@
   <ItemGroup>
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorization\AuthorizeOpenAMAttribute.cs" />
+    <Compile Include="Authorization\AuthTokenCache.cs" />
+    <Compile Include="Authorization\Tenancy.cs" />
+    <Compile Include="Authorization\TokenInfo.cs" />
     <Compile Include="Utilities\Statistics.cs" />
     <Compile Include="Utilities\TISServicesLogger.cs" />
     <Compile Include="Default.aspx.cs">
@@ -96,9 +107,20 @@
     <Compile Include="Services\TestResultController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\CommonUtilities\CommonUtilities.csproj">
-      <Project>{2ea7168e-0377-4703-b970-491f12ef6a09}</Project>
-      <Name>CommonUtilities</Name>
+    <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\Local AM.pubxml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\AIR.Configuration\AIR.Configuration.csproj">
+      <Project>{dbd0dd55-ec2e-48b3-a669-b8d331c5432a}</Project>
+      <Name>AIR.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\TDSQASystemAPI\TDSQASystemAPI.csproj">
       <Project>{5a2159cb-2df4-4b08-9e21-f772b7b03540}</Project>

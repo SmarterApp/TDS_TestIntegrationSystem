@@ -256,6 +256,8 @@ namespace TDSQASystemAPI.TestResults
 
         /// <summary>
         /// Find the test "form" as a '-' seperated list of segment forms
+        /// If a formID contains '-' wrap in [].
+        /// Include blank formID for adaptive segments.
         /// </summary>
         [XmlIgnore]
         public string Forms
@@ -266,17 +268,17 @@ namespace TDSQASystemAPI.TestResults
                 string formCat = "";
                 foreach (TestSegment segment in GetSegmentsAsReadOnlySortedList())
                 {
-                    if (segment.FormID.Length > 0)
+                    string form = segment.FormID;
+                    if (form.Contains("-"))
+                        form = "[" + form + "]";
+                    if (first)
                     {
-                        if (first)
-                        {
-                            formCat = segment.FormID;
-                            first = false;
-                        }
-                        else
-                        {
-                            formCat = formCat + '-' + segment.FormID;
-                        }
+                        formCat = form;
+                        first = false;
+                    }
+                    else
+                    {
+                        formCat = formCat + '-' + form;
                     }
                 }
                 return formCat;

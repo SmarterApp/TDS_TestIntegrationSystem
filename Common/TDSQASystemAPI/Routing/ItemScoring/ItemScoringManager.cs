@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -29,7 +29,7 @@ namespace TDSQASystemAPI.Routing.ItemScoring
             Pretend = ConfigurationManager.AppSettings["SendToHandscoring"].ToString().Equals("pretend", StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public int Send(TestResult tr)
+        public int Send(TestResult tr, SendToModifiers sendToModifiers)
         {
             int sent = 0;
 
@@ -37,6 +37,9 @@ namespace TDSQASystemAPI.Routing.ItemScoring
             
             foreach (Target t in hsTargets)
             {
+                if (sendToModifiers != null && !sendToModifiers.ShouldSend(t.Name))
+                    continue;
+
                 if (t.Send(tr).Sent)
                 {
                     sent++;
@@ -63,7 +66,7 @@ namespace TDSQASystemAPI.Routing.ItemScoring
             tr.Opportunity.Status = "reset";
             tr.Opportunity.StatusDate = DateTime.Now;
             // send it
-            int sent = Send(tr);
+            int sent = Send(tr, null);
             // reinstate original status info
             tr.Opportunity.Status = origStatus;
             tr.Opportunity.StatusDate = origStatusDate;

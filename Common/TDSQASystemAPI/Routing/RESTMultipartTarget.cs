@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -19,11 +19,10 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
 using System.Configuration;
-using CommonUtilities;
-using CommonUtilities.Configuration;
+using AIR.Configuration;
 using TDSQASystemAPI.ExceptionHandling;
 using TDSQASystemAPI.Utilities;
-
+using TDSQASystemAPI.Routing.Authorization;
 
 namespace TDSQASystemAPI.Routing
 {
@@ -37,8 +36,9 @@ namespace TDSQASystemAPI.Routing
         {
         }
 
-        protected override void Post(WebService wsSettings, TestResult tr, string xml, Action<object> outputProcessor, params object[] inputArgs)
+        protected override HttpResponseMessage Post(WebService wsSettings, TestResult tr, string xml, OAuthResponse accessToken, params object[] inputArgs)
         {
+            HttpResponseMessage response = null;
             using (HttpClient client = new HttpClient())
             {
                 using (MultipartFormDataContent content = new MultipartFormDataContent())
@@ -55,18 +55,21 @@ namespace TDSQASystemAPI.Routing
 
                             //string c = content.ReadAsStringAsync().Result; // testing
 
-                            HttpResponseMessage response = client.PostAsync(wsSettings.URL, content).Result;
-                            string result = response.Content.ReadAsStringAsync().Result;
-                            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                            // if there's an oauth config associated with this service, add the key to the header.
+                            if (wsSettings.Authorization != null)
                             {
-                                throw new QAException(String.Format("Error posting file for oppID: {0} to Target: {1}.  Status Code: {2}, Result: {3}", tr.Opportunity.OpportunityID, base.Name, response.StatusCode, result), QAException.ExceptionType.General);
+                                if (accessToken == null)
+                                    throw new NullReferenceException(String.Format("A valid oauth token is required because Authorization is configured for this service.  Service config name: {0},  Auth config name: {1}",
+                                        wsSettings.Name, wsSettings.Authorization.Name));
+                                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(accessToken.token_type, accessToken.access_token.ToString());
                             }
-                            if (outputProcessor != null)
-                                outputProcessor(result);
+
+                            response = client.PostAsync(GetRequestUri(wsSettings, tr, inputArgs), content).Result;
                         }
                     }
                 }
             }
+            return response;
         }
     }
 }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -59,7 +59,7 @@ namespace TDSQASystemAPI.DAL
         /// <returns></returns>
         public DataTable GetTestOpportunityStatus(string oppid)
         {
-            return TDSInterface.GetTestOpportunityStatus(null, null, null, null, oppid, null, null, null, TDSQCConnection);
+            return TDSQC.GetTestOpportunityStatus(null, null, null, null, oppid, null, null, null, TDSQCConnection);
         }
 
         /// <summary>

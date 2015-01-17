@@ -87,7 +87,7 @@ namespace TDSQASystemAPI
             this.dbHandleResults = dbHandleResults;
             try
             {
-                _tc = ConfigurationHolder.TestCollection(dbHandleConfig);
+                _tc = ServiceLocator.Resolve<ConfigurationHolder>().TestCollection(dbHandleConfig);
             }
             catch (Exception e)
             {
@@ -300,8 +300,7 @@ namespace TDSQASystemAPI
                         }
 
                         //send to configured Handscoring targets
-                        if (projectMetaData.sendToHandScoring)
-                            ItemScoringManager.Instance.Send(tr);
+                        ItemScoringManager.Instance.Send(tr, sendToModifiers);
 
                         // send to configured targets in order (incl RB)
                         foreach (Target t in Target.GetOrderedTargets(tr.ProjectID, Target.TargetClass.General))

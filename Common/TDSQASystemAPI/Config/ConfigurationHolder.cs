@@ -23,67 +23,55 @@ using System.Diagnostics;
 
 namespace TDSQASystemAPI.Config
 {
-    //TODO: wierd mix of singleton and static
-    /// <summary>
-    /// Summary description for ConfigurationHolder
-    /// </summary>
     public class ConfigurationHolder
     {
-        private Dictionary<string, TestCollection> _configHolder = new Dictionary<string, TestCollection>();
-        private Dictionary<int, Dictionary<string, Dictionary<string,MetaDataEntry>>> _metaData = 
+        private static Dictionary<string, TestCollection> _configHolder = new Dictionary<string, TestCollection>();
+        private static Dictionary<int, Dictionary<string, Dictionary<string,MetaDataEntry>>> _metaData = 
                new Dictionary<int, Dictionary<string, Dictionary<string,MetaDataEntry>>>();
         
-        private List<AdministrationInfo> _admins = new List<AdministrationInfo>();
-        private static volatile ConfigurationHolder _instance;
-        private static object _syncLoc = new object();
-        private HashSet<string> _sessionDatabases = null;
-        private string _tdsSessionDatabasesValue = null;
-        private Dictionary<string, TestEnvironment> testEnv = null;
+        private static List<AdministrationInfo> _admins = new List<AdministrationInfo>();
+        protected static object _syncLoc = new object();
+        private static HashSet<string> _sessionDatabases = null;
+        private static string _tdsSessionDatabasesValue = null;
+        private static Dictionary<string, TestEnvironment> _testEnv = null;
         //first key = project ID, second key = GroupName
-        private Dictionary<int, Dictionary<string, List<RTSAttribute>>> _rtsAttributes = new Dictionary<int, Dictionary<string, List<RTSAttribute>>>();
+        private static Dictionary<int, Dictionary<string, List<RTSAttribute>>> _rtsAttributes = new Dictionary<int, Dictionary<string, List<RTSAttribute>>>();
 
-        private string _clientName;
+        private static string _clientName;
 
-        private ConfigurationHolder()
+        public ConfigurationHolder()
         {
-            _instance = this;
         }
 
-        public static ConfigurationHolder Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    lock (_syncLoc)
-                    {
-                        _instance = new ConfigurationHolder();
-                    }
-                }
-                return _instance;
-            }
-        }
-
-        public bool IsLoaded
-        {
-            get
-            {
-                return testEnv != null;
-            }
-        }
+        public static bool IsLoaded { get; protected set; }
 
 		/// <summary>
-		/// TODO
+		/// Load all needed DB based configuration data.
 		/// </summary>
 		/// <param name="dbHandle"></param>
-        public void Load(string dbHandle)
+        public virtual void Load(string dbHandle)
+        {
+            if (!IsLoaded)
+            {
+                lock (_syncLoc)
+                {
+                    if (!IsLoaded)
+                    {
+                        ConfigDB db = new ConfigDB(dbHandle);
+                        Logger.Log(true, "Created ConfigDB...", EventLogEntryType.Information, false, true);
+                        Load(dbHandle, db);
+                        IsLoaded = true;
+                    }
+                }
+            }
+        }
+
+        protected void Load(string dbHandle, ConfigDB db)
         {
             _clientName = ConfigurationManager.AppSettings["ClientName"];
-            ConfigDB db = new ConfigDB(dbHandle);
-            Logger.Log(true, "Created ConfigDB...", EventLogEntryType.Information, false, true);
             LoadMetaData(db);
             Logger.Log(true, "Loaded Meta Data...", EventLogEntryType.Information, false, true);
-            testEnv = db.LoadTestEnvironment();
+            _testEnv = db.LoadTestEnvironment();
             Logger.Log(true, "Loaded Test Environment...", EventLogEntryType.Information, false, true);
             LoadRTSAttributes(db);
             Logger.Log(true, "Loaded RTS Attributes Data...", EventLogEntryType.Information, false, true);
@@ -123,16 +111,20 @@ namespace TDSQASystemAPI.Config
         {
             get
             {
-                return Instance._configHolder;
+                if (!IsLoaded)
+                    throw new Exception("ConfigurationHolder has not been loaded yet");
+                return _configHolder;
             }
         }
 
         //ProjectID, GroupID, VarName
-        public static Dictionary<int, Dictionary<string, Dictionary<string,MetaDataEntry>>> MetaData
+        public Dictionary<int, Dictionary<string, Dictionary<string,MetaDataEntry>>> MetaData
         {
             get 
             {
-                return Instance._metaData;
+                if (!IsLoaded)
+                    throw new Exception("ConfigurationHolder has not been loaded yet");
+                return _metaData;
             }
         }
 
@@ -149,49 +141,55 @@ namespace TDSQASystemAPI.Config
 		/// </summary>
 		/// <param name="dbHandle"></param>
 		/// <returns></returns>
-        public static TestCollection TestCollection(string dbHandle)
+        public TestCollection TestCollection(string dbHandle)
         {
+            if (!IsLoaded) Load(dbHandle);
 
-            if (Instance.ConfigHolder.ContainsKey(dbHandle))
-                return Instance.ConfigHolder[dbHandle];
-            else
-            {
-                Instance.Load(dbHandle);
-            }
-            if (Instance.ConfigHolder.ContainsKey(dbHandle))
-                return Instance.ConfigHolder[dbHandle];
+            if (ConfigHolder.ContainsKey(dbHandle))
+                return ConfigHolder[dbHandle];
             return null;
         }
 
-        public Dictionary<string, TestEnvironment> GetTestEnvironment()
+        public Dictionary<string, TestEnvironment> TestEnvironment
         {
-            return testEnv;
+            get
+            {
+                if (!IsLoaded)
+                    throw new Exception("ConfigurationHolder has not been loaded yet");
+
+                return _testEnv;
+            }
         }
 
-        public static MetaDataEntry GetFromMetaData(int projectID, MetaDataEntry.GroupName group, string variable)
+        public MetaDataEntry GetFromMetaData(int projectID, MetaDataEntry.GroupName group, string variable)
         {
             return GetFromMetaData(projectID, group.ToString(), variable);
         }
 
-        public static MetaDataEntry GetFromMetaData(int projectID, string group, string variable)
+        public MetaDataEntry GetFromMetaData(int projectID, string group, string variable)
         {
             Dictionary<string, MetaDataEntry> dctVar = GetGroupFromMetaData(projectID, group);
             if (dctVar == null || !dctVar.ContainsKey(variable)) return null;
             return dctVar[variable];
         }
 
-        public static Dictionary<string, MetaDataEntry> GetGroupFromMetaData(int projectID, string group)
+        public Dictionary<string, MetaDataEntry> GetGroupFromMetaData(int projectID, string group)
         {
-            if (!Instance._metaData.ContainsKey(projectID)) return null;
-            Dictionary<string, Dictionary<string, MetaDataEntry>> dct = MetaData[projectID];
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
+
+            if (!_metaData.ContainsKey(projectID)) return null;
+            Dictionary<string, Dictionary<string, MetaDataEntry>> dct = _metaData[projectID];
             if (!dct.ContainsKey(group)) return null;
             return dct[group];
         }
 
-        public static List<MetaDataEntry> GetFromMetaData(int projectID, string variable)
+        public List<MetaDataEntry> GetFromMetaData(int projectID, string variable)
         {
-            if (!Instance._metaData.ContainsKey(projectID)) return null;
-            Dictionary<string, Dictionary<string, MetaDataEntry>> dct = MetaData[projectID];
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
+            if (!_metaData.ContainsKey(projectID)) return null;
+            Dictionary<string, Dictionary<string, MetaDataEntry>> dct = _metaData[projectID];
             List<MetaDataEntry> entries = new List<MetaDataEntry>();
             //grab any entry in Metadata that is for this variable, regardless of group
             foreach (Dictionary<string, MetaDataEntry> varDict in dct.Values)
@@ -202,21 +200,24 @@ namespace TDSQASystemAPI.Config
             return entries;
         }
 
-        public static int GetProjectIDFromMetaData(IProjectMetaDataLoader projectMetaDataLoader)
+        public int GetProjectIDFromMetaData(IProjectMetaDataLoader projectMetaDataLoader)
         {
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
+
             if (projectMetaDataLoader == null)
                 return -1;
 
             // a couple checks moved down from ctor
-            if (!ConfigurationHolder.MetaData.ContainsKey(-1))
+            if (!_metaData.ContainsKey(-1))
             {
                 throw new Exception("MetaData needs an entry for the 'non-project', _fk_ProjectID = -1");
             }
-            if (!ConfigurationHolder.MetaData[-1].ContainsKey("ProjectMap"))
+            if (!_metaData[-1].ContainsKey("ProjectMap"))
             {
                 throw new Exception("MetaData needs a 'ProjectMap' value for GroupName");
             }
-            MetaDataEntry e = projectMetaDataLoader.GetProjectMetaDataEntry(ConfigurationHolder.MetaData[-1]["ProjectMap"]);
+            MetaDataEntry e = projectMetaDataLoader.GetProjectMetaDataEntry(_metaData[-1]["ProjectMap"]);
             return e == null ? -1 : e.IntVal;
         }
 
@@ -227,6 +228,8 @@ namespace TDSQASystemAPI.Config
         /// <returns>null if no attrs configured</returns>
         public Dictionary<string, List<RTSAttribute>> GetRTSAttributes(int projectID)
         {
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
             if (!_rtsAttributes.ContainsKey(projectID)) return null;
             return _rtsAttributes[projectID];
         }
@@ -239,6 +242,8 @@ namespace TDSQASystemAPI.Config
         /// <returns>null of no attrs configured</returns>
         public List<RTSAttribute> GetRTSAttributes(int projectID, string groupName)
         {
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
             List<RTSAttribute> attrs = null;
             Dictionary<string, List<RTSAttribute>> projectAttrs = GetRTSAttributes(projectID);
             if (projectAttrs != null && projectAttrs.ContainsKey(groupName))
@@ -252,6 +257,8 @@ namespace TDSQASystemAPI.Config
         /// <returns>null if no attrs are configured</returns>
         public List<RTSAttribute> GetRTSAttributes()
         {
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
             List<RTSAttribute> attrs = new List<RTSAttribute>();
             if (_rtsAttributes == null)
                 return attrs;
@@ -265,29 +272,43 @@ namespace TDSQASystemAPI.Config
             return attrs.Count > 0 ? attrs : null;
         }
 
-        public static Dictionary<string, List<TestAccomodation>> GetTestAccommodations(string dbHandle, string testName)
+        public Dictionary<string, List<TestAccomodation>> GetTestAccommodations(string dbHandle, string testName)
         {
-            return Instance._configHolder[dbHandle].GetTestAccommodations(testName);
+            if (!IsLoaded) Load(dbHandle);
+
+            return _configHolder[dbHandle].GetTestAccommodations(testName);
         }
 
-        public static List<AdministrationInfo> GetAdminstrationInfo()
+        public List<AdministrationInfo> GetAdminstrationInfo()
         {
-            return Instance._admins;
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
+
+            return _admins;
         }
 
-        public static bool IsSessionDatabaseConfigured(string server, string database)
+        public bool IsSessionDatabaseConfigured(string server, string database)
         {
-            return Instance._sessionDatabases != null && Instance._sessionDatabases.Contains(String.Format("{0},{1}", server, database));
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
+
+            return _sessionDatabases != null && _sessionDatabases.Contains(String.Format("{0},{1}", server, database));
         }
 
-        public static string TDSSessionDatabasesValue()
+        public string TDSSessionDatabasesValue()
         {
-            return Instance._tdsSessionDatabasesValue;
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
+
+            return _tdsSessionDatabasesValue;
         }
 
-        public static AdministrationInfo GetAdminstrationInfo(DateTime activeDate)
+        public AdministrationInfo GetAdminstrationInfo(DateTime activeDate)
         {
-            foreach (AdministrationInfo admin in Instance._admins)
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
+
+            foreach (AdministrationInfo admin in _admins)
             {
                 if (activeDate >= admin.StartDate && activeDate < admin.EndDate)
                 {
@@ -360,21 +381,24 @@ namespace TDSQASystemAPI.Config
             }
         }
 
-        public static bool IncludeAccommodations(int projectID, MetaDataEntry.GroupName group)
+        public bool IncludeAccommodations(int projectID, MetaDataEntry.GroupName group)
         {
             return IncludeAccommodations(projectID, group.ToString());
         }
-        public static bool IncludeAccommodations(int projectID, string group)
+        public bool IncludeAccommodations(int projectID, string group)
         {
             return GetMetaDataFlag(projectID, group, "Accommodations", false);
         }
 
-        public static bool GetMetaDataFlag(int projectID, MetaDataEntry.GroupName group, string varName, bool defaultValue)
+        public bool GetMetaDataFlag(int projectID, MetaDataEntry.GroupName group, string varName, bool defaultValue)
         {
             return GetMetaDataFlag(projectID, group.ToString(), varName, defaultValue);
         }
-        public static bool GetMetaDataFlag(int projectID, string group, string varName, bool defaultValue)
+        public bool GetMetaDataFlag(int projectID, string group, string varName, bool defaultValue)
         {
+            if (!IsLoaded)
+                throw new Exception("ConfigurationHolder has not been loaded yet");
+
             MetaDataEntry entry = GetFromMetaData(projectID, group, varName);
             if (entry == null)
                 return defaultValue;

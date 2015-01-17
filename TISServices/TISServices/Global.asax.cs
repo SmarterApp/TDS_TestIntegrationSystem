@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -12,8 +12,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
-using CommonUtilities.Security;
+using AIR.Configuration.Security;
 using System.Web.Http;
+using OSS.TIS.Security;
 
 namespace TISServices
 {
@@ -23,7 +24,7 @@ namespace TISServices
         protected void Application_Start(object sender, EventArgs e)
         {
             // handle encrypted configuration data
-            SecureConfigManager.Initialize();
+            SecureConfigManager.Initialize(new NoEncryptionManager());
 
             //record start time by initializing the statistics recorder
             Utilities.Statistics.Initialize();
@@ -34,6 +35,8 @@ namespace TISServices
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            TISServices.Utilities.TISServicesLogger.Log("Application started");
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -63,7 +66,7 @@ namespace TISServices
 
         protected void Application_End(object sender, EventArgs e)
         {
-
+            TISServices.Utilities.TISServicesLogger.Log("Application stopped");
         }
     }
 }

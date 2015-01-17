@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -71,20 +71,20 @@ namespace TDSQASystemAPI.Routing
                     targetClass = TargetClass.General;
             }
 
-            MetaDataEntry e = ConfigurationHolder.GetFromMetaData(projectID, targetName, Variables.TargetType.ToString());
+            MetaDataEntry e = ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, targetName, Variables.TargetType.ToString());
             
             TargetType type;
             if (e == null || !Enum.TryParse<TargetType>(e.TextVal ?? "", out type))
                 type = TargetType.Custom;
 
-            e = ConfigurationHolder.GetFromMetaData(projectID, targetName, Variables.XMLVersion.ToString());
+            e = ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, targetName, Variables.XMLVersion.ToString());
             XMLAdapter.AdapterType xmlVersion;
             if(e == null || !Enum.TryParse<XMLAdapter.AdapterType>(e.TextVal, out xmlVersion))
                 xmlVersion = XMLAdapter.AdapterType.TDS; // default to proprietary
 
             // if a transform is configured, load it
             FileTransformSpec transformSpec = null;
-            e = ConfigurationHolder.GetFromMetaData(projectID, targetName, Variables.Transform.ToString());
+            e = ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, targetName, Variables.Transform.ToString());
             if (e != null)
             {
                 string xsltName = e.TextVal;
@@ -189,7 +189,7 @@ namespace TDSQASystemAPI.Routing
         /// </returns>
         public static List<string> GetOrderedTargetNames(int projectID, TargetClass targetClassFlags)
         {
-            List<MetaDataEntry> targetNames = ConfigurationHolder.GetFromMetaData(projectID, Variables.Target.ToString()).FindAll(e => e.IntVal == 1 // turned on
+            List<MetaDataEntry> targetNames = ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, Variables.Target.ToString()).FindAll(e => e.IntVal == 1 // turned on
                 && (targetClassFlags.HasFlag(TargetClass.DoR) // filter according to targetClasses specified
                         || !e.Group.Equals("DoR", StringComparison.InvariantCultureIgnoreCase))
                 && (targetClassFlags.HasFlag(TargetClass.Handscoring)
@@ -199,21 +199,21 @@ namespace TDSQASystemAPI.Routing
                         || e.Group.StartsWith("Handscoring", StringComparison.InvariantCultureIgnoreCase)));
 
             targetNames.Sort((e1, e2) =>
-                (ConfigurationHolder.GetFromMetaData(projectID, e1.Group, Variables.Order.ToString()) == null
+                (ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, e1.Group, Variables.Order.ToString()) == null
                         ? int.MaxValue
-                        : ConfigurationHolder.GetFromMetaData(projectID, e1.Group, Variables.Order.ToString()).IntVal)
+                        : ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, e1.Group, Variables.Order.ToString()).IntVal)
                 .CompareTo(
-                    ConfigurationHolder.GetFromMetaData(projectID, e2.Group, Variables.Order.ToString()) == null
+                    ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, e2.Group, Variables.Order.ToString()) == null
                         ? int.MaxValue
-                        : ConfigurationHolder.GetFromMetaData(projectID, e2.Group, Variables.Order.ToString()).IntVal));
+                        : ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, e2.Group, Variables.Order.ToString()).IntVal));
 
             // special handling for legacy target config (for backward compat).  DoR first, then handscoring, then RB
             if (targetClassFlags.HasFlag(TargetClass.General))
-                targetNames.InsertRange(0, ConfigurationHolder.GetFromMetaData(projectID, "UpdateRB").FindAll(e => e.IntVal == 1));
+                targetNames.InsertRange(0, ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, "UpdateRB").FindAll(e => e.IntVal == 1));
             if (targetClassFlags.HasFlag(TargetClass.Handscoring))
-                targetNames.InsertRange(0, ConfigurationHolder.GetFromMetaData(projectID, "SendToHandScoring").FindAll(e => e.IntVal == 1));
+                targetNames.InsertRange(0, ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, "SendToHandScoring").FindAll(e => e.IntVal == 1));
             if(targetClassFlags.HasFlag(TargetClass.DoR))
-                targetNames.InsertRange(0, ConfigurationHolder.GetFromMetaData(projectID, "UpdateDoR").FindAll(e => e.IntVal == 1));
+                targetNames.InsertRange(0, ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, "UpdateDoR").FindAll(e => e.IntVal == 1));
 
             return targetNames.Select(e => e.Group).ToList();
         }

@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -53,6 +53,8 @@ namespace TISServices.Utilities
             }
         }
 
+        internal int UnauthenticatedRequests { get; private set; }
+
         internal static DateTime StartTime
         {
             get
@@ -65,6 +67,7 @@ namespace TISServices.Utilities
         {
             this._numRequestsInserted = 0;
             this._numRequestsReceived = 0;
+            this.UnauthenticatedRequests = 0;
             this._startTime = DateTime.Now;
         }
 
@@ -76,6 +79,14 @@ namespace TISServices.Utilities
         internal static void AddToInsertedRequestCount()
         {
             Instance.AddInsertedRequest();
+        }
+
+        internal static void AddToUnauthenticatedRequestCount()
+        {
+            lock (_syncLoc)
+            {
+                Instance.UnauthenticatedRequests++;
+            }
         }
 
         /// <summary>

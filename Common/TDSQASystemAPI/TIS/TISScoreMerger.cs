@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -26,14 +26,6 @@ namespace TDSQASystemAPI.TIS
     /// </summary>
     internal class TISScoreMerger
     {
-        private static bool KeepExpiredStatus
-        {
-            get
-            {
-                return Convert.ToBoolean(ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValue(ConfigurationHolder.Instance.ClientName, "KeepExpiredStatus"));
-            }
-        }
-
         internal TISScoreMerger()
         {
         }
@@ -111,12 +103,17 @@ namespace TDSQASystemAPI.TIS
                                     testResult.Opportunity.ItemResponses).Count > 0; 
 
                 //if we merged all scores into a completed or expired test, mark the opp as scored
-                if (scoresMerged && !unscoredMerged
-                        && (testResult.Opportunity.Status == "completed"
-                            || testResult.Opportunity.Status == "submitted"
-                            || testResult.Opportunity.Status == "reported"
-                            || (testResult.Opportunity.Status == "expired" && !KeepExpiredStatus))
-                        && scores.FirstOrDefault(s => s.ScoreStatus.Equals(TestResults.ScoringStatus.WaitingForMachineScore.ToString(), StringComparison.InvariantCultureIgnoreCase)) == null)
+                string keepExpiredStatus;
+                 if (scoresMerged && !unscoredMerged
+                         && (testResult.Opportunity.Status == "completed"
+                             || testResult.Opportunity.Status == "submitted"
+                             || testResult.Opportunity.Status == "reported"
+                            || (testResult.Opportunity.Status == "expired"
+                                && !Convert.ToBoolean(String.IsNullOrEmpty(keepExpiredStatus = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(testResult.Opportunity.ClientName, "KeepExpiredStatus")) ? "true" : keepExpiredStatus)
+                                )
+                           )
+                        && scores.FirstOrDefault(s => s.ScoreStatus.Equals(TestResults.ScoringStatus.WaitingForMachineScore.ToString(), StringComparison.InvariantCultureIgnoreCase)) == null
+                    )
                 {
                     testResult.Opportunity.Status = "scored";
                     qaProjectChanged = testResult.RefreshQAProject();

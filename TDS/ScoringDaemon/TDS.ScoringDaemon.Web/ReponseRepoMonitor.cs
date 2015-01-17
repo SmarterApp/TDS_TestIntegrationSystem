@@ -33,7 +33,6 @@ namespace TDS.ScoringDeamon.Web
         private IResponseRepository ResponseRepository { get; set; }
         private ItemScoringConfig ItemScoringConf { get; set; }
         private ItemScoringClient ScoreRequestSender { get; set; }
-        private TestScorer TestOppScorer { get; set; }     
         
         public ThreadPoolStats Stats
         {
@@ -252,64 +251,6 @@ namespace TDS.ScoringDeamon.Web
             if (scoredResponse == null) return;   // Should probably log an error here if this were to happen.
 
             ScorableTest scorableTest = ResponseRepository.UpdateItemScore(scoredResponse);
-
-            if (scorableTest == null) return;     // This test (or another) is not ready for test scoring.
-
-            // This Test (or another) is ready for scoring. Lets try to score it.
-            // We have to look up the hub here because the test returned MAY not be for our client/envirnoment pair. It can be ANY test ready for scoring on the same physical hub
-            ReponseRepoMonitor hub = MonitorCollection.Lookup(scorableTest.ClientName, scorableTest.Environment);
-            if (hub != null)
-            {
-                hub.ScoreTest(scorableTest);
-            }
-            else
-            {
-                TDSLogger.Application.Error(new TraceLog(String.Format("Test Scoring: Could not locate hub to score test. TestInfo:{0}/{1}/{2}", scorableTest.ClientName, scorableTest.Environment, scorableTest.OppKey)));
-            }
         }
-
-        public void ScoreTest(ScorableTest scorableTest)
-        {
-
-            if (!(scorableTest.Environment.ToUpper().Equals(Environment) && scorableTest.ClientName.ToUpper().Equals(ClientName)))
-            {
-                TDSLogger.Application.Error(new TraceLog(String.Format("Test Scoring: Wrong hub asked to score test. Hub client/Environment:{0}/{1}, TestInfo:{2}/{3}/{4}", ClientName, Environment, scorableTest.ClientName, scorableTest.Environment, scorableTest.OppKey)));
-                return;
-            }
-
-
-            if (TestOppScorer == null)
-            {
-                TestOppScorer = new TestScorer(ScoringDaemonSettings.ItemBankConnectionString(DBIP, scorableTest.ItemBankDB),
-                                               ClientName);
-            }
-
-            ScoredTest scoredTest = null;
-            try
-            {
-                scoredTest = TestOppScorer.ScoreTest(scorableTest);
-            }
-            catch (Exception ex)
-            {
-                TDSLogger.Application.Error(new TraceLog(String.Format("Test Scoring: There was an exception scoring {0}:{1}:{2}", scorableTest.TestKey, scorableTest.ItemString, scorableTest.DateCompleted), ex));
-            }
-
-            if (scoredTest != null)
-            {
-                try
-                {
-                    ResponseRepository.UpdateTestScore(scoredTest);
-                }
-                catch (Exception ex)
-                {
-                    TDSLogger.Application.Error(new TraceLog(String.Format("Test Scoring: Could not persist test scores for opp:{0}, testkey:{1}, itemString:{2}, scoreString:{3}", scorableTest.OppKey, scorableTest.TestKey, scorableTest.ItemString, scoredTest.TestScoreString), ex));
-                }
-            }
-            else
-            {
-                TDSLogger.Application.Error(new TraceLog(String.Format("Test Scoring: Test scoring returned a null/empty string for client:{0}, opp:{1}, itemstring:{2}, dateCompleted:{3}", scorableTest.ClientName, scorableTest.OppKey, scorableTest.ItemString, scorableTest.DateCompleted)));
-            }          
-        }
-
     }
 }

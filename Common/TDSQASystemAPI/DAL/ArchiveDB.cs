@@ -73,7 +73,7 @@ namespace TDSQASystemAPI.DAL
                 windowOpportunity = tr.Opportunity.WindowOpportunityNumber;
             }
 
-            int result = TDSInterface.InsertTestOpportunityStatus(tr.Testee.EntityKey,tr.Name,opportunity,oppID, tr.Opportunity.Status,
+            int result = TDSQC.InsertTestOpportunityStatus(tr.Testee.EntityKey,tr.Name,opportunity,oppID, tr.Opportunity.Status,
                                                                     passedValidation, tr.Opportunity.StartDate, tr.Opportunity.StatusDate, tr.Opportunity.CompletedDate,
                                                                     tr.Opportunity.QASystemDateRecorded,message,
                                                                     tr.TestID, fileID, isDemo, testWindowID, windowOpportunity,
@@ -133,7 +133,7 @@ namespace TDSQASystemAPI.DAL
                             opportunityID = tr.Opportunity.OpportunityID;
                         }
                     }
-                    int count = TDSInterface.QC_RECORDEXCEPTION(entityKey, testname, opportuntiyNumber, opportunityID, vr.Type.ToString(), vr.XPath,
+                    int count = TDSQC.QC_RECORDEXCEPTION(entityKey, testname, opportuntiyNumber, opportunityID, vr.Type.ToString(), vr.XPath,
                                                                          vr.Message, vr.RuleID, DateTime.Now, fileID, (int)vr.ResultSeverity, 
                                                                          ConfigurationManager.ConnectionStrings["TDSQC"].ConnectionString);
                     if (count == 0)
@@ -221,7 +221,7 @@ namespace TDSQASystemAPI.DAL
                         opportunityid = "-1";
                     }
                 }
-                int count = TDSInterface.QC_RECORDEXCEPTION(entityKey, testname, opportunity, opportunityid, validationType, string.Empty, message, string.Empty,
+                int count = TDSQC.QC_RECORDEXCEPTION(entityKey, testname, opportunity, opportunityid, validationType, string.Empty, message, string.Empty,
                                                             DateTime.Now, fileID, (int)Severity.Fatal, ConfigurationManager.ConnectionStrings["TDSQC"].ConnectionString);
                 if (count == 0)
                 {
@@ -282,7 +282,7 @@ namespace TDSQASystemAPI.DAL
         {
             try
             {
-                int count = TDSInterface.QC_RECORDEXCEPTION(-1, string.Empty, -1, "-1", validationType, string.Empty, message, string.Empty, DateTime.Now,
+                int count = TDSQC.QC_RECORDEXCEPTION(-1, string.Empty, -1, "-1", validationType, string.Empty, message, string.Empty, DateTime.Now,
                                                             fileID, (int)Severity.Fatal, ConfigurationManager.ConnectionStrings["TDSQC"].ConnectionString);
                 if (count == 0)
                 {

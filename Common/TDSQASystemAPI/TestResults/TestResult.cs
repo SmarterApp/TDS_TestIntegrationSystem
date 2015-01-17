@@ -18,6 +18,7 @@ using ScoringEngine.ConfiguredTests;
 using ScoringEngine.Scoring;
 using ScoringEngine;
 using TDSQASystemAPI.ExceptionHandling;
+using AIR.Common;
 
 namespace TDSQASystemAPI.TestResults
 {
@@ -318,9 +319,9 @@ namespace TDSQASystemAPI.TestResults
         public void SetProject(IProjectMetaDataLoader projectMetaDataLoader)
         {
             this.projectMetaDataLoader = projectMetaDataLoader;
-            if (this.Blueprint != null && ConfigurationHolder.Instance.IsLoaded && this.ProjectMetaDataLoader != null)
+            if (this.Blueprint != null && ConfigurationHolder.IsLoaded && this.ProjectMetaDataLoader != null)
             {
-                this.projectID = ConfigurationHolder.GetProjectIDFromMetaData(this.ProjectMetaDataLoader);
+                this.projectID = ServiceLocator.Resolve<ConfigurationHolder>().GetProjectIDFromMetaData(this.ProjectMetaDataLoader);
             }
             else
             {
@@ -361,7 +362,7 @@ namespace TDSQASystemAPI.TestResults
         {
             int oldProject = this.ProjectID;
 
-            if (this.Blueprint != null && ConfigurationHolder.Instance.IsLoaded && this.ProjectMetaDataLoader != null)
+            if (this.Blueprint != null && ConfigurationHolder.IsLoaded && this.ProjectMetaDataLoader != null)
             {
                 this.ProjectMetaDataLoader.Refresh(this);
                 this.SetProject(ProjectMetaDataLoader);
@@ -557,7 +558,7 @@ namespace TDSQASystemAPI.TestResults
 
             List<ScoringEngine.ConfiguredTests.ItemScore> itemScores = this.GetItemScoresForScoringEngine();
 
-            measureValues = new ScoringEngine.Scorer(tc).ApplyComputationRules(this.Name, this.Testee.EnrolledGrade, measureValuesIn, itemScores, this.Opportunity.StartDate, this.Opportunity.Status, this.Opportunity.Forms, this.Opportunity.DateForceCompleted, this.TestMode);
+            measureValues = new ScoringEngine.Scorer(tc).ApplyComputationRules(this.Name, this.Testee.EnrolledGrade, measureValuesIn, itemScores, this.Opportunity.StartDate, this.Opportunity.Status, this.Opportunity.Forms, this.Opportunity.DateForceCompleted, this.TestMode, this.Opportunity.Accomodations, this.Opportunity.RTSAccommodations);
 
             if (measureValues.Count == 0)
                 return false;
@@ -568,7 +569,8 @@ namespace TDSQASystemAPI.TestResults
                 foreach (MeasureValue measureValue in measures.Values)
                 {
                     Score score = new Score(measureValue.MeasureOf, measureValue.MeasureLabel, measureValue.ScoreString, measureValue.StandardErrorString);
-                    xmlChanged = this.Opportunity.AddScoreIfNew(score);
+                    bool changed = this.Opportunity.AddScoreIfNew(score);
+                    xmlChanged = xmlChanged ? xmlChanged : changed;
                 }
             }
             return xmlChanged;
@@ -592,7 +594,7 @@ namespace TDSQASystemAPI.TestResults
         {
             XmlDocument doc = new XmlDocument();
             //Check Metadata for xml serializer type, TDS is default value
-            MetaDataEntry entry = ConfigurationHolder.GetFromMetaData(this.ProjectID, group, "XMLVersion");
+            MetaDataEntry entry = ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(this.ProjectID, group, "XMLVersion");
 
             XMLAdapter.AdapterType xmlType = XMLAdapter.AdapterType.TDS;
             if (entry != null)
@@ -601,7 +603,7 @@ namespace TDSQASystemAPI.TestResults
             //TODO: consider allowing configuration of attrs to exclude rather than include.  May be less config.
             //get the serialization config from the project metadata
             SerializationConfig config = new SerializationConfig(/*ConfigurationHolder.IncludeAccommodations(ProjectID, group),*/ 
-                ConfigurationHolder.Instance.GetRTSAttributes(this.projectID, group));
+                ServiceLocator.Resolve<ConfigurationHolder>().GetRTSAttributes(this.projectID, group));
 
             doc.LoadXml(serializerFactory.CreateSerializer(xmlType.ToString(), this).Serialize(config));
             return doc;

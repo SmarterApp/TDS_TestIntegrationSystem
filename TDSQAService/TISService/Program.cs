@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -12,7 +12,8 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
-using CommonUtilities.Security;
+using AIR.Configuration.Security;
+using OSS.TIS.Security;
 
 namespace TISService
 {
@@ -24,7 +25,7 @@ namespace TISService
         static void Main()
         {
             // initialize secure setting manager
-            SecureConfigManager.Initialize();
+            SecureConfigManager.Initialize(new NoEncryptionManager());
 
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 

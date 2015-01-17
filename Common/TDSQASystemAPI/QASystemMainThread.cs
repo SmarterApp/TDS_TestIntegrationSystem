@@ -148,7 +148,7 @@ namespace TDSQASystemAPI
             timeToSendWarnings = TimeSpan.FromHours(QASystemConfigSettings.Instance.HourToSendWarningSummary);
             sentWarnings = false;
 
-            Utilities.Logger.Log(true, "Created the main thread", EventLogEntryType.Information, false, true);
+            Utilities.Logger.Log(true, "Initialized the QASystemMainThread", EventLogEntryType.Information, false, true);
         }
 
         /// <summary>
@@ -174,7 +174,14 @@ namespace TDSQASystemAPI
                     else difference = currentTime.Subtract(timeToSendWarnings);
                     if (difference <= margin && !sentWarnings)
                     {
-                        Utilities.Logger.SendWarningSummaryEmail(DateTime.Now - TimeSpan.FromDays(1.0));
+                        try
+                        {
+                            Utilities.Logger.SendWarningSummaryEmail(DateTime.Now - TimeSpan.FromDays(1.0));
+                        }
+                        catch (Exception e)
+                        {
+                            Utilities.Logger.Log(true, string.Format("Exception occurred while sending warning summary email. Message: {0} {1} StackTrace: {2}", e.Message, Environment.NewLine, e.StackTrace), EventLogEntryType.Error, true, true);
+                        }
                         sentWarnings = true;
                     }
                     else if (difference > margin)

@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
+using TISServices.Authorization;
 using TISServices.Utilities;
 
 namespace TISServices
@@ -31,13 +31,35 @@ namespace TISServices
             row.Cells.Add(new TableCell() { Text = "Start Time" });
             row.Cells.Add(new TableCell() { Text = Statistics.StartTime.ToString() });
             Settings.Rows.Add(row);
+
             row = new TableRow();
             row.Cells.Add(new TableCell() { Text = "Requests Received" });
             row.Cells.Add(new TableCell() { Text = Statistics.NumRequestsReceived.ToString() });
             Settings.Rows.Add(row);
+
             row = new TableRow();
             row.Cells.Add(new TableCell() { Text = "Requests Inserted" });
             row.Cells.Add(new TableCell() { Text = Statistics.NumRequestsInserted.ToString() });
+            Settings.Rows.Add(row);
+
+            row = new TableRow();
+            row.Cells.Add(new TableCell() { Text = "Authenticated Tokens in Cache" });
+            row.Cells.Add(new TableCell() { Text = String.Format("{0} / {1}", AuthTokenCache.Instance.Count, AuthTokenCache.Instance.MaxSize) });
+            Settings.Rows.Add(row);
+
+            row = new TableRow();
+            row.Cells.Add(new TableCell() { Text = "Last Cache Purge" });
+            row.Cells.Add(new TableCell() { Text = AuthTokenCache.Instance.LastPurge == null ? "N/A" : AuthTokenCache.Instance.LastPurge.ToString() });
+            Settings.Rows.Add(row);
+
+            row = new TableRow();
+            row.Cells.Add(new TableCell() { Text = "Authentication Token Cache - Sliding Expiration (mins)" });
+            row.Cells.Add(new TableCell() { Text = AuthTokenCache.Instance.SlidingExpirationMinutes.ToString() });
+            Settings.Rows.Add(row);
+
+            row = new TableRow();
+            row.Cells.Add(new TableCell() { Text = "Unauthenticated Requests (not incl in Requests Received)" });
+            row.Cells.Add(new TableCell() { Text = Statistics.Instance.UnauthenticatedRequests.ToString() });
             Settings.Rows.Add(row);
         }
     }

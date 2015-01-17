@@ -36,7 +36,10 @@ namespace ScoringEngine.Scoring
         string enrolledGrade;
         string testStatus;
         string form = "";
+        string[] forms;
         TestMode mode = TestMode.Online;
+        List<TestAccomodation> TDSAccommodations;
+        List<TestAccomodation> ARTAccommodations;
 
         internal Dictionary<string, Dictionary<string, MeasureValue>> MeasureValues
         {
@@ -46,40 +49,7 @@ namespace ScoringEngine.Scoring
             }
         }
 
-        internal SpecificComputationRules(string testName, Dictionary<string,Dictionary<string,MeasureValue>> measuresIn, List<ItemScore> scores, DateTime testDate, TestCollection tc)
-        {
-            CheckScores(scores);
-            ScoreIntake(scores);
-            this.tc = tc;
-            this.testName = testName;
-            this.testDate = testDate;
-            this.measures = measuresIn;
-        }
-
-        internal SpecificComputationRules(string testName, string enrolledGrade, Dictionary<string, Dictionary<string, MeasureValue>> measuresIn, List<ItemScore> scores, DateTime testDate, TestCollection tc)
-        {
-            CheckScores(scores);
-            ScoreIntake(scores);
-            this.tc = tc;
-            this.testName = testName;
-            this.testDate = testDate;
-            this.measures = measuresIn;
-            this.enrolledGrade = enrolledGrade;
-        }
-
-        internal SpecificComputationRules(string testName, string status, string enrolledGrade, Dictionary<string, Dictionary<string, MeasureValue>> measuresIn, List<ItemScore> scores, DateTime testDate, TestCollection tc)
-        {
-            CheckScores(scores);
-            ScoreIntake(scores);
-            this.tc = tc;
-            this.testName = testName;
-            this.testDate = testDate;
-            this.measures = measuresIn;
-            this.enrolledGrade = enrolledGrade;
-            this.testStatus = status;
-        }
-
-        internal SpecificComputationRules(string testName, string status, string enrolledGrade, string form, Dictionary<string, Dictionary<string, MeasureValue>> measuresIn, List<ItemScore> scores, DateTime testDate, TestCollection tc, DateTime forceCompletionDate, TestMode mode)
+        internal SpecificComputationRules(string testName, string status, string enrolledGrade, string form, Dictionary<string, Dictionary<string, MeasureValue>> measuresIn, List<ItemScore> scores, DateTime testDate, TestCollection tc, DateTime forceCompletionDate, TestMode mode, List<TestAccomodation> TDSAccomms, List<TestAccomodation> ARTAccomms)
         {
             CheckScores(scores);
             ScoreIntake(scores);
@@ -92,6 +62,8 @@ namespace ScoringEngine.Scoring
             this.form = form;
             this.mode = mode;
             this.forceCompletionDate = forceCompletionDate;
+            this.TDSAccommodations = TDSAccomms;
+            this.ARTAccommodations = ARTAccomms;
         }
 
         private void CheckScores(List<ItemScore> scores)
@@ -331,6 +303,35 @@ namespace ScoringEngine.Scoring
                 throw new ScoringEngineException("MLE scoring failed to converge");
         }
 
+        public void SBACMultiSegmentTheta(string measureOf, string measureLabel, double LOT, double HOT, double seLimit, Dictionary<string, int> segments)
+        {
+            MeasureValue attemptedness = GetMeasureValue("Attempted", measureOf);
+            if (attemptedness.ScoreString != "Y")
+            {
+                AddMeasureValue(measureLabel, measureOf, "");
+                return;
+            }
+
+            List<ItemScore> sbacTestScores = SBACIABRecodeAndSubset(nonDroppedItemScores, segments);
+            List<ItemScore> testScores = MultiSegmentRecodeAndSubset(nonDroppedItemScores, segments);
+            IRTScore thetaScore = MLEScorer.MLEScore3PL(sbacTestScores, 0.1, -15.0, 15.0);
+            if (thetaScore.Type == IRTScoreType.Converged)
+            {
+                double score = thetaScore.Score;
+                if (score < LOT) score = LOT;
+                if (score > HOT) score = HOT;
+                // SE is calculated based only on the answered item(s) for both complete and incomplete tests.
+                double se = 1 / Math.Sqrt(MLEScorer.Information(testScores, score));
+                if (se > seLimit) se = seLimit;
+                if (se < -seLimit) se = -seLimit;
+                AddMeasureValue(measureLabel, measureOf, score, se);
+            }
+            else if (thetaScore.Type == IRTScoreType.NoItems)
+                AddMeasureValue(measureLabel, measureOf, "");
+            else
+                throw new ScoringEngineException("SBACMultiSegmentTheta: MLE scoring failed to converge");
+        }
+
         public void ScaleScore(string measureOf, string measureLabel)
         {
             MeasureValue thetaScoreValue = GetMeasureValue("ThetaScore", measureOf);
@@ -345,6 +346,26 @@ namespace ScoringEngine.Scoring
             }
             else
                 AddMeasureValue(measureLabel, measureOf, "");
+        }
+
+        public void SBACNumBlocks(string measureOf, string measureLabel, Dictionary<int, string> blocks)
+        {
+            int numBlocksAttempted = 0;
+            foreach (string block in blocks.Values)
+            {
+                if (GetMeasureValue("Attempted", block).ScoreString == "Y") numBlocksAttempted += 1;
+            }
+            AddMeasureValue(measureLabel, measureOf, numBlocksAttempted, 0.0);
+        }
+
+        public void SBACNumBlocksProficient(string measureOf, string measureLabel, Dictionary<int, string> blocks)
+        {
+            int numBlocksProficient = 0;
+            foreach (string block in blocks.Values)
+            {
+                if (GetMeasureValue("PerformanceLevel", block).ScoreString == "3") numBlocksProficient += 1;
+            }
+            AddMeasureValue(measureLabel, measureOf, numBlocksProficient, 0.0);
         }
 
         /// <summary>
@@ -453,6 +474,87 @@ namespace ScoringEngine.Scoring
                         throw new ScoringEngineException("Could not find performance level for scale: " + testName + ", Score: " + roundedScore);
                 }
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="measureLabel"></param>
+        /// <param name="measureOf"></param>
+        /// <param name="accomNoCodes"></param> Key is Accommodation Type and the value is the code that corresponds to "No". We need the Type in order to
+        /// identify the corresponding "yes" codes.
+        public void SBACAccommodationUseCodes(string measureLabel, string measureOf, Dictionary<string, string> accomNoCodes)
+        {
+            List<TestAccomodation> eligibleAccommodations = ARTAccommodations;
+            List<TestAccomodation> availableAccommodations = TDSAccommodations;
+            Dictionary<string, int> accommodationUseCodes = new Dictionary<string, int>();
+            // find the set of known accommodations (for eligible and available)
+            HashSet<string> knownEligibleAccommodations = new HashSet<string>();
+            foreach (TestAccomodation eligibleAccom in eligibleAccommodations) knownEligibleAccommodations.Add(eligibleAccom.Type);
+            HashSet<string> knownAvailableAccommodations = new HashSet<string>();
+            foreach (TestAccomodation availableAccom in availableAccommodations) knownAvailableAccommodations.Add(availableAccom.Type);
+            // start filling in accommodationUseCodes (measureOf as key, measure value as value)
+            foreach (TestAccomodation eligibleAccom in eligibleAccommodations)
+            {
+                if (accomNoCodes.ContainsKey(eligibleAccom.Type))
+                {
+                    if (accomNoCodes[eligibleAccom.Type] == eligibleAccom.Code)
+                    {
+                        if (!knownAvailableAccommodations.Contains(eligibleAccom.Type))
+                            accommodationUseCodes[eligibleAccom.ToTypeCodeString()] = 9; // means eligible = no, available = unknown
+                        else
+                            accommodationUseCodes[eligibleAccom.ToTypeCodeString()] = 12; // means eligible = no, available = no
+                        // if there is an available accommodation of this type, we only want a no-no entry if the available accom is also no. This will
+                        // be removed below.
+                    }
+                    else
+                    {
+                        if (knownAvailableAccommodations.Contains(eligibleAccom.Type))
+                            accommodationUseCodes[eligibleAccom.ToTypeCodeString()] = 21; // means eligible = yes, available = no
+                        // this will be changed to yes-yes below if needed.
+                        else
+                            accommodationUseCodes[eligibleAccom.ToTypeCodeString()] = 18; // means eligible = yes, available = unknown
+                    }
+                }
+            }
+
+            foreach (TestAccomodation availableAccom in availableAccommodations)
+            {
+                if (accomNoCodes.ContainsKey(availableAccom.Type))
+                {
+                    if (accomNoCodes[availableAccom.Type] == availableAccom.Code)
+                    {
+                        if (!knownEligibleAccommodations.Contains(availableAccom.Type))
+                            accommodationUseCodes[availableAccom.ToTypeCodeString()] = 3; // means eligible = unknown, available = no
+                        // nothing to do for yes-no or no-no
+                    }
+                    else
+                    {
+                        // first remove possible no-no
+                        if (accommodationUseCodes.ContainsKey(availableAccom.Type + "|" + accomNoCodes[availableAccom.Type]))
+                            accommodationUseCodes.Remove(availableAccom.Type + "|" + accomNoCodes[availableAccom.Type]);
+
+                        if (accommodationUseCodes.ContainsKey(availableAccom.ToTypeCodeString()))
+                        {
+                            accommodationUseCodes[availableAccom.ToTypeCodeString()] = 24; // means eligible = yes, available = yes
+                        }
+                        else
+                        {
+                            if (knownEligibleAccommodations.Contains(availableAccom.ToTypeCodeString()))
+                                accommodationUseCodes[availableAccom.ToTypeCodeString()] = 15; // means eligible = no, available = yes
+                            else
+                                accommodationUseCodes[availableAccom.ToTypeCodeString()] = 6; // means eligible = unknown, available = yes
+                        }
+                    }
+                }
+            }
+            // Do unknow-unknown
+            foreach (string type in accomNoCodes.Keys)
+                if (!knownEligibleAccommodations.Contains(type) && !knownAvailableAccommodations.Contains(type))
+                    accommodationUseCodes[type + "|" + accomNoCodes[type]] = 0;
+
+            foreach (KeyValuePair<string, int> acc in accommodationUseCodes)
+                AddMeasureValue("Accommodation", acc.Key, acc.Value, 0);
         }
 
         /// <summary>
@@ -620,6 +722,77 @@ namespace ScoringEngine.Scoring
             return newResponses;
         }
 
+        /// <summary>
+        /// Assign a score of 0 to unresponded items for items on the segments specified.
+        /// </summary>
+        /// <param name="allTestResponses"></param>
+        /// <param name="subscales"></param>
+        /// <returns></returns>
+        private List<ItemScore> SBACIABRecodeAndSubset(List<ItemScore> allTestResponses, Dictionary<string, int> segments)
+        {
+            TestBlueprint bp = tc.GetBlueprint(testName);
+
+            Dictionary<string, SegmentBlueprint> segmentObjects = new Dictionary<string, SegmentBlueprint>();
+            foreach (string segmentName in bp.SegmentNames())
+            {
+                SegmentBlueprint sbp = bp.GetSegment(segmentName);
+                if (segments.ContainsKey(sbp.SegmentID))
+                    segmentObjects[sbp.SegmentID] = sbp;
+            }
+
+            List<ItemScore> newResponses = new List<ItemScore>();
+
+            Dictionary<string, ItemScore> scores = new Dictionary<string, ItemScore>();
+            foreach (ItemScore ir in allTestResponses)
+                if (segments.ContainsKey(ir.SegmentID))
+                    scores[ir.Item.ItemName + "-" + ir.ScoreInfo.Dimension] = ir;
+
+            // Assign a score of 0 to all non-selected items (even if they aren't passed to the scoring engine)
+            foreach (string segmentID in segments.Keys)
+            {
+                SegmentBlueprint sbp = segmentObjects[segmentID];
+                TestForm formObject = bp.GetForm(forms[sbp.TestPosition - 1]);
+                if (formObject == null)
+                    throw new ScoringEngineException("No form '" + forms[sbp.TestPosition - 1] + "' in the blueprint for segment '" + segmentID + "'");
+                for (int i = 0; i < formObject.Items.Count; i++)
+                {
+                    TestItem fti = formObject.Items[i + 1];
+                    foreach (TestItemScoreInfo si in fti.ScoreInfo)
+                    {
+                        if (scores.ContainsKey(fti.ItemName + "-" + si.Dimension))
+                        {
+                            ItemScore ir = scores[fti.ItemName + "-" + si.Dimension];
+                            if (
+                                    !ir.IsFieldTest
+                                    && !ir.TreatAsNotPresented()
+                                    && !ir.IsDropped
+                                    && ir.Item.IsScored
+                               )
+                            {
+                                if (!ir.IsSelected)
+                                    newResponses.Add(new ItemScore(ir.Item, ir.ScoreInfo, ir.ScoreInfo.RecodeScore(0.0), ir.ConditionCode, ir.IsFieldTest, true, true));
+                                else
+                                    newResponses.Add(new ItemScore(ir.Item, ir.ScoreInfo, ir.ScoreInfo.RecodeScore(ir.Score), ir.ConditionCode, ir.IsFieldTest, ir.IsSelected, ir.IsAttempted));
+                            }
+                        }
+                        else
+                        {
+                            // item dimension doesn't appear in TDS XML file (or wasn't sent to the TestScoringEngine from TDS (e.g. field test items)) but is on the form.
+                            if (
+                                    !fti.IsFieldTest
+                                    && fti.IsScored
+                                )
+                            {
+                                newResponses.Add(new ItemScore(fti, si, 0, "", false, true, true));
+                            }
+                        }
+                    }
+                }
+            }
+
+            return newResponses;
+        }
+
         /// <summary> 
         /// Drop field test items.
         /// Drop non-selected items.
@@ -646,6 +819,66 @@ namespace ScoringEngine.Scoring
                     newResponses.Add(new ItemScore(ir.Item, ir.ScoreInfo, ir.ScoreInfo.RecodeScore(ir.Score), ir.ConditionCode, ir.IsFieldTest, ir.IsSelected, ir.IsAttempted));
                 }
             }
+            return newResponses;
+        }
+
+        private static List<ItemScore> MultiSegmentRecodeAndSubset(List<ItemScore> allTestResponses, Dictionary<string, int> segments)
+        {
+            List<ItemScore> newResponses = new List<ItemScore>();
+            foreach (ItemScore ir in allTestResponses)
+            {
+                if (
+                    segments.ContainsKey(ir.SegmentID)
+                    && !ir.IsFieldTest
+                    && ir.Item.IsScored
+                    && !ir.TreatAsNotPresented()
+                    && !ir.IsDropped
+                    && ir.IsSelected
+                    )
+                {
+                    newResponses.Add(new ItemScore(ir.Item, ir.ScoreInfo, ir.ScoreInfo.RecodeScore(ir.Score), ir.ConditionCode, ir.IsFieldTest, ir.IsSelected, ir.IsAttempted));
+                }
+            }
+            return newResponses;
+        }
+
+        /// <summary> 
+        /// Drop field test items.
+        /// Drop non-selected items.
+        /// Drop non-attempted items.
+        /// Drop items that should be treated as not-presented. 
+        /// Keep only items on the current scale.
+        /// Recode item scores.
+        /// </summary>
+        /// <param name="allTestResponses"></param>
+        /// <returns></returns>
+        private List<ItemScore> RecodeAndSubsetAttempted(List<ItemScore> allTestResponses, string subscale)
+        {
+            List<ItemScore> newResponses = new List<ItemScore>();
+            foreach (ItemScore ir in allTestResponses)
+            {
+                if (
+                        (subscale.ToLower() == "overall" || ir.ScoreInfo.HasStrand(subscale))
+                        && !ir.IsFieldTest
+                        && ir.Item.IsScored
+                        && !ir.TreatAsNotPresented()
+                        && ir.IsSelected
+                        && ir.IsAttempted
+                    )
+                {
+                    newResponses.Add(new ItemScore(ir.Item, ir.ScoreInfo, ir.ScoreInfo.RecodeScore(ir.Score), ir.ConditionCode, ir.IsFieldTest, ir.IsSelected, ir.IsAttempted));
+                    if (ir.ScoreInfo.IRTModel == null)
+                        throw new ScoringEngineException("Item " + ir.Item.ItemName + " isn't associated with a valid IRT model");
+                }
+            }
+            
+            //TextWriter tw = new StreamWriter(@"C:\tmp\SubsetItemsSE.csv", false);
+            //foreach (ItemScore iS in newResponses)
+            //{
+            //    tw.WriteLine(iS.Item.ItemName);
+            //}
+            //tw.Close();
+     
             return newResponses;
         }
 

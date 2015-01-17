@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -25,7 +25,7 @@ namespace OSS.TIS.Routing
             if (targetClass == Target.TargetClass.Handscoring)
                 return new ItemScoringTarget(targetName, targetClass, type, xmlVersion, transformSpec);
             else
-                return new SFTPTarget(targetName, targetClass, type, xmlVersion, transformSpec);
+                return new RESTTarget(targetName, targetClass, type, xmlVersion, transformSpec);
         }
 
         #endregion

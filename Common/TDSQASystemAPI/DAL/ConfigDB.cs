@@ -23,12 +23,12 @@ using System.Configuration;
 
 namespace TDSQASystemAPI.DAL
 {
-    internal class ConfigDB
+    public class ConfigDB
     {
-        private Database _db = null;
+        protected Database _db = null;
         private Database _dbItems = null;
 
-        internal ConfigDB(string handle)
+        public ConfigDB(string handle)
         {
             try
             {

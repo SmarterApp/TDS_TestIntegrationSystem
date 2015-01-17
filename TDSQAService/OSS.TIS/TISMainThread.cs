@@ -1,4 +1,4 @@
-/*******************************************************************************
+﻿/*******************************************************************************
 * Educational Online Test Delivery System
 * Copyright (c) 2014 American Institutes for Research
 *
@@ -30,8 +30,10 @@ namespace OSS.TIS
             ServiceLocator.Register<ITargetFactory>(() => new TISTargetFactory());
             ServiceLocator.Register<IItemScoringTargetFactory>(() => new ItemScoringTargetFactory());
             ServiceLocator.Register<IAcknowledgementTargetFactory>(() => new AcknowledgementTargetFactory());
+            ServiceLocator.Register<ITISExtender>(() => new TISExtender());
             ServiceLocator.Register<ITestResultSerializerFactory>(() => new TestResultSerializerFactory());
             ServiceLocator.Register<TDSQASystemAPI.Config.ISystemConfigurationManager>(() => new Config.SystemConfigurationManager());
+            ServiceLocator.Register<TDSQASystemAPI.Config.ConfigurationHolder>(() => new TDSQASystemAPI.Config.ConfigurationHolder());
         }
     }
 }

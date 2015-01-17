@@ -11,6 +11,21 @@
     <AssemblyName>TISService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,6 +49,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,15 +71,11 @@
   <ItemGroup>
     <None Include="bin\Debug\TISService.exe.config" />
     <None Include="ConfigFiles\Debug.App.config" />
-    <None Include="ConfigFiles\Dev.App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="ConfigFiles\Release.App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\CommonUtilities\CommonUtilities.csproj">
-      <Project>{2ea7168e-0377-4703-b970-491f12ef6a09}</Project>
-      <Name>CommonUtilities</Name>
+    <ProjectReference Include="..\..\Common\AIR.Configuration\AIR.Configuration.csproj">
+      <Project>{dbd0dd55-ec2e-48b3-a669-b8d331c5432a}</Project>
+      <Name>AIR.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Common\TDSQASystemAPI\TDSQASystemAPI.csproj">
       <Project>{5a2159cb-2df4-4b08-9e21-f772b7b03540}</Project>
@@ -100,6 +112,23 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

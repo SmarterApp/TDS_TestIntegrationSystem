@@ -2,4 +2,3 @@ syntax: glob
 *.suo
 bin/*
 obj/*
-*.config
