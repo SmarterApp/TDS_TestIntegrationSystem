@@ -67,24 +67,25 @@ Create an App User account and grant that account dbo access on the above DBs. [
 
 4) Deploy the `[Db server].OSS_QC` database objects by running the following scripts in order: [DB server]
 
-* `<root>\OSS.TIS\SQL\TISDB\1_Create_Objects.sql`
-* `<root>\OSS.TIS\SQL\TISDB\2_Configuration.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TISDB\1_Create_Objects.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TISDB\2_Configuration.sql`
 
-5) Deploy the [Db server].OSS_Configs database objects by running the following scripts in order:
+5) Deploy the [Db server].OSS_TestScoringConfigs database objects by running the following scripts in order:
 
-* `<root>\OSS.TIS\SQL\TDSConfigs\1_Create_Objects.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\2_Configuration.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TestScoringConfigs\Tables.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TestScoringConfigs\Views.sql`
+
+6) Deploy the [Db server].OSS_Configs database objects by running the following scripts in order:
+
+* `<root>\TDSQAService\OSS.TIS\SQL\TDSConfigs\1_Create_Objects.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TDSConfigs\2_Configuration.sql`
  	
-6) Deploy the [Db server].OSS_TestScoringConfigs database objects by running the following scripts in order:
-
-* `<root>\OSS.TIS\SQL\TDSConfigs\Tables.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\Views.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\StoredProcedures.sql`
 	
 7) Deploy the [Db server].OSS_Itembank database objects by running the following scripts in order:
 
-* `<root>\OSS.TIS\SQL\TDSConfigs\1_Create_Objects.sql`
-* `<root>\OSS.TIS\SQL\TDSConfigs\2_Configuration.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\1_Create_Objects.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\2_Configuration.sql`
+
 
 8) Load the test Package by running the Stored Procedure `[tp].[spLoader_Main]`
 
