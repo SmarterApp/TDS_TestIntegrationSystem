@@ -57,13 +57,17 @@
   <ItemGroup>
     <Content Include="SQL\TDSConfigs\1_Create_Objects.sql" />
     <Content Include="SQL\TDSConfigs\2_Configuration.sql" />
-    <Content Include="SQL\TDSItemBank\1_Create_Objects.sql" />
-    <Content Include="SQL\TDSItemBank\2_Configuration.sql" />
+    <Content Include="SQL\TDSItemBank\1_Create_Synonyms_Sproc.sql" />
+    <Content Include="SQL\TDSItemBank\2_Create_Synonyms_Config.sql" />
+    <Content Include="SQL\TDSItemBank\3_Create_Objects.sql" />
+    <Content Include="SQL\TDSItemBank\4_Configuration.sql" />
+    <Content Include="SQL\TDSItemBank\5_LoadPackages.sql" />
+    <Content Include="SQL\TestScoringConfigs\1_Tables.sql" />
+    <Content Include="SQL\TestScoringConfigs\2_Views.sql" />
+    <Content Include="SQL\TestScoringConfigs\3_Configuration.sql" />
     <Content Include="SQL\TISDB\2_Configuration.sql" />
     <Content Include="SQL\TISDB\1_Create_Objects.sql" />
-    <Content Include="SQL\TestScoringConfigs\StoredProcedures.sql" />
-    <Content Include="SQL\TestScoringConfigs\Tables.sql" />
-    <Content Include="SQL\TestScoringConfigs\Views.sql" />
+    <Content Include="SQL\TISDB\3_ScoringDaemonConfiguration.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\AIR.Configuration\AIR.Configuration.csproj">

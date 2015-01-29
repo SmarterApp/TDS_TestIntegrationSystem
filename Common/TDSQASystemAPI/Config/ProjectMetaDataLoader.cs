@@ -34,7 +34,7 @@ namespace TDSQASystemAPI.Config
 
         public MetaDataEntry GetProjectMetaDataEntry(Dictionary<string, MetaDataEntry> projectMap)
         {
-            const string MDE_FMT_STR = "{0}-{1}{2}-{4}";
+            const string MDE_FMT_STR = "{0}-{1}{2}-{3}";
 
             string mdeKey = String.Empty;
             MetaDataEntry mde = null;
