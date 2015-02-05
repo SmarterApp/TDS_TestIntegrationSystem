@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
+using AIR.Common.Xml;
 
 namespace TDS.ItemScoringEngine
 {
@@ -51,27 +52,27 @@ namespace TDS.ItemScoringEngine
             }
         }
 
-        
         // stuff for the Xml Serializer/Deserializer of the specific fields into CDATA elements
 
         [XmlElement("Message")]
-        public XmlCDataSection MsgCDATA
+        public XmlCDataText MsgCDATA
         {
             get
             {
-                return String.IsNullOrEmpty(Msg) ? null : new XmlDocument().CreateCDataSection(Msg);
+                return new XmlCDataText(Msg);
             }
             set
             {
                 Msg = value.Value;
             }
         }
+
         [XmlElement("StackTrace")]
-        public XmlCDataSection ExpCDATA
+        public XmlCDataText ExpCDATA
         {
-            get 
+            get
             {
-                return String.IsNullOrEmpty(_exceptionStr) ? null : new XmlDocument().CreateCDataSection(_exceptionStr);  // keeping a string representation of the exception around is really to help with the serialization/deserialization between ISE and calling host.
+                return new XmlCDataText(_exceptionStr);  // keeping a string representation of the exception around is really to help with the serialization/deserialization between ISE and calling host.
             }
             set
             {

@@ -412,6 +412,64 @@ namespace ScoringEngine.Scoring
                 AddMeasureValue(measureLabel, measureOf, "");
         }
 
+        /// <summary>
+        ///  1 if rounded scale score + seMultiple * SE is less than the proficiency cut
+        ///  3 if rounded scale score - seMultiple * SE is greater than or equal to proficiency cut
+        ///  2 otherwise
+        /// </summary>
+        /// <param name="measureOf"></param>
+        /// <param name="measureLabel"></param>
+        /// <param name="proficiencyPerformanceLevel">performance level corresponding to "proficient"</param>
+        public void SEBasedPLWithRounding(string measureOf, string measureLabel, double seMultiple, int proficientPerformanceLevel, double LOT, double HOT)
+        {
+            MeasureValue scaleScoreValue = GetMeasureValue("ScaleScore", measureOf);
+            MeasureValue thetaScoreValue = GetMeasureValue("ThetaScore", measureOf);
+            if (scaleScoreValue.ScoreString.Length > 0)
+            {
+
+                string pl = "";
+                double thetaScore = thetaScoreValue.Score;
+                if (thetaScore < LOT + 1E-10)
+                {
+                    pl = "1";
+                }
+                else if (thetaScore > HOT - 1E-10)
+                {
+                    pl = "3";
+                }
+                else
+                {
+                    double scaleScore = scaleScoreValue.Score;
+                    double se = scaleScoreValue.StandardError;
+                    TestBlueprint tb = tc.GetBlueprint(testName);
+                    double cutScore = Double.NaN;
+                    foreach (CutScoreStrand cs in tb.SubjectPerformanceLevel)
+                    {
+                        if (cs.PerformanceLevel == proficientPerformanceLevel.ToString())
+                            cutScore = cs.Min;
+                    }
+                    if (Double.IsNaN(cutScore))
+                        throw new ScoringEngineException("Failed to find profiecient cut");
+
+                    if (Math.Round(scaleScore - seMultiple * se, MidpointRounding.AwayFromZero) >= cutScore)
+                    {
+                        pl = "3";
+                    }
+                    else if (Math.Round(scaleScore + seMultiple * se, MidpointRounding.AwayFromZero) < cutScore)
+                    {
+                        pl = "1";
+                    }
+                    else
+                    {
+                        pl = "2";
+                    }
+                }
+                AddMeasureValue(measureLabel, measureOf, pl);
+            }
+            else
+                AddMeasureValue(measureLabel, measureOf, "");
+        }
+
         public void TestPerformanceLevel(string measureOf, string measureLabel)
         {
             MeasureValue scaleScoreValue = GetMeasureValue("ScaleScore", measureOf);

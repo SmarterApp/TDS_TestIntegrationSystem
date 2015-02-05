@@ -538,28 +538,39 @@ namespace TDSQASystemAPI.TestMerge
         private void MergeAccomodations(List<TestResult> sourceTestResults, TestResult targetTestResult)
         {
             // Source test accomodations which has segment 0, value is a dictionary indexed by accomodation code 
-            Dictionary<string, Dictionary<string, TestAccomodation>> sourceTestCommonAccomodations = new Dictionary<string, Dictionary<string,TestAccomodation>>();
+            Dictionary<string, Dictionary<string, TestAccomodation>> sourceTestCommonAccomodations = new Dictionary<string, Dictionary<string, TestAccomodation>>();
 
             // Unique set of segment 0 - accomodation codes
             HashSet<string> uniqueCommonAccomodationCodes = new HashSet<string>();
 
             // Result list of generated target test accomodations 
-            List<TestAccomodation> targetTestAccomdations = new List<TestAccomodation>();            
-            
+            List<TestAccomodation> targetTestAccomdations = new List<TestAccomodation>();
+
+            // Tests and their accommodation codes which are expanded explicitly for all segments eventhough they have common code "segment 0" specified
+            Dictionary<string, HashSet<string>> explicitlyExpandedCommonAccommodationCodesForTests = new Dictionary<string, HashSet<string>>();
+
             // Split/Add segment specific accomodations and common accomodations of source tests
-            foreach(TestResult sourceTestResult in sourceTestResults)            
+            foreach (TestResult sourceTestResult in sourceTestResults)
             {
                 Opportunity sourceOpp = sourceTestResult.Opportunity;
-                foreach(var sourceAccom in sourceOpp.Accomodations)
+
+                // Accommodation code and a list of target segments on which they are currently applied through explicit specification in the source test
+                Dictionary<string, HashSet<int>> accommodationsOnSpecificTargetSegments = new Dictionary<string, HashSet<int>>();
+                foreach (var sourceAccom in sourceOpp.Accomodations)
                 {
-                    // This accomodation is specific to a particular source segment
+                    // This accommodation is specific to a particular source segment
                     if (sourceAccom.Segment > 0)
                     {
-                        // Find the corresponding target segment and and it with specific target segment position (non-zero)
+                        // Find the corresponding target segment and add it with specific target segment position (non-zero)
                         TestSegment targetSegment = GetTargetSegment(sourceTestResult.Name, sourceAccom.Segment);
                         if (targetSegment == null)
                             throw new ApplicationException("Test Merge: Cannot merge accomodations");
                         targetTestAccomdations.Add(new TestAccomodation(sourceAccom.Type, sourceAccom.Description, sourceAccom.Code, targetSegment.Position, sourceAccom.Source, 0));
+
+                        // Add this accommodation code and its target segment position for bookkeeping
+                        if (!accommodationsOnSpecificTargetSegments.ContainsKey(sourceAccom.Code))
+                            accommodationsOnSpecificTargetSegments.Add(sourceAccom.Code, new HashSet<int>());
+                        accommodationsOnSpecificTargetSegments[sourceAccom.Code].Add(targetSegment.Position);
                     }
                     else
                     {
@@ -571,19 +582,52 @@ namespace TDSQASystemAPI.TestMerge
                             sourceCommonAccomodations = new Dictionary<string, TestAccomodation>();
                             sourceTestCommonAccomodations.Add(sourceTestResult.Name, sourceCommonAccomodations);
                         }
-                        
-                        // Add the 0 code accomodation to this particulare test as well as to uniqe code collection.
+
+                        // Add the 0 code accomodation to this particulare test as well as to unique code collection.
                         if (sourceCommonAccomodations.ContainsKey(sourceAccom.Code))
-                            throw new ApplicationException(string.Format("Test merge: Duplicate common accomdation code: {0} found for the test: {1}", sourceAccom.Code, sourceTestResult.Name));                        
+                            throw new ApplicationException(string.Format("Test merge: Duplicate common accomdation code: {0} found for the test: {1}", sourceAccom.Code, sourceTestResult.Name));
                         sourceCommonAccomodations.Add(sourceAccom.Code, sourceAccom);
                         uniqueCommonAccomodationCodes.Add(sourceAccom.Code);
+                    }
+                }
+
+                // Get the 'common code' dictionary for this test
+                Dictionary<string, TestAccomodation> testCommonAccommodations =
+                    sourceTestCommonAccomodations.ContainsKey(sourceTestResult.Name) ? sourceTestCommonAccomodations[sourceTestResult.Name] : null;
+                if (testCommonAccommodations != null)
+                {
+                    foreach (KeyValuePair<string, TestAccomodation> kvp in testCommonAccommodations)
+                    {
+                        string accommodationCode = kvp.Key;
+                        TestAccomodation accommodation = kvp.Value;
+
+                        // Check, if we have overrides for this common code
+                        if (accommodationsOnSpecificTargetSegments.ContainsKey(accommodationCode))
+                        {
+                            HashSet<int> overriddenTargetSegments = accommodationsOnSpecificTargetSegments[accommodationCode];
+                            List<TestSegment> targetSegments = GetTargetSegments(sourceTestResult.Name);
+
+                            // Add this accommodation to the target segments which are not added explicitly
+                            foreach (TestSegment target in targetSegments)
+                            {
+                                if (overriddenTargetSegments.Contains(target.Position))
+                                    continue;
+                                targetTestAccomdations.Add(new TestAccomodation(
+                                    accommodation.Type, accommodation.Description, accommodation.Code, target.Position, accommodation.Source, 0));
+                            }
+
+                            // Add this accommodation code to the explictly expanded list of accommodations for this particular test
+                            if (!explicitlyExpandedCommonAccommodationCodesForTests.ContainsKey(sourceTestResult.Name))
+                                explicitlyExpandedCommonAccommodationCodesForTests.Add(sourceTestResult.Name, new HashSet<string>());
+                            explicitlyExpandedCommonAccommodationCodesForTests[sourceTestResult.Name].Add(accommodationCode);
+                        }
                     }
                 }
             }
 
             // Add the common code with 0 segment position or to corresponding target segments depending on availability of common code in 
             // all the source tests with same description
-            if (sourceTestCommonAccomodations.Count > 0 )
+            if (sourceTestCommonAccomodations.Count > 0)
             {
                 Dictionary<string, TestAccomodation> referenceTestAccomodations = sourceTestCommonAccomodations.First().Value;
 
@@ -599,20 +643,27 @@ namespace TDSQASystemAPI.TestMerge
                     // Add it once with segment code as 0 otherwise add it to all corresponding target segments
                     if (bAllTestsHasSameCode)
                     {
-                        TestAccomodation sample = referenceTestAccomodations[uniqueAccomCode] ;
+                        TestAccomodation sample = referenceTestAccomodations[uniqueAccomCode];
                         targetTestAccomdations.Add(new TestAccomodation(
-                                    sample.Type, sample.Description, sample.Code, 0, sample.Source, 0));            
+                                    sample.Type, sample.Description, sample.Code, 0, sample.Source, 0));
                     }
                     else
                     {
-                        foreach(KeyValuePair<string, Dictionary<string, TestAccomodation>> kvp in sourceTestCommonAccomodations)
+                        foreach (KeyValuePair<string, Dictionary<string, TestAccomodation>> kvp in sourceTestCommonAccomodations)
                         {
                             // If the code is not in this test then continue 
                             if (!kvp.Value.ContainsKey(uniqueAccomCode))
-                                continue ;                            
-                            // Get the target segments corresponding to the segments applicable for this source test
+                                continue;
+
                             string sourceTestName = kvp.Key;
                             TestAccomodation sourceTestAccomodation = kvp.Value[uniqueAccomCode];
+
+                            // If the code is already expanded for this test then skip generating it for the target segments for this test
+                            if (explicitlyExpandedCommonAccommodationCodesForTests.ContainsKey(sourceTestName) &&
+                                explicitlyExpandedCommonAccommodationCodesForTests[sourceTestName].Contains(sourceTestAccomodation.Code))
+                                continue;
+
+                            // Get the target segments corresponding to the segments applicable for this source test
                             List<TestSegment> targetSegments = GetTargetSegments(sourceTestName);
                             // Add the accomodation to each of the target segments
                             foreach (TestSegment target in targetSegments)
@@ -622,12 +673,13 @@ namespace TDSQASystemAPI.TestMerge
                     }
                 }
             }
-            
+
             // Add the newly generated accomodations to the opportunity
             Opportunity targetOpp = targetTestResult.Opportunity;
             foreach (var targetTestAccomodation in targetTestAccomdations)
-                targetOpp.AddAccomodation(targetTestAccomodation);            
+                targetOpp.AddAccomodation(targetTestAccomodation);
         }
+
 
         /// <summary>
         /// Merge generic variables

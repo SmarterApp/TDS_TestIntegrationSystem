@@ -51,9 +51,6 @@ namespace TDSQASystemAPI.TestResults
             //if this is a valid TestResult then grab the blueprint and set the TestItem properties in each item response
             if (isValid && tr != null)
             {
-                
-                TestBlueprint blueprint = null;
-
                 if (isValid && loadBlueprint)
                 {
                     tr.Blueprint = tc.GetBlueprint(tr.Name);
@@ -68,13 +65,16 @@ namespace TDSQASystemAPI.TestResults
                 // set the configured project id for this test opp
                 tr.SetProject(new ProjectMetaDataLoader(tr.HandscoringProjectID, tr.test.TestName, tr.Opportunity.Status, tr.Opportunity.QALevel));
 
-                if (isValid && tr.ItemResponses != null && blueprint != null)
+                if (isValid && tr.ItemResponses != null && tr.Blueprint != null)
                 {
                     foreach (ItemResponse ir in tr.ItemResponses)
                     {
                         TestItem item = tr.Blueprint.GetItem(ir.ItemName);
-                        if (item == null)
+                        if (item != null)
+                            ir.TestItem = item;
+                        else
                         {
+
                             isValid = false;
                             AddValidationRecord(ValidationRecord.ValidationType.Semantic, ValidateResult.UnknownItem, "", "Item named in result xml not found: " + ir.ItemKey);
                         }
@@ -176,32 +176,19 @@ namespace TDSQASystemAPI.TestResults
                         AddValidationRecord(ValidationRecord.ValidationType.Syntactic, ValidateResult.NotFound, @"/TDSReport/Opportunity/Item", "No items found or missing item tag in xml");
                         isValid = false;
                     }
+
                     if (isValid)
                     {
                         foreach (ItemResponse ir in tr.Opportunity.ItemResponses)
                         {
-                            //non-MC items
-                            if (ir.Format != "MC")
+                            //if the item is selected, there should be a response
+                            if (ir.ResponseObject == null && ir.IsSelected)
                             {
-                                //Response node must exist
-                                if (ir.ResponseObject == null)
-                                {
-                                    AddValidationRecord(ValidationRecord.ValidationType.Semantic, ValidateResult.NotFound, @"/TDSReport/Opportunity/Item/Response", String.Format("No Response element found; item key: {1}", ir.ItemKey));
-                                    isValid = false;
-                                }
-                            }
-                            else // MC item
-                            {
-                                //AM: also, response is not required for scanned paper tests; item will still be selected though.
-                                //2012-2013: blank is ok if item is not selected
-                                // Multiple choice items only... parse out response attribute
-                                if ((!ir.IsSelected || tr.Mode.Equals("scanned")) && ir.ResponseObject == null)
-                                {
-                                    AddValidationRecord(ValidationRecord.ValidationType.Semantic, ValidateResult.NotFound, @"/TDSReport/Opportunity/Item/Response", String.Format("No Response element found; item key: {1}", ir.ItemKey));
-                                    isValid = false;
-                                }
+                                AddValidationRecord(ValidationRecord.ValidationType.Semantic, ValidateResult.NotFound, @"/TDSReport/Opportunity/Item/Response", String.Format("No Response element found for selected item: {0}", ir.ItemKey));
+                                isValid = false;
                             }
                         }
+
                     }
                 }
             }

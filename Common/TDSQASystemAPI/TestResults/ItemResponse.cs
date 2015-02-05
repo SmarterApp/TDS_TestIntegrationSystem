@@ -216,6 +216,10 @@ namespace TDSQASystemAPI.TestResults
 			{
 				return testItem;
 			}
+            set
+            {
+                testItem = value;
+            }
 		}
 
         //AML: added this for paper tests with CR items

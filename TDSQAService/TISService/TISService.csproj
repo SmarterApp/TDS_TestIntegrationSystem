@@ -69,7 +69,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\TISService.exe.config" />
     <None Include="ConfigFiles\Debug.App.config" />
   </ItemGroup>
   <ItemGroup>
@@ -91,28 +90,7 @@
       <DependentUpon>TISService.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\AIR.Common.dll" />
-    <Content Include="bin\Debug\AIR.Common.pdb" />
-    <Content Include="bin\Debug\CommonUtilities.dll" />
-    <Content Include="bin\Debug\CommonUtilities.pdb" />
-    <Content Include="bin\Debug\ICSharpCode.SharpZipLib.dll" />
-    <Content Include="bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.dll" />
-    <Content Include="bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.dll" />
-    <Content Include="bin\Debug\Microsoft.Practices.ObjectBuilder.dll" />
-    <Content Include="bin\Debug\OSS.TIS.dll" />
-    <Content Include="bin\Debug\OSS.TIS.pdb" />
-    <Content Include="bin\Debug\ScoringEngine.dll" />
-    <Content Include="bin\Debug\ScoringEngine.pdb" />
-    <Content Include="bin\Debug\TDSQASystemAPI.dll" />
-    <Content Include="bin\Debug\TDSQASystemAPI.pdb" />
-    <Content Include="bin\Debug\TISService.exe" />
-    <Content Include="bin\Debug\TISService.pdb" />
-    <Content Include="bin\Debug\WinSCPnet.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Release\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>

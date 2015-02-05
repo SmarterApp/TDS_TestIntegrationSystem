@@ -48,7 +48,16 @@ namespace TDSQASystemAPI.TestResults
         /// Confidence level associated with this score
         /// </summary>
         [XmlAttribute("confLevel")]
-        public string ConfLevel { get; set; }
+        public string ConfLevelText { get; set; }
+
+        [XmlIgnore]
+        public double? ConfLevel
+        {
+            get
+            {
+                return String.IsNullOrEmpty(ConfLevelText) ? default(double?) : double.Parse(ConfLevelText);
+            }
+        }
 
         [XmlIgnore]
         private int? maxScore;
@@ -101,10 +110,11 @@ namespace TDSQASystemAPI.TestResults
             
         }
         
-        public ItemScoreInfo(int points, int maxPoints, ScoringStatus status, string dimension, ScoreRationale rationale)
+        public ItemScoreInfo(int points, int maxPoints, string confLevel, ScoringStatus status, string dimension, ScoreRationale rationale)
         {
             this.points = points;
             this.maxScore = maxPoints;  // -1 indicates unknown
+            this.ConfLevelText = confLevel;
             this.status = status;
             this.Dimension = dimension ?? "overall";
             this.Rationale = rationale;
@@ -114,6 +124,7 @@ namespace TDSQASystemAPI.TestResults
         {
             this.points = other.points;
             this.maxScore = other.maxScore;
+            this.ConfLevelText = other.ConfLevelText;
             this.status = other.status;
             this.Dimension = other.Dimension;
             this.Rationale = other.Rationale == null ? null : new ScoreRationale(other.Rationale);

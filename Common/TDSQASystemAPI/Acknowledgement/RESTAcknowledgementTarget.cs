@@ -38,7 +38,7 @@ namespace TDSQASystemAPI.Acknowledgement
                         HttpResponseMessage response = client.PostAsync(item.CallbackURL, content).Result;
                         if (response.StatusCode != System.Net.HttpStatusCode.OK)
                         {
-                            throw new QAException(String.Format("Error posting acknowlegement for opp: {0} to {1}.  Status Code: {2}, Result: {3}", ack.oppKey, item.CallbackURL, response.Content.ReadAsStringAsync().Result), QAException.ExceptionType.General);
+                            throw new QAException(String.Format("Error posting acknowlegement for opp: {0} to {1}.  Status Code: {2}, Result: {3}", ack.oppKey, item.CallbackURL, response.StatusCode, response.Content.ReadAsStringAsync().Result), QAException.ExceptionType.General);
                         }
                     }
                 }

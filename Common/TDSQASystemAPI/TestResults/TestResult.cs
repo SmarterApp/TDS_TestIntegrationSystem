@@ -512,6 +512,20 @@ namespace TDSQASystemAPI.TestResults
         /// <returns></returns>
         public bool HasItemsRequiringHandscores(ItemOperationalStatus opStatus, bool excludeDropped, bool selectedOnly)
         {
+            return HasItemsRequiringHandscores(opStatus, excludeDropped, selectedOnly, null);
+        }
+
+        /// <summary>
+        /// Overload that takes a machine scorer confidence level threshold under which the item is to be hand-scored.
+        /// No score info or confidence level will result in an item being counted as requiring hand-scores if machineScoreConfLevelThreshold is supplied
+        /// </summary>
+        /// <param name="opStatus"></param>
+        /// <param name="excludeDropped"></param>
+        /// <param name="selectedOnly"></param>
+        /// <param name="machineScoreConfLevelThreshold"></param>
+        /// <returns></returns>
+        public bool HasItemsRequiringHandscores(ItemOperationalStatus opStatus, bool excludeDropped, bool selectedOnly, double? machineScoreConfLevelThreshold)
+        {
             return ItemResponses.Exists(ir =>
                 ((!Routing.ItemScoring.ItemScoringConfig.Instance.ItemIsConfigured(ir.Format, ir.ItemName)
                         && HandscoredTypes.Contains(ir.Format) && !ir.ItemHandscoreSet)
@@ -520,7 +534,8 @@ namespace TDSQASystemAPI.TestResults
                 && (!selectedOnly || ir.IsSelected)
                 && (opStatus == ItemOperationalStatus.Any
                         || (opStatus == ItemOperationalStatus.FieldTest && ir.Operational == 0)
-                        || (opStatus == ItemOperationalStatus.Operational && ir.Operational == 1)));
+                        || (opStatus == ItemOperationalStatus.Operational && ir.Operational == 1))
+                && (machineScoreConfLevelThreshold == null || ir.ScoreInfo == null || ir.ScoreInfo.ConfLevel == null || ir.ScoreInfo.ConfLevel.Value.CompareTo(machineScoreConfLevelThreshold) < 0));
         }
 
         public void ClearScores()

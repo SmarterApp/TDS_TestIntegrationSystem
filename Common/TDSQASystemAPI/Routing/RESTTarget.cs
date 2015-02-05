@@ -88,7 +88,7 @@ namespace TDSQASystemAPI.Routing
             }
             catch (Exception ex)
             {
-                throw new QAException(String.Format("Exception posting file for oppId: {0} to Target: {1}.  Message: {3}", tr.Opportunity.OpportunityID, base.Name, ex.Message), QAException.ExceptionType.General, ex);
+                throw new QAException(String.Format("Exception posting file for oppId: {0} to Target: {1}.  Message: {2}", tr.Opportunity.OpportunityID, base.Name, ex.Message), QAException.ExceptionType.General, ex);
             }
 
             return new TargetResult() { Sent = true };

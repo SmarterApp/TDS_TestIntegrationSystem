@@ -434,9 +434,32 @@ namespace TDSQASystemAPI
                         if (ackTargetFactory != null) // ok not to acknowledge I suppose
                         {
                             IAcknowledgementTarget ackTarget = ackTargetFactory.SelectTarget(xmlRepoItem);
-                            if (ackTarget == null
-                                || !ackTarget.Send(new Message(tr.Opportunity.Key, accepted, message), xmlRepoItem))
-                                Logger.Log(true, String.Format("Acknowledgement not sent for fileID: {0}", xmlRepoItem.FileID), EventLogEntryType.Information, false, true);
+                            try
+                            {
+                                if (ackTarget == null
+                                    || !ackTarget.Send(new Message(tr.Opportunity.Key, accepted, message), xmlRepoItem))
+                                    Logger.Log(true, String.Format("Acknowledgement not sent for fileID: {0}", xmlRepoItem.FileID), EventLogEntryType.Information, false, true);
+                            }
+                            catch (Exception ex)
+                            {
+                                // allow these to be treated as warnings or errors.  If TreatAcknowledgementFailureAsError is set to true,
+                                //  a failure to send an ACK will result in the file being dumped into the reject bin.
+                                //  Default behavior is to treat these as warnings.  We generally don't want to fail a file just because
+                                //  we can't send the ACK.  Note also that a combo may already have been created (if applicable).
+                                bool treatAckfailureAsError = false;
+
+                                if (!String.IsNullOrEmpty(ConfigurationManager.AppSettings["TreatAcknowledgementFailureAsError"])
+                                    && Convert.ToBoolean(ConfigurationManager.AppSettings["TreatAcknowledgementFailureAsError"]))
+                                    treatAckfailureAsError = true;
+
+                                // if the file would have otherwise succeeded and there was an exception while attempting to send the ACK and
+                                //  we're not treating these as warnings, fail the file.
+                                if (treatAckfailureAsError && result == QAResult.Success)
+                                    result = QAResult.Unknown;
+
+                                Logger.Log(true, String.Format("Could not send acknowledgement for fileID: {0}, Exception: {1}", xmlRepoItem.FileID, ex.GetExceptionMessage(true)),
+                                    treatAckfailureAsError ? EventLogEntryType.Error : EventLogEntryType.Warning, false, true);
+                            }
                         }
                     }
                 }

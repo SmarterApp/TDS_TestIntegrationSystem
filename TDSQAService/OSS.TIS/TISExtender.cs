@@ -41,18 +41,26 @@ namespace OSS.TIS
             ConfigurationHolder configHolder = ServiceLocator.Resolve<ConfigurationHolder>();
             if (tr.Testee != null && configHolder.GetFromMetaData(tr.ProjectID, "Accommodations").Exists(x => x.IntVal.Equals(1)))
             {
-                TesteeAttribute ssid = tr.Testee.GetAttribute("AlternateSSID", TesteeProperty.PropertyContext.INITIAL);
-                List<TesteeRelationship> stateAbbrevsList = tr.Testee.GetRelationships("StateAbbreviation", TesteeProperty.PropertyContext.INITIAL);
+                bool useAlternateStudentId = false;
+                TesteeAttribute ssid = tr.Testee.GetAttribute("StudentIdentifier", TesteeProperty.PropertyContext.INITIAL);
                 if (ssid == null)
-                    throw new NullReferenceException("AlternateSSID was not an ExamineeAttribute in the XML with context = INITIAL. This is required to get accommodations from ART. OppID = " + tr.Opportunity.OpportunityID);
+                {
+                    ssid = tr.Testee.GetAttribute("AlternateSSID", TesteeProperty.PropertyContext.INITIAL);
+                    useAlternateStudentId = true;
+                }
+
+                if (ssid == null)
+                    throw new NullReferenceException("Neither StudentIdentifier nor AlternateSSID were found as ExamineeAttributes in the XML file with context = INITIAL.  At least one is required to get accommodations from ART. OppID = " + tr.Opportunity.OpportunityID);
+
+                List<TesteeRelationship> stateAbbrevsList = tr.Testee.GetRelationships("StateAbbreviation", TesteeProperty.PropertyContext.INITIAL);
                 if (stateAbbrevsList.Count != 1)
                     throw new MissingMemberException(string.Format("StateAbbreviation ExamineeRelationship with context = INITIAL appeared {0} times, but it was exepected to appear only 1 time. OppID = {1}", stateAbbrevsList.Count, tr.Opportunity.OpportunityID));
 
                 WebService webservice = Settings.WebService["ART"];
                 if (webservice == null)
                     throw new NullReferenceException("ART web service is not defined in config file. This is required for getting accommodations from ART");
-                
-                XmlDocument doc = new ARTDAL(webservice).GetStudentPackageXML(ssid.Value, stateAbbrevsList[0].Value);
+
+                XmlDocument doc = new ARTDAL(webservice).GetStudentPackageXML(ssid.Value, stateAbbrevsList[0].Value, useAlternateStudentId);
                 if (doc == null)
                     throw new NullReferenceException("ART Student package could not be retrieved for OppID " + tr.Opportunity.OpportunityID);
 

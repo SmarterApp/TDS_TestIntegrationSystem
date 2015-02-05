@@ -37,7 +37,7 @@ namespace OSS.TIS.DAL
         /// <param name="ssid"></param>
         /// <param name="stateAbbrviation"></param>
         /// <returns></returns>
-        public XmlDocument GetStudentPackageXML(string ssid, string stateAbbrviation)
+        public XmlDocument GetStudentPackageXML(string ssid, string stateAbbrviation, bool useAlternateStudentId)
         {
             if (string.IsNullOrEmpty(ssid) || string.IsNullOrEmpty(stateAbbrviation))
                 throw new ApplicationException(String.Format("Illegal parameters... ssid: {0}, stateAbbrviation: {1}", ssid ?? "<null>", stateAbbrviation ?? "<null>"));
@@ -50,14 +50,14 @@ namespace OSS.TIS.DAL
             if (artService.Authorization != null)
                 oauthToken = OAuth.GetResponse(artService.Authorization, out authTokenFoundInCache);
 
-            HttpResponseMessage response = Get(ssid, stateAbbrviation, oauthToken);
+            HttpResponseMessage response = Get(ssid, stateAbbrviation, oauthToken, useAlternateStudentId);
 
             if ((response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden) && authTokenFoundInCache)
             {
                 // try again with a fresh token; may have expired
                 OAuth.RemoveFromCache(artService.Authorization, oauthToken);
                 oauthToken = OAuth.GetResponse(artService.Authorization, out authTokenFoundInCache);
-                response = Get(ssid, stateAbbrviation, oauthToken);
+                response = Get(ssid, stateAbbrviation, oauthToken, useAlternateStudentId);
             }
 
             if (response.IsSuccessStatusCode)
@@ -75,11 +75,11 @@ namespace OSS.TIS.DAL
             return doc;
         }
 
-        private HttpResponseMessage Get(string ssid, string stateAbbrviation, OAuthResponse authToken)
+        private HttpResponseMessage Get(string ssid, string stateAbbrviation, OAuthResponse authToken, bool useAlternateStudentId)
         {
             using (HttpClient httpclient = new HttpClient())
             {
-                string path = string.Format("rest/studentpackage?ssid={0}&stateabbreviation={1}", Uri.EscapeDataString(ssid), Uri.EscapeDataString(stateAbbrviation));
+                string path = string.Format("rest/studentpackage?{0}={1}&stateabbreviation={2}", useAlternateStudentId ? "externalId" : "ssid", Uri.EscapeDataString(ssid), Uri.EscapeDataString(stateAbbrviation));
                 httpclient.BaseAddress = new Uri(artService.URL);
 
                 if (artService.Authorization != null)

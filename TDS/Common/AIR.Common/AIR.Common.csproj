@@ -207,14 +207,4 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <PreBuildEvent>if not exist $(ProjectDir)Security\KeyInfo.key (
-$(ProjectDir)..\Libraries\KeyTool.App.exe --create=$(ProjectDir)Security\KeyInfo.key
-$(ProjectDir)..\Libraries\KeyTool.App.exe --update=$(ProjectDir)Security\KeyUtil.cs --key=$(ProjectDir)Security\KeyInfo.key
-)</PreBuildEvent>
-  </PropertyGroup>
-  <!--<Target Name="AfterClean">  This messes up when we rebuild
-    <Delete Files="$(ProjectDir)Security\KeyInfo.key" ContinueOnError="true" />
-	<Exec Command="hg revert -C AIR.Common\Security\KeyUtil.cs" WorkingDirectory="$(ProjectDir)\..\"/>
-  </Target> -->
 </Project>

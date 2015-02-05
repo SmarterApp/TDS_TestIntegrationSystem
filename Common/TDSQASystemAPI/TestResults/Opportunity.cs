@@ -268,7 +268,7 @@ namespace TDSQASystemAPI.TestResults
                 string formCat = "";
                 foreach (TestSegment segment in GetSegmentsAsReadOnlySortedList())
                 {
-                    string form = segment.FormID;
+                    string form = segment.FormID ?? "";
                     if (form.Contains("-"))
                         form = "[" + form + "]";
                     if (first)
