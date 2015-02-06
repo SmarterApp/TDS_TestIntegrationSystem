@@ -107,9 +107,14 @@ namespace TDSQASystemAPI.TestResults
 
         public ItemScoreInfo()
         {
-            
+
         }
-        
+
+        public ItemScoreInfo(int points, int maxPoints, ScoringStatus status, string dimension, ScoreRationale rationale)
+            : this(points, maxPoints, null, status, dimension, rationale)
+        {
+        }
+
         public ItemScoreInfo(int points, int maxPoints, string confLevel, ScoringStatus status, string dimension, ScoreRationale rationale)
         {
             this.points = points;

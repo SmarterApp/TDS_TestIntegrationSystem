@@ -62,6 +62,7 @@
     <Content Include="SQL\TDSItemBank\3_Create_Objects.sql" />
     <Content Include="SQL\TDSItemBank\4_Configuration.sql" />
     <Content Include="SQL\TDSItemBank\5_LoadPackages.sql" />
+    <Content Include="SQL\TDSItemBank\6_TestToolConfiguration.sql" />
     <Content Include="SQL\TestScoringConfigs\1_Tables.sql" />
     <Content Include="SQL\TestScoringConfigs\2_Views.sql" />
     <Content Include="SQL\TestScoringConfigs\3_Configuration.sql" />
