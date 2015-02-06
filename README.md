@@ -86,6 +86,7 @@ TIS requires Visual Studio 2012 to build. The Deployment steps are as follows -
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\3_Create_Objects.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\4_Configuration.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\5_LoadPackages.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\6_TestToolConfiguration.sql`
 
 7) Deploy TISService code at `tis_opentestsystem/` [App server]
 
@@ -113,61 +114,47 @@ Test Integration System has the following dependencies that are necessary for it
 ### Runtime Dependencies
 None
 
-## Items included in 1/28 release:
+## Items/Updates included in 02/06/2015 release:
 
-####1) Config Updates
-##### - [OSS_Configs]
-- 2_Configuration.sql 
+1)	Added SEBasedPLWithRounding scoring rule to test scoring engine and test scoring configuration script
 
-         - updated to remove extraneous configuration
+2)	TDS will now send the primary student ID in the StudentIdentifier examinee attribute and a secondary/alternate SSID in the AlternateSSID attribute.  Previously we were only getting the primary student ID in the AlternateSSID attribute.  Modified the fetching of student accommodations from ART to attempt to use the StudentIdentifier first, then the AlternateSSID if the StudentIdentifier is not available (which should never be the case; primarily for backward compatibility).
 
-##### - [OSS_Itembank]
-- Scripts broken out to add a couple extra steps to make sure that synonym references can be resolved when creating objects, and to make the loading of packages a separate step
-- Configuration script modified to remove some extraneous values
-- Create_Objects.sql script updated:
- 
-         - fixes to loader sprocs
-         - an unused view was removed (which had a reference to a missing UDF).
-         - objects were reordered to eliminate dependency errors
+3)	The v_RescoreAppeals view is referenced by a stored proc that is used in the OSS TIS system, so I added this back to the TIS DDL script.  The view will always be empty.
 
-##### - [OSS_TestScoringConfigs]
-- Scripts numbered
-- 3_Configuration.sql script added
+4)	Handling exceptions in sending of acknowledgement to TDS.  Previously the file would have been left in the “processing” location in the XmlRepository.  Will log as a warning by default.  Can be configured to treat as an error by setting TreatAcknowledgementFailureAsError = “true” in the app.config file; this will move the file into the “reject” location.  Note that a combination test may already have been created and submitted to TIS by this point though.
 
-##### - [OSS_TIS]
-- 1_Create_Objects.sql
+5)	Added RTSAttribute configuration for HandscoringTSS target to TIS config script.
 
-        - added missing GetWarningsSummary sproc
-        - Removed unused view and added a new view
+6)	Added Transform config to the TIS configuration script for the HandscoringTSS target.
 
-- 2_Configuration.sql 
+7)	Added TDSItemBank\6_TestToolConfiguration script.  This is a preliminary script that we may need to update.  Testing is underway.
 
-        - updated config for mapping combo test forms as well as for configuring which student attributes should flow downstream.
+8)	Fixed bug with the handling of accommodations at the segment level that override accommodations at the test level.  If the same accommodation exists at segment=”0” (test-level) and segment > 0, the accommodation with segment > 0 overrides for that segment.
 
-- 3_ScoringDaemonConfiguration.sql 
+9)	Removed pre-build step in Release configuration from AIR.Common project; this step is n/a for the OSS systems.
 
-	- Added a new script.
+10)	Removed publish profile from TISServices project (TIS) and bin dir from TISService (REST API) project
 
-####2)Code Updates 
-- ScoringEnvironment in the TIS’s app.config file changed from “QA” to “TIS”.
-- Bug in a format string fixed
-- Reverted back to original approach for configuring which RTSAttributes should be included in the file for a particular target: only include configured attributes. 
+11)	Fixed SBACItemResolutionRuleWER compile issue with overloaded ItemScoreInfo constructor.
 
-####3)'Build & Deploy' steps have been updated.
--  Steps 3 -- Removed the step to create /tis_common/
-- Steps 5 & 7 have been updated with the new scripts (also numbered).
--  Step 8 (previous version) has been removed
-- Step 12 (previous version) has been removed
-- Steps 8 & 9 have been added.
+12)	Various bug fixes for null refs and bad format strings.
+
 
 ------------------------------------------------------------------
+## Known Issues (as of 02/06/2015):
+
+
+1)	The configuration of test tools (accommodations) is not part of the admin package loading procedure and will require a separate script.  A preliminary script has been added, but testing is still underway and the script may be updated in the near future.  If there are issues with fetching accommodations for students from ART in the meantime, this can be disabled by setting the IntValue = 1 on the “Accommodations” config settings in the TIS configuration script.
+
+2)	Combination tests are being created but currently don’t include examinee attributes or relationships.
+
+3)	An exception will be thrown when attempting to gather the inputs to the test scoring engine if any items have more than one dimension.
+
+4)	Changes will be required for creating Summative test combinations to support 1/N possible component tests.  These changes are currently being tested.
+
 
 ## Future Enhancements 
-
-The following features and tasks are not included in the 1/28/2015 release:
-
-####1) Issue with the loader Script (Build & Deploy Step 6.5) - 
-The Loader script is currently not loading all accommodations. It is currently only loading the following accommodations - `Language` and `Print Size`. We intend to fix this bug ASAP and have the fix released in an upcoming release.
 
 ####1) System and Integration Testing - 
 
