@@ -32,17 +32,16 @@ namespace TDSQASystemAPI.TestResults
         }
 
         [XmlIgnore]
-        private int? points;
+        public int? Points { get; private set; }
         /// <summary>
         /// Score point for this dimension
         /// </summary>
         [XmlAttribute("scorePoint")]
         public string pointsAsText
         {
-            get { return (points.HasValue) ? points.ToString() : null; }
-            set { points = !string.IsNullOrEmpty(value) ? int.Parse(value) : default(int?); }
+            get { return (Points.HasValue) ? Points.ToString() : null; }
+            set { Points = !string.IsNullOrEmpty(value) ? int.Parse(value) : default(int?); }
         }
-
 
         /// <summary>
         /// Confidence level associated with this score
@@ -60,17 +59,16 @@ namespace TDSQASystemAPI.TestResults
         }
 
         [XmlIgnore]
-        private int? maxScore;
+        public int? MaxScore { get; private set; }
         /// <summary>
         /// Max score possible for this dimension
         /// </summary>
         [XmlAttribute("maxScore")]
         public string maxScoreAsText
         {
-            get { return (maxScore.HasValue) ? maxScore.ToString() : null; }
-            set { maxScore = !string.IsNullOrEmpty(value) ? int.Parse(value) : default(int?); }
+            get { return (MaxScore.HasValue) ? MaxScore.ToString() : null; }
+            set { MaxScore = !string.IsNullOrEmpty(value) ? int.Parse(value) : default(int?); }
         }
-
 
         /// <summary>
         /// Dimension that this score is for
@@ -79,17 +77,16 @@ namespace TDSQASystemAPI.TestResults
         public string Dimension { get; set; }
 
         [XmlIgnore]
-        private ScoringStatus? status;
+        public ScoringStatus? Status { get; private set; }
         /// <summary>
         /// Status of this score
         /// </summary>
         [XmlAttribute("scoreStatus")]
         public string statusAsText
         {
-            get { return (status.HasValue) ? status.ToString() : null; }
-            set { status = !string.IsNullOrEmpty(value) ? (ScoringStatus)Enum.Parse(typeof(ScoringStatus), value) : default(ScoringStatus?); }
+            get { return (Status.HasValue) ? Status.ToString() : null; }
+            set { Status = !string.IsNullOrEmpty(value) ? (ScoringStatus)Enum.Parse(typeof(ScoringStatus), value) : default(ScoringStatus?); }
         }
-
 
         /// <summary>
         /// ScoreRationale for this score for this dimension
@@ -117,20 +114,20 @@ namespace TDSQASystemAPI.TestResults
 
         public ItemScoreInfo(int points, int maxPoints, string confLevel, ScoringStatus status, string dimension, ScoreRationale rationale)
         {
-            this.points = points;
-            this.maxScore = maxPoints;  // -1 indicates unknown
+            this.Points = points;
+            this.MaxScore = maxPoints;  // -1 indicates unknown
             this.ConfLevelText = confLevel;
-            this.status = status;
+            this.Status = status;
             this.Dimension = dimension ?? "overall";
             this.Rationale = rationale;
         }
 
         public ItemScoreInfo(ItemScoreInfo other)
         {
-            this.points = other.points;
-            this.maxScore = other.maxScore;
+            this.Points = other.Points;
+            this.MaxScore = other.MaxScore;
             this.ConfLevelText = other.ConfLevelText;
-            this.status = other.status;
+            this.Status = other.Status;
             this.Dimension = other.Dimension;
             this.Rationale = other.Rationale == null ? null : new ScoreRationale(other.Rationale);
             if (other.SubScores != null)

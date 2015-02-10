@@ -398,18 +398,6 @@ namespace TDSQASystemAPI.TestResults
 
                 // Attemptedness (this will probably get more complicated at some point...)
                 bool attempted = ir.Response.Length > 0;
-                XmlNodeList dimScoreInfoNodes = null;
-                if (!ir.ItemHandscoreSet
-                    && ir.TestItem.ScoreInfo.Count > 1
-                    && ir.HasScoreInfo)
-                {
-                    // we've got dims and no handscores.  We'll attempt to read dim scores from the ScoreInfo embedded within the scorerationale
-                    //TODO: formalize ScoreInfo within the TestResult namespace.  Maybe talk to Balaji about breaking TDS.ItemScoringEngine.ItemScoreInfo 
-                    //  out into a separate light-weight lib that we can reference.
-                    XmlDocument scoreInfo = new XmlDocument();
-                    scoreInfo.LoadXml(ir.ScoreRationale);
-                    dimScoreInfoNodes = scoreInfo.SelectNodes("/ScoreInfo/SubScoreList/ScoreInfo");
-                }
 
                 foreach (TestItemScoreInfo si in ir.TestItem.ScoreInfo)
                 {
@@ -431,21 +419,21 @@ namespace TDSQASystemAPI.TestResults
                     {
                         if (ir.TestItem.ScoreInfo.Count == 1)
                             itemScores.Add(new ScoringEngine.ConfiguredTests.ItemScore(ir.TestItem, si, ir.Position, ir.PresentedScore, "", segmentID, ir.Operational == 0, ir.IsSelected, attempted, ir.Dropped));
-                        else if (dimScoreInfoNodes != null)
+                        else if (ir.ScoreInfo != null && ir.ScoreInfo.SubScores != null && ir.ScoreInfo.SubScores.Count > 0) // if there exist dimension scores, use them
                         {
                             bool findIt = false;
 
-                            foreach (XmlNode dimScoreInfoNode in dimScoreInfoNodes)
+                            foreach (ItemScoreInfo dimScoreInfo in ir.ScoreInfo.SubScores)
                             {
-                                if (si.Dimension.Equals(dimScoreInfoNode.Attributes["scoreDimension", ""].Value, StringComparison.InvariantCultureIgnoreCase)
-                                    && dimScoreInfoNode.Attributes["scoreStatus", ""].Value.Equals("Scored", StringComparison.InvariantCultureIgnoreCase))
+                                if (si.Dimension.Equals(dimScoreInfo.Dimension ?? "", StringComparison.InvariantCultureIgnoreCase)
+                                    && (dimScoreInfo.Status ?? ScoringStatus.NotScored) == ScoringStatus.Scored)
                                 {
                                     if (findIt)
                                         throw new Exception("Two scores for dimension'" + si.Dimension + "' for item " + ir.TestItem.ItemName);
-                                    double scorePoint;
-                                    if (!double.TryParse(dimScoreInfoNode.Attributes["scorePoint", ""].Value, out scorePoint))
-                                        scorePoint = -1.0;
-                                    itemScores.Add(new ScoringEngine.ConfiguredTests.ItemScore(ir.TestItem, si, ir.Position, scorePoint, "" /*TODO: will need to handle CCs for TSS*/, segmentID, ir.Operational == 0, ir.IsSelected, attempted, ir.Dropped));
+                                    // TODO: we may eventually need to start handling scorepoints as a double.  For now, it's the same as machine-scored == int
+                                    double scorePoint = dimScoreInfo.Points == null ? -1 : dimScoreInfo.Points.Value;
+                                    string cc = dimScoreInfo.Rationale == null || dimScoreInfo.Rationale.HandScoreDetails == null ? null : dimScoreInfo.Rationale.HandScoreDetails.conditionCode;
+                                    itemScores.Add(new ScoringEngine.ConfiguredTests.ItemScore(ir.TestItem, si, ir.Position, scorePoint, cc, segmentID, ir.Operational == 0, ir.IsSelected, attempted, ir.Dropped));
                                     findIt = true;
                                 }
                             }
@@ -615,10 +603,21 @@ namespace TDSQASystemAPI.TestResults
             if (entry != null)
                 xmlType = Utilities.Utility.Value(entry.TextVal, XMLAdapter.AdapterType.TDS);
 
-            //TODO: consider allowing configuration of attrs to exclude rather than include.  May be less config.
-            //get the serialization config from the project metadata
-            SerializationConfig config = new SerializationConfig(/*ConfigurationHolder.IncludeAccommodations(ProjectID, group),*/ 
-                ServiceLocator.Resolve<ConfigurationHolder>().GetRTSAttributes(this.projectID, group));
+            // if set to 1/true, any demographics in the file will be preserved
+            //  Used only in the OSS environment to minimize configuration
+            entry = ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(this.ProjectID, group, "IncludeAllDemographics");
+
+            SerializationConfig config = null;
+            if (entry != null && Convert.ToBoolean(entry.IntVal))
+            {
+                config = new SerializationConfigIncludeAllDemographics();
+            }
+            else
+            {
+                //get the serialization config from the project metadata
+                config = new SerializationConfig(/*ConfigurationHolder.IncludeAccommodations(ProjectID, group),*/
+                    ServiceLocator.Resolve<ConfigurationHolder>().GetRTSAttributes(this.projectID, group));
+            }
 
             doc.LoadXml(serializerFactory.CreateSerializer(xmlType.ToString(), this).Serialize(config));
             return doc;

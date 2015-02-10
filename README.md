@@ -114,6 +114,18 @@ Test Integration System has the following dependencies that are necessary for it
 ### Runtime Dependencies
 None
 
+
+## Items/Updates included in 02/09/2015 release:
+
+The following previously known issues have been fixed - 
+
+1) Combination tests are being created but currently don’t include examinee attributes or relationships.
+
+ - The following script has been updated - \TDSQAService\OSS.TIS\SQL\TISDB\2_Configuration.sql
+
+2) An exception will be thrown when attempting to gather the inputs to the test scoring engine if any items have more than one dimension.
+
+
 ## Items/Updates included in 02/06/2015 release:
 
 1)	Added SEBasedPLWithRounding scoring rule to test scoring engine and test scoring configuration script
@@ -142,16 +154,12 @@ None
 
 
 ------------------------------------------------------------------
-## Known Issues (as of 02/06/2015):
+## Known Issues (as of 02/09/2015):
 
 
 1)	The configuration of test tools (accommodations) is not part of the admin package loading procedure and will require a separate script.  A preliminary script has been added, but testing is still underway and the script may be updated in the near future.  If there are issues with fetching accommodations for students from ART in the meantime, this can be disabled by setting the IntValue = 1 on the “Accommodations” config settings in the TIS configuration script.
 
-2)	Combination tests are being created but currently don’t include examinee attributes or relationships.
-
-3)	An exception will be thrown when attempting to gather the inputs to the test scoring engine if any items have more than one dimension.
-
-4)	Changes will be required for creating Summative test combinations to support 1/N possible component tests.  These changes are currently being tested.
+2)	Changes will be required for creating Summative test combinations to support 1/N possible component tests.  These changes are currently being tested.
 
 
 ## Future Enhancements 

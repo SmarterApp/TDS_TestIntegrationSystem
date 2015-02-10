@@ -122,7 +122,13 @@ namespace TDSQASystemAPI.TestMerge
                     // Merge the test result
                     TestResult mergedResult = MergeTestResults(tc, sourceTestResults, sTargetTestStatus);
                     if (mergedResult != null)
+                    {
+                        // Need the QA project of the combo test in order for the serlializer to fetch the correct config.
+                        //  For now, set the QA projectID using the OSS loader, which is all we currently need for combos
+                        //  TODO:
+                        mergedResult.SetProject(new Config.ProjectMetaDataLoader(mergedResult.HandscoringProjectID, mergedResult.test.TestName, mergedResult.Opportunity.Status, null));
                         xmlRepo.InsertXml(BL.XmlRepository.Location.source, mergedResult, serializerFactory);
+                    }
                 }
             }
             catch (Exception ex)

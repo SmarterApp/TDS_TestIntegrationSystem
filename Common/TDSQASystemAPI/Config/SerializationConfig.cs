@@ -33,10 +33,26 @@ namespace TDSQASystemAPI.Config
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        public bool IncludeAttribute(TesteeProperty property)
+        public virtual bool IncludeAttribute(TesteeProperty property)
         {
             return IncludedAttributes != null && IncludedAttributes.Exists(x => x.XMLName.Equals(property.Name, StringComparison.InvariantCultureIgnoreCase)
                                                                                 && x.Context.Equals(property.Context, StringComparison.InvariantCultureIgnoreCase));
+        }
+    }
+
+    /// <summary>
+    /// Will include all RTS attributes and relationships in the file
+    /// </summary>
+    public class SerializationConfigIncludeAllDemographics : SerializationConfig
+    {
+        public SerializationConfigIncludeAllDemographics()
+            : base(null)
+        {
+        }
+
+        public override bool IncludeAttribute(TesteeProperty property)
+        {
+            return true;
         }
     }
 }
