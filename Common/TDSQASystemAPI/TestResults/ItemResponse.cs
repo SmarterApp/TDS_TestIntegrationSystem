@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Linq;
 
 using TDSQASystemAPI.Config;
 using ScoringEngine.ConfiguredTests;
@@ -157,7 +158,7 @@ namespace TDSQASystemAPI.TestResults
 		{
 			get
 			{
-                if ((presentedScore >= 0.0) && (presentedScore <= scorePoints))
+                if ((presentedScore >= 0.0) && (presentedScore <= ScorePoints))
                     return presentedScore;
                 else return -1.0;
                 // return presentedScore;
@@ -180,17 +181,30 @@ namespace TDSQASystemAPI.TestResults
         }
 
         [XmlIgnore]
-        private double scorePoints;
+        private double? scorePoints;
         [XmlIgnore]
 		public double ScorePoints
 		{
 			get
 			{
-				return scorePoints;
+                // if scorePoints is set, return this value
+                //TODO: even want to do this, or just ignore it?  OSS format doesn't support it.
+                if (scorePoints != null)
+                    return scorePoints.Value;
+
+                // otherwise, get the score points from the item bank config
+                TestItemScoreInfo overall = null;
+                if (testItem != null && testItem.ScoreInfo != null && testItem.ScoreInfo.Count > 0
+                    && (overall = testItem.ScoreInfo.FirstOrDefault(si => String.IsNullOrEmpty(si.Dimension) || si.Dimension.Equals("overall", StringComparison.InvariantCultureIgnoreCase))) != null)
+                    return overall.ScorePoints;
+
+                // no value and no BP, just return 0.
+                return default(double);
 			}
 		}
 
         //AM 9/30/2010: new attribute
+        public bool ShouldSerializeScoreStatus() { return !String.IsNullOrEmpty(ScoreStatus); }
         [XmlIgnore]
         private string scoreStatus;
         [XmlAttribute("scoreStatus")]

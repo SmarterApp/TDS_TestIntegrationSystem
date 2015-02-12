@@ -58,6 +58,8 @@ namespace TDSQASystemAPI.TestResults
             }
         }
 
+        public bool ShouldSerializeConfLevelText() { return !String.IsNullOrEmpty(ConfLevelText); }
+
         [XmlIgnore]
         public int? MaxScore { get; private set; }
         /// <summary>

@@ -577,6 +577,8 @@ namespace TDSQASystemAPI.TestResults
 
         public void AddRTSAccomodation(string type, string value, string code, int segment, string source)
         {
+            if (RTSAccommodations == null)
+                RTSAccommodations = new List<TestAccomodation>();
             RTSAccommodations.Add(new TestAccomodation(type, value, code, segment, source, 0));
         }
 

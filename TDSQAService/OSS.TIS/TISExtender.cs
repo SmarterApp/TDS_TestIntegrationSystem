@@ -88,7 +88,9 @@ namespace OSS.TIS
                 foreach (ARTAccommodation accom in artAccs.Values)
                 {
                     if (!myAccomsDict.ContainsKey(accom.AccomCode))
-                        throw new NullReferenceException(string.Format("ART Accommodation code {0} was not found in TDS Configs DB.", accom.AccomCode));
+                        continue; // ART accoms are by subject; it seems conceivable that not every test that the student is eligible for with the same subject would have the same accom configuration
+                    //throw new NullReferenceException(string.Format("ART Accommodation code {0} was not found in TDS Configs DB.", accom.AccomCode));
+
                     //add all distinct type/code accommodations. Note that we hardcode segment to 0
                     foreach (TestAccomodation tdsAccom in myAccomsDict[accom.AccomCode])
                         tr.Opportunity.AddRTSAccomodation(tdsAccom.Type, tdsAccom.Description, tdsAccom.Code, 0/*tdsAccom.Segment*/, "");

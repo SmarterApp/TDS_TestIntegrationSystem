@@ -114,6 +114,21 @@ Test Integration System has the following dependencies that are necessary for it
 ### Runtime Dependencies
 None
 
+## Items/Updates included in 02/11/2015 release:
+
+
+1)	\TDSQAService\OSS.TIS\SQL\TDSItemBank\6_TestToolConfiguration.sql: added combo test tool configuration and fixed an issue with the existing config where 'null' was being inserted instead of null.
+
+2)	\TDSQAService\OSS.TIS\SQL\TDSItemBank\3_Create_Objects.sql: fixed a bug in the spLoader_ExtractXML sproc that was setting the TestScoreFeature.MeasureOf to the TestID for test-level measures, rather than to the required value of ‘Overall’.
+
+3)	Fixed bug in ItemResponse where ScorePoints was never returning a value, which caused item scores of -1 to be passed to the test scoring engine, generating an error.
+
+4)	A couple serialization fixes to handle null attribute values.
+
+5)	If ART returns an accommodation that does not exist in the test tool configuration for the current test, skip it instead of throwing an exception.  Since ART specifies accommodations at the subject level, it’s conceivable that an accommodation may be specified for a subject in ART but not configured for all tests that the student is eligible for in that subject.
+
+6)	Fixed null ref exception when attempting to pass the student’s accommodations from ART to the test scoring engine.
+
 
 ## Items/Updates included in 02/09/2015 release:
 
@@ -154,12 +169,10 @@ The following previously known issues have been fixed -
 
 
 ------------------------------------------------------------------
-## Known Issues (as of 02/09/2015):
+## Known Issues (as of 02/11/2015):
 
 
-1)	The configuration of test tools (accommodations) is not part of the admin package loading procedure and will require a separate script.  A preliminary script has been added, but testing is still underway and the script may be updated in the near future.  If there are issues with fetching accommodations for students from ART in the meantime, this can be disabled by setting the IntValue = 1 on the “Accommodations” config settings in the TIS configuration script.
-
-2)	Changes will be required for creating Summative test combinations to support 1/N possible component tests.  These changes are currently being tested.
+1)	Changes will be required for creating Summative test combinations to support 1/N possible component tests.  These changes are currently being tested.
 
 
 ## Future Enhancements 

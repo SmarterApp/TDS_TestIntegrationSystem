@@ -368,7 +368,7 @@ namespace TDSQASystemAPI.Config
                 bool fetch = Utility.Value(dr["FetchIfNotInXml"], true);
 
                 if (!_rtsAttributes.ContainsKey(projectID))
-                    _rtsAttributes.Add(projectID, new Dictionary<string,List<RTSAttribute>>());
+                    _rtsAttributes.Add(projectID, new Dictionary<string, List<RTSAttribute>>(StringComparer.InvariantCultureIgnoreCase));
 
                 Dictionary<string, List<RTSAttribute>> projectSet = _rtsAttributes[projectID];
 
