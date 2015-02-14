@@ -114,6 +114,11 @@ Test Integration System has the following dependencies that are necessary for it
 ### Runtime Dependencies
 None
 
+## Items/Updates included in 02/13/2015 release:
+
+1)	\TDSQAService\OSS.TIS\SQL\TISDB\1_Create_Objects.sql: modified InsertAndArchiveXML stored procedure to copy the CallbackURL to the destination file location when archiving a file.  Otherwise, if the file in the "destination" location is resubmitted within TIS, no acknowledgement will be sent to TDS.
+
+
 ## Items/Updates included in 02/11/2015 release:
 
 
