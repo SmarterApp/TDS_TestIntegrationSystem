@@ -114,63 +114,15 @@ Test Integration System has the following dependencies that are necessary for it
 ### Runtime Dependencies
 None
 
+## Items/Updates included in 02/20/2015 release:
+
+1)	Improved thread management in the TIS service.  Worker thread was continuing to run for a period of time after the service was stopped.
+
+2)	Improved error handling in REST endpoint when a file is received that has invalid or missing key fields.
+
 ## Items/Updates included in 02/13/2015 release:
 
 1)	\TDSQAService\OSS.TIS\SQL\TISDB\1_Create_Objects.sql: modified InsertAndArchiveXML stored procedure to copy the CallbackURL to the destination file location when archiving a file.  Otherwise, if the file in the "destination" location is resubmitted within TIS, no acknowledgement will be sent to TDS.
-
-
-## Items/Updates included in 02/11/2015 release:
-
-
-1)	\TDSQAService\OSS.TIS\SQL\TDSItemBank\6_TestToolConfiguration.sql: added combo test tool configuration and fixed an issue with the existing config where 'null' was being inserted instead of null.
-
-2)	\TDSQAService\OSS.TIS\SQL\TDSItemBank\3_Create_Objects.sql: fixed a bug in the spLoader_ExtractXML sproc that was setting the TestScoreFeature.MeasureOf to the TestID for test-level measures, rather than to the required value of ‘Overall’.
-
-3)	Fixed bug in ItemResponse where ScorePoints was never returning a value, which caused item scores of -1 to be passed to the test scoring engine, generating an error.
-
-4)	A couple serialization fixes to handle null attribute values.
-
-5)	If ART returns an accommodation that does not exist in the test tool configuration for the current test, skip it instead of throwing an exception.  Since ART specifies accommodations at the subject level, it’s conceivable that an accommodation may be specified for a subject in ART but not configured for all tests that the student is eligible for in that subject.
-
-6)	Fixed null ref exception when attempting to pass the student’s accommodations from ART to the test scoring engine.
-
-
-## Items/Updates included in 02/09/2015 release:
-
-The following previously known issues have been fixed - 
-
-1) Combination tests are being created but currently don’t include examinee attributes or relationships.
-
- - The following script has been updated - \TDSQAService\OSS.TIS\SQL\TISDB\2_Configuration.sql
-
-2) An exception will be thrown when attempting to gather the inputs to the test scoring engine if any items have more than one dimension.
-
-
-## Items/Updates included in 02/06/2015 release:
-
-1)	Added SEBasedPLWithRounding scoring rule to test scoring engine and test scoring configuration script
-
-2)	TDS will now send the primary student ID in the StudentIdentifier examinee attribute and a secondary/alternate SSID in the AlternateSSID attribute.  Previously we were only getting the primary student ID in the AlternateSSID attribute.  Modified the fetching of student accommodations from ART to attempt to use the StudentIdentifier first, then the AlternateSSID if the StudentIdentifier is not available (which should never be the case; primarily for backward compatibility).
-
-3)	The v_RescoreAppeals view is referenced by a stored proc that is used in the OSS TIS system, so I added this back to the TIS DDL script.  The view will always be empty.
-
-4)	Handling exceptions in sending of acknowledgement to TDS.  Previously the file would have been left in the “processing” location in the XmlRepository.  Will log as a warning by default.  Can be configured to treat as an error by setting TreatAcknowledgementFailureAsError = “true” in the app.config file; this will move the file into the “reject” location.  Note that a combination test may already have been created and submitted to TIS by this point though.
-
-5)	Added RTSAttribute configuration for HandscoringTSS target to TIS config script.
-
-6)	Added Transform config to the TIS configuration script for the HandscoringTSS target.
-
-7)	Added TDSItemBank\6_TestToolConfiguration script.  This is a preliminary script that we may need to update.  Testing is underway.
-
-8)	Fixed bug with the handling of accommodations at the segment level that override accommodations at the test level.  If the same accommodation exists at segment=”0” (test-level) and segment > 0, the accommodation with segment > 0 overrides for that segment.
-
-9)	Removed pre-build step in Release configuration from AIR.Common project; this step is n/a for the OSS systems.
-
-10)	Removed publish profile from TISServices project (TIS) and bin dir from TISService (REST API) project
-
-11)	Fixed SBACItemResolutionRuleWER compile issue with overloaded ItemScoreInfo constructor.
-
-12)	Various bug fixes for null refs and bad format strings.
 
 
 ------------------------------------------------------------------

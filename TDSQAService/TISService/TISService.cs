@@ -81,13 +81,10 @@ namespace TISService
         {
             if (thread != null && thread.IsAlive)
             {
-                thread.Join(Int32.Parse(sleepTime));
+                mainQASystemThread.RequestStop();
+                thread.Join();
             }
-            else
-            {
-                this.Stop();
-            }
-            Logger.Log(true, ServiceName + " Stopped", EventLogEntryType.Information, true, true);
+            Logger.Log(true, String.Format("{0} Stopped", ServiceName), EventLogEntryType.Information, true, true);
         }
     }
 }

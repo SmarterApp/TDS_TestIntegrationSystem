@@ -58,6 +58,11 @@ namespace TDSQASystemAPI
         /// </summary>
         private static int numberOfGeneralThreads = Int32.Parse(ConfigurationManager.AppSettings["NumberOfGeneralThreads"], CultureInfo.InvariantCulture);
         /// <summary>
+        /// when the service is stopped, the system will wait this long for all worker threads to complete
+        /// Default = 120 seconds
+        /// </summary>
+        private static int waitForWorkerThreadsOnStopSeconds = String.IsNullOrEmpty(ConfigurationManager.AppSettings["WaitForWorkerThreadsOnStopSeconds"]) ? 120 : Convert.ToInt32(ConfigurationManager.AppSettings["WaitForWorkerThreadsOnStopSeconds"]);
+        /// <summary>
         /// The Instance name of QA System.
         /// </summary>
         public static string ServiceName = ConfigurationManager.AppSettings["ServiceName"];
@@ -85,6 +90,30 @@ namespace TDSQASystemAPI
         private static TimeSpan margin = TimeSpan.FromMinutes(10.0); // will send warnings email if within 10 minutes of timeToSendWarnings
         private bool sentWarnings;
 
+        #region "service stopped"
+        private volatile bool stopSignalled = false;
+        private DateTime? stopSignalledDateTime = null;
+        public void RequestStop()
+        {
+            stopSignalledDateTime = DateTime.Now;
+            stopSignalled = true;
+            Utilities.Logger.Log(true, "Requested to stop...", EventLogEntryType.Information, false, true);
+        }
+
+        private bool StopTimeoutElapsed
+        {
+            get
+            {
+                if ((stopSignalledDateTime == null) ? false : DateTime.Now.Subtract(TimeSpan.FromSeconds(waitForWorkerThreadsOnStopSeconds)) > stopSignalledDateTime.Value)
+                {
+                    Utilities.Logger.Log(true, String.Format("Stop timeout of: {0} seconds elapsed with an active threadcount of: {1}!", waitForWorkerThreadsOnStopSeconds, numberOfGeneralThreads), EventLogEntryType.Information, false, true);
+                    return true;
+                }
+                return false;
+            }
+        }
+        #endregion
+
         protected abstract void InitializeServices();
 
         /// <summary>
@@ -96,7 +125,7 @@ namespace TDSQASystemAPI
             InitializeServices();
 
             Utilities.Logger.Log(true, "Initializing the QASystem", EventLogEntryType.Information, false, true);
-   
+
             QASystem qa = new QASystem("TDSQC", "TDSQC");
             //TODO: also make QASystemConfigSettings pluggable
             xmlRepositoryBL = new BL.XmlRepository(QASystemConfigSettings.Instance.LongDbCommandTimeout);
@@ -104,7 +133,7 @@ namespace TDSQASystemAPI
             Utilities.Logger.Log(true, "Initialized the QASystem", EventLogEntryType.Information, false, true);
 
             generalThreadCounter = 0;
-           
+
             // Create performance counter category if it doesn't exist and add counters to it...
             if (!PerformanceCounterCategory.Exists("TDS QA System"))
             {
@@ -160,7 +189,7 @@ namespace TDSQASystemAPI
         {
             //@rem Regex regularExpression = new Regex(fileRegexPattern);
 
-            while (true)
+            while (!stopSignalled || (generalThreadCounter > 0 && !StopTimeoutElapsed)) // if signalled to stop, let the worker threads finish until we hit a timeout threshold
             {
                 // if the settings say to send an email alert for warnings then we are not supposd to send a summary email as well.
                 // If we are not supposed to send email alerts for warnings then we are supposed to send only a summary email
@@ -189,52 +218,56 @@ namespace TDSQASystemAPI
                         sentWarnings = false;
                     }
                 }
-                if (XMLRepositoryQ.Count > 0 && generalThreadCounter < numberOfGeneralThreads)
+
+                if (!stopSignalled)
                 {
-                    // Get a file to process from the queue...
-                    XmlRepositoryItem repositoryItem = XMLRepositoryQ.Dequeue();
+                    if (XMLRepositoryQ.Count > 0 && generalThreadCounter < numberOfGeneralThreads)
+                    {
+                        // Get a file to process from the queue...
+                        XmlRepositoryItem repositoryItem = XMLRepositoryQ.Dequeue();
 
-                    // try to lock the opp.  If it's already locked, then move
-                    //  on to the next file leaving this one in the repository to be
-                    //  picked up next time.
-                    if (!LockOpp(repositoryItem))
-                    {
-                        Utilities.Logger.Log(true, String.Format("FileID: {0}, OppID: {1}, TesteeKey: {2} could not be locked.  Will try again later...", repositoryItem.FileID, repositoryItem.OppID, repositoryItem.TesteeKey), EventLogEntryType.Information, false, true);
-                        continue;
-                    }
+                        // try to lock the opp.  If it's already locked, then move
+                        //  on to the next file leaving this one in the repository to be
+                        //  picked up next time.
+                        if (!LockOpp(repositoryItem))
+                        {
+                            Utilities.Logger.Log(true, String.Format("FileID: {0}, OppID: {1}, TesteeKey: {2} could not be locked.  Will try again later...", repositoryItem.FileID, repositoryItem.OppID, repositoryItem.TesteeKey), EventLogEntryType.Information, false, true);
+                            continue;
+                        }
 
-                    try
-                    {
-                        QASystemWorkerThread worker = new QASystemWorkerThread(repositoryItem);
-                        Thread workerThread = new Thread(new ParameterizedThreadStart(worker.ProcessXmlFile));
-                        workerThread.Name = "process XML file";
-                        workerThread.Start(this);
+                        try
+                        {
+                            QASystemWorkerThread worker = new QASystemWorkerThread(repositoryItem);
+                            Thread workerThread = new Thread(new ParameterizedThreadStart(worker.ProcessXmlFile));
+                            workerThread.Name = "process XML file";
+                            workerThread.Start(this);
 
-                        // Increment the active thread count...
-                        generalThreadCounter++;
-                        activeThreadCount.Increment();
+                            // Increment the active thread count...
+                            generalThreadCounter++;
+                            activeThreadCount.Increment();
+                        }
+                        catch (Exception e)
+                        {
+                            Utilities.Logger.Log(true, "Error starting worker thread: " + e.StackTrace, EventLogEntryType.Error, false, true);
+                            continue;
+                        }
                     }
-                    catch (Exception e)
+                    else if (XMLRepositoryQ.Count == 0) // If the file queues are empty...
                     {
-                        Utilities.Logger.Log(true, "Error starting worker thread: " + e.StackTrace, EventLogEntryType.Error, false, true);
-                        continue;
-                    }
-                }
-                else if (XMLRepositoryQ.Count == 0) // If the file queues are empty...
-                {
-                    try
-                    {
-                        XMLRepositoryQ = xmlRepositoryBL.GetXMLRepository(ServiceName);
-                    }
-                    catch (Exception ex)
-                    {
-                        Utilities.Logger.Log(true, String.Format("Fatal Exception encountered while reading XmlRepository: {0}, Stack Trace: {1}", ex.Message, ex.StackTrace), EventLogEntryType.Error, true, true);
-                        throw ex;
-                    }
+                        try
+                        {
+                            XMLRepositoryQ = xmlRepositoryBL.GetXMLRepository(ServiceName);
+                        }
+                        catch (Exception ex)
+                        {
+                            Utilities.Logger.Log(true, String.Format("Fatal Exception encountered while reading XmlRepository: {0}, Stack Trace: {1}", ex.Message, ex.StackTrace), EventLogEntryType.Error, true, true);
+                            throw ex;
+                        }
 
-                    if (XMLRepositoryQ.Count == 0)
-                    {
-                        Thread.Sleep(idleSleepTime);
+                        if (XMLRepositoryQ.Count == 0)
+                        {
+                            Thread.Sleep(idleSleepTime);
+                        }
                     }
                 }
                 Thread.Sleep(loopSleepTime);
@@ -246,17 +279,10 @@ namespace TDSQASystemAPI
         /// </summary>
         public void DecrementCounter()
         {
-            try
+            lock (this)
             {
-                lock (this)
-                {
-                    activeThreadCount.Decrement();
-                    generalThreadCounter--;
-                }
-            }
-            catch (Exception e)
-            {
-                throw;
+                activeThreadCount.Decrement();
+                generalThreadCounter--;
             }
         }
 

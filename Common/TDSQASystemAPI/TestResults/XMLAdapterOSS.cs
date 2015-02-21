@@ -214,14 +214,43 @@ namespace TDSQASystemAPI.TestResults
 
         public override void GetKeyValues(out string testName, out long oppId, out long testeeKey, out DateTime statusDate, out bool isDemo)
         {
+            string oppKey = null;
+
             XPathNavigator nav = _xmlDoc.CreateNavigator();
+
             nav = nav.SelectSingleNode("//TDSReport/Test");
+            if (nav == null)
+                throw new ApplicationException("Invalid file format.  TDSReport/Test node could not be found");
+
             testName = nav.GetAttribute("name", "");
+
             nav = nav.SelectSingleNode("//TDSReport/Opportunity");
-            oppId = long.Parse(nav.GetAttribute("oppId", ""));
-            statusDate = DateTime.Parse(nav.GetAttribute("statusDate", ""));
+            if (nav == null)
+                throw new ApplicationException("Invalid file format.  TDSReport/Opportunity node could not be found");
+
+            if (!long.TryParse(nav.GetAttribute("oppId", ""), out oppId))
+            {
+                oppKey = nav.GetAttribute("key", "");
+                throw new ApplicationException(String.Format("Invalid or missing oppId: {0}.  Opp key: {1}",
+                    String.IsNullOrEmpty(nav.GetAttribute("oppId", "")) ? "(null)" : nav.GetAttribute("oppId", ""),
+                    String.IsNullOrEmpty(oppKey) ? "(unknown)" : oppKey));
+            }
+
+            if (String.IsNullOrEmpty(testName))
+                throw new ApplicationException(String.Format("Missing test name.  OppId: {0}", oppId));
+
+            if (!DateTime.TryParse(nav.GetAttribute("statusDate", ""), out statusDate))
+                throw new ApplicationException(String.Format("Invalid or missing statusDate: {0}.  OppId: {1} ",
+                    String.IsNullOrEmpty(nav.GetAttribute("statusDate", "")) ? "(null)" : nav.GetAttribute("statusDate", ""), oppId));
+
             nav = nav.SelectSingleNode("//TDSReport/Examinee");
-            testeeKey = long.Parse(nav.GetAttribute("key", ""));
+            if (nav == null)
+                throw new ApplicationException(String.Format("Invalid file format.  TDSReport/Examinee node could not be found.  OppId: {0}", oppId));
+
+            if (!long.TryParse(nav.GetAttribute("key", ""), out testeeKey))
+                throw new ApplicationException(String.Format("Invalid or missing examinee key: {0}.  OppId: {1}",
+                    String.IsNullOrEmpty(nav.GetAttribute("key", "")) ? "(null)" : nav.GetAttribute("key", ""), oppId));
+
             try
             {
                 // TODO: not sure if isDemo is going to be received from OSS TDS
