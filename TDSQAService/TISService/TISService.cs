@@ -53,8 +53,8 @@ namespace TISService
             {
                 EventLog.CreateEventSource(eventLogSource, eventLogName);
             }
-            eventLog.Source = eventLogSource;
-            eventLog.Log = eventLogName;
+            eventLog1.Source = eventLogSource;
+            eventLog1.Log = eventLogName;
         }
 
         protected override void OnStart(string[] args)

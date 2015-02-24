@@ -1,13 +1,13 @@
 ﻿namespace TISService
 {
-    partial class TISService
+    partial class ProjectInstaller
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
+        /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -22,20 +22,28 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            this.eventLog1 = new System.Diagnostics.EventLog();
-            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
+            this.serviceInstaller1 = new System.ServiceProcess.ServiceInstaller();
+            // 
+            // serviceInstaller1
+            // 
+            this.serviceInstaller1.ServiceName = "TISService";
+            // 
+            // ProjectInstaller
+            // 
+            this.Installers.AddRange(new System.Configuration.Install.Installer[] {
+            this.serviceInstaller1});
 
         }
 
         #endregion
 
-        private System.Diagnostics.EventLog eventLog1;
+        private System.ServiceProcess.ServiceInstaller serviceInstaller1;
+
     }
 }
