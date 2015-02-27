@@ -114,21 +114,20 @@ Test Integration System has the following dependencies that are necessary for it
 ### Runtime Dependencies
 None
 
+## Items/Updates included in 02/27/2015 release:
+
+1)	Fixed null reference exception that would occur in the test scoring engine when there were no accommodations returned from ART for the student/subject.  Change was to the container in TIS, not to the TSE.
+
 ## Items/Updates included in 02/23/2015 release:
 
 1)	Added service installer to the TISService project at \TDSQAService\TISService\.
 
-## Items/Updates included in 02/20/2015 release:
-
-1)	Improved thread management in the TIS service.  Worker thread was continuing to run for a period of time after the service was stopped.
-
-2)	Improved error handling in REST endpoint when a file is received that has invalid or missing key fields.
 
 ------------------------------------------------------------------
 ## Known Issues (as of 02/11/2015):
 
 
-1)	Changes will be required for creating Summative test combinations to support 1/N possible component tests.  These changes are currently being tested.
+1)	Changes will be required for creating Summative test combinations to support 1/N possible component tests.  These changes are currently being tested, as are the test scoring calculations for summative tests.
 
 
 ## Future Enhancements 

@@ -61,8 +61,19 @@ namespace TDSQASystemAPI.TestResults
             }
             set { accomodations = value; }
         }
+
         [XmlIgnore]
-        public List<TestAccomodation> RTSAccommodations { get; set; }
+        private List<TestAccomodation> rtsAccommodations;
+        [XmlIgnore]
+        public List<TestAccomodation> RTSAccommodations
+        {
+            get
+            {
+                if (rtsAccommodations == null)
+                    rtsAccommodations = new List<TestAccomodation>();
+                return rtsAccommodations;
+            }
+        }
 
         [XmlElement("Score", Order = 3)]
         public List<Score> ScoresList;
@@ -558,7 +569,7 @@ namespace TDSQASystemAPI.TestResults
             this.ScoresList = new List<Score>();
             this.scores = null;
             this.ItemResponses = new List<ItemResponse>();
-            this.RTSAccommodations = new List<TestAccomodation>();
+            this.rtsAccommodations = new List<TestAccomodation>();
         }
 
         #region Collections
@@ -577,8 +588,6 @@ namespace TDSQASystemAPI.TestResults
 
         public void AddRTSAccomodation(string type, string value, string code, int segment, string source)
         {
-            if (RTSAccommodations == null)
-                RTSAccommodations = new List<TestAccomodation>();
             RTSAccommodations.Add(new TestAccomodation(type, value, code, segment, source, 0));
         }
 
