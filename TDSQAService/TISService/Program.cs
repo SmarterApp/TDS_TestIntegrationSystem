@@ -27,12 +27,40 @@ namespace TISService
             // initialize secure setting manager
             SecureConfigManager.Initialize(new NoEncryptionManager());
 
+            ////TODO: uncomment to step through a file...
+            //Test();
+            //return;
+
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
             { 
                 new TISService() 
             };
             ServiceBase.Run(ServicesToRun);
+        }
+
+        private static void Test()
+        {
+            //TODO: set to the ID of the file you want to step through
+            //  Note: oppId and testeeKey can be pulled from the file below if you're so inclined.
+            //  If using the deserializer, a ref to the test scoring engine will be required.
+            //  Easy enough just to set them here.
+            long fileID = 23;
+            long oppId = 5000003;
+            long testeeKey = 85;
+
+            // init the main thread
+            OSS.TIS.TISMainThread mainQASystemThread = new OSS.TIS.TISMainThread();
+
+            // get the file to step through
+            TDSQASystemAPI.BL.XmlRepository xmlRepo = new TDSQASystemAPI.BL.XmlRepository();
+            System.Xml.XmlDocument doc = xmlRepo.GetXmlContent(fileID);
+
+            // init the QA system
+            TDSQASystemAPI.QASystem qaSystem = new TDSQASystemAPI.QASystem("TDSQC", "TDSQC");
+
+            // submit the file
+            TDSQASystemAPI.QASystem.QAResult result = qaSystem.ReceiveTestResult(doc, new TDSQASystemAPI.Data.XmlRepositoryItem(fileID, oppId.ToString(), testeeKey, null, null));
         }
     }
 }

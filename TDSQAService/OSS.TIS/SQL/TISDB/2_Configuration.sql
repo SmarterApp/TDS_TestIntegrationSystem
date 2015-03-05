@@ -1,3 +1,6 @@
+--TODO:
+-- set seed for CombinationTestOpportunity's OppId to value agreed upon with TDS so that we avoid clashes with oppIds TDS generates
+DBCC CHECKIDENT('dbo.CombinationTestOpportunity', RESEED, 5000000)
 
 -- ServiceName should be same as app.config file for the TIS service, and same as InstanceName in TestNameLookup
 INSERT INTO [dbo].[QASystemServices] ([ServiceName], [Path], [Description]) VALUES ('OSS_TISService', 'TODO:', 'TIS Windows Service')
