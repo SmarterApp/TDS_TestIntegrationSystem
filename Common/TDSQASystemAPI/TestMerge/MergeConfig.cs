@@ -20,7 +20,7 @@ namespace TDSQASystemAPI.TestMerge
     /// A class to allow configuring the tests which need to be merged to have a different target test
     /// </summary>
     public class MergeConfig
-    {        
+    {
         /// <summary>
         /// Target test for this merge 
         /// </summary>
@@ -48,8 +48,8 @@ namespace TDSQASystemAPI.TestMerge
         /// <param name="sTargetSegmentName"></param>
         /// <param name="sSourceFormKey"></param>
         /// <param name="sTargetFormKey"></param>
-        public void AddConfig(string sSourceTestName, 
-                               string sSourceSegmentName, string sTargetSegmentName, 
+        public void AddConfig(string sSourceTestName,
+                               string sSourceSegmentName, string sTargetSegmentName,
                                string sSourceFormKey, string sTargetFormKey)
         {
             // Add the source test to the list of source tests
@@ -74,10 +74,6 @@ namespace TDSQASystemAPI.TestMerge
             if (!SourceSegmentToTargetSegmentNamesMap.ContainsKey(sSourceSegmentName))
                 SourceSegmentToTargetSegmentNamesMap.Add(sSourceSegmentName, sTargetSegmentName);
 
-            // Map the target segment to source segment 
-            if (!TargetSegmentToSourceSegmentNamesMap.ContainsKey(sTargetSegmentName))
-                TargetSegmentToSourceSegmentNamesMap.Add(sTargetSegmentName, sSourceSegmentName);
-            
             // Add the source form to the source segment.
             if (!string.IsNullOrEmpty(sSourceFormKey) && !string.IsNullOrEmpty(sTargetFormKey))
             {
@@ -125,16 +121,6 @@ namespace TDSQASystemAPI.TestMerge
         }
 
         /// <summary>
-        /// Get source segment name given the target segment name (reverse mapping)
-        /// </summary>
-        /// <param name="sSourceSegmentName"></param>
-        /// <returns></returns>
-        public string GetSourceSegmentName(string sTargetSegmentName)
-        {
-            return TargetSegmentToSourceSegmentNamesMap.ContainsKey(sTargetSegmentName) ? TargetSegmentToSourceSegmentNamesMap[sTargetSegmentName] : null;
-        }
-
-        /// <summary>
         /// Get source segment names for the given source test 
         /// </summary>
         /// <param name="sSourceTestName"></param>
@@ -168,11 +154,6 @@ namespace TDSQASystemAPI.TestMerge
         /// Mapping of source segment name to target segment
         /// </summary>
         private Dictionary<string, string> SourceSegmentToTargetSegmentNamesMap = new Dictionary<string, string>();
-
-        /// <summary>
-        /// Mapping of target segment to source segment name
-        /// </summary>
-        private Dictionary<string, string> TargetSegmentToSourceSegmentNamesMap = new Dictionary<string, string>();
 
         /// <summary>
         /// Mapping of source segment name to list of source form keys

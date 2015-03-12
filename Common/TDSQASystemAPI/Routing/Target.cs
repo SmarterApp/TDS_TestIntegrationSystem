@@ -62,7 +62,7 @@ namespace TDSQASystemAPI.Routing
         private static Target Create(int projectID, string targetName)
         {
             TargetClass targetClass;
-            if (!Enum.TryParse<TargetClass>(targetName, out targetClass))
+            if (!Enum.TryParse<TargetClass>(targetName, true, out targetClass))
             {
                 // handscoring targets must have GroupName thats starts with Handscoring (case-insensitive)
                 if (targetName.StartsWith("Handscoring", StringComparison.InvariantCultureIgnoreCase))
@@ -74,12 +74,12 @@ namespace TDSQASystemAPI.Routing
             MetaDataEntry e = ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, targetName, Variables.TargetType.ToString());
             
             TargetType type;
-            if (e == null || !Enum.TryParse<TargetType>(e.TextVal ?? "", out type))
+            if (e == null || !Enum.TryParse<TargetType>(e.TextVal ?? "", true, out type))
                 type = TargetType.Custom;
 
             e = ServiceLocator.Resolve<ConfigurationHolder>().GetFromMetaData(projectID, targetName, Variables.XMLVersion.ToString());
             XMLAdapter.AdapterType xmlVersion;
-            if(e == null || !Enum.TryParse<XMLAdapter.AdapterType>(e.TextVal, out xmlVersion))
+            if(e == null || !Enum.TryParse<XMLAdapter.AdapterType>(e.TextVal, true, out xmlVersion))
                 xmlVersion = XMLAdapter.AdapterType.TDS; // default to proprietary
 
             // if a transform is configured, load it

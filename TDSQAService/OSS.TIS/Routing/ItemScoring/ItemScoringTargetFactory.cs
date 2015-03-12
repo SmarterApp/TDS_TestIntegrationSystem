@@ -24,10 +24,21 @@ namespace OSS.TIS.Routing.ItemScoring
     {
         #region IItemScoringTargetFactory Members
 
-        public Target Create(ItemScoringTarget itemScoringTarget, TestResult testResult)
+        public ItemScoringTarget Create(ItemScoringTarget itemScoringTarget, TestResult testResult, out object[] sendInputArgs)
         {
-            return new TSSTarget(itemScoringTarget.Name, itemScoringTarget.Class, itemScoringTarget.Type, itemScoringTarget.XmlVersion, itemScoringTarget.TransformSpec, 
-                new TSSFileTransformArgs(ConfigurationManager.AppSettings["ItemScoring:CallbackUrl"]));
+            // initialize to null; can be set to whatever should be passed to Send on a case-by-case basis
+            sendInputArgs = null;
+
+            switch (itemScoringTarget.Type)
+            {
+                case Target.TargetType.WebService:
+                    return new TSSTarget(itemScoringTarget.Name, itemScoringTarget.Class, itemScoringTarget.Type, itemScoringTarget.XmlVersion, itemScoringTarget.TransformSpec,
+                        new TSSFileTransformArgs(ItemScoringConfigManager.Instance.GetItemScoringConfig(itemScoringTarget.Name).CallbackURL));
+                case Target.TargetType.Custom:
+                    return new ItemScoringDaemonTarget(itemScoringTarget.Name);
+                default:
+                    throw new ApplicationException(String.Format("Item scoring target: {0} has an unsupported type: {1}", itemScoringTarget.Name, itemScoringTarget.Type));
+            }
         }
 
         #endregion

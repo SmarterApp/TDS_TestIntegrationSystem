@@ -17,6 +17,6 @@ namespace TDSQASystemAPI.Routing.ItemScoring
 {
     public interface IItemScoringTargetFactory
     {
-        Target Create(ItemScoringTarget itemScoringTarget, TestResult testResult);
+        ItemScoringTarget Create(ItemScoringTarget itemScoringTarget, TestResult testResult, out object[] inputArgs);
     }
 }

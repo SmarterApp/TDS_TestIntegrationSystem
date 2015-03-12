@@ -107,6 +107,10 @@ namespace TIS.ScoringDaemon.Sql
                     ScorableResponse scorableResponse = new ScorableResponse
                         {
                             OppKey = reader.GetGuid("OppKey"),
+                            //TODO: this is probably a good thing to have for item resolution rules.  Can add this to the contextToken
+                            //  so that we can key off of it in the callback handler to determine which rule to create.  We'll want to store
+                            //  it though in TestOpportunityItemScore to avoid joins, and we don't need it right now since there's only 1 item resolution
+                            //  rule that keys off of the item type.
                             //TestKey = reader.GetString("testkey"),
                             TestId = reader.GetString("testID"),
                             Position = reader.GetInt32("position"),

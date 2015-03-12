@@ -76,14 +76,19 @@ namespace TIS.ScoringDaemon.Web
                 reader.Close();
             }
 
-            //TODO: support encryption.  Can do this if we're sending requests individually, but then I'd need to be able 
-            //  to determine whether the token is encrypted.  It won't be from TSS, where we're sending the TDSReport and they're assembling
-            //  the contextToken themselves based on an agreed-upon format.
-            // decrypt token
-            string decryptedToken = itemScoreResponse.Score.ContextToken; //EncryptionHelper.DecryptFromBase64(itemScoreResponse.Score.ContextToken);
+            // get the context token and deserialize it
+            string decryptedToken = GetContextToken(itemScoreResponse);
+            ItemScoreRequestContextToken tokenData = null;
 
             // get test data
-            ItemScoreRequestContextToken tokenData = JsonHelper.Deserialize<ItemScoreRequestContextToken>(decryptedToken);
+            try
+            {
+                tokenData = JsonHelper.Deserialize<ItemScoreRequestContextToken>(decryptedToken);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(String.Format("Could not read contextToken: {0},  Error: {1}.", decryptedToken ?? "(null)", ex.Message));
+            }
 
             // create response
             ScoredResponse scoredResponse = new ScoredResponse()
@@ -101,7 +106,6 @@ namespace TIS.ScoringDaemon.Web
             string hubDBName = tokenData.TISDbName;
             string clientName = tokenData.clientName;
             string environment = tokenData.environment;
-            string itemFormat = tokenData.itemType;
 
             // create function for submitting scores
             Action submitScore = delegate
@@ -144,7 +148,7 @@ namespace TIS.ScoringDaemon.Web
                     
                     //run resolution rule if there is one
                     //Zach 12/11/2014 TODO: Add checks or try/catches around each part of running the rule to give more specific error messages?
-                    TISItemResolutionRule rule = TISItemResolutionRule.CreateRule(itemFormat, scoredResponse.ItemKey, clientName);
+                    TISItemResolutionRule rule = TISItemResolutionRule.CreateRule(tokenData.itemType, scoredResponse.ItemKey, clientName);
                     if (rule != null)
                         scoredResponse.ScoreDimensions = HttpWebHelper.SerializeXml(rule.ResolveItemScore(Serialization.DeserializeXml<TDSQASystemAPI.TestResults.ItemScoreInfo>(scoredResponse.ScoreDimensions)));
 
@@ -183,6 +187,27 @@ namespace TIS.ScoringDaemon.Web
                 // sync
                 submitScore();
             }
+        }
+
+        /// <summary>
+        /// This handler expects an encrypted context token.  If for some reason it can't be decrypted, try the plain text value.
+        /// The ItemScoringCallbackHandlerRcvOnly handler should be used if an encrypted context token is not expected.
+        /// </summary>
+        /// <param name="itemScoreResponse"></param>
+        /// <returns></returns>
+        protected virtual string GetContextToken(ItemScoreResponse itemScoreResponse)
+        {
+            string contextToken = null;
+            try
+            {
+                contextToken = EncryptionHelper.DecryptFromBase64(itemScoreResponse.Score.ContextToken);
+            }
+            catch (Exception ex)
+            {
+                TDSLogger.Application.Warn(String.Format("Error decrypting context token.  Trying plain text value.  Message: {0}", ex.Message));
+                contextToken = itemScoreResponse.Score.ContextToken;
+            }
+            return contextToken;
         }
 
         public bool IsReusable

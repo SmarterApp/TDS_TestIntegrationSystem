@@ -161,7 +161,7 @@
     <Compile Include="Routing\Authorization\OAuth.cs" />
     <Compile Include="Routing\Authorization\OAuthResponse.cs" />
     <Compile Include="Routing\ItemScoring\IItemScoringTargetFactory.cs" />
-    <Compile Include="Routing\ItemScoring\ItemScoringConfig.cs" />
+    <Compile Include="Routing\ItemScoring\ItemScoringConfigManager.cs" />
     <Compile Include="Routing\ItemScoring\ItemScoringManager.cs" />
     <Compile Include="Routing\ItemScoring\ItemScoringDaemonTarget.cs" />
     <Compile Include="Routing\ItemScoring\ItemScoringTarget.cs" />

@@ -269,12 +269,22 @@ namespace ScoringEngine.Scoring
 
         public void SBACTheta(string measureOf, string measureLabel, double LOT, double HOT, double seLimit)
         {
+            SBACCATTheta(measureOf, measureLabel, LOT, HOT, seLimit, -1.0, 0.0);
+        }
+
+        public void SBACCATTheta(string measureOf, string measureLabel, double LOT, double HOT, double seLimit, double averageA, double averageB)
+        {
             Dictionary<int, string> strands = new Dictionary<int, string>();
             strands[1] = measureOf;
-            SBACMultiStrandTheta(measureOf, measureLabel, LOT, HOT, seLimit, strands);
+            SBACCATMultiStrandTheta(measureOf, measureLabel, LOT, HOT, seLimit, strands, averageA, averageB);
         }
 
         public void SBACMultiStrandTheta(string measureOf, string measureLabel, double LOT, double HOT, double seLimit, Dictionary<int, string> strands)
+        {
+            SBACCATMultiStrandTheta(measureOf, measureLabel, LOT, HOT, seLimit, strands, -1.0, 0.0);
+        }
+
+        public void SBACCATMultiStrandTheta(string measureOf, string measureLabel, double LOT, double HOT, double seLimit, Dictionary<int, string> strands, double averageA, double averageB)
         {
             MeasureValue attemptedness = GetMeasureValue("Attempted", "Overall");
             if (attemptedness.ScoreString != "Y")
@@ -283,7 +293,12 @@ namespace ScoringEngine.Scoring
                 return;
             }
 
-            List<ItemScore> sbacTestScores = SBACRecodeAndSubset(nonDroppedItemScores, strands);
+            List<ItemScore> sbacTestScores = SBACRecodeAndSubset(nonDroppedItemScores, strands, averageA, averageB);
+            if (sbacTestScores == null)
+            {
+                AddMeasureValue(measureLabel, measureOf, "");
+                return;
+            }
             List<ItemScore> testScores = MultiSubScaleRecodeAndSubset(nonDroppedItemScores, strands);
             IRTScore thetaScore = MLEScorer.MLEScore3PL(sbacTestScores, 0.1, -15.0, 15.0);
             if (thetaScore.Type == IRTScoreType.Converged)
@@ -622,7 +637,7 @@ namespace ScoringEngine.Scoring
         /// <param name="allTestResponses"></param>
         /// <param name="subscales"></param>
         /// <returns></returns>
-        private List<ItemScore> SBACRecodeAndSubset(List<ItemScore> allTestResponses, Dictionary<int, string> subscales)
+        private List<ItemScore> SBACRecodeAndSubset(List<ItemScore> allTestResponses, Dictionary<int, string> subscales, double averageA, double averageB)
         {
             if (!IsPartialTest())
                 return MultiSubScaleRecodeAndSubset(allTestResponses, subscales);
@@ -660,9 +675,11 @@ namespace ScoringEngine.Scoring
                         if (subscales.Count > 1 || String.Compare(subscales[1], "overall", true) != 0)
                             return null;
 
+                        if (averageA < 0)
+                            throw new ScoringEngineException("Need to specify averageA and averageB for SBAC theta computation");
+
                         foreach (ItemScore ir in allTestResponses)
                         {
-
                             if (ir.SegmentID == segmentID
                                 && !ir.IsFieldTest
                                 && ir.Item.IsScored
@@ -677,21 +694,14 @@ namespace ScoringEngine.Scoring
                             }
                         }
 
-                        // simulate "missing" items
-                        double averageB = 0.0;
-                        double averageA = 0.0;
                         int count = 0;
                         foreach (ItemScore ir in allTestResponses)
                         {
                             // include non selected items...
                             if (ir.SegmentID == segmentID && !ir.IsFieldTest)
                             {
-                                averageB += ir.ScoreInfo.IRTModel.GetDifficulty();
-                                averageA += ir.ScoreInfo.IRTModel.GetSlope();
                                 count += 1;
                             }
-                            averageB = averageB / count;
-                            averageA = averageA / count;
                         }
 
                         TestItem ni = new TestItem(-1, -1, "", true, true, true, false, false, false, "", 1, segmentID);
@@ -714,7 +724,7 @@ namespace ScoringEngine.Scoring
                                 scores[ir.Item.ItemName + "-" + ir.ScoreInfo.Dimension] = ir;
 
                         // Assign a score of 0 to all non-selected items (even if they aren't passed to the scoring engine)
-                        TestForm formObject = bp.GetForm(form.Split('-')[sbp.TestPosition - 1]);
+                        TestForm formObject = bp.GetForm(forms[sbp.TestPosition - 1]);
                         if (formObject == null)
                             throw new ScoringEngineException("No form '" + form + "' in the blueprint for test name '" + testName + "'");
                         for (int i = 0; i < formObject.Items.Count; i++)

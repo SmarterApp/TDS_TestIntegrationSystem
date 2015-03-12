@@ -219,8 +219,8 @@ namespace ScoringEngine.ConfiguredTests
 
         public void SetDimension(string dimension, IRTModelFactory.Model model, string recodeRule, double weight, int points, int parameteCount)
         {
-            if (recodeRule.StartsWith("GRR(") && recodeRule.Length != 2 * ScorePoint + 6)
-                throw new ScoringEngineException("recodeRule " + recodeRule + " for item " + ItemName + " does not seem to provide a recode for each of its possible scores (scorePoint = " + ScorePoint + ")");
+            if (recodeRule.StartsWith("GRR(") && recodeRule.Substring(recodeRule.Length - 2,1) != points.ToString())
+                throw new ScoringEngineException("recodeRule " + recodeRule + " for item " + ItemName + " does not seem to provide a recode for each of its possible scores (scorePoint = " + points + ")");
             scoreInfo.Add(new TestItemScoreInfo(this.itemBank, this.itemID, dimension, model, recodeRule, parameteCount, weight, points));
         }
 

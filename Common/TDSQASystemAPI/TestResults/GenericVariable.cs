@@ -47,7 +47,7 @@ namespace TDSQASystemAPI.TestResults
                 if (!context.HasValue)
                 {
                     VariableContext c;
-                    if (!Enum.TryParse(ContextString, out c))
+                    if (!Enum.TryParse(ContextString, true, out c))
                         context = VariableContext.OTHER;
                     else context = c;
                 }
@@ -66,7 +66,7 @@ namespace TDSQASystemAPI.TestResults
         public GenericVariable(string context, string name, string value)             
         {
             VariableContext vc = VariableContext.OTHER;
-            this.Context = (Enum.TryParse(context, out vc) && Enum.IsDefined(typeof(VariableContext), vc)) ? vc : VariableContext.OTHER;
+            this.Context = (Enum.TryParse(context, true, out vc) && Enum.IsDefined(typeof(VariableContext), vc)) ? vc : VariableContext.OTHER;
             this.ContextString = context;
             this.Name = name;
             this.Value = value;

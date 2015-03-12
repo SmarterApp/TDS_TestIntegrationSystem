@@ -11,8 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-//todo: after refactor, instead include the "Common" project that will contain all common classes
 using TDSQASystemAPI.TestResults;
 using TDSQASystemAPI.Routing.ItemScoring;
 using TISItemResolution.Rules;
@@ -40,7 +38,7 @@ namespace TISItemResolution
                 ItemScoreInfo _obj = new ItemScoreInfo(scoreInfo);
                 ResolveItemScore(_obj);
             }
-            catch (Exception e)
+            catch
             {
                 return false;
             }
@@ -49,26 +47,19 @@ namespace TISItemResolution
 
         public static TISItemResolutionRule CreateRule(string itemType, string itemID, string clientName)
         {
-            //todo: use client name
+            //TODO: make this more rubust
             TISItemResolutionRule rule = null;
-            if (ItemScoringConfig.Instance.ItemIsConfigured(itemType, itemID))
-            {
-                //check specific rule by item ID first
-                switch (itemID)
-                {
-                    default:
-                        break;
-                }
 
-                //if none was found then try item type
-                switch (itemType.ToUpper())
-                {
-                    case "WER":
-                        return new SBACItemResolutionRuleWER();
-                    default:
-                        break;
-                }
+            //if none was found then try item type
+            switch (itemType.ToUpper())
+            {
+                case "WER":
+                    rule = new SBACItemResolutionRuleWER();
+                    break;
+                default:
+                    break;
             }
+
             return rule;
         }
     }

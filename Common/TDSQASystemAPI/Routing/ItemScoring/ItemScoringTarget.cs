@@ -31,15 +31,33 @@ namespace TDSQASystemAPI.Routing.ItemScoring
         {
         }
 
+        public ItemScoringTarget(string targetName, TargetClass targetClass, TargetType type) 
+            : base(targetName, targetClass, type)
+        {
+        }
+
         public override ITargetResult Send(TestResult testResult, Action<object> outputProcessor, params object[] inputArgs)
         {
             IItemScoringTargetFactory f = ServiceLocator.Resolve<IItemScoringTargetFactory>();
             if(f == null)
                 throw new QAException("There is no IItemScoringTargetFactory in the service repository.", QAException.ExceptionType.ConfigurationError);
-            Target t = f.Create(this, testResult);
+            ItemScoringTarget t = f.Create(this, testResult, out inputArgs);
             if (t == null)
                 throw new QAException(String.Format("Could not create Target: {0}", base.Name), QAException.ExceptionType.ConfigurationError);
             return t.Send(testResult, outputProcessor, inputArgs);
+        }
+
+        protected virtual List<ItemResponse> GetItemsToScore(TestResult testResult)
+        {
+            List<ItemResponse> itemsToScore = new List<ItemResponse>();
+
+            // get all selected items on the test that are configured for item scoring
+            //  and are not already scored
+            foreach (ItemResponse ir in testResult.ItemResponses)
+                if (ir.IsSelected && !ir.ScoreStatus.Equals("Scored", StringComparison.InvariantCultureIgnoreCase) && ItemScoringConfigManager.Instance.ScoreItem(base.Name, ir))
+                    itemsToScore.Add(ir);
+
+            return itemsToScore;
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AIR.Common.Json;
+using AIR.Common.Web;
 using TDS.ScoringDaemon.Abstractions;
 using TDS.ScoringDeamon.Web;
 using TIS.ScoringDaemon.Abstractions;
@@ -25,7 +26,6 @@ namespace TIS.ScoringDaemon.Web
         {
         }
 
-        //TODO: support encryption.
         protected override string GetContextToken(ReponseRepoMonitor repoMon, ScorableResponse scorableResponse)
         {
             int[] itemKey = scorableResponse.GetItemKeyTokens();
@@ -39,10 +39,11 @@ namespace TIS.ScoringDaemon.Web
                 itemID = itemKey[1],
                 TISIP = repoMon.DBIP,
                 TISDbName = repoMon.DBName,
+                environment = repoMon.Environment,
                 itemType = scorableResponse.Format
             };
 
-            return JsonHelper.Serialize<ItemScoreRequestContextToken>(contextToken);
+            return EncryptionHelper.EncryptToBase64(JsonHelper.Serialize<ItemScoreRequestContextToken>(contextToken));  // encrypt token (do not url encode)  
         }
 
     }

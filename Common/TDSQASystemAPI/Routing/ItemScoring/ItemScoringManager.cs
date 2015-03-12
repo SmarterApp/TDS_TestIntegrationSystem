@@ -43,7 +43,7 @@ namespace TDSQASystemAPI.Routing.ItemScoring
                 if (t.Send(tr).Sent)
                 {
                     sent++;
-                    Logger.Log(true, String.Format("Sent data for OppId: {0} to Handscoring Target: {1}{2})", tr.Opportunity.OpportunityID, t.Name,
+                    Logger.Log(true, String.Format("Sent data for OppId: {0} to Item Scoring Target: {1}{2})", tr.Opportunity.OpportunityID, t.Name,
                         Pretend ? " (pretend)" : ""), EventLogEntryType.Information, false, true);
                 }
             }

@@ -515,9 +515,9 @@ namespace TDSQASystemAPI.TestResults
         public bool HasItemsRequiringHandscores(ItemOperationalStatus opStatus, bool excludeDropped, bool selectedOnly, double? machineScoreConfLevelThreshold)
         {
             return ItemResponses.Exists(ir =>
-                ((!Routing.ItemScoring.ItemScoringConfig.Instance.ItemIsConfigured(ir.Format, ir.ItemName)
+                ((!Routing.ItemScoring.ItemScoringConfigManager.Instance.ScoreItem(ir)
                         && HandscoredTypes.Contains(ir.Format) && !ir.ItemHandscoreSet)
-                    || Routing.ItemScoring.ItemScoringConfig.Instance.ScoreItem(ir))
+                    || Routing.ItemScoring.ItemScoringConfigManager.Instance.ScoreItem(ir))
                 && (!excludeDropped || !ir.Dropped)
                 && (!selectedOnly || ir.IsSelected)
                 && (opStatus == ItemOperationalStatus.Any

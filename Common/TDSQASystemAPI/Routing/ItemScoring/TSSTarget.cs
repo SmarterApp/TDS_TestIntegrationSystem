@@ -18,7 +18,7 @@ using TDSQASystemAPI.TestResults;
 
 namespace TDSQASystemAPI.Routing.ItemScoring
 {
-    public class TSSTarget : Target
+    public class TSSTarget : ItemScoringTarget
     {
         public TSSTarget(string targetName, TargetClass targetClass, TargetType type, XMLAdapter.AdapterType xmlVersion, FileTransformSpec transformSpec, IFileTransformArgs transformArgs)
             : base(targetName, targetClass, type, xmlVersion, transformSpec, transformArgs) { }
@@ -27,8 +27,15 @@ namespace TDSQASystemAPI.Routing.ItemScoring
         {
             // first save items to the database using the item scoring daemon target
             ItemScoringDaemonTarget isd = new ItemScoringDaemonTarget(this.Name);
-            ITargetResult result = isd.Send(testResult, null, true); // mark as batch scoring since we'll be sending the entire file to TSS
-            if (!result.Sent)
+            ITargetResult result = isd.Send(testResult, null);
+
+            // if there were no items to send, and it's not a reset or invalidation, then return the !sent result.
+            //  If it was a reset or invalidation, we want to send this to TSS even if all items have already been scored.
+            //  Resets in particular should cause the opp to be reset in TSS.  TSS can ignore invalidations if they want
+            //  or apply special handling for those too.
+            if (!result.Sent 
+                    && !testResult.Opportunity.Status.Equals("reset", StringComparison.InvariantCultureIgnoreCase)
+                    && !testResult.Opportunity.Status.Equals("invalidated", StringComparison.InvariantCultureIgnoreCase))
                 return result;
 
             // check "pretend" setting now that we've written the items to the item scoring table

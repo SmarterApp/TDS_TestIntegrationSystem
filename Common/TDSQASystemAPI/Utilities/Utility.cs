@@ -51,7 +51,7 @@ namespace TDSQASystemAPI.Utilities
                 else
                 {
                     XMLAdapter.AdapterType type;
-                    if (!Enum.TryParse(Convert.ToString(obj), out type))
+                    if (!Enum.TryParse(Convert.ToString(obj), true, out type))
                     {
                         if (Convert.ToString(obj).Equals("proprietary", StringComparison.InvariantCultureIgnoreCase))
                         {

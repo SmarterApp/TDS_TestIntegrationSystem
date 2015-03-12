@@ -59,7 +59,7 @@ namespace TDSQASystemAPI.TestMerge
                 Dictionary<string, RelatedTestOpportunity> RelatedXMLFileInfo = GetOppsForMerge(currentTestResult);
                 if (RelatedXMLFileInfo == null)
                     return;
-                
+
                 // Gather all the test results and statuses for merge participants 
                 Dictionary<string, TestResult> sourceTestNameToResultsMap = new Dictionary<string, TestResult>();
                 Dictionary<string, string> sourceTestNameToStatusesMap = new Dictionary<string, string>();
@@ -74,7 +74,7 @@ namespace TDSQASystemAPI.TestMerge
                     // Check, if we have the file ID for the test
                     if (RelatedXMLFileInfo.ContainsKey(configuredSourceTestName))
                     {
-                        RelatedTestOpportunity  relatedTestOpportunity = RelatedXMLFileInfo[configuredSourceTestName];
+                        RelatedTestOpportunity relatedTestOpportunity = RelatedXMLFileInfo[configuredSourceTestName];
                         // Check, if it is already added 
                         if (!sourceTestNameToResultsMap.ContainsKey(configuredSourceTestName))
                         {
@@ -87,7 +87,7 @@ namespace TDSQASystemAPI.TestMerge
                             sourceTestNameToResultsMap.Add(configuredSourceTestName, tr);
                             sourceTestNameToStatusesMap.Add(configuredSourceTestName, tr.Opportunity.Status);
                         }
-                        
+
                         // If the test is in 'scored' then previosly it is 'handscored' or 'appealed' - get the status prior to that to decide overall status
                         string currentStatus = sourceTestNameToStatusesMap[configuredSourceTestName];
                         if (currentStatus.Equals("scored"))
@@ -99,7 +99,7 @@ namespace TDSQASystemAPI.TestMerge
                                 TestResult tr = CreateTestResult(tc, xmlRepo, relatedTestOpportunity.HandScoredFileId, serializerFactory);
                                 sourceTestNameToStatusesMap[configuredSourceTestName] = tr.Opportunity.Status;
                             }
-                            else if ((relatedTestOpportunity.LatestStatus.Equals("appeal") 
+                            else if ((relatedTestOpportunity.LatestStatus.Equals("appeal")
                                       || relatedTestOpportunity.LatestStatus.Equals("scored"))
                                       && relatedTestOpportunity.PreAppealFileId != -1)
                             {
@@ -118,7 +118,7 @@ namespace TDSQASystemAPI.TestMerge
                 {
                     // Get the overall status 
                     string sTargetTestStatus = GetMergedTestStatus(sourceTestNameToStatusesMap.Values.ToList());
-                    
+
                     // Merge the test result
                     TestResult mergedResult = MergeTestResults(tc, sourceTestResults, sTargetTestStatus);
                     if (mergedResult != null)
@@ -146,7 +146,7 @@ namespace TDSQASystemAPI.TestMerge
         {
             // Return null, if merge cannot be done, otherwise return chosen opportunties for merge 
             Dictionary<string, RelatedTestOpportunity> RelatedXMLFileInfo = new Dictionary<string, RelatedTestOpportunity>();
-            
+
             // Get the current test information 
             String sCurrentTestID = currentTestResult.TestID;
             int nCurrentOpportunityNumber = currentTestResult.Opportunity.OpportunityNumber;
@@ -189,7 +189,7 @@ namespace TDSQASystemAPI.TestMerge
             // Current opp is 'reset' and there exists something in the past 
             // 'nullify' the candidate set
             if (bCheckForMergeSkipOnReset && bPastExistsForCurrentResetOpp)
-                RelatedXMLFileInfo = null; 
+                RelatedXMLFileInfo = null;
 
             // Return the candidates for merge
             return RelatedXMLFileInfo;
@@ -223,7 +223,7 @@ namespace TDSQASystemAPI.TestMerge
         /// </summary>
         /// <param name="sourceTestResults"></param>
         private List<TestResult> ValidateAndSortTestResults(List<TestResult> sourceTestResults)
-        {            
+        {
             // Only 'one test' or 'no test at all' met the merge criteria trivially
             int nCount = sourceTestResults.Count;
             if (nCount < 2)
@@ -239,12 +239,99 @@ namespace TDSQASystemAPI.TestMerge
             if (!bValid)
                 sourceTestResults.Clear();
 
+            // If we have multiple valid candidates mapping to the same segment then resolve the results down to 1 candidate
+            ResolveSegments(sourceTestResults);
+
             // Return the validated tests
             return sourceTestResults;
         }
 
         /// <summary>
-        /// Merge the givent list of test results
+        /// Resolve multiple candidate tests for a segment down to one candidate, removing the other(s) from the list.
+        /// </summary>
+        /// <param name="sourceTestResults"></param>
+        private void ResolveSegments(List<TestResult> sourceTestResults)
+        {
+            // key = target segment, value = TestResult mapped to it
+            Dictionary<string, TestResult> targetSegmentTestResult = new Dictionary<string, TestResult>(StringComparer.InvariantCultureIgnoreCase);
+            string[] priorityStatuses = new string[] { "completed", "reported", "submitted", "scored" };
+
+            // hold set of tests to remove from sourceTestResults
+            HashSet<TestResult> testsToRemove = new HashSet<TestResult>();
+
+            // Check if there are multiple candidates for the same segment position on the combo and resolve it 
+            for (int i = 0; i < sourceTestResults.Count; i++)
+            {
+                TestResult tr = sourceTestResults[i];
+                List<TestSegment> segments = tr.Opportunity.segmentsList;
+                foreach (TestSegment segment in segments)
+                {
+                    string targetSegment = _mergeConfig.GetTargetSegmentName(segment.ID);
+                    if (!targetSegmentTestResult.ContainsKey(targetSegment))
+                        targetSegmentTestResult.Add(targetSegment, tr);
+                    else
+                    {
+                        // segment already has a candidate found, so resolve with the current candidate using these rules
+                        // 1.	(completed|reported|submitted|scored) > expired > invalidated > reset
+                        // 2.	Full invalidation  > partial invalidation
+                        // 3.	Break ties with min(opp start date)
+                        TestResult other = targetSegmentTestResult[targetSegment];
+                        bool changeToCurrentTestResult;
+                        bool isOtherPriorityStatus = priorityStatuses.Contains(other.Opportunity.Status);
+                        bool isCurrentPriorityStatus = priorityStatuses.Contains(tr.Opportunity.Status);
+
+                        //check status priorities
+                        if (isOtherPriorityStatus && !isCurrentPriorityStatus)
+                            changeToCurrentTestResult = false;
+                        else if (!isOtherPriorityStatus && isCurrentPriorityStatus)
+                            changeToCurrentTestResult = true;
+                        else if (other.Opportunity.Status == "expired" && tr.Opportunity.Status != "expired")
+                            changeToCurrentTestResult = false;
+                        else if (other.Opportunity.Status != "expired" && tr.Opportunity.Status == "expired")
+                            changeToCurrentTestResult = true;
+                        else if (other.Opportunity.Status == "invalidated" && tr.Opportunity.Status != "invalidated")
+                            changeToCurrentTestResult = false;
+                        else if (other.Opportunity.Status != "invalidated" && tr.Opportunity.Status == "invalidated")
+                            changeToCurrentTestResult = true;
+                        // check for other being full invalidation and current being partial
+                        else if (other.Opportunity.Status == "invalidated" && tr.Opportunity.Status == "invalidated" && other.Opportunity.CompletedDate.HasValue && !tr.Opportunity.CompletedDate.HasValue)
+                            changeToCurrentTestResult = false;
+                        // check for current being full invalidation and other being partial
+                        else if (other.Opportunity.Status == "invalidated" && tr.Opportunity.Status == "invalidated" && !other.Opportunity.CompletedDate.HasValue && tr.Opportunity.CompletedDate.HasValue)
+                            changeToCurrentTestResult = true;
+                        // if both are same status (or both have status of same priority) check if other has earlier start date
+                        else if ((other.Opportunity.Status == tr.Opportunity.Status || (isOtherPriorityStatus && isCurrentPriorityStatus)) && other.Opportunity.StartDate < tr.Opportunity.StartDate)
+                            changeToCurrentTestResult = false;
+                        // if both are same status (or both have status of same priority) check if current has earlier start date
+                        else if ((other.Opportunity.Status == tr.Opportunity.Status || (isOtherPriorityStatus && isCurrentPriorityStatus)) && tr.Opportunity.StartDate < other.Opportunity.StartDate)
+                            changeToCurrentTestResult = true;
+                        else throw new NotImplementedException(string.Format("Resolution rules could not resolve which test to allow in TestMerge for target segment {0}. OppIDs in question: {1}, {2}", targetSegment, other.Opportunity.OpportunityID, tr.Opportunity.OpportunityID));
+
+                        // flag the other TestResult to be removed -- the current TestResult has priority
+                        if (changeToCurrentTestResult)
+                        {
+                            targetSegmentTestResult[targetSegment] = tr;
+                            testsToRemove.Add(other);
+                        }
+                        else // flag current TestResult to be removed because the other has priority
+                        {
+                            testsToRemove.Add(tr);
+                        }
+                    }
+                }
+            }
+
+            // If we still have a TestResult we will be removing mapped to a target segment then we have a problem.
+            // This could happen if one TestResult does not map to ALL the same segments/forms as another.
+            foreach (KeyValuePair<string, TestResult> kvp in targetSegmentTestResult.Where(x => testsToRemove.Contains(x.Value)))
+                throw new NotImplementedException(string.Format("In Test Merging oppID {0} is mapped to target segment {1}, but it was marked as being removed from another segment. This happenned because OppID {0} was replaced with a test that is not mapped to exactly the same segments/forms in CombinationTestFormMap, which is not currently supported. Please investigate.", kvp.Value.Opportunity.OpportunityID, kvp.Key));
+
+            //remove the flagged tests
+            sourceTestResults.RemoveAll(x => testsToRemove.Contains(x));
+        }
+
+        /// <summary>
+        /// Merge the given list of test results
         /// </summary>
         /// <param name="tc"></param>
         /// <param name="sourceTestResults"></param>
@@ -262,7 +349,7 @@ namespace TDSQASystemAPI.TestMerge
 
             // Get reference test result to gather common attributes 
             TestResult referenceTestResult = sourceTestResults[0];
-            
+
             // Get blueprint for the combined test
             TestBlueprint targetBlueprint = tc.GetBlueprint(_mergeConfig.TargetTestName);
             if (targetBlueprint == null)
@@ -332,7 +419,7 @@ namespace TDSQASystemAPI.TestMerge
                     }
                     // Get the target segment name and form key as per configuration 
                     string configuredTargetSegmentName = _mergeConfig.GetTargetSegmentName(configuredSourceSegmentName);
-                    string configuredTargetFormKey = string.IsNullOrEmpty(sourceFormKey) ? null :_mergeConfig.GetTargetFormKey(sourceFormKey);
+                    string configuredTargetFormKey = string.IsNullOrEmpty(sourceFormKey) ? null : _mergeConfig.GetTargetFormKey(sourceFormKey);
 
                     // Get the target segment from blueprint
                     TestSegment configuredTargetSegment = targetBlueprint.GetTestSegment(configuredTargetSegmentName, configuredTargetFormKey);
@@ -379,9 +466,9 @@ namespace TDSQASystemAPI.TestMerge
             int nItemCount = 0;
             int nPauses = 0;
             int nFieldTestCount = 0;
-            int nGracePeriodRestarts = 0; 
+            int nGracePeriodRestarts = 0;
             int nAbnormalStarts = 0;
-            
+
             // Record the last TAID, TAName, and SessionID received from TDS for merged test
             string sTAID = "";
             string sTAName = "";
@@ -395,7 +482,7 @@ namespace TDSQASystemAPI.TestMerge
             string sServer = referenceTestResult.Opportunity.ServerName;
             string sDatabase = referenceTestResult.Opportunity.DatabaseName;
             string sQALevel = "";
-            
+
             // The status date of the "whole test" shall be the max(statusDate) 
             DateTime dateTestStatus = DateTime.MinValue;
 
@@ -410,7 +497,7 @@ namespace TDSQASystemAPI.TestMerge
             DateTime? dateTestCompleted = GetCompletedDateForMergedTest(sourceTestResults, sTargetOpportunityStatus);
 
             // For all tests for merge
-            foreach(TestResult testResult in sourceTestResults)
+            foreach (TestResult testResult in sourceTestResults)
             {
                 // Sum all the counts
                 if (sTargetOpportunityStatus.Equals("invalidated") || !testResult.Opportunity.Status.Equals("invalidated"))
@@ -441,9 +528,9 @@ namespace TDSQASystemAPI.TestMerge
                     dateTestForceCompleted = testResult.Opportunity.DateForceCompleted;
             }
 
-            int nOpportunityNumber = referenceTestResult.Opportunity.OpportunityNumber; 
+            int nOpportunityNumber = referenceTestResult.Opportunity.OpportunityNumber;
             long nOppID = -1;
-            Guid key ;
+            Guid key;
             TestMergeDataAccess.GetCombinedTestOppId(targetTestResult.Name, referenceTestResult.Testee.EntityKey, nOpportunityNumber, out nOppID, out key);
             if (nOppID == -1)
                 throw new ApplicationException(string.Format("Test Merge: Opportunity cannot be obtained or created for the combined test {0}", targetTestResult.Name));
@@ -451,7 +538,7 @@ namespace TDSQASystemAPI.TestMerge
             targetTestResult.Opportunity = new Opportunity(nOppID.ToString(), dateTestStarted, nOpportunityNumber, sTargetOpportunityStatus, dateTestStatus, nPauses,
                 nItemCount, nFieldTestCount, dateTestCompleted, nGracePeriodRestarts, nAbnormalStarts, dateQA, sServer, sDatabase, key, sTAID,
                 sTAName, sSessionID, dateTestForceCompleted, sWindowID, nWindowOpportunity, sQALevel, sMode, sClientName, 0);
-                
+
             AddSegments(targetTestResult);
             MergeAccomodations(sourceTestResults, targetTestResult);
             MergeGenericVariables(sourceTestResults, targetTestResult);
@@ -472,7 +559,7 @@ namespace TDSQASystemAPI.TestMerge
             bool bAnyTestsHandScored = sourceTestStatuses.Exists(x => x.Equals("handscored"));
             bool bAnyExpiredTests = sourceTestStatuses.Exists(x => x.Equals("expired"));
             bool bMetConditionForInvalidated = sourceTestStatuses.All(x => x.Equals("invalidated") || x.Equals("reset"));
-            
+
             string status = "";
             if (bAllTestsReset)
                 status = "reset";
@@ -491,7 +578,7 @@ namespace TDSQASystemAPI.TestMerge
                                                                             || x.Equals("invalidated"));
                 if (bMetConditionForCompleted)
                     status = "completed";
-            }            
+            }
             return status;
         }
 
@@ -504,20 +591,20 @@ namespace TDSQASystemAPI.TestMerge
         private DateTime? GetCompletedDateForMergedTest(List<TestResult> sourceTestResults, string mergedTestStatus)
         {
             DateTime? completedDate = null;
-            bool bHasNullCompletedDate = sourceTestResults.Exists(x=> x.Opportunity.IsCompletedDateValid() == false);
-            bool bAllNonNullCompletedDate = sourceTestResults.All(x=> x.Opportunity.IsCompletedDateValid());            
-            bool bAnyInvalidatedCompHaveNullCompletedDate = sourceTestResults.Exists(x=> x.Opportunity.Status.Equals("invalidated") && x.Opportunity.IsCompletedDateValid() == false);
-            bool bAllInvalidatedCompHaveCompletedDate = sourceTestResults.Where(x=>x.Opportunity.Status.Equals("invalidated")).All(y => y.Opportunity.IsCompletedDateValid());            
+            bool bHasNullCompletedDate = sourceTestResults.Exists(x => x.Opportunity.IsCompletedDateValid() == false);
+            bool bAllNonNullCompletedDate = sourceTestResults.All(x => x.Opportunity.IsCompletedDateValid());
+            bool bAnyInvalidatedCompHaveNullCompletedDate = sourceTestResults.Exists(x => x.Opportunity.Status.Equals("invalidated") && x.Opportunity.IsCompletedDateValid() == false);
+            bool bAllInvalidatedCompHaveCompletedDate = sourceTestResults.Where(x => x.Opportunity.Status.Equals("invalidated")).All(y => y.Opportunity.IsCompletedDateValid());
             var maxTest = sourceTestResults.Where(x => x.Opportunity.IsCompletedDateValid()).OrderByDescending(x => x.Opportunity.CompletedDate).FirstOrDefault();
-            DateTime? maxCompletedDate = maxTest == null? null: maxTest.Opportunity.CompletedDate;
+            DateTime? maxCompletedDate = maxTest == null ? null : maxTest.Opportunity.CompletedDate;
 
-            if ( mergedTestStatus.Equals("pending")
+            if (mergedTestStatus.Equals("pending")
                   || mergedTestStatus.Equals("expired")
                   || (mergedTestStatus.Equals("reset") && bHasNullCompletedDate)
-                  || (mergedTestStatus.Equals("invalidated") && bAnyInvalidatedCompHaveNullCompletedDate)) 
+                  || (mergedTestStatus.Equals("invalidated") && bAnyInvalidatedCompHaveNullCompletedDate))
                 completedDate = null;
             else if ((mergedTestStatus.Equals("reset") && bAllNonNullCompletedDate)
-                     ||(mergedTestStatus.Equals("invalidated") && bAllInvalidatedCompHaveCompletedDate))
+                     || (mergedTestStatus.Equals("invalidated") && bAllInvalidatedCompHaveCompletedDate))
                 completedDate = maxCompletedDate;
             else if (mergedTestStatus.Equals("completed"))
                 completedDate = maxCompletedDate;
@@ -535,7 +622,7 @@ namespace TDSQASystemAPI.TestMerge
             foreach (TestSegment targetTestSegment in targetSegments)
                 targetTestResult.Opportunity.AddTestSegment(targetTestSegment);
         }
-        
+
         /// <summary>
         /// Merge accomodations
         /// </summary>
@@ -685,7 +772,6 @@ namespace TDSQASystemAPI.TestMerge
             foreach (var targetTestAccomodation in targetTestAccomdations)
                 targetOpp.AddAccomodation(targetTestAccomodation);
         }
-
 
         /// <summary>
         /// Merge generic variables
@@ -842,7 +928,7 @@ namespace TDSQASystemAPI.TestMerge
             foreach (TestResult sourceTestResult in sourceTestResults)
             {
                 if (sourceTestResult.Opportunity.Status.Equals("invalidated") && !targetTestResult.Opportunity.Status.Equals("invalidated"))
-                    continue; 
+                    continue;
                 foreach (ItemResponse sourceItemResponse in sourceTestResult.ItemResponses)
                 {
                     ItemResponse targetItemResponse = CreateTargetItemResponse(sourceTestResult, sourceItemResponse);
@@ -856,15 +942,21 @@ namespace TDSQASystemAPI.TestMerge
             SourceTestItemPositionToTargetItemPositionMap.Clear();
             List<ItemResponse> targetItemResponses = new List<ItemResponse>();
 
+            //for optimization. Key = target segment ID, value = source segment ID
+            Dictionary<string, string> usedSourceSegmentToTargetSegmentMapping = new Dictionary<string, string>();
+            foreach (TestResult tr in sourceTestResults)
+                foreach (string sourceSegmentName in tr.Opportunity.Segments.Keys)
+                    usedSourceSegmentToTargetSegmentMapping.Add(_mergeConfig.GetTargetSegmentName(sourceSegmentName), sourceSegmentName);
+
             // Set the positions based only on the available targets segments i.e target segments of source segments which are currently participating in merge
             int nPosition = 1;
             List<TestSegment> availableTargetSegments = GetAvailableTargetSegments();
             foreach (TestSegment targetSegment in availableTargetSegments)
             {
                 // Get the source segement name and test name 
-                string sourceSegmentName = _mergeConfig.GetSourceSegmentName(targetSegment.ID);
+                string sourceSegmentName = usedSourceSegmentToTargetSegmentMapping[targetSegment.ID];
                 string sourceTestName = _mergeConfig.GetSourceTestName(sourceSegmentName);
-                
+
                 // Check/create if we have item position mapping for this source test
                 Dictionary<int, int> itemPositionMap = null;
                 if (SourceTestItemPositionToTargetItemPositionMap.ContainsKey(sourceTestName))
@@ -885,7 +977,7 @@ namespace TDSQASystemAPI.TestMerge
                 foreach (ItemResponse itemResponse in thisSegmentItemResponses)
                 {
                     // Add the mapping for use to map the comments 
-                    itemPositionMap.Add(itemResponse.Position, nPosition);                     
+                    itemPositionMap.Add(itemResponse.Position, nPosition);
 
                     // Set the new position 
                     itemResponse.Position = nPosition;
@@ -893,10 +985,10 @@ namespace TDSQASystemAPI.TestMerge
 
                     // Increment the position#
                     ++nPosition;
-                    
+
                     // Add the modified response to the target list
-                    targetItemResponses.Add(itemResponse);                    
-                }                
+                    targetItemResponses.Add(itemResponse);
+                }
             }
 
             // Finally set the responses list to the target result
@@ -943,16 +1035,16 @@ namespace TDSQASystemAPI.TestMerge
             foreach (TestResult testResult in sourceTestResults)
             {
                 if (testResult.Opportunity.Status.Equals("invalidated") && !targetTestResult.Opportunity.Status.Equals("invalidated"))
-                    continue; 
+                    continue;
                 foreach (Comment comment in testResult.Comments)
                 {
                     Comment targetComment = CreateTargetComment(testResult, comment);
                     if (targetComment == null)
                         throw new ApplicationException("Test Merge: Transforming comment failed");
-                    comments.Add(targetComment);                    
+                    comments.Add(targetComment);
                 }
             }
-            targetTestResult.Comments = comments;            
+            targetTestResult.Comments = comments;
         }
 
         /// <summary>
@@ -984,23 +1076,23 @@ namespace TDSQASystemAPI.TestMerge
         /// <param name="targetTestResult"></param>
         private void MergeToolUsage(List<TestResult> sourceTestResults, TestResult targetTestResult)
         {
-            Dictionary<string, ToolUsage> targetToolUsages = new Dictionary<string,ToolUsage>();
-            
+            Dictionary<string, ToolUsage> targetToolUsages = new Dictionary<string, ToolUsage>();
+
             foreach (TestResult sourceTestResult in sourceTestResults)
             {
                 if (sourceTestResult.Opportunity.Status.Equals("invalidated") && !targetTestResult.Opportunity.Status.Equals("invalidated"))
-                    continue; 
+                    continue;
                 foreach (ToolUsage sourceToolUsage in sourceTestResult.ToolUsages)
                 {
                     ToolUsage targetToolUsage = null;
                     if (targetToolUsages.ContainsKey(sourceToolUsage.Code))
                         targetToolUsage = targetToolUsages[sourceToolUsage.Code];
-                    else 
+                    else
                     {
                         targetToolUsage = new ToolUsage(sourceToolUsage.Type, sourceToolUsage.Code);
                         targetToolUsages.Add(sourceToolUsage.Code, targetToolUsage);
                     }
-                    foreach(ToolPage sourceToolPage in sourceToolUsage.ToolPages) 
+                    foreach (ToolPage sourceToolPage in sourceToolUsage.ToolPages)
                     {
                         int nTargetPageNumber = GetTargetItemPosition(sourceTestResult.Name, sourceToolPage.PageNumber);
                         if (nTargetPageNumber == -1)
@@ -1009,16 +1101,17 @@ namespace TDSQASystemAPI.TestMerge
                     }
                 }
             }
-            targetTestResult.ToolUsages = targetToolUsages.Values.ToList();      
+            targetTestResult.ToolUsages = targetToolUsages.Values.ToList();
         }
 
         /// <summary>
-        /// Get target segments in positional order
+        /// Get target segments in positional order. 
+        /// Zach 2/10/2015: changed to get distinct segments in positional order
         /// </summary>
         /// <returns></returns>
         private List<TestSegment> GetAllConfiguredTargetSegments()
         {
-            List<TestSegment> targetTestSegments = SourceSegmentNameToTargetSegmentMap.Values.ToList();
+            List<TestSegment> targetTestSegments = SourceSegmentNameToTargetSegmentMap.Values.GroupBy(x => x.ID).Select(x => x.First()).ToList();
             targetTestSegments.Sort((x, y) => x.Position.CompareTo(y.Position));
             return targetTestSegments;
         }
@@ -1031,7 +1124,7 @@ namespace TDSQASystemAPI.TestMerge
         {
             // Get only the available target segments as kvp 
             List<TestSegment> availableTargetSegments = SourceSegmentNameToTargetSegmentMap.Where(
-                                                            x => SourceSegmentNameToSourceSegmentMap.ContainsKey(x.Key)).Select(y=>y.Value).ToList();
+                                                            x => SourceSegmentNameToSourceSegmentMap.ContainsKey(x.Key)).Select(y => y.Value).ToList();
             availableTargetSegments.Sort((x, y) => x.Position.CompareTo(y.Position));
             return availableTargetSegments;
         }
@@ -1056,6 +1149,7 @@ namespace TDSQASystemAPI.TestMerge
 
         /// <summary>
         /// Get target segments for the given source test
+        /// Zach 2/10/2015: changed to HashSet
         /// </summary>
         /// <param name="sourceTestName"></param>
         /// <returns></returns>
@@ -1063,9 +1157,9 @@ namespace TDSQASystemAPI.TestMerge
         {
             // Get all the source segment names for the test
             List<string> sourceSegmentNames = _mergeConfig.GetSourceSegmentNames(sourceTestName);
-            
+
             // Return the matching target segments for the source segments
-            return SourceSegmentNameToTargetSegmentMap.Where(x => sourceSegmentNames.Contains(x.Key)).Select(y=>y.Value).ToList();
+            return SourceSegmentNameToTargetSegmentMap.Where(x => sourceSegmentNames.Contains(x.Key)).Select(y => y.Value).GroupBy(x => x.ID).Select(x => x.First()).ToList();
         }
 
         /// <summary>
@@ -1076,8 +1170,8 @@ namespace TDSQASystemAPI.TestMerge
         /// <returns></returns>
         private int GetTargetItemPosition(string sourceTestName, int sourceItemPosition)
         {
-            Dictionary<int, int> sourceTestItemPositions = 
-                SourceTestItemPositionToTargetItemPositionMap.ContainsKey(sourceTestName) ? SourceTestItemPositionToTargetItemPositionMap[sourceTestName] : null ;
+            Dictionary<int, int> sourceTestItemPositions =
+                SourceTestItemPositionToTargetItemPositionMap.ContainsKey(sourceTestName) ? SourceTestItemPositionToTargetItemPositionMap[sourceTestName] : null;
             return (sourceTestItemPositions != null && sourceTestItemPositions.ContainsKey(sourceItemPosition)) ? sourceTestItemPositions[sourceItemPosition] : -1;
         }
 
@@ -1095,11 +1189,11 @@ namespace TDSQASystemAPI.TestMerge
         /// Mapping of each <test, itemPosition> pair to -> target item position
         /// </summary>
         private Dictionary<string, Dictionary<int, int>> SourceTestItemPositionToTargetItemPositionMap = new Dictionary<string, Dictionary<int, int>>();
- 
+
         /// <summary>
         /// Mapping of source test to target position map (for generic variables) - This assumes segments are mapped in order
         /// </summary>
-        private Dictionary<string, int> SourceTestToTargetPositionMap = new Dictionary<string,int>();
+        private Dictionary<string, int> SourceTestToTargetPositionMap = new Dictionary<string, int>();
 
         /// <summary>
         /// Related XML file info the current test being processed

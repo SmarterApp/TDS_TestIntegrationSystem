@@ -45,9 +45,9 @@ namespace TISService
             //  Note: oppId and testeeKey can be pulled from the file below if you're so inclined.
             //  If using the deserializer, a ref to the test scoring engine will be required.
             //  Easy enough just to set them here.
-            long fileID = 23;
-            long oppId = 5000003;
-            long testeeKey = 85;
+            long fileID = 7;
+            long oppId = 100040;
+            long testeeKey = 3;
 
             // init the main thread
             OSS.TIS.TISMainThread mainQASystemThread = new OSS.TIS.TISMainThread();

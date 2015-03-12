@@ -82,6 +82,10 @@ namespace TISItemResolution.Rules
 
             scoreInfo.SubScores.Add(newConventionDim);
 
+            // finally update the overall item score and score status.  Should have come from the scorer as -1, NotScored.
+            scoreInfo.Points = avgDim.Points + newConventionDim.Points;
+            scoreInfo.Status = ScoringStatus.Scored;
+
             return scoreInfo;
         }
 

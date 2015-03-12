@@ -43,6 +43,9 @@
     <Compile Include="Authorization.cs" />
     <Compile Include="AuthorizationConfig.cs" />
     <Compile Include="AuthorizationSettings.cs" />
+    <Compile Include="ItemScoringConfig.cs" />
+    <Compile Include="ItemScoringSettings.cs" />
+    <Compile Include="ItemScoring.cs" />
     <Compile Include="FTPConfig.cs" />
     <Compile Include="FTPConfiguration.cs" />
     <Compile Include="FTPSettings.cs" />

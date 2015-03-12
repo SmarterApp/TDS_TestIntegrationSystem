@@ -37,6 +37,8 @@ namespace TDSQASystemAPI.DAL
 
         /// <summary>
         /// get all rows from TestOpportunityItemScore table for this oppID
+        /// Note that WaitingForHandScore is being converted to WaitingForMachineScore to simplify evaluation.
+        /// It's all the same to TIS == waiting.
         /// </summary>
         /// <param name="oppID"></param>
         /// <param name="includeResponse">if false will return null for the response</param>
@@ -60,7 +62,7 @@ namespace TDSQASystemAPI.DAL
                             TestOpportunityItemScore score = 
                                 new TestOpportunityItemScore(Convert.ToInt64(rdr["OppID"].ToString())
                                     ,rdr["ScoreInfo"] == DBNull.Value ? null : rdr["ScoreInfo"].ToString()
-                                    ,rdr["ScoreStatus"].ToString()
+                                    , rdr["ScoreStatus"].ToString().Equals("WaitingForHandScore", StringComparison.InvariantCultureIgnoreCase) ? "WaitingForMachineScore" : rdr["ScoreStatus"].ToString()
                                     ,rdr["Score"] == DBNull.Value ? null : (int?)Convert.ToInt32(rdr["Score"].ToString()) 
                                     ,Convert.ToInt64(rdr["_efk_Item"].ToString())
                                     , Convert.ToInt64(rdr["_efk_ItemBank"].ToString())
@@ -74,7 +76,7 @@ namespace TDSQASystemAPI.DAL
             return scores;
         }
 
-        internal static int UpdateItemsToScore(TestResults.TestResult testResult, List<TestResults.ItemResponse> responses, bool scoreInvalidations, bool batchScoring, bool updateSameReportingVersion)
+        internal static int UpdateItemsToScore(TestResults.TestResult testResult, List<TestResults.ItemResponse> responses, bool scoreInvalidations, bool batchScoring, bool updateSameReportingVersion, bool handscored)
         {
             int responsesUpdated = 0;
 
@@ -109,6 +111,7 @@ namespace TDSQASystemAPI.DAL
                             cmd.Parameters.AddWithValue("@scoreInvalidations", scoreInvalidations);
                             cmd.Parameters.AddWithValue("@batchScoring", batchScoring);
                             cmd.Parameters.AddWithValue("@updateSameReportingVersion", updateSameReportingVersion);
+                            cmd.Parameters.AddWithValue("@handscored", handscored);
 
                             responsesUpdated += Convert.ToInt32(cmd.ExecuteScalar());
                         }

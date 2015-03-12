@@ -30,7 +30,7 @@ namespace TDSQASystemAPI.TIS
         {
         }
 
-        internal List<ItemResponse> MergeScores(List<TestOpportunityItemScore> mergeFrom, List<ItemResponse> mergeTo, 
+        internal List<ItemResponse> MergeScores(List<TestOpportunityItemScore> mergeFrom, List<ItemResponse> mergeTo,
             Func<TestOpportunityItemScore, ItemResponse, bool> shouldMerge)
         {
             List<ItemResponse> merged = new List<ItemResponse>();
@@ -42,7 +42,7 @@ namespace TDSQASystemAPI.TIS
 
                 if (!shouldMerge(score, ir))
                     continue;
-                
+
                 ItemScoreInfo scoreInfo = null;
                 try
                 {
@@ -52,7 +52,7 @@ namespace TDSQASystemAPI.TIS
                 {
                     throw new FormatException(string.Format("Failed serializing ItemScoreInfo. ItemKey={0}, BankKey={1}, oppID={2}, ScoreInfo text='{3}'.  Error: {4}", score.ItemKey, score.BankKey, score.OppID, score.ScoreInfo ?? "null", e.Message));
                 }
-                
+
                 //finally merge the score info
                 ir.ScoreInfo = scoreInfo;
                 ir.ScoreRationale = score.ScoreInfo;
@@ -78,45 +78,55 @@ namespace TDSQASystemAPI.TIS
             qaProjectChanged = false;
             bool scoresMerged = false;
             bool unscoredMerged = false;
+
             if (testResult.Opportunity != null && testResult.Opportunity.ItemResponses != null)
             {
                 // get all item scores, including responses
-                //TODO: can optimize this by only pulling responses when we need to; responses may be big
+                //TODO: can optimize this by only pulling responses when we need to (i.e. for scored items); responses may be big
                 List<TestOpportunityItemScore> scores = TISScoreMergerDAL.GetItemScores(Convert.ToInt64(testResult.Opportunity.OpportunityID), true);
-                
+
                 // if we have scores, merge them in unless the response has changed
                 // Note that we're also only merging if the score and scorestatus in the file are not the same as what
                 //  we have in the db.  This is to handle resubmits of scored tests or resets/invalidations that
                 //  were already merged, so that we don't think the file has changed when it hasn't and unnecessarily archive it.
-                scoresMerged = MergeScores(scores.FindAll(s => s.ScoreStatus.Equals(TestResults.ScoringStatus.Scored.ToString(), StringComparison.InvariantCultureIgnoreCase)), 
-                    testResult.Opportunity.ItemResponses, 
-                    delegate(TestOpportunityItemScore s, ItemResponse r) {
+                scoresMerged = MergeScores(scores.FindAll(s => s.ScoreStatus.Equals(TestResults.ScoringStatus.Scored.ToString(), StringComparison.InvariantCultureIgnoreCase)),
+                    testResult.Opportunity.ItemResponses,
+                    delegate(TestOpportunityItemScore s, ItemResponse r)
+                    {
                         return ((s.Response ?? "") == (r.Response ?? ""))
-                            && !(s.ScoreStatus.Equals(r.ScoreStatus, StringComparison.InvariantCultureIgnoreCase) && (s.Score ?? -1).Equals(r.Score));
+                            && !(s.ScoreStatus.Equals(r.ScoreStatus, StringComparison.InvariantCultureIgnoreCase) && ((double)(s.Score ?? -1.0)).Equals(r.Score));
                     }).Count > 0;
 
-                // we may have responses that have errored out or timed out or otherwise not been scored.
-                //  merge them in too so that validation in TIS/QA will let us know about them
+                // if there were any scoring errors, merge those in so that TIS/QA will let us know about them.
+                //  Don't do this though if the item already has that status in the file or is scored in the file.
                 unscoredMerged =
-                    MergeScores(scores.FindAll(s => !s.ScoreStatus.Equals(TestResults.ScoringStatus.Scored.ToString(), StringComparison.InvariantCultureIgnoreCase) 
-                        && !s.ScoreStatus.Equals(TestResults.ScoringStatus.WaitingForMachineScore.ToString(), StringComparison.InvariantCultureIgnoreCase)),
-                                    testResult.Opportunity.ItemResponses).Count > 0; 
+                   MergeScores(scores.FindAll(s => !s.ScoreStatus.Equals(TestResults.ScoringStatus.Scored.ToString(), StringComparison.InvariantCultureIgnoreCase)
+                       && !s.ScoreStatus.Equals(TestResults.ScoringStatus.WaitingForMachineScore.ToString(), StringComparison.InvariantCultureIgnoreCase)),
+                                   testResult.Opportunity.ItemResponses,
+                                   delegate(TestOpportunityItemScore s, ItemResponse r)
+                                   {
+                                       return !r.ScoreStatus.Equals(TestResults.ScoringStatus.Scored.ToString(), StringComparison.InvariantCultureIgnoreCase)
+                                           && !r.ScoreStatus.Equals(s.ScoreStatus, StringComparison.InvariantCultureIgnoreCase);
+                                   }).Count > 0;
 
-                //if we merged all scores into a completed or expired test, mark the opp as scored
-                string keepExpiredStatus;
-                 if (scoresMerged && !unscoredMerged
-                         && (testResult.Opportunity.Status == "completed"
-                             || testResult.Opportunity.Status == "submitted"
-                             || testResult.Opportunity.Status == "reported"
+                //if all items are scored on a completed or expired test, mark the opp as scored
+                if (scoresMerged && !unscoredMerged)
+                {
+                    string keepExpiredStatus;
+                    bool unscoredItems = testResult.Opportunity.ItemResponses.Exists(r => !r.ScoreStatus.Equals(TestResults.ScoringStatus.Scored.ToString(), StringComparison.InvariantCultureIgnoreCase));
+                    if (!unscoredItems 
+                        && (testResult.Opportunity.Status == "completed"
+                            || testResult.Opportunity.Status == "submitted"
+                            || testResult.Opportunity.Status == "reported"
                             || (testResult.Opportunity.Status == "expired"
                                 && !Convert.ToBoolean(String.IsNullOrEmpty(keepExpiredStatus = ServiceLocator.Resolve<ISystemConfigurationManager>().GetConfigSettingsValueOrEmptyString(testResult.Opportunity.ClientName, "KeepExpiredStatus")) ? "true" : keepExpiredStatus)
                                 )
-                           )
-                        && scores.FirstOrDefault(s => s.ScoreStatus.Equals(TestResults.ScoringStatus.WaitingForMachineScore.ToString(), StringComparison.InvariantCultureIgnoreCase)) == null
-                    )
-                {
-                    testResult.Opportunity.Status = "scored";
-                    qaProjectChanged = testResult.RefreshQAProject();
+                          )
+                        )
+                    {
+                        testResult.Opportunity.Status = "scored";
+                        qaProjectChanged = testResult.RefreshQAProject();
+                    }
                 }
             }
             return scoresMerged || unscoredMerged;

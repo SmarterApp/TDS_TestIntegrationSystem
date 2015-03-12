@@ -59,5 +59,16 @@ namespace AIR.Configuration
                 return ((AuthorizationConfig)authConfig).AuthSettings;
             }
         }
+
+        private static object itemScoringConfig = ConfigurationManager.GetSection("ItemScoringSettings");
+        public static ItemScoringSettings ItemScoringSettings
+        {
+            get
+            {
+                if (itemScoringConfig == null)
+                    throw new ApplicationException("ItemScoringSettings are not configured for this application.");
+                return ((ItemScoringConfig)itemScoringConfig).ItemScoringSettings;
+            }
+        }
     }
 }

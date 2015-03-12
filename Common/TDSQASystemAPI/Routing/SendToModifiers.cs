@@ -50,7 +50,7 @@ namespace TDSQASystemAPI.Routing
             foreach (KeyValuePair<string, bool> kvp in sendToModifiers)
             {
                 SendTo t;
-                if (!Enum.TryParse<SendTo>(kvp.Key, out t))
+                if (!Enum.TryParse<SendTo>(kvp.Key, true, out t))
                     t = SendTo.Unknown;
                 yield return new KeyValuePair<SendTo, bool>(t, kvp.Value);
             }

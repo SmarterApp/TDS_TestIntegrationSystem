@@ -32,7 +32,7 @@ namespace TDSQASystemAPI.TestResults
         }
 
         [XmlIgnore]
-        public int? Points { get; private set; }
+        public int? Points { get; set; }
         /// <summary>
         /// Score point for this dimension
         /// </summary>
@@ -79,7 +79,7 @@ namespace TDSQASystemAPI.TestResults
         public string Dimension { get; set; }
 
         [XmlIgnore]
-        public ScoringStatus? Status { get; private set; }
+        public ScoringStatus? Status { get; set; }
         /// <summary>
         /// Status of this score
         /// </summary>
