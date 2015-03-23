@@ -114,16 +114,13 @@ Test Integration System has the following dependencies that are necessary for it
 ### Runtime Dependencies
 None
 
-## Items/Updates included in 03/11/2015 release:
+## Items/Updates - 03/23/2015:
 
-1)	Added support for interfacing with machine scoring servers to provide a retry mechanism for items that TDS was not able to score.  Sample config files and scripts were updated accordingly.  Changes were to TIS and TISScoringDaemon, including DDL changes in \TDSQAService\OSS.TIS\SQL\TISDB\1_Create_Objects.sql.
+1)	Fixed: there was a bug in the test combination routine that determines the status for a combo test.  For summative tests where the student may take 1/N component tests, the check as to whether or not all component tests have been received was counting all possible components (N) rather than just 1/N, and so was always assigning a status of "pending" to the combo.  If there are any such combo tests in a live system, once this fix is deployed, one of the components should be resubmitted to TIS (set the status of the most recent record in XMLRepository = 'source') to regenerate the combo with the correct status.
 
-2)	Added support for Summative test combinations to support 1/N possible component tests
-
-3) 	Added Summative test scoring calculations
 
 ------------------------------------------------------------------
-## Known Issues (as of 03/11/2015):
+## Known Issues (as of 03/23/2015):
 
 1)	The Test Integration System has not undergone integration testing with the Data Warehouse.
 

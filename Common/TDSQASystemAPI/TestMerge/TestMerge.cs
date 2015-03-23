@@ -117,7 +117,7 @@ namespace TDSQASystemAPI.TestMerge
                 if (sourceTestResults.Count > 0)
                 {
                     // Get the overall status 
-                    string sTargetTestStatus = GetMergedTestStatus(sourceTestNameToStatusesMap.Values.ToList());
+                    string sTargetTestStatus = GetMergedTestStatus(tc, sourceTestResults, sourceTestNameToStatusesMap.Values.ToList());
 
                     // Merge the test result
                     TestResult mergedResult = MergeTestResults(tc, sourceTestResults, sTargetTestStatus);
@@ -549,9 +549,21 @@ namespace TDSQASystemAPI.TestMerge
         /// </summary>
         /// <param name="sourceTestResults"></param>
         /// <returns></returns>
-        private string GetMergedTestStatus(List<string> sourceTestStatuses)
+        private string GetMergedTestStatus(TestCollection tc, List<TestResult> sourceTests, List<string> sourceTestStatuses)
         {
-            bool bAllTestsReceived = _mergeConfig.SourceTestNamesForMerge.Count == sourceTestStatuses.Count;
+            //get the list of all segments on the target from the blueprint
+            TestBlueprint targetBlueprint = tc.GetBlueprint(_mergeConfig.TargetTestName);
+            List<String> allTargetSegments = targetBlueprint.SegmentNames();
+
+            //get list of all the target segments from the segments found in the source tests
+            List<String> foundTargetSegments = new List<string>();
+            foreach (TestResult tr in sourceTests)
+                foreach (string segmentID in tr.Opportunity.Segments.Keys)
+                    if (!foundTargetSegments.Contains(_mergeConfig.GetTargetSegmentName(segmentID)))
+                        foundTargetSegments.Add(_mergeConfig.GetTargetSegmentName(segmentID));
+
+            //all tests were received if all segments are accounted for
+            bool bAllTestsReceived = allTargetSegments.Count == foundTargetSegments.Count;
             bool bAllTestsReset = sourceTestStatuses.All(x => x.Equals("reset"));
             bool bAnyTestsReset = sourceTestStatuses.Exists(x => x.Equals("reset"));
             bool bAnyTestsAppeal = sourceTestStatuses.Exists(x => x.Equals("appeal"));
