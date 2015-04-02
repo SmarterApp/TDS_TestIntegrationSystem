@@ -114,13 +114,12 @@ Test Integration System has the following dependencies that are necessary for it
 ### Runtime Dependencies
 None
 
-## Items/Updates - 03/23/2015:
+## Items/Updates - 04/02/2015:
 
-1)	Fixed: there was a bug in the test combination routine that determines the status for a combo test.  For summative tests where the student may take 1/N component tests, the check as to whether or not all component tests have been received was counting all possible components (N) rather than just 1/N, and so was always assigning a status of "pending" to the combo.  If there are any such combo tests in a live system, once this fix is deployed, one of the components should be resubmitted to TIS (set the status of the most recent record in XMLRepository = 'source') to regenerate the combo with the correct status.
-
+1)	Changes to several admin package loading stored procedures to include additional parameters required for the adaptive algorithm and to fix a couple bugs: \TDSQAService\OSS.TIS\SQL\TDSItemBank\3_Create_Objects.sql
 
 ------------------------------------------------------------------
-## Known Issues (as of 03/23/2015):
+## Known Issues (as of 04/02/2015):
 
 1)	The Test Integration System has not undergone integration testing with the Data Warehouse.
 
