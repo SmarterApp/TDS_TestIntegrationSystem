@@ -6,6 +6,8 @@
 * See accompanying file AIR-License-1_0.txt or at
 * http://www.smarterapp.org/documents/American_Institutes_for_Research_Open_Source_Software_License.pdf
 ******************************************************************************/
+
+using System.Runtime.Serialization;
 using ScoringEngine;
 using ScoringEngine.ConfiguredTests;
 using System;
@@ -16,6 +18,7 @@ using System.Text;
 using System.Xml;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.Data;
+using TDSQASystemAPI.Routing;
 using TDSQASystemAPI.TestResults;
 
 namespace TDSQASystemAPI.TestMerge
@@ -376,7 +379,74 @@ namespace TDSQASystemAPI.TestMerge
             // Merge Tool usages
             MergeToolUsage(sourceTestResults, targetTestResult);
 
+            // Merge Assessment properties
+            MergeAssessmentProperties(sourceTestResults, targetTestResult);
+
             return targetTestResult;
+        }
+
+
+        /// <summary>
+        /// Merge the following assessment properties for the targetTestResult.Test based on the values seen in the sourceTestResults
+        /// </summary>
+        /// <param name="sourceTestResults">The source test results.</param>
+        /// <param name="targetTestResult">The target test result.</param>
+        private void MergeAssessmentProperties(List<TestResult> sourceTestResults, TestResult targetTestResult)
+        {
+            if (sourceTestResults.Any())
+            {
+                //Use the academic year and assessmentType values from the first sourceTestResult.
+                //These are expected to be the same across all sourceTestResults, hence readind
+                //these from the first sourceTestResult, because it is as good as any
+                TestResult firstSourceTestResult = sourceTestResults.First();
+                string academicYear = firstSourceTestResult.test.AcademicYear;
+                string assessmentType = firstSourceTestResult.test.AssessmentType;
+
+                targetTestResult.test.AcademicYear = academicYear;
+                targetTestResult.test.AssessmentType = assessmentType;
+
+                //AssessmentVersion values may be different from different sourceTestResults, so preparing
+                //a pipe-delimited value to use in targetTestResults
+                SetMergedAssessmentVersion(sourceTestResults, targetTestResult); ;
+            }
+        }
+
+        /// <summary>
+        /// Merges assessment versions of various available sourceTestResults into a pipe delimited values of
+        /// assessmentVersions to be set in targetTestResult.test.AssessmentVersion
+        /// </summary>
+        /// <param name="sourceTestResults">The source test results.</param>
+        /// <param name="targetTestResult">The target test result.</param>
+        private void SetMergedAssessmentVersion(List<TestResult> sourceTestResults, TestResult targetTestResult)
+        {
+            //targetTestResult.test.AssessmentVersion is always empty, so let's initialize it.
+            List<string> assessmentVersions = new List<string>();
+
+            for (int i = 0; i < _mergeConfig.SourceTestNamesForMerge.Count; i++)
+            {
+                assessmentVersions.Add(string.Empty);
+            }
+
+            foreach (string configuredSourceTestName in _mergeConfig.SourceTestNamesForMerge)
+            {
+                if (!SourceTestToTargetPositionMap.ContainsKey(configuredSourceTestName))
+                {
+                    throw new Exception("Unable to determine the position of the SourceTest in the " +
+                                        "combo test for derving the targetTestResult.test.AssessmentVersion");
+                }
+
+                int position = SourceTestToTargetPositionMap[configuredSourceTestName];
+                // Check and get if the merge component test is available 
+                TestResult availableSourceTestResult =
+                    sourceTestResults.FirstOrDefault(x => x.Name.Equals(configuredSourceTestName));
+                if (availableSourceTestResult != null)
+                {
+                    string assessmentVersion = availableSourceTestResult.test.AssessmentVersion;
+                    assessmentVersions[position - 1] = assessmentVersion;
+                }
+
+            }
+            targetTestResult.test.AssessmentVersion = string.Join("|", assessmentVersions); ;
         }
 
         /// <summary>
