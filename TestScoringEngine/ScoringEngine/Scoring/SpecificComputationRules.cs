@@ -124,6 +124,34 @@ namespace ScoringEngine.Scoring
                 AddMeasureValue(measureLabel, measureOf, "P");
         }
 
+        public void SBACIABAttemptedness(string measureOf, string measureLabel)
+        {
+            bool attempted = false;
+            foreach (ItemScore ir in allItemScores)
+            {
+                if (ir.IsSelected)
+                {
+                    attempted = true;
+                    break;
+                }
+            }
+            AddMeasureValue(measureLabel, measureOf, attempted ? "Y" : "P");
+        }
+
+        public void SBACBlockAttemptedness(string measureOf, string measureLabel, Dictionary<string, int> segments)
+        {
+            bool attempted = false;
+            foreach (ItemScore ir in allItemScores)
+            {
+                if (ir.IsSelected && segments.ContainsKey(ir.SegmentID))
+                {
+                    attempted = true;
+                    break;
+                }
+            }
+            AddMeasureValue(measureLabel, measureOf, attempted ? "Y" : "N");
+        }
+
         /// <summary>
         /// This is the number of items presented. Field test and operational items are counted. If an item is 
         /// selectable it is counted (whether actually selected or not). If an item is scored on n dimensions it is 
