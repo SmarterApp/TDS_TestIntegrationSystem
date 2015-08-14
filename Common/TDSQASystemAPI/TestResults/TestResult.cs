@@ -490,7 +490,6 @@ namespace TDSQASystemAPI.TestResults
             return itemsNotDropped;
         }
 
-        private static readonly List<string> HandscoredTypes = new List<string>() { "SER", "SSR", "WER", "WSR", "EI", "ER", "SA", "CR" };
         /// <summary>
         /// Returns whether or not the test opp has items requiring hand-scoring.
         /// </summary>
@@ -500,7 +499,7 @@ namespace TDSQASystemAPI.TestResults
         /// <returns></returns>
         public bool HasItemsRequiringHandscores(ItemOperationalStatus opStatus, bool excludeDropped, bool selectedOnly)
         {
-            return HasItemsRequiringHandscores(opStatus, excludeDropped, selectedOnly, null);
+            return HasItemsRequiringHandscores(opStatus, excludeDropped, selectedOnly, false);
         }
 
         /// <summary>
@@ -512,14 +511,13 @@ namespace TDSQASystemAPI.TestResults
         /// <param name="selectedOnly"></param>
         /// <param name="machineScoreConfLevelThreshold"></param>
         /// <returns></returns>
-        public bool HasItemsRequiringHandscores(ItemOperationalStatus opStatus, bool excludeDropped, bool selectedOnly, double? machineScoreConfLevelThreshold)
+        public bool HasItemsRequiringHandscores(ItemOperationalStatus opStatus, bool excludeDropped, bool selectedOnly, bool excludeNotForScoring, double? machineScoreConfLevelThreshold = null)
         {
             return ItemResponses.Exists(ir =>
-                ((!Routing.ItemScoring.ItemScoringConfigManager.Instance.ScoreItem(ir)
-                        && HandscoredTypes.Contains(ir.Format) && !ir.ItemHandscoreSet)
-                    || Routing.ItemScoring.ItemScoringConfigManager.Instance.ScoreItem(ir))
+                Routing.ItemScoring.ItemScoringConfigManager.Instance.ScoreItem(ir)
                 && (!excludeDropped || !ir.Dropped)
                 && (!selectedOnly || ir.IsSelected)
+                && (!excludeNotForScoring || (ir.TestItem != null && ir.TestItem.IsScored))
                 && (opStatus == ItemOperationalStatus.Any
                         || (opStatus == ItemOperationalStatus.FieldTest && ir.Operational == 0)
                         || (opStatus == ItemOperationalStatus.Operational && ir.Operational == 1))

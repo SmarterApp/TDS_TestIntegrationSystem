@@ -419,34 +419,7 @@ namespace TDSQASystemAPI.TestMerge
         /// <param name="targetTestResult">The target test result.</param>
         private void SetMergedAssessmentVersion(List<TestResult> sourceTestResults, TestResult targetTestResult)
         {
-            //targetTestResult.test.AssessmentVersion is always empty, so let's initialize it.
-            List<string> assessmentVersions = new List<string>();
-
-            for (int i = 0; i < _mergeConfig.SourceTestNamesForMerge.Count; i++)
-            {
-                assessmentVersions.Add(string.Empty);
-            }
-
-            foreach (string configuredSourceTestName in _mergeConfig.SourceTestNamesForMerge)
-            {
-                if (!SourceTestToTargetPositionMap.ContainsKey(configuredSourceTestName))
-                {
-                    throw new Exception("Unable to determine the position of the SourceTest in the " +
-                                        "combo test for derving the targetTestResult.test.AssessmentVersion");
-                }
-
-                int position = SourceTestToTargetPositionMap[configuredSourceTestName];
-                // Check and get if the merge component test is available 
-                TestResult availableSourceTestResult =
-                    sourceTestResults.FirstOrDefault(x => x.Name.Equals(configuredSourceTestName));
-                if (availableSourceTestResult != null)
-                {
-                    string assessmentVersion = availableSourceTestResult.test.AssessmentVersion;
-                    assessmentVersions[position - 1] = assessmentVersion;
-                }
-
-            }
-            targetTestResult.test.AssessmentVersion = string.Join("|", assessmentVersions); ;
+            targetTestResult.test.AssessmentVersion = string.Join("|", sourceTestResults.OrderBy(t => SourceTestToTargetPositionMap[t.Name]).Select(t => t.test.AssessmentVersion ?? ""));
         }
 
         /// <summary>

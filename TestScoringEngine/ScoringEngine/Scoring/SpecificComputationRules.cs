@@ -60,6 +60,7 @@ namespace ScoringEngine.Scoring
             this.enrolledGrade = enrolledGrade;
             this.testStatus = status;
             this.form = form;
+            this.forms = SplitForm(form);
             this.mode = mode;
             this.forceCompletionDate = forceCompletionDate;
             this.TDSAccommodations = TDSAccomms;
@@ -86,6 +87,40 @@ namespace ScoringEngine.Scoring
                 if (!score.IsDropped)
                     nonDroppedItemScores.Add(score);
             }
+        }
+
+        private string[] SplitForm(string form)
+        {
+            char[] chars = form.ToCharArray();
+            List<string> forms = new List<string>();
+            int parCnt = 0;
+            string aform; 
+            StringBuilder f = new StringBuilder();
+            for (int i = 0; i < chars.Length; i++)
+            {
+                if (chars[i] == '-' && parCnt == 0)
+                {
+                    aform = f.ToString();
+                    if (aform.StartsWith("[") && aform.EndsWith("]"))
+                        forms.Add(aform.Substring(1, aform.Length - 2));
+                    else
+                        forms.Add(aform);
+                    f = new StringBuilder();
+                }
+                else
+                {
+                    f.Append(chars[i]);
+                    if (chars[i] == '[') parCnt++;
+                    if (chars[i] == ']') parCnt--;
+                }
+            }
+            aform = f.ToString();
+            if (aform.StartsWith("[") && aform.EndsWith("]"))
+                forms.Add(aform.Substring(1, aform.Length - 2));
+            else
+                forms.Add(aform);
+
+            return forms.ToArray();
         }
 
         public void SBACAttemptedness(string measureOf, string measureLabel, Dictionary<string, int> testPart)

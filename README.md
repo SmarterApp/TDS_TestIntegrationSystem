@@ -114,18 +114,10 @@ Test Integration System has the following dependencies that are necessary for it
 ### Runtime Dependencies
 None
 
-## Items/Updates - 04/02/2015:
+## Items/Updates - 08/17/2015:
 
-1)	Changes to several admin package loading stored procedures to include additional parameters required for the adaptive algorithm and to fix a couple bugs: \TDSQAService\OSS.TIS\SQL\TDSItemBank\3_Create_Objects.sql
+1) 	Modified TISExtender.ShouldScore method to only score the test if it's not a reset and there are no items that need scoring (operational, selected, not dropped, not marked as notForScoring)
 
-------------------------------------------------------------------
-## Known Issues (as of 04/02/2015):
+2) 	Changed the way assessmentVersion value is derived for combo tests.  It will now be an ordered, pipe-delimited string of the assessmentVersion values from all components currently included in the combo.
 
-1)	The Test Integration System has not undergone integration testing with the Data Warehouse.
-
-
-## Future Enhancements 
-
-####1) System and Integration Testing - 
-
-System testing and integration testing between the Test Integration System and TDS, as well as between TIS and THSS have been performed; however, the Test Integration System has not undergone integration testing with the Data Warehouse.
+3) 	Added sample Summative test configuration to \TDSQAService\OSS.TIS\SQL\TISDB\2_Configuration.sql.  Includes project mapping and combo mapping.  Does not include project settings.

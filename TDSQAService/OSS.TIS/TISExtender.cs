@@ -100,7 +100,9 @@ namespace OSS.TIS
 
         public bool ShouldScore(QASystem tis, TDSQASystemAPI.TestResults.XMLAdapter adapter, TDSQASystemAPI.TestResults.TestResult tr, TDSQASystemAPI.Config.ProjectMetaData projectMetaData, ITISExtenderState state)
         {
-            return true;
+            // score if it's not a reset or an opp with items still requiring scores (operational, selected, not dropped, and not marked as notForScoring)
+            return !tr.Opportunity.Status.Equals("reset", StringComparison.InvariantCultureIgnoreCase)
+                    && !tr.HasItemsRequiringHandscores(TestResult.ItemOperationalStatus.Operational, true, true, true);
         }
 
         public void PostScore(QASystem tis, TDSQASystemAPI.TestResults.TestResult tr, TDSQASystemAPI.Data.XmlRepositoryItem xmlRepoItem, TDSQASystemAPI.Config.ProjectMetaData projectMetaData, ITISExtenderState state)
