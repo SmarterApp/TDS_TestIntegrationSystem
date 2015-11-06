@@ -150,7 +150,12 @@ namespace TIS.ScoringDaemon.Web
                     //Zach 12/11/2014 TODO: Add checks or try/catches around each part of running the rule to give more specific error messages?
                     TISItemResolutionRule rule = TISItemResolutionRule.CreateRule(tokenData.itemType, scoredResponse.ItemKey, clientName);
                     if (rule != null)
-                        scoredResponse.ScoreDimensions = HttpWebHelper.SerializeXml(rule.ResolveItemScore(Serialization.DeserializeXml<TDSQASystemAPI.TestResults.ItemScoreInfo>(scoredResponse.ScoreDimensions)));
+                    {
+                        TDSQASystemAPI.TestResults.ItemScoreInfo resolvedScore = rule.ResolveItemScore(Serialization.DeserializeXml<TDSQASystemAPI.TestResults.ItemScoreInfo>(scoredResponse.ScoreDimensions));
+                        scoredResponse.Score = (int)resolvedScore.Points;
+                        scoredResponse.ScoreStatus = resolvedScore.Status == TDSQASystemAPI.TestResults.ScoringStatus.Scored ? ScoringStatus.Scored.ToString() : ScoringStatus.ScoringError.ToString();
+                        scoredResponse.ScoreDimensions = HttpWebHelper.SerializeXml(resolvedScore);
+                    }
 
                     responseRepo.UpdateItemScore(scoredResponse);
                 }
