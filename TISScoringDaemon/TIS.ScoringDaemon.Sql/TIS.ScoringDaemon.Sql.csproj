@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7754701C-4914-49AD-9210-E9070C31742C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TIS.ScoringDaemon.Sql</RootNamespace>
+    <AssemblyName>TIS.ScoringDaemon.Sql</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdminRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepositoryStartupTask.cs" />
+    <Compile Include="ResponseRepository.cs" />
+    <Compile Include="ResponseRepositoryFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\TDS\Common\AIR.Common\AIR.Common.csproj">
+      <Project>{e11c4060-59b5-401d-bf72-1f52156e64db}</Project>
+      <Name>AIR.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TDS\ScoringDaemon\TDS.ScoringDaemon.Abstractions\TDS.ScoringDaemon.Abstractions.csproj">
+      <Project>{9FA4A973-71AE-4B33-87CB-65E032112DB1}</Project>
+      <Name>TDS.ScoringDaemon.Abstractions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TDS\Shared\TDS.Shared\TDS.Shared.csproj">
+      <Project>{333414cc-30e7-4e31-951d-a6ca78d73abd}</Project>
+      <Name>TDS.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TIS.ScoringDaemon.Abstractions\TIS.ScoringDaemon.Abstractions.csproj">
+      <Project>{bdcdc789-5e31-4722-b618-0ed40c1c779e}</Project>
+      <Name>TIS.ScoringDaemon.Abstractions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="scripts\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

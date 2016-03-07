@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E11C4060-59B5-401D-BF72-1F52156E64DB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AIR.Common</RootNamespace>
+    <AssemblyName>AIR.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug Manifest|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug Manifest\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Development|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Development\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deployment|AnyCPU'">
+    <OutputPath>bin\Deployment\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel.Web">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Mobile" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Algorithms\AliasMethod.cs" />
+    <Compile Include="ApplicationMetrics\CounterData.cs" />
+    <Compile Include="ApplicationMetrics\PerformanceCollector.cs" />
+    <Compile Include="ApplicationMetrics\CounterCollector.cs" />
+    <Compile Include="ApplicationMetrics\PerformanceData.cs" />
+    <Compile Include="Caching\CacheEntry.cs" />
+    <Compile Include="Caching\CacheManager.cs" />
+    <Compile Include="Caching\CacheSettings.cs" />
+    <Compile Include="Caching\DictionaryCacheManager.cs" />
+    <Compile Include="Caching\ICacheManager.cs" />
+    <Compile Include="Caching\LazyCacheEntry.cs" />
+    <Compile Include="Caching\MemoryCacheManager.cs" />
+    <Compile Include="Caching\PerRequestCache.cs" />
+    <Compile Include="Caching\WebCacheManager.cs" />
+    <Compile Include="CommandHandler.cs" />
+    <Compile Include="Configuration\AppSetting.cs" />
+    <Compile Include="DomainEvents\DomainEventManager.cs" />
+    <Compile Include="Collections\MultiValueDictionary.cs" />
+    <Compile Include="DataEventArgs.cs" />
+    <Compile Include="Diagnostics\Debug.cs" />
+    <Compile Include="Diagnostics\InternalLogger.cs" />
+    <Compile Include="Diagnostics\Listeners\CustomTraceListener.cs" />
+    <Compile Include="Diagnostics\Listeners\FileTraceListener.cs" />
+    <Compile Include="Diagnostics\Listeners\FileTraceListenerBase.cs" />
+    <Compile Include="Diagnostics\Listeners\OutputDebugStringTraceListener.cs" />
+    <Compile Include="Diagnostics\RelatedPropertyIdStore.cs" />
+    <Compile Include="Diagnostics\SafeNativeMethods.cs" />
+    <Compile Include="Diagnostics\StreamWriterCache.cs" />
+    <Compile Include="Diagnostics\StringFormatter.cs" />
+    <Compile Include="DomainEvents\DomainEventMapper.cs" />
+    <Compile Include="DomainEvents\IDomainEvent.cs" />
+    <Compile Include="DomainEvents\IDomainEventHandler.cs" />
+    <Compile Include="DomainEvents\IEventContainer.cs" />
+    <Compile Include="Dynamic\DynamicWrapper.cs" />
+    <Compile Include="Dynamic\DynamicWrapperExtensions.cs" />
+    <Compile Include="Dynamic\FieldInfoExtensions.cs" />
+    <Compile Include="Dynamic\GlobalSuppressions.cs" />
+    <Compile Include="Dynamic\TypeExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\XmlReaderExtensions.cs" />
+    <Compile Include="Extensions\XmlWriterExtensions.cs" />
+    <Compile Include="Gaurd.cs" />
+    <Compile Include="Json\JsonBuilder.cs" />
+    <Compile Include="Json\JsonSerializer.cs" />
+    <Compile Include="Json\JsonWriter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\SecureConfigManager.cs" />
+    <Compile Include="ServiceLocator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sql\ColumnReader.cs" />
+    <Compile Include="Sql\DBHelper.cs" />
+    <Compile Include="Sql\DbTable.cs" />
+    <Compile Include="Sql\IColumnReader.cs" />
+    <Compile Include="Extensions\SqlClientExtensions.cs" />
+    <Compile Include="Sql\RepositoryBase.cs" />
+    <Compile Include="Sql\TableReader.cs" />
+    <Compile Include="Threading\BoundedThreadPool.cs" />
+    <Compile Include="Threading\ITask.cs" />
+    <Compile Include="Threading\IThreadPool.cs" />
+    <Compile Include="Threading\ReductionVariable.cs" />
+    <Compile Include="Threading\Task.cs" />
+    <Compile Include="Threading\ThreadPoolStats.cs" />
+    <Compile Include="Threading\ThreadPoolStatsRecorder.cs" />
+    <Compile Include="Threading\ThreadSafeRandom.cs" />
+    <Compile Include="Utilities\AntiXss.cs" />
+    <Compile Include="Utilities\AssemblyLocator.cs" />
+    <Compile Include="Utilities\BaseComparer.cs" />
+    <Compile Include="Utilities\DataSetCSV.cs" />
+    <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="Utilities\GuidUtility.cs" />
+    <Compile Include="Web\EncryptionHelper2.cs" />
+    <Compile Include="Web\HttpCommand.cs" />
+    <Compile Include="Web\HttpCommandHandler.cs" />
+    <Compile Include="Web\HttpResponseExtensions.cs" />
+    <Compile Include="Web\HttpRequestExtensions.cs" />
+    <Compile Include="Web\MachineKeyData.cs" />
+    <Compile Include="Web\ShortGuid.cs" />
+    <Compile Include="Web\HashingUtilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\Impersonator.cs" />
+    <Compile Include="Web\AspNetShutDownDetector.cs" />
+    <Compile Include="Web\CookieHelper.cs" />
+    <Compile Include="Web\FileFtpHandler.cs" />
+    <Compile Include="Web\HttpDate.cs" />
+    <Compile Include="Web\HttpHandlerBase.cs" />
+    <Compile Include="Web\BrowserParser.cs" />
+    <Compile Include="Web\EncryptionHelper.cs" />
+    <Compile Include="Web\FileHttpHandler.cs" />
+    <Compile Include="Web\HttpWorkerHelper.cs" />
+    <Compile Include="Web\HttpAsyncResult.cs" />
+    <Compile Include="Web\MimeMapping.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Web\Routing\RedirectHandler.cs" />
+    <Compile Include="Web\Routing\RedirectRouteHandler.cs" />
+    <Compile Include="Web\StaticFileHandler3.cs" />
+    <Compile Include="Web\WebHelper.cs" />
+    <Compile Include="Web\HttpVerb.cs" />
+    <Compile Include="Json\JsonHelper.cs" />
+    <Compile Include="Configuration\AppSettingsHelper.cs" />
+    <Compile Include="Web\CookieContainer.cs" />
+    <Compile Include="WebControls\HtmlInclude.cs" />
+    <Compile Include="WebControls\HtmlLink.cs" />
+    <Compile Include="WebControls\HtmlScript.cs" />
+    <Compile Include="Web\HttpRuntimeWrapper.cs" />
+    <Compile Include="Web\StaticFileHandler2.cs" />
+    <Compile Include="Web\UrlHelper.cs" />
+    <Compile Include="Web\WebValueCollection.cs" />
+    <Compile Include="Xml\IXmlSerializableExt.cs" />
+    <Compile Include="Xml\XmlCDataText.cs" />
+    <Compile Include="Xml\XmlFragmentReader.cs" />
+    <Compile Include="Xml\XmlLocalResolver.cs" />
+    <Compile Include="Xml\XmlSanitizingStream.cs" />
+    <Compile Include="Xml\XmlWrappingReader.cs" />
+    <Compile Include="Xml\XmlWrappingWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Dynamic\readme.txt" />
+    <Content Include="Extensions\readme.txt" />
+    <Content Include="Xml\readme.txt" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

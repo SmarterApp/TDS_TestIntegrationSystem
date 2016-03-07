@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{333414CC-30E7-4E31-951D-A6CA78D73ABD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TDS.Shared</RootNamespace>
+    <AssemblyName>TDS.Shared</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Browser\BrowserAction.cs" />
+    <Compile Include="Browser\BrowserInfo.cs" />
+    <Compile Include="Browser\BrowserRule.cs" />
+    <Compile Include="Browser\BrowserValidation.cs" />
+    <Compile Include="Configuration\TDSSettings.cs" />
+    <Compile Include="Data\ReturnStatus.cs" />
+    <Compile Include="Data\ReturnStatusException.cs" />
+    <Compile Include="Data\TDSSqlResult.cs" />
+    <Compile Include="Data\DataUtils.cs" />
+    <Compile Include="Exceptions\TDSHttpException.cs" />
+    <Compile Include="Exceptions\TDSSecurityException.cs" />
+    <Compile Include="Logging\ExceptionFormatter.cs" />
+    <Compile Include="Logging\ExceptionSignatureBuilder.cs" />
+    <Compile Include="Logging\HexTranslator.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Mask.cs" />
+    <Compile Include="Logging\SqlTraceListener.cs" />
+    <Compile Include="Logging\TDSLog.cs" />
+    <Compile Include="Logging\TDSLogger.cs" />
+    <Compile Include="Logging\TDSTraceListener.cs" />
+    <Compile Include="Logging\TextExceptionFormatter.cs" />
+    <Compile Include="Logging\TraceLog.cs" />
+    <Compile Include="Logging\TraceLogger.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Security\AuthenticationModule.cs" />
+    <Compile Include="Security\FormsAuthenticationHelper.cs" />
+    <Compile Include="Security\TDSIdentity.cs" />
+    <Compile Include="Security\TDSPrincipal.cs" />
+    <Compile Include="Security\TDSUser.cs" />
+    <Compile Include="Sql\SqlRepository.cs" />
+    <Compile Include="Sql\TDSRepository.cs" />
+    <Compile Include="Utilities\Constants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\Dates.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\Email.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\Numbers.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\ScriptHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\Strings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\Utility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utilities\Validation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Web\AdminHandler.cs" />
+    <Compile Include="Web\Encryption.cs" />
+    <Compile Include="Web\RESTHandler.cs" />
+    <Compile Include="Web\UserCookie.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\AIR.Common\AIR.Common.csproj">
+      <Project>{e11c4060-59b5-401d-bf72-1f52156e64db}</Project>
+      <Name>AIR.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

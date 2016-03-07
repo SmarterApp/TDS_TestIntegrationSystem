@@ -1,0 +1,84 @@
+<!-- Markdown format 
+	http://daringfireball.net/projects/markdown/dingus
+	http://daringfireball.net/projects/markdown/syntax
+-->
+# OSS TIS and OSS TDS - Exchanging files and acknowledgements
+
+## Receiving Test Files
+
+OSS TIS will stand up a REST endpoint to receive a TDSReport from TDS in OSS format or proprietary format.  A callback URL will also be provided (url encoded) which will be saved with the file and used to send an acknowledgement when TIS has processed the file.
+
+### Request Format:
+
+**URL:** `https://<hostname>/api/testresult/submit?statusCallback={statusCallbackUriEncoded}`  
+**Content-Type:** application/xml  
+**Method:**  POST  
+**Body:** the TDSReport XML file...  
+	`<TDSReport>  
+		<Test name="(SBAC_PT)SBAC-Perf-MATH-11-Spring-2013-2015" subject="MATH" testID="SBAC-Perf-MATH-11" airbank="1" handscoreproject="" contract="SBAC_PT" mode="online" grade="11" assessmentType="" academicYear="" assessmentVersion="5644" />  
+			<Examinee airkey="8" >  
+				<ExamineeAttribute context = "INITIAL" name = "Birthdate" value = "01012000" contextDate = "2014-11-07 16:12:19.432" />  
+				...  
+	</TDSReport>`
+
+### Returns
+
+An HTTP status code and a message as the content if there's an error.
+        
+#### Codes:
+- 200: OK
+- 400: request is not formatted correctly or does not contain the expected data.
+- 500: an exception occurred while attempting to insert the file into the database
+
+TIS will log exceptions on 500 errors, but will not attempt to retry.  Once any issues are resolved, the file will need to be resubmitted from TDS.
+
+### Security
+
+The API should be used over SSL.
+
+**TODO:** secure the API with oauth and provide details.
+
+## Processing
+
+If the file is accepted, it will be submitted to TIS for processing. Once TIS has processed the file, it will send acknowledgement message to a REST endpoint exposed by OSS TDS at the address specified in the initial request's statusCallback parameter value.
+
+The acknowledgement will indicate whether TIS succeeded or failed in processing the test file.  If it failed, an error message will be returned.
+
+TIS will log any errors that may occur while attempting to callback to TDS with an acknowledgement and members of the TIS development team can alert TDS as to issues.  TDS may also notice that test opps have not changed status as expected and contact the TIS team to investigate.  Once any issues are resolved, tests can be resubmitted within TIS in order to resend the acknowledgement.
+
+
+================================
+
+## Reply from TIS to TDS
+### Request Format:
+**URL:** [statusCallbackURI]  
+**Content-Type:** application/json  
+**Method:** POST  
+**Body:**  json formatted  
+`{"oppKey" : "AA19A641-C782-4426-8586-E7D77EDF2D02",
+ "success" : false,
+  "error" : "too late, student  left the building"}`  
+
+### Example: 
+http://1.2.3.4:8080/ student/TIS/API/tisReply  
+‘success’ element is boolean.  
+‘error’ element is optional.  
+
+### Returns
+An HTTP status code and a message(optional) as the content if there's an error.
+#### Codes:
+- 200:  OK
+- 400:  request is not formatted correctly or does not contain the expected data.
+
+##Processing
+Tis Reply is processed by Student server.  
+
+If  Tis Reply parameters passed validation, TDS tries to find record for given opportunity key in testopportunity table.  
+ If not found, TDS places record in Student application log  and finishes processing.  
+ 
+Otherwise:  
+    >> if success parameter is set to false, TDS inserts record detailed into opportunityaudit table and finishes processing.  
+    >> If success parameter is set to true , TDS checks  if opportunity status is ‘expired’ or is not  ‘submitted’, record to that regard is inserted into opportunityaudit table and processing is finished.  
+    >> Otherwise: test opportinuty status  in testopporunity table is set to ‘reported’ and record is inserted into opportunityaudit table.  
+	
+Any exceptions while processing validated TIS Reply will be logged into Student server log, but not reported to TIS server.

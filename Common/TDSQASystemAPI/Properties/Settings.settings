@@ -1,0 +1,65 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TDSQASystemAPI.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TDS_QC_ConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=38.118.82.146;Initial Catalog=TDS_QC_;Persist Security Info=True;User ID=dbtds;Password=KOJ89238876234rUHJ&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=38.118.82.146;Initial Catalog=TDS_QC_;Persist Security Info=True;User ID=dbtds;Password=KOJ89238876234rUHJ</Value>
+    </Setting>
+    <Setting Name="TDS_QC_MN_2011ConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=38.118.82.146;Initial Catalog=TDS_QC_MN_2011;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=38.118.82.146;Initial Catalog=TDS_QC_MN_2011;Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="TDS_QC_DE_2012ConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=38.118.82.146;Initial Catalog=TDS_QC_DE_2013;User ID=dbtds&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=38.118.82.146;Initial Catalog=TDS_QC_DE_2013;User ID=dbtds</Value>
+    </Setting>
+    <Setting Name="TDS_QC_DE_2011ConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=38.118.82.146;Initial Catalog=TDS_QC_DE_2011;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=38.118.82.146;Initial Catalog=TDS_QC_DE_2011;Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="TDS_QC_OR_2012ConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=38.118.82.146;Initial Catalog=TDS_QC_OR_2012;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=38.118.82.146;Initial Catalog=TDS_QC_OR_2012;Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="TDSQASystemAPI_UpdateDoR_Service" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://38.118.83.42/webservice/XMLLoaderService.asmx</Value>
+    </Setting>
+    <Setting Name="TDS_QC_DEConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=38.118.82.146;Initial Catalog=TDS_QC_DE;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=38.118.82.146;Initial Catalog=TDS_QC_DE;Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="TDS_QC_MN_2013ConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=38.118.82.146;Initial Catalog=TDS_QC_MN_2013;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=38.118.82.146;Initial Catalog=TDS_QC_MN_2013;Integrated Security=True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C7954359-0FA0-444E-87AC-07069CE64E21}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ScoringEngine</RootNamespace>
+    <AssemblyName>ScoringEngine</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ComputationRules.cs" />
+    <Compile Include="ConfiguredTests\ComputationSpec.cs" />
+    <Compile Include="ConfiguredTests\CutScores.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\FeatureSpec.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\ItemScore.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\ParameterValue.cs" />
+    <Compile Include="ConfiguredTests\SegmentBlueprint.cs" />
+    <Compile Include="ConfiguredTests\Stimulus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\TestAccomodation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\TestBlueprint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\TestForm.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\TestItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\TestItemScoreInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\TestSegment.cs" />
+    <Compile Include="ConfiguredTests\Utility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ConfiguredTests\WindowMaxOpportunity.cs" />
+    <Compile Include="MeasurementModels\IRTModelGRL.cs" />
+    <Compile Include="MeasurementModels\IRTModel.cs" />
+    <Compile Include="MeasurementModels\IRTModel3pl.cs" />
+    <Compile Include="MeasurementModels\IRTModel3pln.cs" />
+    <Compile Include="MeasurementModels\IRTModelFactory.cs" />
+    <Compile Include="MeasurementModels\IRTModelGPC.cs" />
+    <Compile Include="MeasurementModels\IRTModelPCL.cs" />
+    <Compile Include="MeasurementModels\IRTModelRaw.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScoringEngineException.cs" />
+    <Compile Include="Scoring\IRTScore.cs" />
+    <Compile Include="Scoring\MeasureValue.cs" />
+    <Compile Include="Scoring\MLEScorer.cs" />
+    <Compile Include="Scoring\SpecificComputationRules.cs" />
+    <Compile Include="TestCollection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
