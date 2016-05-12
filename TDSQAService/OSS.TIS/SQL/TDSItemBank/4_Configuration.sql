@@ -8,6 +8,9 @@ set @ItemBankKey = 200
 Insert into tblclient (name)
 values ('SBAC')
 
+Insert into tblclient (name)
+values ('SBAC_PT')
+
 set @clientKey = @@IDENTITY
 
 ---Inserting into tblitembank
