@@ -233,7 +233,7 @@ namespace TDSQASystemAPI.TestResults
 
         [XmlIgnore]
         private string completeness;
-        [XmlAttribute]
+        [XmlAttribute("completeStatus")]
         public string Completeness
         {
             get { return completeness; }

@@ -19,6 +19,7 @@ using ScoringEngine.Scoring;
 using ScoringEngine;
 using TDSQASystemAPI.ExceptionHandling;
 using AIR.Common;
+using System.Linq;
 
 namespace TDSQASystemAPI.TestResults
 {
@@ -534,6 +535,47 @@ namespace TDSQASystemAPI.TestResults
         {
             if ((validationRecords != null) && (validationRecords.Count == 0)) return true;
             return false;
+        }
+
+        /// <summary>
+        /// A test is considered complete if:
+        ///     for CAT: student respond tothe minimum number of operational items specified in the blueprint
+        ///     for fixed form: student responds to all items
+        /// </summary>
+        /// <returns></returns>
+        public bool IsComplete()
+        {
+            bool complete = true;
+
+            // if any segments are not complete, then the testresult is not considered complete
+            foreach (string segmentKey in this.Blueprint.SegmentNames())
+            {
+                SegmentBlueprint segmentBlueprint = this.Blueprint.GetSegment(segmentKey);
+                if (segmentBlueprint == null)
+                {
+                    continue;
+                }
+
+                var segmentResponses = this.ItemResponses.Where(x => x.SegmentID == segmentKey);
+
+                // we can only check the IsSelected flag, because the validation done in XMLAdapterOSS.CreatetTestResult makes sure that all selected items have responses
+                switch (segmentBlueprint.SelectionAlgorithm)
+                {
+                    case TestBlueprint.SelectionAlgorithmType.FixedForm:
+                        complete = segmentResponses.All(x => x.IsSelected);
+
+                        break;
+                    case TestBlueprint.SelectionAlgorithmType.Adaptive:
+                        complete = segmentResponses.Count(x => x.IsSelected) >= segmentBlueprint.MinItems;
+
+                        break;
+                }
+
+                if (!complete)
+                    break;
+            }
+
+            return complete;
         }
 
         public bool AddScores(TestCollection tc)
