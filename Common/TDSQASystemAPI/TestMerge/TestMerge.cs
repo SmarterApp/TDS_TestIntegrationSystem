@@ -382,6 +382,9 @@ namespace TDSQASystemAPI.TestMerge
             // Merge Assessment properties
             MergeAssessmentProperties(sourceTestResults, targetTestResult);
 
+            // Set completeness of the new test result
+            targetTestResult.Opportunity.Completeness = !targetTestResult.IsComplete() ? "Partial" : "Complete";
+
             return targetTestResult;
         }
 
