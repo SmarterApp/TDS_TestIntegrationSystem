@@ -123,6 +123,35 @@ None
 
 3) 	Added sample Summative test configuration to \TDSQAService\OSS.TIS\SQL\TISDB\2_Configuration.sql.  Includes project mapping and combo mapping.  Does not include project settings.
 
+# Loading Test Packages
+
+Both the Administration and Scoring Test Packages need to be loaded into TIS.  For summative tests, the Performance and CAT Administration packages and the Combined Administration and Scoring packages need to be loaded.
+
+## Implementation Readiness Package Example
+
+The latest Implementation Readiness test packages can be found here: <ftp://ftps.smarterbalanced.org/~sbacpublic/Public/ImplementationReadiness/>.  Download and unzip this file.
+
+As an example, to load the Grade 3 Math summative tests into TIS, you will need to load the following packages:
+
+* /Test Packages
+	* /TDS/Administration
+		* (SBAC_PT)SBAC-IRP-CAT-MATH-3-Summer-2015-2016.xml
+		* (SBAC_PT)SBAC-IRP-Perf-MATH-3-Summer-2015-2016.xml
+	* /TIS/Administration
+		* (SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016.xml
+	* /TIS/Scoring
+		* (SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016.xml
+
+## Loading script
+
+To load the test packages you will copy and paste the XML from each file and run the following against the `OSS_TIS` database:
+
+> EXEC tp.spLoader_Main '`[Test Package file(XML file)]`'
+> 
+> EXEC dbo.UpdateTDSConfigs 1
+
+
+
 # Configuration
 
 ## Applications
@@ -220,6 +249,7 @@ isHandscoringTarget | False | Set to True for the HandscoringTSS target and to F
 batchRequest | False | Defines if results should be sent as batches or individually.  The Teacher Handscoring System can handle batch requests and therefore can be set to True.  The Equation Scoring target can not and therefore must be set to False or left blank.  Defaults to False if not provided.
 
 _**ItemTypes Format**_  
+
 The item types string follows a specific format that can be summarized like so: `{itemType}:{itemKey},{itemKey}:{isExcludedItems};{itemType}...` where only the `{itemType}` is required.
 
 In it's simplest form, the string will contain a semicolon separated list of item types that should be sent to this particular target.  This would look like: `SA;WER;TI`.
@@ -298,8 +328,57 @@ ScoringDaemon.MaxAttempts | 10 | The maximum number of attempts at rescoring mac
 ScoringDaemon.SessionType | 0 | Defaults to 0 if not provided.  0 means online.
 ScoringDaemon.MaxItemsReturned | 500 | The maximum number of tests to retrieve at a time when looking for pending items that need to be scored.
 ScoringDaemon.ItemScoringConfigCacheSeconds | 14400 | Seconds to cache the item scoring configuration.  Defaults to 14400 (4 hours).
-ScoringDaemon.ItemScoringCallBackHostUrl | https://[TIS BASE URL]/ | The UR of this TIS server.  **IMPORTANT:** The URL must end with a /
+ScoringDaemon.ItemScoringCallBackHostUrl | https://`[TIS BASE URL]`/ | The UR of this TIS server.  **IMPORTANT:** The URL must end with a /
 ScoringDaemon.ItemFormatsRequiringItemKeysForRubric | ER,EQ | Defines the item types that need to have their rubrics retrieved from the student application. Defaults to "ER" if not provided.
-ScoringDaemon.StudentAppUrlOverride | https://[STUDENT APP URL]/ | Allows the student application to be overriden instead of using the value sent in the TRT.
-ScoringDaemon.ItemScoringServerUrlOverride | https://[URL]/ | Allows the item scoring server URL to be overriden.
+ScoringDaemon.StudentAppUrlOverride | https://`[STUDENT APP URL]`/ | Allows the student application to be overriden instead of using the value sent in the TRT.
+ScoringDaemon.ItemScoringServerUrlOverride | https://`[URL]`/ | Allows the item scoring server URL to be overriden.
 ScoringDaemon.EnableLocalHostUsageForColocatedApps | False | Allows the use of localhost instead of a specific URL when the student application and the item scoring are colocated on the same server.  Defaults to False.
+
+## Database
+
+### OSS_TIS.dbo.TestNameLookUp
+
+In order for TIS to score a new test that has been loaded into the system, you must manually add the test into the `TestNameLookUp` table.  
+
+**IMPORTANT:** The instance name must match what was set in the TIS Server AppSettings for `ServiceName`.  By default, this should be kept as `OSS_TISService`.
+
+### OSS_TIS.dbo.CombinationTestMap, OSS_TIS.dbo.CombinationTestFormMap
+
+For summative tests, TIS combines the Performance Task with the Computer Adaptive Test (CAT) into a Combined Test when performing the test scoring.  The test and segment mapping that allow this combination to happen are defined in these two tables.
+
+For new tests loaded into the system, these tables will need to be populated accordingly.
+
+### OSS_TIS.dbo.QC\_ProjectMetaData
+
+This table holds settings and meta-data for projects in the system.  A project is a way to group tests that have the same processing rules.  Generally the grouping rules are by test name and status.
+
+Metadata values can include the following:
+
+Group Name | Variable Name | Notes
+:-----     | :------       | :----
+HandscoringTSS | Target |
+HandscoringTSS | XMLVersion |
+HandscoringTSS | Transform |
+HandscoringTSS | IncludeAllDemographics |
+HandscoringTSS | TargetType |
+HandscoringTSS | Order |
+HandscoringTDSUnscored | Target |
+HandscoringTDSUnscored | Order |
+QA | MergeIetmScores |
+QA | ScoreInvalidations |
+QA | UpdateAppealStatus |
+QA | AutoAppealTrigger |
+QA | IgnoreWrongServer | If this is set to "1" (meaning true), then TIS will not validate the server sending the results is in th approved whitelist.
+All | Accommodations |
+DW1 | Target |
+DW1 | XMLVersion |
+DW1 | Transform |
+DW1 | IncludeAllDemographics |
+DW1 | TargetType |
+DW1 | Order |
+DW2 | Target |
+DW2 | XMLVersion |
+DW2 | Transform |
+DW2 | IncludeAllDemographics |
+DW2 | TargetType |
+DW2 | Order |
