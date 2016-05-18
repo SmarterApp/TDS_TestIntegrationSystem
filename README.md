@@ -122,3 +122,184 @@ None
 2) 	Changed the way assessmentVersion value is derived for combo tests.  It will now be an ordered, pipe-delimited string of the assessmentVersion values from all components currently included in the combo.
 
 3) 	Added sample Summative test configuration to \TDSQAService\OSS.TIS\SQL\TISDB\2_Configuration.sql.  Includes project mapping and combo mapping.  Does not include project settings.
+
+# Configuration
+
+## Applications
+
+### TDS Receiver
+
+#### TISServices\TISServices\Web.config
+
+**WebServiceSettings**  
+
+The `<WebService>` element is used to define the connection to OpenAM.
+
+Name		| Url	| Description
+:-------- | :--- | :-----------
+OpenAM		| https://`[OPENAM BASE URL]`/auth/oauth2/tokeninfo | The URL for the token information endpoint of OpenAM.  Replace [OPENAM BASE URL] with the appropriate URL.
+
+**connectionStrings**  
+
+There is a single connection string to configure that must point to the `OSS_TIS` database.
+
+Name		| Example Value	| Description
+:-------- | :--- | :-----------
+TDSQC		| Data Source=`[DATABASE IP OR URL]`;Initial Catalog=OSS_TIS;User id=`[USERNAME]`;Password=`[PASSWORD]` | Use any valid SQL Server connecion string that connects to the OSS_TIS database.
+
+**appSettings**  
+
+Name          	| Example Value   	| Description
+:------------- 	| :------------- 	| :-------
+LogFilePath		| C:\Logs\TDSReceiveLog.txt| Full path to the log file. 
+AuthTokenCache:MaxSize  | 10	| The max number of tokens to store in the cache. 
+AuthTokenCache:PurgeCount | 5	| The number of entries to purge if the count is >= MaxSize. 
+AuthTokenCache:SlidingExpirationMinutes | 90 | If the cache is not accessed in this number of minutes, it will be dumped from memory.
+
+NOTE: The AuthTokenCache stores authenticaion tokens sent with requests in order to decrease the number of calls to OpenAM in order to validate the token.
+
+### TIS Service
+#### TDSQAService\TISService\App.config
+
+**WebServiceSettings**  
+
+The `<WebService>` element is used to define the connection to the Teacher Handscoring System (THSS), ART and the Data Warehouse.  
+
+NOTE: The `name` of the handscoring webservices are used as the `target` of the `<ItemScoring>` element.  The `authSettingName` refers to the `name` of the `<Authorization>` element defined below, and is used to determine how to authenticate before calling a particular web service.
+
+Name		| Url	| AuthSettingName | Description
+:-------- | :--- | :----------- | :-----
+HandscoringTSS		| https://`[THSS BASE URL]`/api/test/submit | OAuth | The endpoint where items that need to be hand scored will be sent.
+HandscoringTDSUnscored | https://`[EQUATION SCORER BASE URL]`:8084 | OAuth | The python equation scoring server endpoint.
+ART		| https://`[ART_BASE_URL]`/rest	| OAuth | ART rest endpoint used to get the student package.
+DW1 (DW2, DW3, etc.)	| [DATA WAREHOUSE URL] | OAuthDW1 | Data warehouse endpoint
+
+**connectionStrings**  
+
+There are two connection strings to configure that point to the `OSS_ItemBank` and the `OSS_TIS` databases.
+
+Name		| Example Value	| Description
+:-------- | :--- | :-----------
+ITEMBANK		| Data Source=`[DATABASE IP OR URL]`;Initial Catalog=OSS_ItemBank;User id=`[USERNAME]`;Password=`[PASSWORD]` | Use any valid SQL Server connecion string that connects to the OSS_ItemBank database.
+TDSQC		| Data Source=`[DATABASE IP OR URL]`;Initial Catalog=OSS_TIS;User id=`[USERNAME]`;Password=`[PASSWORD]` | Use any valid SQL Server connecion string that connects to the OSS_TIS database.
+
+**AuthorizationSettings**
+
+Multiple `<Authorization>` elements can be configured here and are used by the `<WebService>` elements above to get an OAuth token and allow access to the web service. Each attribute is defined below.
+
+Attribute Name	| Example Value	| Description
+:-------- | :------------- 	| :-------
+name		| OAuth | Name to use as a reference.  Matches the `WebServiceSettings\WebService authSettingName` attribute
+url			| https://`[SSO_URL]`/ | OpenAM base url.  **IMPORTANT:** This is only the base url and does not include the /auth/oauth2 path as that is added within the code itself.
+realm		| /sbac	| The realm used by OpenAM
+grantType	| password	| Should always be the text "password" (that is not a placeholder) for these use cases
+username	| admin	| A user in the system that has elevated privileges
+password	| somepassword | The password for this user
+clientId	| pm	| The OpenAM OAuth configured client id.  The installation process configures a "pm" client which can be used out of the box.  You can view the clients in the OpenAM console by going to the Access Control tab -> click **sbac** link -> Agents -> OAuth2.0/OpenID Connect tab.
+clientSecret | sbac12345 | This is the default password for the "pm" client and should have been changed during installation.
+passwordEncrypted | false | A boolean value that defines whether the passwords provided  in this file are encrypted.
+
+Below is an example of the main `OAuth` authorization element that is needed when configuring the ART web service shown above.
+
+> \<Authorization name="OAuth" url="https://sso.sbtds.org/" realm="/sbac" grantType="password" username="adminuser" password="somepassword" clientId="pm" clientSecret="sbac12345" passwordEncrypted="false" />
+
+
+**ItemScoringSettings**
+
+Multiple `<ItemScoring>` elements can be configured here and are used by TIS to determine where to sent items that still need to be scored.  In most situations there will be two elements configured; one for sending items to the Handscoring System and the other for sending Math Equations to be machine scored.  Examples of these are provided after each attribute is described in the table below.
+
+Attribute Name	| Example Value	| Description
+:-------- | :------------- 	| :-------
+target		| HandscoringTSS | WebService target that should be used.  Matches the `WebServiceSettings\WebService name` attribute
+callbackUrl			| https://`[TIS_SCORING_DAEMON_URL]`/ ItemScoringCallbackRcv.axd | The callback URL that the scoring server will use to notify TIS of the results.   `ItemScoringCallbackRcv.axd` should be used for the Teacher Handscoring target and `ItemScoringCallback.axd` should be used for the Math Equation Scorer.
+itemTypes | SA;WER;TI:200-25662,200-19678,200-6117 | Defines the items that should be included in this group and therefore sent to the defined target.  See the **"ItemTypes Format"** section below for more detail on the format itself.
+scoreStatuses | NotScored, WaitingForMachineScore | A comma-separated list of score statuses that should be included.  Defaults to "NotScored" if no value is provided.
+scoreInvalidations | True | Defines if invalidations be scored.  Defaults to True if no value is provided.
+updateSameReportingVersion | True | Defaults to True if no value is provided.
+isHandscoringTarget | False | Set to True for the HandscoringTSS target and to False for the HandscoringTDSUnscored (e.g. equation scorer).  Defaults to False if value is not provided.
+batchRequest | False | Defines if results should be sent as batches or individually.  The Teacher Handscoring System can handle batch requests and therefore can be set to True.  The Equation Scoring target can not and therefore must be set to False or left blank.  Defaults to False if not provided.
+
+_**ItemTypes Format**_  
+The item types string follows a specific format that can be summarized like so: `{itemType}:{itemKey},{itemKey}:{isExcludedItems};{itemType}...` where only the `{itemType}` is required.
+
+In it's simplest form, the string will contain a semicolon separated list of item types that should be sent to this particular target.  This would look like: `SA;WER;TI`.
+
+Including one or more `{itemKey}`'s limits the items that will be included for this `{itemType}` to only those listed.  So `SA;WER;TI:200-25662,200-19678` means that all SA and WER items are included and only item 200-25662 and 200-19678 are included for the TI type.
+
+The last option `{isExcludedItems}` is a boolean value that defines if the list of `{itemKey}`'s provided should be included or exceluded.  If it isnt provided it defaults to `true`, meaning the items are included. Therefore `SA;WER;TI:200-25662,200-19678:true` means that all SA and WER items are included and all TI items except 200-25662 and 200-19678 will be included.
+
+
+**appSettings**  
+
+Name          	| Example Value   	| Description
+:------------- 	| :------------- 	| :-------
+ServiceName		| OSS_TISService | This should only be changd in rare circumstances where there are multiple Services accessing the same TIS database.  This value is used in the `OSS_TIS.dbo.TestNameLookUp` `InstanceName` column to determine which tests this service processes.
+MaxErrorEMails  | 25	| The max number of error emails to send. 
+FatalErrorsTo | email@email.com	| Email address where fatal errors are sent.
+FatalErrorsCc | email@email.com | Email address where fatal errors are sent via CC.
+EmailAlertForWarnings | True | Boolean value defining whether warning notifications should be sent via email.
+WarningsTo | email@email.com | Email address where warnings are sent if `EmailAlertForWarnings` is set to True.
+WarningsCc | email@email.com | Email address where warnings are sent via CC if `EmailAlertForWarnings` is set to True.
+ScoringEnvironment | TIS | Must match the value in `OSS_TestScoringConfigs.dbo.ComputationLocations` table which is TIS by default.
+ClientName | SBAC | The client name of the tests TIS is processing.  For IRP packages this would be "SPAC_PT."  When tests are loaded, the client name from the test is used to populate the `OSS_COnfigs.dbo.Client_TestMode`.  If you are not sure what to set this value to check this table after loading up your tests.
+EventLogName | OSS_TISEventLog | The name of the Windows Event Log that will be created and used for warnings and errors.  NOTE: The user that this service is running as will need to have access to create and write to the Event Log.  By default the Local System should have access.
+EventLogSource | OSS_TIS | The source name used in the Event Log.
+ErrorLog | C:\logs\OSS_TIS_ResultLog.txt | Path to a log file used by the service.  Make sure the user running the service has write access to this path.
+SendToHandscoring | True | Boolean value that controls whether items are sent to the Teacher Handscoring System or not.
+IgnoreHandscoringDuplicates | True | Should duplicates be ignored when processing handscoring results.
+Environment | Producion | Set to Production when deployed live.  If set to "Local" or "Dev" then it allows for the TDS server to not be validated.  See `TDSSessionDatabases` below.
+IdleSleepTime | 1000 | The amount of time (in milliseconds) to sleep when there is no work to be done.
+LoopSleepTime | 10 | The amount of time the thread sleeps (in milliseconds) at each iteration of the loop
+NumberOfGeneralThreads | 20 | The total number of threads used for all subjects, except writing.
+WaitForWorkerThreadsOnStopSeconds | 120 | When the service is stopped, the system will wait this long for all worker threads to complete.  Defaults to 120 seconds.
+LongDbCommandTimeout | 90 | Database command timeout in seconds
+TDSSessionDatabases | tds-web01,session;tds-web02,session | List of one or more TDS applications that are allowed to send test results to this TIS intance. The format is `{server},{database};{server},{database};`  The database should almost always be set to **"session"** and the `{server}` should be set to the machine name of the TDS server.  TIS validates that the data coming in is from one of those servers by looking at the TRT file `<Opportunity>` `server` and `database` values.   **IMPORTANT:** If `Environment` is starts with "Dev" or "Local" then this validation is skipped.
+
+**system.net/mailSettings/smtp**  
+
+In order to receive email notifications, the SMTP settings must be set appropriately.  For more information please refer to the MSDN Microsoft page here: <https://msdn.microsoft.com/en-us/library/ms164240(v=vs.110).aspx>
+
+
+### TIS Scoring Daemon
+
+#### TISScoringDaemon\TIS.ScoringDaemon.Web.UI\Web.config
+
+**machineKey**  
+
+For security reasons, the `validationKey` and `decryptionKey` values should be changed when TIS is deployed.  This can easily be done from within IIS as described here: <https://blogs.msdn.microsoft.com/amb/2012/07/31/easiest-way-to-generate-machinekey/>.
+
+#### TISScoringDaemon\TIS.ScoringDaemon.Web.UI\Configuration\database.config
+
+**connectionStrings**  
+
+There is a single connection string to configure that point to the `OSS_TIS` databases.
+
+Name		| Example Value	| Description
+:-------- | :--- | :-----------
+GEO:Cloud		| Data Source=`[DATABASE IP OR URL]`;Initial Catalog=OSS_TIS;User id=`[USERNAME]`;Password=`[PASSWORD]` | Use any valid SQL Server connecion string that connects to the OSS_TIS database.
+
+#### TISScoringDaemon\TIS.ScoringDaemon.Web.UI\Configuration\logging.config
+
+You will need to update the `filePath` attribute of the `<sharedListeners><add name="fileTrace">` element to point to an appropriate logging directory.  NOTE: This is actually a directory and not a full file path.
+
+If necessary, the logging levels can be set in the `<switches>` element.
+
+#### TISScoringDaemon\TIS.ScoringDaemon.Web.UI\Configuration\settings.config
+
+**appSettings**  
+
+Name          	| Example Value   	| Description
+:------------- 	| :------------- 	| :-------
+ScoringDaemon.HubTimerIntervalSeconds | 90 | Time in seconds that the daemon waits before checking for data to process.
+ScoringDaemon.MachineName  | THSS	| The machine name.  If this is not set, the machine name will be retrieved and used (using C# `Environment.MachineName`. 
+ScoringDaemon.PendingMins | 15 | Determines the number of minutes since the last attempt at scoring when finding new items to rescore.  Defaults to 15 minutes if no value is provided.  Used for machine scoring, and not relevant for hand scored items.
+ScoringDaemon.MinAttempts | 0 | The minimum number of attempts at rescoring machine scored items.  Defaults to 0 if no value is provided.
+ScoringDaemon.MaxAttempts | 10 | The maximum number of attempts at rescoring machine scored items.  If scoring attempts is above this value, the item is marked with a status of `ScoringError`.  Defaults to 10 if no value is provided.
+ScoringDaemon.SessionType | 0 | Defaults to 0 if not provided.  0 means online.
+ScoringDaemon.MaxItemsReturned | 500 | The maximum number of tests to retrieve at a time when looking for pending items that need to be scored.
+ScoringDaemon.ItemScoringConfigCacheSeconds | 14400 | Seconds to cache the item scoring configuration.  Defaults to 14400 (4 hours).
+ScoringDaemon.ItemScoringCallBackHostUrl | https://[TIS BASE URL]/ | The UR of this TIS server.  **IMPORTANT:** The URL must end with a /
+ScoringDaemon.ItemFormatsRequiringItemKeysForRubric | ER,EQ | Defines the item types that need to have their rubrics retrieved from the student application. Defaults to "ER" if not provided.
+ScoringDaemon.StudentAppUrlOverride | https://[STUDENT APP URL]/ | Allows the student application to be overriden instead of using the value sent in the TRT.
+ScoringDaemon.ItemScoringServerUrlOverride | https://[URL]/ | Allows the item scoring server URL to be overriden.
+ScoringDaemon.EnableLocalHostUsageForColocatedApps | False | Allows the use of localhost instead of a specific URL when the student application and the item scoring are colocated on the same server.  Defaults to False.
