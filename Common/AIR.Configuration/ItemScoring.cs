@@ -240,8 +240,8 @@ namespace AIR.Configuration
         /// <param name="itemConfig"></param>
         private void BuildItemConfig()
         {
-            itemConfig = new Dictionary<string, HashSet<string>>();
-            ItemsAreExclusions = new Dictionary<string, bool>();
+            Dictionary<string, HashSet<string>> itemConfig = new Dictionary<string, HashSet<string>>();
+            Dictionary<string, bool> itemsAreExclusions = new Dictionary<string, bool>();
 
             if (String.IsNullOrEmpty(ItemTypesString))
                 return;
@@ -250,9 +250,12 @@ namespace AIR.Configuration
             {
                 List<string> itcToks = itemTypeConfig.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries).ToList();
                 HashSet<string> items = (itcToks.Count > 1) ? new HashSet<string>(itcToks[1].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) : new HashSet<string>();
-                ItemConfig.Add(itcToks[0], items);
-                ItemsAreExclusions[itcToks[0]] = (itcToks.Count > 2) ? Convert.ToBoolean(itcToks[2]) : false;
+                itemConfig.Add(itcToks[0], items);
+                itemsAreExclusions[itcToks[0]] = (itcToks.Count > 2) ? Convert.ToBoolean(itcToks[2]) : false;
             }
+
+            this.ItemsAreExclusions = itemsAreExclusions;
+            this.itemConfig = itemConfig;
         }
 
         #endregion
