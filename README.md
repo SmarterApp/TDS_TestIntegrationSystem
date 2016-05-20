@@ -150,7 +150,7 @@ To load the test packages you will copy and paste the XML from each file and run
 > 
 > EXEC dbo.UpdateTDSConfigs 1
 
-
+After loading the tests the `OSS_TIS.dbo.TestNameLookUp`, `OSS_Configs.dbo.Client_TestTool` and `OSS_Configs.dbo.Client_TestToolType` will need to be populated.  See the database configuration section below for more details.
 
 # Configuration
 
@@ -347,6 +347,10 @@ In order for TIS to score a new test that has been loaded into the system, you m
 For summative tests, TIS combines the Performance Task with the Computer Adaptive Test (CAT) into a Combined Test when performing the test scoring.  The test and segment mapping that allow this combination to happen are defined in these two tables.
 
 For new tests loaded into the system, these tables will need to be populated accordingly.
+
+### OSS_Configs.dbo.Client_TestTool, OSS_Configs.dbo.Client_TestToolType
+
+These tables are similar to the TDS configs.client_testtool and configs.client_testtooltype tables.  They hold the available accommodations and need to be added for each test.  The Context column is used to make it available for a particular test or for all tests by using "*".  This comes pre-populated with example data from 2014-15 that can be used as a guide for each new test loaded into the system.
 
 ### OSS_TIS.dbo.QC\_ProjectMetaData
 
