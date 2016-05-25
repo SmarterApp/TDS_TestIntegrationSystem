@@ -144,7 +144,7 @@ As an example, to load the Grade 3 Math summative tests into TIS, you will need 
 
 ## Loading script
 
-To load the test packages you will copy and paste the XML from each file and run the following against the `OSS_TIS` database:
+To load the test packages you will copy and paste the XML from each file and run the following against the `OSS_Itembank` database:
 
 > EXEC tp.spLoader_Main '`[Test Package file(XML file)]`'
 > 
