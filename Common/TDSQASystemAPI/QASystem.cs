@@ -184,6 +184,9 @@ namespace TDSQASystemAPI
                             SetArchiveStrategy(ArchiveStrategy.ArchiveAndInsert);
                     }
 
+                    //COMPLETENESS STATUS:
+                    tr.Opportunity.Completeness = !tr.IsComplete() ? "Partial" : "Complete";
+
                     // Validation section. This checks the xml file against several business rules.
                     // If validation fails, the file is moved to a failed files directory.
 

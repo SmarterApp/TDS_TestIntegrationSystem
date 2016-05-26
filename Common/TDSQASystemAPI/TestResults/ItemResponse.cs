@@ -472,6 +472,16 @@ namespace TDSQASystemAPI.TestResults
             set { pageTime = value; }
         }
 
+        // JT 5/11/2016: added for 2015-16
+        [XmlIgnore]
+        private double responseDuration = 0.0;
+        [XmlAttribute("responseDuration")]
+        public double ResponseDuration
+        {
+            get { return responseDuration; }
+            set { responseDuration = value; }
+        }
+
         //AM: new for 2011
         [XmlIgnore]
         private bool dropped

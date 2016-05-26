@@ -161,6 +161,17 @@ namespace TDSQASystemAPI.TestResults
             }
 		}
 
+        // JT 5/11/2016: added for 2015-16 year
+        [XmlIgnore]
+        private string administrationCondition;
+        [XmlAttribute("administrationCondition")]
+        public string AdministrationCondition
+        {
+            get { return administrationCondition; }
+            set { administrationCondition = value; }
+        }
+
+
         /// <summary>
         /// The true startdate from the XML file.  If there is no start date in the file, this will
         /// be DateTime.MinValue and StartDate will return the StatusDate.
@@ -219,6 +230,15 @@ namespace TDSQASystemAPI.TestResults
                 status = value;
             }
 		}
+
+        [XmlIgnore]
+        private string completeness;
+        [XmlAttribute("completeStatus")]
+        public string Completeness
+        {
+            get { return completeness; }
+            set { completeness = value; }
+        }
 
         [XmlIgnore]
 		private int pauses;
@@ -535,7 +555,7 @@ namespace TDSQASystemAPI.TestResults
         public Opportunity() { }
         public Opportunity(string oppID, DateTime startDate, int opportunity, string status, DateTime statusDate, int pauses, int itemCount, int fieldTestCount,
             DateTime? completedDate, int gracePeriodRestarts, int abnormalStarts, DateTime qaDate, string serverName, string databaseName,
-            Guid key, string taId, string taName, string sessionId, DateTime dateForceCompleted, string windowID, int? windowOpportunity, string qaLevel, string mode, string clientName, int reportingVersion)
+            Guid key, string taId, string taName, string sessionId, DateTime dateForceCompleted, string windowID, int? windowOpportunity, string qaLevel, string mode, string clientName, int reportingVersion, string userAgent, string adminCondition)
         {
             this.opportunityID = oppID;
             this.StartDate = startDate;
@@ -570,6 +590,9 @@ namespace TDSQASystemAPI.TestResults
             this.scores = null;
             this.ItemResponses = new List<ItemResponse>();
             this.rtsAccommodations = new List<TestAccomodation>();
+            this.completeness = null;
+            this.AdministrationCondition = adminCondition;
+            this.AssessmentParticipantSessionPlatformUserAgent = userAgent;
         }
 
         #region Collections
