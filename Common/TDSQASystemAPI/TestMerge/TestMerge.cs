@@ -382,6 +382,9 @@ namespace TDSQASystemAPI.TestMerge
             // Merge Assessment properties
             MergeAssessmentProperties(sourceTestResults, targetTestResult);
 
+            // Set completeness of the new test result
+            targetTestResult.Opportunity.Completeness = !targetTestResult.IsComplete() ? "Partial" : "Complete";
+
             return targetTestResult;
         }
 
@@ -525,6 +528,8 @@ namespace TDSQASystemAPI.TestMerge
             string sServer = referenceTestResult.Opportunity.ServerName;
             string sDatabase = referenceTestResult.Opportunity.DatabaseName;
             string sQALevel = "";
+            string userAgent = referenceTestResult.Opportunity.AssessmentParticipantSessionPlatformUserAgent;
+            string adminCondition = referenceTestResult.Opportunity.AdministrationCondition;
 
             // The status date of the "whole test" shall be the max(statusDate) 
             DateTime dateTestStatus = DateTime.MinValue;
@@ -569,6 +574,14 @@ namespace TDSQASystemAPI.TestMerge
                 // Set test original force complete as maximum
                 if (testResult.Opportunity.DateForceCompleted > dateTestForceCompleted)
                     dateTestForceCompleted = testResult.Opportunity.DateForceCompleted;
+
+                // if the user agent of the reference test result is empty and this one isn't, use one that tis populated
+                if (String.IsNullOrEmpty(userAgent) && !String.IsNullOrEmpty(testResult.Opportunity.AssessmentParticipantSessionPlatformUserAgent))
+                    userAgent = testResult.Opportunity.AssessmentParticipantSessionPlatformUserAgent;
+
+                // if the user agent of the reference test result is empty and this one isn't, use one that tis populated
+                if (String.IsNullOrEmpty(adminCondition) && !String.IsNullOrEmpty(testResult.Opportunity.AdministrationCondition))
+                    adminCondition = testResult.Opportunity.AdministrationCondition;
             }
 
             int nOpportunityNumber = referenceTestResult.Opportunity.OpportunityNumber;
@@ -580,7 +593,7 @@ namespace TDSQASystemAPI.TestMerge
 
             targetTestResult.Opportunity = new Opportunity(nOppID.ToString(), dateTestStarted, nOpportunityNumber, sTargetOpportunityStatus, dateTestStatus, nPauses,
                 nItemCount, nFieldTestCount, dateTestCompleted, nGracePeriodRestarts, nAbnormalStarts, dateQA, sServer, sDatabase, key, sTAID,
-                sTAName, sSessionID, dateTestForceCompleted, sWindowID, nWindowOpportunity, sQALevel, sMode, sClientName, 0);
+                sTAName, sSessionID, dateTestForceCompleted, sWindowID, nWindowOpportunity, sQALevel, sMode, sClientName, 0, userAgent, adminCondition);
 
             AddSegments(targetTestResult);
             MergeAccomodations(sourceTestResults, targetTestResult);
