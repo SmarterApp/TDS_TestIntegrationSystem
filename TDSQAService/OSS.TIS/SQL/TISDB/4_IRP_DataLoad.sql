@@ -201,3 +201,11 @@ INSERT [dbo].[QC_ProjectMetaData] ([_fk_ProjectID], [GroupName], [VarName], [Int
 INSERT [dbo].[QC_ProjectMetaData] ([_fk_ProjectID], [GroupName], [VarName], [IntValue], [FloatValue], [TextValue], [Comment]) VALUES (-1, N'ProjectMap', N'0-(SBAC_PT)SBAC-IRP-MATH-11-COMBINED-Summer-2015-2016-invalidated', 30, NULL, NULL, N'mapping of ''HS project ID''-''test''-''[testFormat]''-''[qaLevel]''-''[discrep]''-''status'' to QC Project')
 INSERT [dbo].[QC_ProjectMetaData] ([_fk_ProjectID], [GroupName], [VarName], [IntValue], [FloatValue], [TextValue], [Comment]) VALUES (-1, N'ProjectMap', N'0-(SBAC_PT)SBAC-IRP-MATH-11-COMBINED-Summer-2015-2016-pending', 29, NULL, NULL, N'mapping of ''HS project ID''-''test''-''[testFormat]''-''[qaLevel]''-''[discrep]''-''status'' to QC Project')
 INSERT [dbo].[QC_ProjectMetaData] ([_fk_ProjectID], [GroupName], [VarName], [IntValue], [FloatValue], [TextValue], [Comment]) VALUES (-1, N'ProjectMap', N'0-(SBAC_PT)SBAC-IRP-MATH-11-COMBINED-Summer-2015-2016-reset', 30, NULL, NULL, N'mapping of ''HS project ID''-''test''-''[testFormat]''-''[qaLevel]''-''[discrep]''-''status'' to QC Project')
+
+-- the IRP load script above uses some Projects that don't exist based on the seed data, so we are creating them based on Project 6
+insert into QC_ProjectMetaData (_fk_ProjectID, GroupName, VarName, IntValue, FloatValue, TextValue, Comment)
+select p._Key, md.GroupName, md.VarName, md.IntValue, md.FloatValue, md.TextValue, md.Comment
+from
+	Projects p
+	join QC_ProjectMetaData md on p._Key > 17 and p._Key < 34
+		and md._fk_ProjectID = 6
