@@ -1,4 +1,5 @@
 INSERT INTO [Client_TimeLimits]([_key],[OppExpire],[OppRestart],[OppDelay],[InterfaceTimeout],[ClientName],[IsPracticeTest],[sessionExpire],[requestInterfaceTimeout],[RefreshValueMultiplier])VALUES(newid(), 1, 10, -1, 15, N'SBAC', 0, 8, 120, 2)
+INSERT INTO [Client_TimeLimits]([_key],[OppExpire],[OppRestart],[OppDelay],[InterfaceTimeout],[ClientName],[IsPracticeTest],[sessionExpire],[requestInterfaceTimeout],[RefreshValueMultiplier])VALUES(newid(), 1, 10, -1, 15, N'SBAC_PT', 0, 8, 120, 2)
 
 INSERT TDS_TestToolType VALUES (N'American Sign Language', 1, 1, N'TDSAcc-ASL', 0, 0)
 INSERT TDS_TestToolType VALUES (N'Audio Playback Controls', 1, 0, N'TDSAcc-AudioPlaybackControls', 0, 1)
