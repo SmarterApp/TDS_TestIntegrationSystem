@@ -19,9 +19,10 @@ using TISServices.Extensions;
 using TISServices.Utilities;
 using OSS.TIS;
 using TISServices.Authorization;
+using System.Text;
 
 namespace TISServices.Services
-{    
+{
     [AuthorizeOpenAM]
     public class TestResultController : ApiController
     {
@@ -100,16 +101,29 @@ namespace TISServices.Services
 
             try
             {
-                new XmlRepository().InsertXml(XmlRepository.Location.source, doc, callBackUrl.AbsoluteUri, new TestResultSerializerFactory());
+                long fileId = new XmlRepository().InsertXml(XmlRepository.Location.source, doc, callBackUrl.AbsoluteUri, new TestResultSerializerFactory());
                 Statistics.AddToInsertedRequestCount();
+                return Request.CreateResponse(HttpStatusCode.OK, fileId);
             }
             catch (Exception ex)
             {
                 TISServicesLogger.Log(ex);
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Could not persist the request.");
             }
+        }
 
-            return Request.CreateResponse(HttpStatusCode.OK);
+        [HttpGet]
+        public HttpResponseMessage Get(long fileId)
+        {
+            XmlDocument doc = new XmlRepository().GetDestinationXmlContent(fileId);
+
+            if (doc == null)
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(doc.OuterXml, Encoding.UTF8, "application/xml")
+            };
         }
     }
 }

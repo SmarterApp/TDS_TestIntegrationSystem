@@ -126,6 +126,30 @@ namespace TDSQASystemAPI.DAL
             return doc;
         }
 
+        public XmlDocument GetDestinationXmlContent(long fileId)
+        {
+            XmlDocument doc = null;
+            using (DbCommand cmd = _db.GetStoredProcCommand("GetDestinationXmlContentByFileID"))
+            {
+                if (dbCommandTimeout != null)
+                    cmd.CommandTimeout = dbCommandTimeout.Value;
+                _db.AddInParameter(cmd, "@FileID", DbType.Int64, fileId);
+                using (SqlDataReader rdr = (SqlDataReader)_db.ExecuteReader(cmd))
+                {
+                    if (rdr.Read())
+                    {
+                        if (!rdr.IsDBNull(0))
+                        {
+                            doc = new XmlDocument();
+                            doc.Load(rdr.GetSqlXml(0).CreateReader());
+                        }
+                    }
+                }
+            }
+
+            return doc;
+        }
+
         public XmlDocument ProcessXmlFile(long fileId)
         {
             XmlDocument doc = null;

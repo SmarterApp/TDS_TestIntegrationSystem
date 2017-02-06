@@ -107,6 +107,11 @@ namespace TDSQASystemAPI.BL
             return xmlRepositoryDAL.GetXmlContent(fileId);
         }
 
+        public XmlDocument GetDestinationXmlContent(long fileId)
+        {
+            return xmlRepositoryDAL.GetDestinationXmlContent(fileId);
+        }
+
         public XmlDocument ProcessXmlFile(long fileId)
         {
             return xmlRepositoryDAL.ProcessXmlFile(fileId);
