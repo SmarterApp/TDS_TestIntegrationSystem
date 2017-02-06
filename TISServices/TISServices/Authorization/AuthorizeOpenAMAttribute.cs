@@ -56,7 +56,7 @@ namespace TISServices.Authorization
              {
                  using (HttpClient client = new HttpClient())
                  {
-                     response = client.GetAsync(String.Format("{0}?access_token={1}", OpenAMUrl, authKey)).Result;
+                     response = client.GetAsync(String.Format("{0}?access_token={1}&realm=/sbac", OpenAMUrl, authKey)).Result;
                      if (response.IsSuccessStatusCode)
                      {
                          // appears to be a successful authentication. 

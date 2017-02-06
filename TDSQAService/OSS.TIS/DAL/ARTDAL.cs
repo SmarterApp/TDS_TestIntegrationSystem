@@ -52,7 +52,7 @@ namespace OSS.TIS.DAL
 
             HttpResponseMessage response = Get(ssid, stateAbbrviation, oauthToken, useAlternateStudentId);
 
-            if ((response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden) && authTokenFoundInCache)
+            if ((response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden || response.StatusCode == HttpStatusCode.BadRequest) && authTokenFoundInCache)
             {
                 // try again with a fresh token; may have expired
                 OAuth.RemoveFromCache(artService.Authorization, oauthToken);
