@@ -1,0 +1,6 @@
+-- Fixes typos for RTSAttribute fieldname from "EnglishLanguageProficiencLevel" to "EnglishLanguageProficiencyLevel"
+INSERT [dbo].[RTSAttributes] ([_fk_ProjectID], [GroupName], [Context], [ContextDate], [Decrypt], [XMLName], [EntityType], [Relationship], [FieldName], [FetchIfNotInXml]) VALUES (13, N'DW2', N'INITIAL', NULL, 0, N'EnglishLanguageProficiencyLevel', N'', N'', N'EnglishLanguageProficiencyLevel', 0)
+INSERT [dbo].[RTSAttributes] ([_fk_ProjectID], [GroupName], [Context], [ContextDate], [Decrypt], [XMLName], [EntityType], [Relationship], [FieldName], [FetchIfNotInXml]) VALUES (13, N'DW2', N'FINAL', NULL, 0, N'EnglishLanguageProficiencyLevel', N'', N'', N'EnglishLanguageProficiencyLevel', 0)
+INSERT [dbo].[RTSAttributes] ([_fk_ProjectID], [GroupName], [Context], [ContextDate], [Decrypt], [XMLName], [EntityType], [Relationship], [FieldName], [FetchIfNotInXml]) VALUES (15, N'DW2', N'INITIAL', NULL, 0, N'EnglishLanguageProficiencyLevel', N'', N'', N'EnglishLanguageProficiencyLevel', 0)
+INSERT [dbo].[RTSAttributes] ([_fk_ProjectID], [GroupName], [Context], [ContextDate], [Decrypt], [XMLName], [EntityType], [Relationship], [FieldName], [FetchIfNotInXml]) VALUES (15, N'DW2', N'FINAL', NULL, 0, N'EnglishLanguageProficiencyLevel', N'', N'', N'EnglishLanguageProficiencyLevel', 0)
+
