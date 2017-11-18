@@ -2,18 +2,18 @@
 
 The TIS is responsible for:
 
-* Receiving a test result from TDS (Test Delivery System) 
+* Receiving a test result from TDS (Test Delivery System)
 * Sending it to THSS (Teacher HandScoring System) for hand scoring of items that require human scoring
 * Receiving item scores back from THSS
 * Inserting item scores into the file received from TDS
 * Scoring the test
-* Sending the scored test to downstream systems via SFTP 
+* Sending the scored test to downstream systems via SFTP
 
 The TIS consists of the following 3 modules/parts:
 
 1. TDS Receiver
-1. TIS Service 
-1. TIS Scoring Daemon      
+1. TIS Service
+1. TIS Scoring Daemon
 
 ## License ##
 This project is licensed under the [AIR Open Source License v1.0](http://www.smarterapp.org/documents/American_Institutes_for_Research_Open_Source_Software_License.pdf).
@@ -25,24 +25,24 @@ We would be happy to receive feedback on its capabilities, problems, or future e
 * Use the **Issues** link to file bugs or enhancement requests.
 * Feel free to **Fork** this project and develop your changes!
 
-## Usage 
+## Usage
 ### TDS Receiver
 This is a REST endpoint that receives test results in an XML format from the Test Delivery System.  Each result received is inserted into a database where it is picked up and processed by the TIS Service.  The TDS Receiver solution can be found here:  TISServices\TISServices\TISServices.sln.
 
 ### TIS Service
-This is a Windows service that continuously looks for new test results in the database that have not yet been processed.  Once it finds these, it picks them up and processes them (either by sending to THSS, inserting scores from THSS, scoring the test or sending the test downstream). 
+This is a Windows service that continuously looks for new test results in the database that have not yet been processed.  Once it finds these, it picks them up and processes them (either by sending to THSS, inserting scores from THSS, scoring the test or sending the test downstream).
 As part of the deployment of this application, we need to set up the database and deploy the code in app server. A Windows service needs to be installed and started for this app.
 The TIS Service solution can be found here:  TDSQAService/OSSTIS.sln.
 
-### TIS Scoring Daemon      
+### TIS Scoring Daemon
 This is a web application that talks to the THSS (Teacher HandScoring system) and is responsible for receiving item scores from THSS and sending it to the TIS Service for further processing.  The TIS Scoring Daemon solution can be found here:  TISScoringDaemon\TISScoringDaemon.sln.
 
 ### REST EndPoint communication with [TDS, ART & Data warehouse]
 The Test Integration System is built to communicate with all the peer and down-stream systems using a secured REST APIs (using OAuth). The token for secured communiation would be supported/provided by the OpenAM system.
-TISServices\TISServices\TISServices.sln 
+TISServices\TISServices\TISServices.sln
 
 ## Build & Deploy
-TIS requires Visual Studio 2012 to build. The Deployment steps are as follows - 
+TIS requires Visual Studio 2012 to build. The Deployment steps are as follows -
 
 1) Create the following databases [DB Server]:
 
@@ -78,8 +78,8 @@ TIS requires Visual Studio 2012 to build. The Deployment steps are as follows -
 
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSConfigs\1_Create_Objects.sql`  (** Ignore the SQL warnings.)
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSConfigs\2_Configuration.sql`
- 	
-	
+
+
 6) Deploy the `[Db server].OSS_Itembank` database objects by running the following scripts in order:
 
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\1_Create_Synonyms_Sproc.sql`
@@ -88,15 +88,16 @@ TIS requires Visual Studio 2012 to build. The Deployment steps are as follows -
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\4_Configuration.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\5_LoadPackages.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\6_TestToolConfiguration.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\7_create_procedure_spDeleteAssessment.sql`
 
 7) Deploy TISService code at `tis_opentestsystem/` [App server]
 
-8) To deploy the 'TIS Scoring Daemon' - 
+8) To deploy the 'TIS Scoring Daemon' -
 
 - Create a web application on the App server at `/oss_tis_itemscoring'
 - Publish the 'TIS Scoring Daemon' application to `/oss_tis_itemscoring`
 
-9) To deploy the 'TIS services REST endpoint' - 
+9) To deploy the 'TIS services REST endpoint' -
 
 - Create a web application on the App server at `/oss_tisservices'
 - Publish the 'REST endpoint application' to `/oss_tisservices`
@@ -106,7 +107,7 @@ TIS requires Visual Studio 2012 to build. The Deployment steps are as follows -
 11) Verify that the TIS service has privileges to write to the event log [App server].
 
 ## Dependencies
-Test Integration System has the following dependencies that are necessary for it to compile and run. 
+Test Integration System has the following dependencies that are necessary for it to compile and run.
 
 ### Compile Time Dependencies
 * .Net Framework 4.5
@@ -147,7 +148,7 @@ As an example, to load the Grade 3 Math summative tests into TIS, you will need 
 To load the test packages you will copy and paste the XML from each file and run the following against the `OSS_Itembank` database:
 
 > EXEC tp.spLoader_Main '`[Test Package file(XML file)]`'
-> 
+>
 > EXEC dbo.UpdateTDSConfigs 1
 
 After loading the tests the `OSS_TIS.dbo.TestNameLookUp`, `OSS_Configs.dbo.Client_TestTool` and `OSS_Configs.dbo.Client_TestToolType` will need to be populated.  See the database configuration section below for more details.
@@ -160,7 +161,7 @@ After loading the tests the `OSS_TIS.dbo.TestNameLookUp`, `OSS_Configs.dbo.Clien
 
 #### TISServices\TISServices\Web.config
 
-**WebServiceSettings**  
+**WebServiceSettings**
 
 The `<WebService>` element is used to define the connection to OpenAM.
 
@@ -168,21 +169,25 @@ Name		| Url	| Description
 :-------- | :--- | :-----------
 OpenAM		| https://`[OPENAM BASE URL]`/auth/oauth2/tokeninfo | The URL for the token information endpoint of OpenAM.  Replace [OPENAM BASE URL] with the appropriate URL.
 
-**connectionStrings**  
+**connectionStrings**
 
-There is a single connection string to configure that must point to the `OSS_TIS` database.
+There are two connection strings to configure that must point to the `OSS_TIS` and `OSS_Itembank` databases.  These connection strings can be found in the following locations:
+
+* `TISServices/Web.config`
+* `TISUnitTests/app.config`
 
 Name		| Example Value	| Description
 :-------- | :--- | :-----------
+itembank       | Data Source=`[DATABASE IP OR URL]`;Initial Catalog=OSS_Itembank;User id=`[USERNAME]`;Password=`[PASSWORD]` | Use any valid SQL Server connecion string that connects to the OSS_TIS database.
 TDSQC		| Data Source=`[DATABASE IP OR URL]`;Initial Catalog=OSS_TIS;User id=`[USERNAME]`;Password=`[PASSWORD]` | Use any valid SQL Server connecion string that connects to the OSS_TIS database.
 
-**appSettings**  
+**appSettings**
 
 Name          	| Example Value   	| Description
 :------------- 	| :------------- 	| :-------
-LogFilePath		| C:\Logs\TDSReceiveLog.txt| Full path to the log file. 
-AuthTokenCache:MaxSize  | 10	| The max number of tokens to store in the cache. 
-AuthTokenCache:PurgeCount | 5	| The number of entries to purge if the count is >= MaxSize. 
+LogFilePath		| C:\Logs\TDSReceiveLog.txt| Full path to the log file.
+AuthTokenCache:MaxSize  | 10	| The max number of tokens to store in the cache.
+AuthTokenCache:PurgeCount | 5	| The number of entries to purge if the count is >= MaxSize.
 AuthTokenCache:SlidingExpirationMinutes | 90 | If the cache is not accessed in this number of minutes, it will be dumped from memory.
 
 NOTE: The AuthTokenCache stores authenticaion tokens sent with requests in order to decrease the number of calls to OpenAM in order to validate the token.
@@ -190,9 +195,9 @@ NOTE: The AuthTokenCache stores authenticaion tokens sent with requests in order
 ### TIS Service
 #### TDSQAService\TISService\App.config
 
-**WebServiceSettings**  
+**WebServiceSettings**
 
-The `<WebService>` element is used to define the connection to the Teacher Handscoring System (THSS), ART and the Data Warehouse.  
+The `<WebService>` element is used to define the connection to the Teacher Handscoring System (THSS), ART and the Data Warehouse.
 
 NOTE: The `name` of the handscoring webservices are used as the `target` of the `<ItemScoring>` element.  The `authSettingName` refers to the `name` of the `<Authorization>` element defined below, and is used to determine how to authenticate before calling a particular web service.
 
@@ -203,7 +208,7 @@ HandscoringTDSUnscored | https://`[EQUATION SCORER BASE URL]`:8084 | OAuth | The
 ART		| https://`[ART_BASE_URL]`/rest	| OAuth | ART rest endpoint used to get the student package.
 DW1 (DW2, DW3, etc.)	| [DATA WAREHOUSE URL] | OAuthDW1 | Data warehouse endpoint
 
-**connectionStrings**  
+**connectionStrings**
 
 There are two connection strings to configure that point to the `OSS_ItemBank` and the `OSS_TIS` databases.
 
@@ -248,7 +253,7 @@ updateSameReportingVersion | True | Defaults to True if no value is provided.
 isHandscoringTarget | False | Set to True for the HandscoringTSS target and to False for the HandscoringTDSUnscored (e.g. equation scorer).  Defaults to False if value is not provided.
 batchRequest | False | Defines if results should be sent as batches or individually.  The Teacher Handscoring System can handle batch requests and therefore can be set to True.  The Equation Scoring target can not and therefore must be set to False or left blank.  Defaults to False if not provided.
 
-_**ItemTypes Format**_  
+_**ItemTypes Format**_
 
 The item types string follows a specific format that can be summarized like so: `{itemType}:{itemKey},{itemKey}:{isExcludedItems};{itemType}...` where only the `{itemType}` is required.
 
@@ -259,12 +264,12 @@ Including one or more `{itemKey}`'s limits the items that will be included for t
 The last option `{isExcludedItems}` is a boolean value that defines if the list of `{itemKey}`'s provided should be included or exceluded.  If it isnt provided it defaults to `true`, meaning the items are included. Therefore `SA;WER;TI:200-25662,200-19678:true` means that all SA and WER items are included and all TI items except 200-25662 and 200-19678 will be included.
 
 
-**appSettings**  
+**appSettings**
 
 Name          	| Example Value   	| Description
 :------------- 	| :------------- 	| :-------
 ServiceName		| OSS_TISService | This should only be changd in rare circumstances where there are multiple Services accessing the same TIS database.  This value is used in the `OSS_TIS.dbo.TestNameLookUp` `InstanceName` column to determine which tests this service processes.
-MaxErrorEMails  | 25	| The max number of error emails to send. 
+MaxErrorEMails  | 25	| The max number of error emails to send.
 FatalErrorsTo | email@email.com	| Email address where fatal errors are sent.
 FatalErrorsCc | email@email.com | Email address where fatal errors are sent via CC.
 EmailAlertForWarnings | True | Boolean value defining whether warning notifications should be sent via email.
@@ -285,7 +290,7 @@ WaitForWorkerThreadsOnStopSeconds | 120 | When the service is stopped, the syste
 LongDbCommandTimeout | 90 | Database command timeout in seconds
 TDSSessionDatabases | tds-web01,session;tds-web02,session | List of one or more TDS applications that are allowed to send test results to this TIS intance. The format is `{server},{database};{server},{database};`  The database should almost always be set to **"session"** and the `{server}` should be set to the machine name of the TDS server.  TIS validates that the data coming in is from one of those servers by looking at the TRT file `<Opportunity>` `server` and `database` values.   **IMPORTANT:** If `Environment` is starts with "Dev" or "Local" then this validation is skipped.
 
-**system.net/mailSettings/smtp**  
+**system.net/mailSettings/smtp**
 
 In order to receive email notifications, the SMTP settings must be set appropriately.  For more information please refer to the MSDN Microsoft page here: <https://msdn.microsoft.com/en-us/library/ms164240(v=vs.110).aspx>
 
@@ -294,13 +299,13 @@ In order to receive email notifications, the SMTP settings must be set appropria
 
 #### TISScoringDaemon\TIS.ScoringDaemon.Web.UI\Web.config
 
-**machineKey**  
+**machineKey**
 
 For security reasons, the `validationKey` and `decryptionKey` values should be changed when TIS is deployed.  This can easily be done from within IIS as described here: <https://blogs.msdn.microsoft.com/amb/2012/07/31/easiest-way-to-generate-machinekey/>.
 
 #### TISScoringDaemon\TIS.ScoringDaemon.Web.UI\Configuration\database.config
 
-**connectionStrings**  
+**connectionStrings**
 
 There is a single connection string to configure that point to the `OSS_TIS` databases.
 
@@ -316,12 +321,12 @@ If necessary, the logging levels can be set in the `<switches>` element.
 
 #### TISScoringDaemon\TIS.ScoringDaemon.Web.UI\Configuration\settings.config
 
-**appSettings**  
+**appSettings**
 
 Name          	| Example Value   	| Description
 :------------- 	| :------------- 	| :-------
 ScoringDaemon.HubTimerIntervalSeconds | 90 | Time in seconds that the daemon waits before checking for data to process.
-ScoringDaemon.MachineName  | THSS	| The machine name.  If this is not set, the machine name will be retrieved and used (using C# `Environment.MachineName`. 
+ScoringDaemon.MachineName  | THSS	| The machine name.  If this is not set, the machine name will be retrieved and used (using C# `Environment.MachineName`.
 ScoringDaemon.PendingMins | 15 | Determines the number of minutes since the last attempt at scoring when finding new items to rescore.  Defaults to 15 minutes if no value is provided.  Used for machine scoring, and not relevant for hand scored items.
 ScoringDaemon.MinAttempts | 0 | The minimum number of attempts at rescoring machine scored items.  Defaults to 0 if no value is provided.
 ScoringDaemon.MaxAttempts | 10 | The maximum number of attempts at rescoring machine scored items.  If scoring attempts is above this value, the item is marked with a status of `ScoringError`.  Defaults to 10 if no value is provided.
@@ -338,7 +343,7 @@ ScoringDaemon.EnableLocalHostUsageForColocatedApps | False | Allows the use of l
 
 ### OSS_TIS.dbo.TestNameLookUp
 
-In order for TIS to score a new test that has been loaded into the system, you must manually add the test into the `TestNameLookUp` table.  
+In order for TIS to score a new test that has been loaded into the system, you must manually add the test into the `TestNameLookUp` table.
 
 **IMPORTANT:** The instance name must match what was set in the TIS Server AppSettings for `ServiceName`.  By default, this should be kept as `OSS_TISService`.
 
