@@ -15,22 +15,8 @@ BEGIN
 
 	  Desc: Delete an assessment from the TIS databases.
 
-	  Input:  
-		@testPackageKey = the unique identifier of the assessment to delete.
-
 	  Example Usage:
-
-	  -- Delete an assessment:
-		EXEC OSS_Itembank.dbo.spDeleteAssessment @testPackageKey = '(SBAC_PT)MSB-Multiform-Mathematics-3';
-
-	    -- Delete a combined assessment:
 		EXEC OSS_Itembank.dbo.spDeleteAssessment @testPackageKey = '(SBAC_PT)SBAC-IRP-MATH-7-COMBINED-Summer-2015-2016';
-
-	  NOTES:
-	    * The @testPackageKey should be the "parent"/highest-level unique identifier for the test package.  That is, for a 
-		combined assessment (also referred to as an "ICA") the @testPackageKey value should be the the identifier that 
-		represents the "collection" of assessments in the combined test package.  Typically, this identifier will contain
-		"COMBINED" in the identifier.
 
 	***********************************************************************************************************************/
 	SET NOCOUNT ON;
@@ -58,15 +44,30 @@ BEGIN
 		INSERT
 			@assessmentKeys(assessment_key)
 		SELECT
-			ComponentTestName
+			DISTINCT sas._Key
 		FROM
-			OSS_TIS.dbo.CombinationTestMap
+			dbo.tblSetofAdminSubjects sas
+		JOIN
+			OSS_TIS.dbo.CombinationTestMap ctm
+			ON (sas._Key = ctm.CombinationSegmentName
+			OR sas._Key = ctm.CombinationTestName
+			OR sas._Key = ctm.ComponentSegmentName
+			OR sas._Key = ctm.ComponentTestName)
 		WHERE
-			CombinationTestName = @testPackageKey;
+			ctm.CombinationTestName = @testPackageKey;
+
 	END
 	ELSE
 	BEGIN
-		INSERT @assessmentKeys(assessment_key) VALUES (@testPackageKey)
+		INSERT 
+			@assessmentKeys(assessment_key)
+		SELECT
+			_Key
+		FROM
+			dbo.tblSetofAdminSubjects
+		WHERE
+			_Key = @testPackageKey
+			OR VirtualTest = @testPackageKey;
 	END
 
 	-- For each assessment key discovered in the previous step, collect all the Test IDs and their associated client names.  
@@ -380,7 +381,8 @@ BEGIN
 			dbo.tblSetofAdminSubjects sas 
 		JOIN 
 			@assessmentKeys ak 
-			ON (ak.assessment_key = sas._Key);
+			ON (ak.assessment_key = sas._Key
+			OR ak.assessment_key = sas.VirtualTest);
 
 		-- Delete items that are no longer in use by any assessment for the specified
 		-- client
