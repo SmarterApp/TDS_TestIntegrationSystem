@@ -63,9 +63,11 @@
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\TISServices\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Http">
       <HintPath>..\TISServices\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssessmentControllerIntegrationTest.cs" />
@@ -88,7 +90,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="resources\scoring-package.xml" />
+    <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-MATH-3-Summer-2015-2016-UNIT-TEST.xml" />
+    <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-Perf-MATH-3-Summer-2015-2016-UNIT-TEST.xml" />
+    <Content Include="resources\test-packages\tis\administration\%28SBAC_PT%29SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST.xml" />
+    <Content Include="resources\test-packages\tis\scoring\%28SBAC_PT%29SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
