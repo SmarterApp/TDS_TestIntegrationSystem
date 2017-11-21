@@ -8,9 +8,9 @@ declare @dbname varchar(255)
 declare @scoringDaemonName varchar(50)
 
 -- these can be IP or server name
-set @IP = 'my.tisdb.org'
-set @privateIP = 'my.tisdb.org' -- can be different if you want to use a private IP 
-set @dbname = 'MY_TIS_DB'
+set @IP = 'my.tisdb.org' -- Database Host Name or IP
+set @privateIP = NULL -- can be different if you want to use a private IP 
+set @dbname = 'OSS_TIS'
 set @scoringDaemonName = 'MyTISScoringDaemon'
 
 --TODO: your hosts

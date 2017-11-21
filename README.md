@@ -204,9 +204,9 @@ NOTE: The `name` of the handscoring webservices are used as the `target` of the 
 Name		| Url	| AuthSettingName | Description
 :-------- | :--- | :----------- | :-----
 HandscoringTSS		| https://`[THSS BASE URL]`/api/test/submit | OAuth | The endpoint where items that need to be hand scored will be sent.
-HandscoringTDSUnscored | https://`[EQUATION SCORER BASE URL]`:8084 | OAuth | The python equation scoring server endpoint.
+HandscoringTDSUnscored | https://`[TDS BASE URL]`/itemscoring/Scoring/ItemScoring | OAuth | The URL to the [Item Scoring Engine](https://github.com/SmarterApp/TDS_ItemScoring).  This assumes it is installed on the TDS server.
 ART		| https://`[ART_BASE_URL]`/rest	| OAuth | ART rest endpoint used to get the student package.
-DW1 (DW2, DW3, etc.)	| [DATA WAREHOUSE URL] | OAuthDW1 | Data warehouse endpoint
+DW1 (DW2, DW3, etc.)	| https://`[DATA_WAREHOUSE_URL]`/services/xml | OAuth | Data warehouse Score Batcher endpoint
 
 **connectionStrings**
 
@@ -245,13 +245,13 @@ Multiple `<ItemScoring>` elements can be configured here and are used by TIS to 
 Attribute Name	| Example Value	| Description
 :-------- | :------------- 	| :-------
 target		| HandscoringTSS | WebService target that should be used.  Matches the `WebServiceSettings\WebService name` attribute
-callbackUrl			| https://`[TIS_SCORING_DAEMON_URL]`/ ItemScoringCallbackRcv.axd | The callback URL that the scoring server will use to notify TIS of the results.   `ItemScoringCallbackRcv.axd` should be used for the Teacher Handscoring target and `ItemScoringCallback.axd` should be used for the Math Equation Scorer.
+callbackUrl			| https://`[TIS_SCORING_DAEMON_URL]`/ ItemScoringCallbackRcv.axd | The callback URL that the scoring server will use to notify TIS of the results.   `ItemScoringCallbackRcv.axd` should be used for the Teacher Handscoring target and `ItemScoringCallback.axd` should be used for the unscored items sent to the Item Scoring Engine.
 itemTypes | SA;WER;TI:200-25662,200-19678,200-6117 | Defines the items that should be included in this group and therefore sent to the defined target.  See the **"ItemTypes Format"** section below for more detail on the format itself.
-scoreStatuses | NotScored, WaitingForMachineScore | A comma-separated list of score statuses that should be included.  Defaults to "NotScored" if no value is provided.
-scoreInvalidations | True | Defines if invalidations be scored.  Defaults to True if no value is provided.
+scoreStatuses | NotScored,ScoringError | A comma-separated list of score statuses that should be included.  Defaults to "NotScored" if no value is provided.  **IMPORTANT** If items that are not SA or WER are included to be handscored, you will need to include `ScoringError` in the statuses since TDS will try to score these items and mark them as an error with a message of "Rubric does not exist."
+scoreInvalidations | True | Defines if invalidations should be scored.  Defaults to True if no value is provided.
 updateSameReportingVersion | True | Defaults to True if no value is provided.
-isHandscoringTarget | False | Set to True for the HandscoringTSS target and to False for the HandscoringTDSUnscored (e.g. equation scorer).  Defaults to False if value is not provided.
-batchRequest | False | Defines if results should be sent as batches or individually.  The Teacher Handscoring System can handle batch requests and therefore can be set to True.  The Equation Scoring target can not and therefore must be set to False or left blank.  Defaults to False if not provided.
+isHandscoringTarget | True | Set to True for the HandscoringTSS target and to False for the HandscoringTDSUnscored (e.g. Item Scoring Engine).  Defaults to False if value is not provided.
+batchRequest | False | Defines if results should be sent as batches or individually.  The Teacher Handscoring System can handle batch requests and therefore can be set to True.  The Item Scoring Engine target can not and therefore must be set to False or left blank.  Defaults to False if not provided.
 
 _**ItemTypes Format**_
 
@@ -279,10 +279,10 @@ ScoringEnvironment | TIS | Must match the value in `OSS_TestScoringConfigs.dbo.C
 ClientName | SBAC | The client name of the tests TIS is processing.  For IRP packages this would be "SPAC_PT."  When tests are loaded, the client name from the test is used to populate the `OSS_COnfigs.dbo.Client_TestMode`.  If you are not sure what to set this value to check this table after loading up your tests.
 EventLogName | OSS_TISEventLog | The name of the Windows Event Log that will be created and used for warnings and errors.  NOTE: The user that this service is running as will need to have access to create and write to the Event Log.  By default the Local System should have access.
 EventLogSource | OSS_TIS | The source name used in the Event Log.
-ErrorLog | C:\logs\OSS_TIS_ResultLog.txt | Path to a log file used by the service.  Make sure the user running the service has write access to this path.
+ErrorLog | C:\logs\OSS\_TIS_ResultLog.txt | Path to a log file used by the service.  Make sure the user running the service has write access to this path.
 SendToHandscoring | True | Boolean value that controls whether items are sent to the Teacher Handscoring System or not.
 IgnoreHandscoringDuplicates | True | Should duplicates be ignored when processing handscoring results.
-Environment | Producion | Set to Production when deployed live.  If set to "Local" or "Dev" then it allows for the TDS server to not be validated.  See `TDSSessionDatabases` below.
+Environment | Production | Set to Production when deployed live.  If set to "Local" or "Dev" then it allows for the TDS server to not be validated.  See `TDSSessionDatabases` below.
 IdleSleepTime | 1000 | The amount of time (in milliseconds) to sleep when there is no work to be done.
 LoopSleepTime | 10 | The amount of time the thread sleeps (in milliseconds) at each iteration of the loop
 NumberOfGeneralThreads | 20 | The total number of threads used for all subjects, except writing.
@@ -326,17 +326,17 @@ If necessary, the logging levels can be set in the `<switches>` element.
 Name          	| Example Value   	| Description
 :------------- 	| :------------- 	| :-------
 ScoringDaemon.HubTimerIntervalSeconds | 90 | Time in seconds that the daemon waits before checking for data to process.
-ScoringDaemon.MachineName  | THSS	| The machine name.  If this is not set, the machine name will be retrieved and used (using C# `Environment.MachineName`.
+ScoringDaemon.MachineName  | MyTISScoringDaemon	| The machine name.  If this is not set, the machine name will be retrieved and used (using C# `Environment.MachineName`.
 ScoringDaemon.PendingMins | 15 | Determines the number of minutes since the last attempt at scoring when finding new items to rescore.  Defaults to 15 minutes if no value is provided.  Used for machine scoring, and not relevant for hand scored items.
 ScoringDaemon.MinAttempts | 0 | The minimum number of attempts at rescoring machine scored items.  Defaults to 0 if no value is provided.
 ScoringDaemon.MaxAttempts | 10 | The maximum number of attempts at rescoring machine scored items.  If scoring attempts is above this value, the item is marked with a status of `ScoringError`.  Defaults to 10 if no value is provided.
 ScoringDaemon.SessionType | 0 | Defaults to 0 if not provided.  0 means online.
 ScoringDaemon.MaxItemsReturned | 500 | The maximum number of tests to retrieve at a time when looking for pending items that need to be scored.
 ScoringDaemon.ItemScoringConfigCacheSeconds | 14400 | Seconds to cache the item scoring configuration.  Defaults to 14400 (4 hours).
-ScoringDaemon.ItemScoringCallBackHostUrl | https://`[TIS BASE URL]`/ | The UR of this TIS server.  **IMPORTANT:** The URL must end with a /
-ScoringDaemon.ItemFormatsRequiringItemKeysForRubric | ER,EQ | Defines the item types that need to have their rubrics retrieved from the student application. Defaults to "ER" if not provided.
-ScoringDaemon.StudentAppUrlOverride | https://`[STUDENT APP URL]`/ | Allows the student application to be overriden instead of using the value sent in the TRT.
-ScoringDaemon.ItemScoringServerUrlOverride | https://`[URL]`/ | Allows the item scoring server URL to be overriden.
+ScoringDaemon.ItemScoringCallBackHostUrl | https://`[TIS_SCORING_DAEMON_URL]`/ | The URL of the TIS Scoring Daemon (which is this website).  **IMPORTANT:** The URL must end with a /
+ScoringDaemon.ItemFormatsRequiringItemKeysForRubric | EQ,GI | Defines the item types that need to have their rubrics retrieved from the student application. Defaults to "ER" if not provided.
+ScoringDaemon.StudentAppUrlOverride | https://`[STUDENT_APP_URL]`/ | Allows the student application to be overriden instead of using the value sent in the TRT.  This setting is optional.
+ScoringDaemon.ItemScoringServerUrlOverride | https://`[URL]`/ | Allows the item scoring server URL to be overriden.  This setting is optional.
 ScoringDaemon.EnableLocalHostUsageForColocatedApps | False | Allows the use of localhost instead of a specific URL when the student application and the item scoring are colocated on the same server.  Defaults to False.
 
 ## Database
@@ -365,14 +365,14 @@ Metadata values can include the following:
 
 Group Name | Variable Name | Notes
 :-----     | :------       | :----
-HandscoringTSS | Target |
-HandscoringTSS | XMLVersion |
+HandscoringTSS | Target | "1" means it will send items to the Teacher Handscoring System.  "0" means it will not.
+HandscoringTSS | XMLVersion | "OSS" is the only value used in the open source system and stands for "Open Source System"
 HandscoringTSS | Transform |
-HandscoringTSS | IncludeAllDemographics |
+HandscoringTSS | IncludeAllDemographics | "1" means that all student demographic data will be sent.  If set to "0" then it will get data from the `OSS_TIS.dbo.RTSAttributes` table
 HandscoringTSS | TargetType |
-HandscoringTSS | Order |
-HandscoringTDSUnscored | Target |
-HandscoringTDSUnscored | Order |
+HandscoringTSS | Order | Integer representing the order that these will be processed.  This value is compared to the HandScoringTDSUnscored value only.
+HandscoringTDSUnscored | Target | "1" means it will send items that were not scored back to the Item Scoring engine on TDS.  "0" means it will not.
+HandscoringTDSUnscored | Order | Integer representing the order that these will be processed.  This value is compared to the HandScoringTSS value only.
 QA | MergeIetmScores |
 QA | ScoreInvalidations |
 QA | UpdateAppealStatus |
@@ -382,12 +382,12 @@ All | Accommodations |
 DW1 | Target |
 DW1 | XMLVersion |
 DW1 | Transform |
-DW1 | IncludeAllDemographics |
+DW1 | IncludeAllDemographics | "1" means that all student demographic data will be sent.  If set to "0" then it will get data from the `OSS_TIS.dbo.RTSAttributes` table
 DW1 | TargetType |
 DW1 | Order |
 DW2 | Target |
 DW2 | XMLVersion |
 DW2 | Transform |
-DW2 | IncludeAllDemographics |
+DW2 | IncludeAllDemographics | "1" means that all student demographic data will be sent.  If set to "0" then it will get data from the `OSS_TIS.dbo.RTSAttributes` table
 DW2 | TargetType |
 DW2 | Order |
