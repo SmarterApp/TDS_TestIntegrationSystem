@@ -178,7 +178,7 @@ There are two connection strings to configure that must point to the `OSS_TIS` a
 
 Name		| Example Value	| Description
 :-------- | :--- | :-----------
-itembank       | Data Source=`[DATABASE IP OR URL]`;Initial Catalog=OSS_Itembank;User id=`[USERNAME]`;Password=`[PASSWORD]` | Use any valid SQL Server connecion string that connects to the OSS_TIS database.
+itembank       | Data Source=`[DATABASE IP OR URL]`;Initial Catalog=OSS_Itembank;User id=`[USERNAME]`;Password=`[PASSWORD]` | Use any valid SQL Server connecion string that connects to the OSS_Itembank database.
 TDSQC		| Data Source=`[DATABASE IP OR URL]`;Initial Catalog=OSS_TIS;User id=`[USERNAME]`;Password=`[PASSWORD]` | Use any valid SQL Server connecion string that connects to the OSS_TIS database.
 
 **appSettings**
