@@ -1,15 +1,16 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Data.SqlClient;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
-using TISServices.Services;
-using System.Net.Http;
-using System.Net;
-using System.Transactions;
 using System.Data;
+using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Transactions;
 using System.Xml;
+using TISServices.Services;
 
 namespace TISUnitTests
 {
@@ -27,7 +28,7 @@ namespace TISUnitTests
     [TestClass]
     public class AssessmentControllerIntegrationTest
     {
-        private static readonly String[] testPackageFiles = {
+        private readonly string[] testPackageFiles = {
            @"..\..\resources\test-packages\tds\administration\(SBAC_PT)SBAC-IRP-CAT-MATH-3-Summer-2015-2016-UNIT-TEST.xml",
            @"..\..\resources\test-packages\tds\administration\(SBAC_PT)SBAC-IRP-Perf-MATH-3-Summer-2015-2016-UNIT-TEST.xml",
            @"..\..\resources\test-packages\tis\administration\(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST.xml",
@@ -38,10 +39,13 @@ namespace TISUnitTests
            @"..\..\resources\test-packages\tis\scoring\(SBAC_PT)SBAC-IRP-ELA-11-COMBINED-Summer-2015-2016-UNIT-TEST.xml"
         };
 
-        private const String MATH_TEST_PACKAGE_KEY = "(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST";
-        private const String ELA_TEST_PACKAGE_KEY = "(SBAC_PT)SBAC-IRP-ELA-11-COMBINED-Summer-2015-2016-UNIT-TEST";
+        private readonly Dictionary<string, string> testPackageKeys = new Dictionary<string, string>()
+        {
+            { "mathTest", "(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST" },
+            { "elaTest", "(SBAC_PT)SBAC-IRP-ELA-11-COMBINED-Summer-2015-2016-UNIT-TEST" }
+        };
 
-        private static readonly String[] combinationTestMapSqls =
+        private readonly string[] combinationTestMapSqls =
         {
             @"INSERT INTO OSS_TIS.dbo.CombinationTestMap(ComponentTestName, ComponentSegmentName, CombinationTestName, CombinationSegmentName) VALUES('(SBAC_PT)SBAC-IRP-CAT-MATH-3-Summer-2015-2016-UNIT-TEST', '(SBAC_PT)SBAC-IRP-CAT-MATH-3-Summer-2015-2016-UNIT-TEST', '(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST', '(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST')",
             @"INSERT INTO OSS_TIS.dbo.CombinationTestMap(ComponentTestName, ComponentSegmentName, CombinationTestName, CombinationSegmentName) VALUES('(SBAC_PT)SBAC-IRP-Perf-MATH-3-Summer-2015-2016-UNIT-TEST', '(SBAC_PT)SBAC-IRP-Perf-MATH-3-Summer-2015-2016-UNIT-TEST', '(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST', '(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST' )",
@@ -50,14 +54,14 @@ namespace TISUnitTests
             @"INSERT INTO OSS_TIS.dbo.CombinationTestMap(ComponentTestName, ComponentSegmentName, CombinationTestName, CombinationSegmentName) VALUES('(SBAC_PT)IRP-Perf-ELA-11-Summer-2015-2016-UNIT-TEST', '(SBAC_PT)SBAC-IRP-Perf-S2-ELA-11-Summer-2015-2016-UNIT-TEST', '(SBAC_PT)SBAC-IRP-ELA-11-COMBINED-Summer-2015-2016-UNIT-TEST', '(SBAC_PT)SBAC-IRP-Perf-S2-COMBINED-ELA-11-Summer-2015-2016-UNIT-TEST')"
         };
 
-        private static readonly String[] combinationTestFormMapSqls =
+        private readonly string[] combinationTestFormMapSqls =
         {
             @"INSERT INTO OSS_TIS.dbo.CombinationTestFormMap(ComponentSegmentName, ComponentFormKey, CombinationFormKey) VALUES('(SBAC_PT)SBAC-IRP-Perf-MATH-3-Summer-2015-2016-UNIT-TEST', '187-764', '187-780')",
             @"INSERT INTO OSS_TIS.dbo.CombinationTestFormMap(ComponentSegmentName, ComponentFormKey, CombinationFormKey) VALUES('(SBAC_PT)SBAC-IRP-Perf-S1-ELA-11-Summer-2015-2016-UNIT-TEST', '187-762', '187-778')",
             @"INSERT INTO OSS_TIS.dbo.CombinationTestFormMap(ComponentSegmentName, ComponentFormKey, CombinationFormKey) VALUES('(SBAC_PT)SBAC-IRP-Perf-S2-ELA-11-Summer-2015-2016-UNIT-TEST', '187-763', '187-779')"
         };
 
-        private readonly String[] mathCombinedValidationSqls =
+        private readonly string[] mathCombinedValidationSqls =
         {
             @"SELECT COUNT(*) FROM OSS_Itembank.dbo.tblSetOfAdminSubjects WHERE _Key LIKE '%math%unit-test'",
             @"SELECT COUNT(*) FROM OSS_TIS.dbo.CombinationTestMap WHERE CombinationTestName LIKE '%math%%unit-test'",
@@ -66,7 +70,7 @@ namespace TISUnitTests
             @"SELECT COUNT(*) FROM OSS_Itembank.dbo.tblSetofAdminItems WHERE _fk_AdminSubject LIKE '%math%%unit-test'"
         };
 
-        private readonly String[] elaCombinedValidationSqls =
+        private readonly string[] elaCombinedValidationSqls =
         {
             @"SELECT COUNT(*) FROM OSS_Itembank.dbo.tblSetOfAdminSubjects WHERE _Key LIKE '%ela%unit-test'",
             @"SELECT COUNT(*) FROM OSS_TIS.dbo.CombinationTestMap WHERE CombinationTestName LIKE '%ela%%unit-test'",
@@ -76,19 +80,14 @@ namespace TISUnitTests
         };
         
         /// <summary>
-        /// Set up seed data for the integration tests prior to running them.  The <code>ClassInitialize</code> attribute ensures data will only be loaded
-        /// once.
+        /// Set up seed data prior to each integration test executing.
         /// </summary>
-        /// <remarks>
-        /// The signature for a method decorated with the <code>ClassInitialize</code> method must be static and must accept a <code>TestContext</code> argument, even if 
-        /// the test context is never used.
-        /// </remarks>
-        [ClassInitialize]
-        public static void Setup(TestContext testContext)
+        [TestInitialize]
+        public void Setup()
         {
             // Read scoring package XML from each test package that needs to be loaded into TIS for testing the delete process.  According to the instructions on
             // the README for TIS, there are four files that need to be loaded into TIS.
-            var testPackageXmls = new String[testPackageFiles.Length];
+            var testPackageXmls = new string[testPackageFiles.Length];
             for (var i = 0; i < testPackageFiles.Length; i++)
             {
                 if (File.Exists(testPackageFiles[i]))
@@ -134,15 +133,38 @@ namespace TISUnitTests
             }
         }
 
+        /// <summary>
+        /// Remove unit test seed data after each test.
+        /// </summary>
+        [TestCleanup]
+        public void Cleanup()
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["itembank"].ConnectionString))
+            {
+                connection.Open();
+
+                foreach (var testPackageKey in testPackageKeys)
+                {
+                    using (var cleanupTestDataCommand = new SqlCommand("dbo.spDeleteAssessment", connection))
+                    {
+                        cleanupTestDataCommand.CommandType = CommandType.StoredProcedure;
+                        cleanupTestDataCommand.Parameters.AddWithValue("@testPackageKey", testPackageKey.Value);
+
+                        cleanupTestDataCommand.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
         [TestMethod]
         public void ShouldDeleteTheSpecifiedAssessment()
         {
             var assessmentController = new AssessmentsController()
             {
-                Request = new HttpRequestMessage(HttpMethod.Delete, "http://localhost:44444/api/assessments/" + MATH_TEST_PACKAGE_KEY)
+                Request = new HttpRequestMessage(HttpMethod.Delete, "http://localhost:44444/api/assessments/" + testPackageKeys["mathTest"])
             };
 
-            using (var response = assessmentController.Delete(MATH_TEST_PACKAGE_KEY))
+            using (var response = assessmentController.Delete(testPackageKeys["mathTest"]))
             {
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
@@ -178,10 +200,10 @@ namespace TISUnitTests
         {
             var assessmentController = new AssessmentsController()
             {
-                Request = new HttpRequestMessage(HttpMethod.Delete, "http://localhost:44444/api/assessments/" + ELA_TEST_PACKAGE_KEY)
+                Request = new HttpRequestMessage(HttpMethod.Delete, "http://localhost:44444/api/assessments/" + testPackageKeys["elaTest"])
             };
 
-            using (var response = assessmentController.Delete(ELA_TEST_PACKAGE_KEY))
+            using (var response = assessmentController.Delete(testPackageKeys["elaTest"]))
             {
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
 
@@ -207,7 +229,7 @@ namespace TISUnitTests
         /// </summary>
         /// <param name="scoringPackageXml">The test package XML.</param>
         /// <param name="connection">The <code>SqlConnection</code> pointing to the database(s) that need to be loaded.</param>
-        private static void LoadScoringPackage(String scoringPackageXml, SqlConnection connection)
+        private static void LoadScoringPackage(string scoringPackageXml, SqlConnection connection)
         {            
             using (var loaderCommand = new SqlCommand("tp.spLoader_Main", connection))
             {
@@ -228,7 +250,7 @@ namespace TISUnitTests
         /// <param name="connection">The <code>SqlConnection</code> pointing to the database(s) that need to be loaded.</param>
         /// <remarks>The process that loads assessments into TIS does not write records to these tables; they have to be created
         /// manually.</remarks>
-        private static void ExecuteInsertSqls(String[] insertSqls, SqlConnection connection)
+        private static void ExecuteInsertSqls(string[] insertSqls, SqlConnection connection)
         {
             for (var i = 0; i < insertSqls.Length; i++)
             {
