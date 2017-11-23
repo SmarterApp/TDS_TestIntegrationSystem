@@ -90,9 +90,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="resources\scoring-package.xml" />
+    <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29IRP-Perf-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />
+    <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-MATH-3-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-Perf-MATH-3-Summer-2015-2016-UNIT-TEST.xml" />
+    <Content Include="resources\test-packages\tis\administration\%28SBAC_PT%29SBAC-IRP-ELA-11-COMBINED-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tis\administration\%28SBAC_PT%29SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST.xml" />
+    <Content Include="resources\test-packages\tis\scoring\%28SBAC_PT%29SBAC-IRP-ELA-11-COMBINED-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tis\scoring\%28SBAC_PT%29SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST.xml" />
   </ItemGroup>
   <ItemGroup />
