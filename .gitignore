@@ -8,6 +8,12 @@ syntax: glob
 *.userosscache
 *.sln.docstates
 
+# Mac/OS X-specific files
+.DS_Store
+
+# Visual Studio 2015 cache/options directory
+.vs/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -25,6 +31,7 @@ bld/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
+!Common/TDSQASystemAPI/TestResults
 [Bb]uild[Ll]og.*
 
 #NUNIT

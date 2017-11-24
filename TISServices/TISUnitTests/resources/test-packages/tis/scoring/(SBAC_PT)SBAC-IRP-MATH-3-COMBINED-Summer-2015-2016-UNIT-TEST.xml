@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testspecification purpose="scoring" publisher="SBAC_PT" publishdate="Aug 19 2015  4:37PM" version="1.0">
+  <identifier uniqueid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST" name="SBAC-IRP-MATH-3-COMBINED-UNIT-TEST" label="Grade 3 MATH" version="8175" />
+  <property name="subject" value="MATH" label="MATH" />
+  <property name="grade" value="3" label="grade 3" />
+  <property name="type" value="summative" label="summative" />
+  <scoring>
+    <testblueprint>
+      <bpelement elementtype="test" minopitems="12" maxopitems="12" minftitems="0" maxftitems="0" opitemcount="21" ftitemcount="0">
+        <identifier uniqueid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST" name="SBAC-IRP-MATH-3-COMBINED-UNIT-TEST" version="8175" />
+      </bpelement>
+      <bpelement elementtype="segment" minopitems="8" maxopitems="8" minftitems="0" maxftitems="0" opitemcount="17" ftitemcount="0">
+        <identifier uniqueid="(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST-UNIT-TEST" name="SBAC-IRP-CAT-COMBINED-MATH-3-UNIT-TEST" version="8175" />
+      </bpelement>
+      <bpelement elementtype="segment" minopitems="4" maxopitems="4" minftitems="0" maxftitems="0" opitemcount="4" ftitemcount="0">
+        <identifier uniqueid="(SBAC_PT)SBAC-IRP-Perf-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST-UNIT-TEST" name="SBAC-IRP-Perf-COMBINED-MATH-3-UNIT-TEST" version="8175" />
+      </bpelement>
+      <bpelement elementtype="affinitygroup" minopitems="2" maxopitems="2" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="G3Math_Claim1_MC/MS" name="G3Math_Claim1_MC/MS" version="8175" />
+      </bpelement>
+      <bpelement elementtype="affinitygroup" minopitems="2" maxopitems="2" opitemcount="4" ftitemcount="0">
+        <identifier uniqueid="G3Math_Claim2/4" name="G3Math_Claim2/4" version="8175" />
+      </bpelement>
+      <bpelement elementtype="affinitygroup" minopitems="2" maxopitems="8" opitemcount="9" ftitemcount="0">
+        <identifier uniqueid="G3Math_DOK2" name="G3Math_DOK2" version="8175" />
+      </bpelement>
+      <bpelement elementtype="strand" minopitems="4" maxopitems="7" opitemcount="9" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1" name="1" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1" minopitems="0" maxopitems="14" opitemcount="4" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD" name="1|MD" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|G-3" name="1|MD|G-3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD|G-3" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|G-3|m" name="1|MD|G-3|m" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD|G-3|m" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|G-3|m|3.MD.2" name="1|MD|G-3|m|3.MD.2" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|H-3" name="1|MD|H-3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD|H-3" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|H-3|a/s" name="1|MD|H-3|a/s" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD|H-3|a/s" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|H-3|a/s|3.MD.3" name="1|MD|H-3|a/s|3.MD.3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|I-3" name="1|MD|I-3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD|I-3" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|I-3|m" name="1|MD|I-3|m" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD|I-3|m" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|I-3|m|3.MD.7d" name="1|MD|I-3|m|3.MD.7d" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|J-3" name="1|MD|J-3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD|J-3" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|J-3|a/s" name="1|MD|J-3|a/s" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|MD|J-3|a/s" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|MD|J-3|a/s|3.MD.8" name="1|MD|J-3|a/s|3.MD.8" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|NBT" name="1|NBT" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|NBT" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|NBT|E-3" name="1|NBT|E-3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|NBT|E-3" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|NBT|E-3|a/s" name="1|NBT|E-3|a/s" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|NBT|E-3|a/s" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|NBT|E-3|a/s|3.NBT.2" name="1|NBT|E-3|a/s|3.NBT.2" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1" minopitems="0" maxopitems="8" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|NF" name="1|NF" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|NF" minopitems="0" maxopitems="8" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|NF|F-3" name="1|NF|F-3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|NF|F-3" minopitems="0" maxopitems="8" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|NF|F-3|m" name="1|NF|F-3|m" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|NF|F-3|m" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|NF|F-3|m|3.NF.3a" name="1|NF|F-3|m|3.NF.3a" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|NF|F-3|m" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|NF|F-3|m|3.NF.3c" name="1|NF|F-3|m|3.NF.3c" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1" minopitems="0" maxopitems="14" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|OA" name="1|OA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|OA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|OA|A-3" name="1|OA|A-3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|OA|A-3" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|OA|A-3|m" name="1|OA|A-3|m" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|OA|A-3|m" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|OA|A-3|m|3.OA.3" name="1|OA|A-3|m|3.OA.3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|OA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|OA|C-3" name="1|OA|C-3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|OA|C-3" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|OA|C-3|m" name="1|OA|C-3|m" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-1|OA|C-3|m" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-1|OA|C-3|m|3.OA.7" name="1|OA|C-3|m|3.OA.7" version="8175" />
+      </bpelement>
+      <bpelement elementtype="strand" minopitems="0" maxopitems="5" opitemcount="3" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-2" name="2" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-2" minopitems="0" maxopitems="8" opitemcount="3" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-2|MD" name="2|MD" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-2|MD" minopitems="0" maxopitems="8" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-2|MD|A" name="2|MD|A" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-2|MD" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-2|MD|B" name="2|MD|B" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-2|MD|B" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-2|MD|B|NA" name="2|MD|B|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-2|MD|B|NA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-2|MD|B|NA|NA" name="2|MD|B|NA|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="strand" minopitems="2" maxopitems="5" opitemcount="5" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3" name="3" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3" minopitems="0" maxopitems="6" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|G" name="3|G" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|G" minopitems="0" maxopitems="6" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|G|F" name="3|G|F" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|G|F" minopitems="0" maxopitems="6" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|G|F|NA" name="3|G|F|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|G|F|NA" minopitems="0" maxopitems="6" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|G|F|NA|NA" name="3|G|F|NA|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3" minopitems="0" maxopitems="8" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|MD" name="3|MD" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|MD" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|MD|A" name="3|MD|A" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|MD" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|MD|C" name="3|MD|C" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|MD|C" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|MD|C|NA" name="3|MD|C|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|MD|C|NA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|MD|C|NA|NA" name="3|MD|C|NA|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|NF" name="3|NF" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|NF" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|NF|A" name="3|NF|A" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|NF|A" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|NF|A|NA" name="3|NF|A|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|NF|A|NA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|NF|A|NA|NA" name="3|NF|A|NA|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|OA" name="3|OA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|OA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|OA|D" name="3|OA|D" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|OA|D" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|OA|D|NA" name="3|OA|D|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-3|OA|D|NA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-3|OA|D|NA|NA" name="3|OA|D|NA|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="strand" minopitems="0" maxopitems="5" opitemcount="4" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4" name="4" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4" minopitems="0" maxopitems="8" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|MD" name="4|MD" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|MD" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|MD|A" name="4|MD|A" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|MD" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|MD|C" name="4|MD|C" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|MD|C" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|MD|C|NA" name="4|MD|C|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|MD|C|NA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|MD|C|NA|NA" name="4|MD|C|NA|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4" minopitems="0" maxopitems="8" opitemcount="2" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|OA" name="4|OA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|OA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|OA|D" name="4|OA|D" version="8175" />R
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|OA|D" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|OA|D|NA" name="4|OA|D|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|OA|D|NA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|OA|D|NA|NA" name="4|OA|D|NA|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|OA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|OA|E" name="4|OA|E" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|OA|E" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|OA|E|NA" name="4|OA|E|NA" version="8175" />
+      </bpelement>
+      <bpelement elementtype="contentlevel" parentid="SBAC_PT-4|OA|E|NA" minopitems="0" maxopitems="8" opitemcount="1" ftitemcount="0">
+        <identifier uniqueid="SBAC_PT-4|OA|E|NA|NA" name="4|OA|E|NA|NA" version="8175" />
+      </bpelement>
+    </testblueprint>
+    <itempool>
+      <passage filename="stim-187-3700.xml">
+        <identifier uniqueid="187-3700" version="8175" />
+      </passage>
+      <testitem filename="item-187-1576.xml" itemtype="EQ">
+        <identifier uniqueid="187-1576" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-Perf-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>SBAC_PT-2</bpref>
+        <bpref>SBAC_PT-2|MD</bpref>
+        <bpref>SBAC_PT-2|MD|A</bpref>
+        <passageref>187-3700</passageref>
+        <poolproperty property="--ITEMTYPE--" value="EQ" label="EQ" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.426470000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="-1.896590000000000e+000" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1578.xml" itemtype="GI">
+        <identifier uniqueid="187-1578" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-Perf-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>SBAC_PT-4</bpref>
+        <bpref>SBAC_PT-4|MD</bpref>
+        <bpref>SBAC_PT-4|MD|A</bpref>
+        <passageref>187-3700</passageref>
+        <poolproperty property="--ITEMTYPE--" value="GI" label="GI" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRTGPC" scorepoints="2" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="5.880000000000000e-001" />
+          <itemscoreparameter measurementparameter="b0" value="-8.878600000000000e-001" />
+          <itemscoreparameter measurementparameter="b1" value="-1.533600000000000e-001" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1793.xml" itemtype="MI">
+        <identifier uniqueid="187-1793" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>SBAC_PT-1</bpref>
+        <bpref>SBAC_PT-1|OA</bpref>
+        <bpref>SBAC_PT-1|OA|C-3</bpref>
+        <bpref>SBAC_PT-1|OA|C-3|m</bpref>
+        <bpref>SBAC_PT-1|OA|C-3|m|3.OA.7</bpref>
+        <poolproperty property="--ITEMTYPE--" value="MI" label="MI" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.000000000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="1.000000000000000e-015" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1966.xml" itemtype="GI">
+        <identifier uniqueid="187-1966" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>SBAC_PT-3</bpref>
+        <bpref>SBAC_PT-3|G</bpref>
+        <bpref>SBAC_PT-3|G|F</bpref>
+        <bpref>SBAC_PT-3|G|F|NA</bpref>
+        <bpref>SBAC_PT-3|G|F|NA|NA</bpref>
+        <poolproperty property="--ITEMTYPE--" value="GI" label="GI" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.000000000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="1.000000000000000e-015" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1972.xml" itemtype="GI">
+        <identifier uniqueid="187-1972" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_DOK2</bpref>
+        <bpref>SBAC_PT-1</bpref>
+        <bpref>SBAC_PT-1|NF</bpref>
+        <bpref>SBAC_PT-1|NF|F-3</bpref>
+        <bpref>SBAC_PT-1|NF|F-3|m</bpref>
+        <bpref>SBAC_PT-1|NF|F-3|m|3.NF.3c</bpref>
+        <poolproperty property="--ITEMTYPE--" value="GI" label="GI" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="5.505700000000000e-001" />
+          <itemscoreparameter measurementparameter="b" value="5.695100000000000e-001" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1973.xml" itemtype="MC">
+        <identifier uniqueid="187-1973" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_Claim1_MC/MS</bpref>
+        <bpref>SBAC_PT-1</bpref>
+        <bpref>SBAC_PT-1|OA</bpref>
+        <bpref>SBAC_PT-1|OA|A-3</bpref>
+        <bpref>SBAC_PT-1|OA|A-3|m</bpref>
+        <bpref>SBAC_PT-1|OA|A-3|m|3.OA.3</bpref>
+        <poolproperty property="--ITEMTYPE--" value="MC" label="MC" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.000000000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="1.000000000000000e-015" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1975.xml" itemtype="EQ">
+        <identifier uniqueid="187-1975" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>SBAC_PT-1</bpref>
+        <bpref>SBAC_PT-1|NBT</bpref>
+        <bpref>SBAC_PT-1|NBT|E-3</bpref>
+        <bpref>SBAC_PT-1|NBT|E-3|a/s</bpref>
+        <bpref>SBAC_PT-1|NBT|E-3|a/s|3.NBT.2</bpref>
+        <poolproperty property="--ITEMTYPE--" value="EQ" label="EQ" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="5.812100000000000e-001" />
+          <itemscoreparameter measurementparameter="b" value="1.290840000000000e+000" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1976.xml" itemtype="EQ">
+        <identifier uniqueid="187-1976" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_DOK2</bpref>
+        <bpref>SBAC_PT-1</bpref>
+        <bpref>SBAC_PT-1|MD</bpref>
+        <bpref>SBAC_PT-1|MD|H-3</bpref>
+        <bpref>SBAC_PT-1|MD|H-3|a/s</bpref>
+        <bpref>SBAC_PT-1|MD|H-3|a/s|3.MD.3</bpref>
+        <poolproperty property="--ITEMTYPE--" value="EQ" label="EQ" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="5.300400000000000e-001" />
+          <itemscoreparameter measurementparameter="b" value="-1.108910000000000e+000" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1978.xml" itemtype="EQ">
+        <identifier uniqueid="187-1978" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_Claim2/4</bpref>
+        <bpref>G3Math_DOK2</bpref>
+        <bpref>SBAC_PT-4</bpref>
+        <bpref>SBAC_PT-4|OA</bpref>
+        <bpref>SBAC_PT-4|OA|E</bpref>
+        <bpref>SBAC_PT-4|OA|E|NA</bpref>
+        <bpref>SBAC_PT-4|OA|E|NA|NA</bpref>
+        <poolproperty property="--ITEMTYPE--" value="EQ" label="EQ" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.000000000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="1.000000000000000e-015" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1979.xml" itemtype="GI">
+        <identifier uniqueid="187-1979" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_DOK2</bpref>
+        <bpref>SBAC_PT-3</bpref>
+        <bpref>SBAC_PT-3|NF</bpref>
+        <bpref>SBAC_PT-3|NF|A</bpref>
+        <bpref>SBAC_PT-3|NF|A|NA</bpref>
+        <bpref>SBAC_PT-3|NF|A|NA|NA</bpref>
+        <poolproperty property="--ITEMTYPE--" value="GI" label="GI" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRTGPC" scorepoints="2" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.000000000000000e+000" />
+          <itemscoreparameter measurementparameter="b0" value="1.000000000000000e-015" />
+          <itemscoreparameter measurementparameter="b1" value="1.000000000000000e-015" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1986.xml" itemtype="EQ">
+        <identifier uniqueid="187-1986" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_DOK2</bpref>
+        <bpref>SBAC_PT-1</bpref>
+        <bpref>SBAC_PT-1|MD</bpref>
+        <bpref>SBAC_PT-1|MD|G-3</bpref>
+        <bpref>SBAC_PT-1|MD|G-3|m</bpref>
+        <bpref>SBAC_PT-1|MD|G-3|m|3.MD.2</bpref>
+        <poolproperty property="--ITEMTYPE--" value="EQ" label="EQ" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.000000000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="1.000000000000000e-015" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1987.xml" itemtype="EQ">
+        <identifier uniqueid="187-1987" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>SBAC_PT-1</bpref>
+        <bpref>SBAC_PT-1|MD</bpref>
+        <bpref>SBAC_PT-1|MD|J-3</bpref>
+        <bpref>SBAC_PT-1|MD|J-3|a/s</bpref>
+        <bpref>SBAC_PT-1|MD|J-3|a/s|3.MD.8</bpref>
+        <poolproperty property="--ITEMTYPE--" value="EQ" label="EQ" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.189700000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="1.946350000000000e+000" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1988.xml" itemtype="MI">
+        <identifier uniqueid="187-1988" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_DOK2</bpref>
+        <bpref>SBAC_PT-3</bpref>
+        <bpref>SBAC_PT-3|OA</bpref>
+        <bpref>SBAC_PT-3|OA|D</bpref>
+        <bpref>SBAC_PT-3|OA|D|NA</bpref>
+        <bpref>SBAC_PT-3|OA|D|NA|NA</bpref>
+        <poolproperty property="--ITEMTYPE--" value="MI" label="MI" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="7.348800000000000e-001" />
+          <itemscoreparameter measurementparameter="b" value="-1.006060000000000e+000" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1991.xml" itemtype="EQ">
+        <identifier uniqueid="187-1991" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_DOK2</bpref>
+        <bpref>SBAC_PT-1</bpref>
+        <bpref>SBAC_PT-1|MD</bpref>
+        <bpref>SBAC_PT-1|MD|I-3</bpref>
+        <bpref>SBAC_PT-1|MD|I-3|m</bpref>
+        <bpref>SBAC_PT-1|MD|I-3|m|3.MD.7d</bpref>
+        <poolproperty property="--ITEMTYPE--" value="EQ" label="EQ" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="8.254600000000000e-001" />
+          <itemscoreparameter measurementparameter="b" value="2.037520000000000e+000" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-1996.xml" itemtype="EQ">
+        <identifier uniqueid="187-1996" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_Claim2/4</bpref>
+        <bpref>SBAC_PT-4</bpref>
+        <bpref>SBAC_PT-4|MD</bpref>
+        <bpref>SBAC_PT-4|MD|C</bpref>
+        <bpref>SBAC_PT-4|MD|C|NA</bpref>
+        <bpref>SBAC_PT-4|MD|C|NA|NA</bpref>
+        <poolproperty property="--ITEMTYPE--" value="EQ" label="EQ" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRTGPC" scorepoints="2" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="7.955800000000000e-001" />
+          <itemscoreparameter measurementparameter="b0" value="-1.194170000000000e+000" />
+          <itemscoreparameter measurementparameter="b1" value="1.145090000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-2001.xml" itemtype="MC">
+        <identifier uniqueid="187-2001" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_DOK2</bpref>
+        <bpref>SBAC_PT-3</bpref>
+        <bpref>SBAC_PT-3|MD</bpref>
+        <bpref>SBAC_PT-3|MD|C</bpref>
+        <bpref>SBAC_PT-3|MD|C|NA</bpref>
+        <bpref>SBAC_PT-3|MD|C|NA|NA</bpref>
+        <poolproperty property="--ITEMTYPE--" value="MC" label="MC" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.000000000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="1.000000000000000e-015" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-2015.xml" itemtype="MS">
+        <identifier uniqueid="187-2015" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_Claim1_MC/MS</bpref>
+        <bpref>SBAC_PT-1</bpref>
+        <bpref>SBAC_PT-1|NF</bpref>
+        <bpref>SBAC_PT-1|NF|F-3</bpref>
+        <bpref>SBAC_PT-1|NF|F-3|m</bpref>
+        <bpref>SBAC_PT-1|NF|F-3|m|3.NF.3a</bpref>
+        <poolproperty property="--ITEMTYPE--" value="MS" label="MS" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.000000000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="1.000000000000000e-015" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-2017.xml" itemtype="GI">
+        <identifier uniqueid="187-2017" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_Claim2/4</bpref>
+        <bpref>SBAC_PT-4</bpref>
+        <bpref>SBAC_PT-4|OA</bpref>
+        <bpref>SBAC_PT-4|OA|D</bpref>
+        <bpref>SBAC_PT-4|OA|D|NA</bpref>
+        <bpref>SBAC_PT-4|OA|D|NA|NA</bpref>
+        <poolproperty property="--ITEMTYPE--" value="GI" label="GI" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRTGPC" scorepoints="2" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="3.962800000000000e-001" />
+          <itemscoreparameter measurementparameter="b0" value="-8.063200000000000e-001" />
+          <itemscoreparameter measurementparameter="b1" value="4.434380000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-2024.xml" itemtype="MC">
+        <identifier uniqueid="187-2024" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-CAT-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>G3Math_Claim2/4</bpref>
+        <bpref>G3Math_DOK2</bpref>
+        <bpref>SBAC_PT-2</bpref>
+        <bpref>SBAC_PT-2|MD</bpref>
+        <bpref>SBAC_PT-2|MD|B</bpref>
+        <bpref>SBAC_PT-2|MD|B|NA</bpref>
+        <bpref>SBAC_PT-2|MD|B|NA|NA</bpref>
+        <poolproperty property="--ITEMTYPE--" value="MC" label="MC" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.000000000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="1.000000000000000e-015" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-2788.xml" itemtype="TI">
+        <identifier uniqueid="187-2788" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-Perf-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>SBAC_PT-2</bpref>
+        <bpref>SBAC_PT-2|MD</bpref>
+        <bpref>SBAC_PT-2|MD|A</bpref>
+        <passageref>187-3700</passageref>
+        <poolproperty property="--ITEMTYPE--" value="TI" label="TI" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="1.025780000000000e+000" />
+          <itemscoreparameter measurementparameter="b" value="-1.836230000000000e+000" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+      <testitem filename="item-187-2789.xml" itemtype="TI">
+        <identifier uniqueid="187-2789" version="8175" />
+        <bpref>(SBAC_PT)SBAC-IRP-Perf-COMBINED-MATH-3-Summer-2015-2016-UNIT-TEST</bpref>
+        <bpref>SBAC_PT-3</bpref>
+        <bpref>SBAC_PT-3|MD</bpref>
+        <bpref>SBAC_PT-3|MD|A</bpref>
+        <passageref>187-3700</passageref>
+        <poolproperty property="--ITEMTYPE--" value="TI" label="TI" />
+        <poolproperty property="Language" value="ENU" label="English" />
+        <itemscoredimension measurementmodel="IRT3PLn" scorepoints="1" weight="1.000000000000000e+000">
+          <itemscoreparameter measurementparameter="a" value="4.239400000000000e-001" />
+          <itemscoreparameter measurementparameter="b" value="1.070860000000000e+000" />
+          <itemscoreparameter measurementparameter="c" value="0.000000000000000e+000" />
+        </itemscoredimension>
+      </testitem>
+    </itempool>
+    <testform length="4">
+      <identifier uniqueid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST:Default-ENU" name="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST:Default-ENU" version="8175" />
+      <property name="language" value="ENU" label="English" />
+      <poolproperty property="--ITEMTYPE--" value="EQ" label="EQ" itemcount="1" />
+      <poolproperty property="--ITEMTYPE--" value="GI" label="GI" itemcount="1" />
+      <poolproperty property="--ITEMTYPE--" value="TI" label="TI" itemcount="2" />
+      <poolproperty property="Language" value="ENU" label="English" itemcount="4" />
+      <formpartition>
+        <identifier uniqueid="187-780" name="IRP::MathG3::Perf::SP15::COMBINED" version="8175" />
+        <itemgroup formposition="1" maxitems="ALL" maxresponses="ALL">
+          <identifier uniqueid="187-780:G-187-3700-2" name="187-780:G-187-3700-2" version="8175" />
+          <passageref>187-3700</passageref>
+          <groupitem itemid="187-2788" formposition="1" groupposition="1" adminrequired="false" responserequired="false" isactive="true" isfieldtest="false" blockid="A" />
+          <groupitem itemid="187-1576" formposition="2" groupposition="2" adminrequired="false" responserequired="false" isactive="true" isfieldtest="false" blockid="A" />
+          <groupitem itemid="187-2789" formposition="3" groupposition="3" adminrequired="false" responserequired="false" isactive="true" isfieldtest="false" blockid="A" />
+          <groupitem itemid="187-1578" formposition="4" groupposition="4" adminrequired="false" responserequired="false" isactive="true" isfieldtest="false" blockid="A" />
+        </itemgroup>
+      </formpartition>
+    </testform>
+    <performancelevels>
+      <performancelevel bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST" plevel="1" scaledlo="2.189000000000000e+003" scaledhi="2.381000000000000e+003" />
+      <performancelevel bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST" plevel="2" scaledlo="2.381000000000000e+003" scaledhi="2.436000000000000e+003" />
+      <performancelevel bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST" plevel="3" scaledlo="2.436000000000000e+003" scaledhi="2.501000000000000e+003" />
+      <performancelevel bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST" plevel="4" scaledlo="2.501000000000000e+003" scaledhi="2.621000000000000e+003" />
+    </performancelevels>
+    <scoringrules>
+      <computationrule computationorder="62" bpelementid="SBAC_PT-3">
+        <identifier uniqueid="452E7802-61FD-4C82-A783-0B6400D937B8" name="SBACCATTheta" label="ThetaScore" version="1.0" />
+        <computationruleparameter position="1" parametertype="double">
+          <identifier uniqueid="686D3098-28B0-40A0-AC92-EB71DD389125" name="LOT" version="1.0" />
+          <computationruleparametervalue value="-4.1132" />
+        </computationruleparameter>
+        <computationruleparameter position="2" parametertype="double">
+          <identifier uniqueid="51FA9EDA-3EED-4A9C-9146-F7ACA82E61C0" name="HOT" version="1.0" />
+          <computationruleparametervalue value="1.3335" />
+        </computationruleparameter>
+        <computationruleparameter position="3" parametertype="double">
+          <identifier uniqueid="F52B7D21-3EB8-4E1D-BECB-A8798CFD7673" name="seLimit" version="1.0" />
+          <computationruleparametervalue value="2.5" />
+        </computationruleparameter>
+        <computationruleparameter position="4" parametertype="double">
+          <identifier uniqueid="0899CB7A-F48A-4979-A590-B2C45B982D2F" name="averageA" version="1.0" />
+          <computationruleparametervalue value="0.85" />
+        </computationruleparameter>
+        <computationruleparameter position="5" parametertype="double">
+          <identifier uniqueid="D29ABEA7-6298-46E7-9F40-7E69B434EC29" name="averageB" version="1.0" />
+          <computationruleparametervalue value="-0.81" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="140" bpelementid="SBAC_PT-1">
+        <identifier uniqueid="0BD23C28-4F93-4C5F-B38F-0BE368B40FBD" name="RawScore" label="RawScore" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="141" bpelementid="SOCK_2">
+        <identifier uniqueid="368DEE8B-B9B4-4D3E-8145-0CC5D67C0DD6" name="MultiStrandRawScore" label="RawScore" version="1.0" />
+        <computationruleparameter position="1" parametertype="string">
+          <identifier uniqueid="76E22FB0-379B-409C-AC58-BAF25E67CCCF" name="strands" version="1.0" />
+          <property name="indextype" value="int" />
+          <computationruleparametervalue index="1" value="2" />
+          <computationruleparametervalue index="2" value="4" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="10" bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST">
+        <identifier uniqueid="F47933EF-ACCE-4D6E-ADB5-0F351B25E7A7" name="SBACAttemptedness" label="Attempted" version="1.0" />
+        <computationruleparameter position="1" parametertype="int">
+          <identifier uniqueid="1511FAA2-FB95-4E48-ACA9-7E73AB947D33" name="testPart" version="1.0" />
+          <property name="indextype" value="string" />
+          <computationruleparametervalue index="SBAC-IRP-CAT-COMBINED-MATH-3" value="1" />
+          <computationruleparametervalue index="SBAC-IRP-Perf-COMBINED-MATH-3" value="2" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="61" bpelementid="SOCK_2">
+        <identifier uniqueid="0693779E-004E-4B16-9EF0-1027381A4759" name="SBACCATMultiStrandTheta" label="ThetaScore" version="1.0" />
+        <computationruleparameter position="1" parametertype="double">
+          <identifier uniqueid="3792C8CF-89FA-429F-9692-251375D2C855" name="LOT" version="1.0" />
+          <computationruleparametervalue value="-4.1132" />
+        </computationruleparameter>
+        <computationruleparameter position="2" parametertype="double">
+          <identifier uniqueid="6E1573D0-3A27-4F0F-A9E2-F13D43D17C97" name="HOT" version="1.0" />
+          <computationruleparametervalue value="1.3335" />
+        </computationruleparameter>
+        <computationruleparameter position="3" parametertype="double">
+          <identifier uniqueid="0515C78F-70A6-4104-AC45-4AF97AA49893" name="seLimit" version="1.0" />
+          <computationruleparametervalue value="2.5" />
+        </computationruleparameter>
+        <computationruleparameter position="4" parametertype="string">
+          <identifier uniqueid="9A828D3D-DE11-4557-8947-775B90E51CF2" name="strands" version="1.0" />
+          <property name="indextype" value="int" />
+          <computationruleparametervalue index="1" value="2" />
+          <computationruleparametervalue index="2" value="4" />
+        </computationruleparameter>
+        <computationruleparameter position="5" parametertype="double">
+          <identifier uniqueid="244A5AD9-67F6-447D-8BFB-81730008E56A" name="averageA" version="1.0" />
+          <computationruleparametervalue value="0.85" />
+        </computationruleparameter>
+        <computationruleparameter position="6" parametertype="double">
+          <identifier uniqueid="FCDEB5E3-EADC-4975-A232-D2D0574DA139" name="averageB" version="1.0" />
+          <computationruleparametervalue value="-0.81" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="35" bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST">
+        <identifier uniqueid="587A5DD2-3E33-4521-AB1B-15A7FEE461BE" name="TestPerformanceLevel" label="PerformanceLevel" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="70" bpelementid="SBAC_PT-1">
+        <identifier uniqueid="88AF04C1-42D0-42AD-9AF2-38649898A0C1" name="ScaleScore" label="ScaleScore" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="30" bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST">
+        <identifier uniqueid="A2A76AFE-6FCE-46D8-AC4E-47DB2ECFB5FE" name="ScaleScore" label="ScaleScore" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="131" bpelementid="SOCK_2">
+        <identifier uniqueid="CDCDBA7D-47DF-4540-A088-49292C57C359" name="MultipleStrandItemCountScored" label="ItemCountScored" version="1.0" />
+        <computationruleparameter position="1" parametertype="string">
+          <identifier uniqueid="947BBD8B-2C84-451F-A5D9-3CC299310B4F" name="strands" version="1.0" />
+          <property name="indextype" value="int" />
+          <computationruleparametervalue index="1" value="2" />
+          <computationruleparametervalue index="2" value="4" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="72" bpelementid="SBAC_PT-3">
+        <identifier uniqueid="58A95255-5E45-4159-8792-49FEE5562E25" name="ScaleScore" label="ScaleScore" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="84" bpelementid="SBAC_PT-1">
+        <identifier uniqueid="77640D3A-52C6-4755-B33C-5480B885D42C" name="SEBasedPLWithRounding" label="PerformanceLevel" version="1.0" />
+        <computationruleparameter position="1" parametertype="double">
+          <identifier uniqueid="7B19E304-3863-4F12-9A75-E311DD578EC1" name="seMultiple" version="1.0" />
+          <computationruleparametervalue value="1.5" />
+        </computationruleparameter>
+        <computationruleparameter position="2" parametertype="int">
+          <identifier uniqueid="2EE0DDB3-7AD5-495E-B1CE-72D4C2BB1AAC" name="proficientPerformanceLevel" version="1.0" />
+          <computationruleparametervalue value="3" />
+        </computationruleparameter>
+        <computationruleparameter position="3" parametertype="double">
+          <identifier uniqueid="4363F62B-647C-4831-B334-DA5A1B5EA596" name="LOT" version="1.0" />
+          <computationruleparametervalue value="-4.1132" />
+        </computationruleparameter>
+        <computationruleparameter position="4" parametertype="double">
+          <identifier uniqueid="8191A641-6455-4AAF-840F-FF13BD6E5747" name="HOT" version="1.0" />
+          <computationruleparametervalue value="1.3335" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="130" bpelementid="SBAC_PT-1">
+        <identifier uniqueid="3B151A8A-58B8-448B-8E64-56E6E31E927B" name="ItemCountScored" label="ItemCountScored" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="132" bpelementid="SBAC_PT-3">
+        <identifier uniqueid="A33AADC2-8B85-4B2D-A793-6DE4C2D10E27" name="ItemCountScored" label="ItemCountScored" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="122" bpelementid="SBAC_PT-3">
+        <identifier uniqueid="70F7BC7A-537E-4D98-9970-75A7C1A544A3" name="ItemCount" label="ItemCount" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="71" bpelementid="SOCK_2">
+        <identifier uniqueid="7DFAF8B9-4BD2-4365-98B2-7EC95401C2F8" name="ScaleScore" label="ScaleScore" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="110" bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST">
+        <identifier uniqueid="3475A3E8-F8DC-4280-88B4-800F83607071" name="RawScore" label="RawScore" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="20" bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST">
+        <identifier uniqueid="10F3B10F-A7D9-44A7-88BB-A045DC6E484F" name="SBACCATTheta" label="ThetaScore" version="1.0" />
+        <computationruleparameter position="1" parametertype="double">
+          <identifier uniqueid="686D3098-28B0-40A0-AC92-EB71DD389125" name="LOT" version="1.0" />
+          <computationruleparametervalue value="-4.1132" />
+        </computationruleparameter>
+        <computationruleparameter position="2" parametertype="double">
+          <identifier uniqueid="51FA9EDA-3EED-4A9C-9146-F7ACA82E61C0" name="HOT" version="1.0" />
+          <computationruleparametervalue value="1.3335" />
+        </computationruleparameter>
+        <computationruleparameter position="3" parametertype="double">
+          <identifier uniqueid="F52B7D21-3EB8-4E1D-BECB-A8798CFD7673" name="seLimit" version="1.0" />
+          <computationruleparametervalue value="2.5" />
+        </computationruleparameter>
+        <computationruleparameter position="4" parametertype="double">
+          <identifier uniqueid="0899CB7A-F48A-4979-A590-B2C45B982D2F" name="averageA" version="1.0" />
+          <computationruleparametervalue value="0.85" />
+        </computationruleparameter>
+        <computationruleparameter position="5" parametertype="double">
+          <identifier uniqueid="D29ABEA7-6298-46E7-9F40-7E69B434EC29" name="averageB" version="1.0" />
+          <computationruleparametervalue value="-0.81" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="85" bpelementid="SOCK_2">
+        <identifier uniqueid="96FAAFE5-F70F-48D6-B139-A5F94FCAD898" name="SEBasedPLWithRounding" label="PerformanceLevel" version="1.0" />
+        <computationruleparameter position="1" parametertype="double">
+          <identifier uniqueid="7B19E304-3863-4F12-9A75-E311DD578EC1" name="seMultiple" version="1.0" />
+          <computationruleparametervalue value="1.5" />
+        </computationruleparameter>
+        <computationruleparameter position="2" parametertype="int">
+          <identifier uniqueid="2EE0DDB3-7AD5-495E-B1CE-72D4C2BB1AAC" name="proficientPerformanceLevel" version="1.0" />
+          <computationruleparametervalue value="3" />
+        </computationruleparameter>
+        <computationruleparameter position="3" parametertype="double">
+          <identifier uniqueid="4363F62B-647C-4831-B334-DA5A1B5EA596" name="LOT" version="1.0" />
+          <computationruleparametervalue value="-4.1132" />
+        </computationruleparameter>
+        <computationruleparameter position="4" parametertype="double">
+          <identifier uniqueid="8191A641-6455-4AAF-840F-FF13BD6E5747" name="HOT" version="1.0" />
+          <computationruleparametervalue value="1.3335" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="90" bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST">
+        <identifier uniqueid="7F19F28E-744E-496A-B55F-C023421EAD19" name="ItemCount" label="ItemCount" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="86" bpelementid="SBAC_PT-3">
+        <identifier uniqueid="729C20C8-8AA5-4468-86D6-CA3AF28C2D68" name="SEBasedPLWithRounding" label="PerformanceLevel" version="1.0" />
+        <computationruleparameter position="1" parametertype="double">
+          <identifier uniqueid="7B19E304-3863-4F12-9A75-E311DD578EC1" name="seMultiple" version="1.0" />
+          <computationruleparametervalue value="1.5" />
+        </computationruleparameter>
+        <computationruleparameter position="2" parametertype="int">
+          <identifier uniqueid="2EE0DDB3-7AD5-495E-B1CE-72D4C2BB1AAC" name="proficientPerformanceLevel" version="1.0" />
+          <computationruleparametervalue value="3" />
+        </computationruleparameter>
+        <computationruleparameter position="3" parametertype="double">
+          <identifier uniqueid="4363F62B-647C-4831-B334-DA5A1B5EA596" name="LOT" version="1.0" />
+          <computationruleparametervalue value="-4.1132" />
+        </computationruleparameter>
+        <computationruleparameter position="4" parametertype="double">
+          <identifier uniqueid="8191A641-6455-4AAF-840F-FF13BD6E5747" name="HOT" version="1.0" />
+          <computationruleparametervalue value="1.3335" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="142" bpelementid="SBAC_PT-3">
+        <identifier uniqueid="03F9CC1A-8A36-42D0-862F-E509D709260B" name="RawScore" label="RawScore" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="60" bpelementid="SBAC_PT-1">
+        <identifier uniqueid="9E7CF623-4E23-47B3-9E5F-E86E2ECB3416" name="SBACCATTheta" label="ThetaScore" version="1.0" />
+        <computationruleparameter position="1" parametertype="double">
+          <identifier uniqueid="686D3098-28B0-40A0-AC92-EB71DD389125" name="LOT" version="1.0" />
+          <computationruleparametervalue value="-4.1132" />
+        </computationruleparameter>
+        <computationruleparameter position="2" parametertype="double">
+          <identifier uniqueid="51FA9EDA-3EED-4A9C-9146-F7ACA82E61C0" name="HOT" version="1.0" />
+          <computationruleparametervalue value="1.3335" />
+        </computationruleparameter>
+        <computationruleparameter position="3" parametertype="double">
+          <identifier uniqueid="F52B7D21-3EB8-4E1D-BECB-A8798CFD7673" name="seLimit" version="1.0" />
+          <computationruleparametervalue value="2.5" />
+        </computationruleparameter>
+        <computationruleparameter position="4" parametertype="double">
+          <identifier uniqueid="0899CB7A-F48A-4979-A590-B2C45B982D2F" name="averageA" version="1.0" />
+          <computationruleparametervalue value="0.85" />
+        </computationruleparameter>
+        <computationruleparameter position="5" parametertype="double">
+          <identifier uniqueid="D29ABEA7-6298-46E7-9F40-7E69B434EC29" name="averageB" version="1.0" />
+          <computationruleparametervalue value="-0.81" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="100" bpelementid="(SBAC_PT)SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST">
+        <identifier uniqueid="64286836-1C63-4A9E-AB7A-E8D156C213B9" name="ItemCountScored" label="ItemCountScored" version="1.0" />
+      </computationrule>
+      <computationrule computationorder="121" bpelementid="SOCK_2">
+        <identifier uniqueid="B7B506E3-8057-49EE-9A1B-F4D49E590D35" name="MultipleStrandItemCount" label="ItemCount" version="1.0" />
+        <computationruleparameter position="1" parametertype="string">
+          <identifier uniqueid="A59C4CF5-E430-42B0-BB91-39D06900F466" name="strands" version="1.0" />
+          <property name="indextype" value="int" />
+          <computationruleparametervalue index="1" value="2" />
+          <computationruleparametervalue index="2" value="4" />
+        </computationruleparameter>
+      </computationrule>
+      <computationrule computationorder="120" bpelementid="SBAC_PT-1">
+        <identifier uniqueid="C3C3F69D-1FAB-4D9E-8C87-F770BF4EE9DC" name="ItemCount" label="ItemCount" version="1.0" />
+      </computationrule>
+    </scoringrules>
+  </scoring>
+</testspecification>

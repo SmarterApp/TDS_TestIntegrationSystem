@@ -34,7 +34,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -63,6 +62,7 @@
     <Content Include="SQL\TDSItemBank\4_Configuration.sql" />
     <Content Include="SQL\TDSItemBank\5_LoadPackages.sql" />
     <Content Include="SQL\TDSItemBank\6_TestToolConfiguration.sql" />
+    <Content Include="SQL\TDSItemBank\7_create_procedure_spDeleteAssessment.sql" />
     <Content Include="SQL\TestScoringConfigs\1_Tables.sql" />
     <Content Include="SQL\TestScoringConfigs\2_Views.sql" />
     <Content Include="SQL\TestScoringConfigs\3_Configuration.sql" />
@@ -88,7 +88,9 @@
       <Name>ScoringEngine</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
