@@ -8,9 +8,9 @@
 ******************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
+using System.Data;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Xsl;
 
@@ -43,6 +43,67 @@ namespace TDSQASystemAPI.Extensions
                 message.Append(e.StackTrace);
             }
             return message.ToString();
+        }
+
+        /// <summary>
+        /// Convert an <code>IList<typeparamref name="T"/></code> to a <code>DataTable</code>.
+        /// </summary>
+        /// <typeparam name="T">The type of object contained within the list</typeparam>
+        /// <param name="list">The list of objects to convert to a <code>DataTable</code></param>
+        /// <param name="tableName">The name of the <code>DataTable</code>.  Defaults to "dataTable" if not specified</param>
+        /// <returns>A <code>DataTable</code> containing the list of T as rows/columns.</returns>
+        /// <remarks>
+        /// This method does not handle complex objects; the intent is to take a list of DTOs that map to database tables and
+        /// create a <code>DataTable</code> from them.  This <code>DataTable</code> is ultimately passed to SQL Server as a 
+        /// table-valued parameter, making saving lists of objects to the database easy.
+        /// </remarks>
+        public static DataTable ToDataTable<T>(this IList<T> list, string tableName = "dataTable")
+        {
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            var dataTable = new DataTable(tableName);
+
+            if (typeof(T).IsValueType || typeof(T).Equals(typeof(string)))
+            {
+                var column = new DataColumn("Value");
+                dataTable.Columns.Add(column);
+                list.ForEach(l =>
+                {
+                    var dataRow = dataTable.NewRow();
+                    dataRow[0] = l;
+                    dataTable.Rows.Add(dataRow);
+                });
+            }
+            else
+            {
+                var properties = TypeDescriptor.GetProperties(typeof(T));
+                foreach (PropertyDescriptor prop in properties)
+                {
+                    dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                }
+
+                list.ForEach(l =>
+                {
+                    var dataRow = dataTable.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                    {
+                        try
+                        {
+                            dataRow[prop.Name] = prop.GetValue(l) ?? DBNull.Value;
+                        }
+                        catch (Exception e)
+                        {
+                            dataRow[prop.Name] = DBNull.Value;
+                        }
+                    }
+                    dataTable.Rows.Add(dataRow);
+                });
+            }
+
+            return dataTable;
         }
     }
 }
