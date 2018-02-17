@@ -1,4 +1,4 @@
-﻿namespace TDSQASystemAPI.DAL.configs
+﻿namespace TDSQASystemAPI.DAL.configs.dtos
 {
     /// <summary>
     /// Represents a single record for the <code>OSS_Configs..Client_AccommodationFamily</code> table.

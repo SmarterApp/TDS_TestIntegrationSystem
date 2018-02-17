@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TDSQASystemAPI.DAL.configs
+﻿namespace TDSQASystemAPI.DAL.configs.dtos
 {
     /// <summary>
     /// Represents a single record in the <code>OSS_Configs..Client_Grade</code> table.

@@ -1,4 +1,4 @@
-﻿namespace TDSQASystemAPI.DAL.configs
+﻿namespace TDSQASystemAPI.DAL.configs.dtos
 {
     /// <summary>
     /// Represents a record from the <code>OSS_Configs..TDS_TesteeAttribute</code> table.
@@ -13,7 +13,5 @@
         public string Label { get; set; }
         public string AtLogin { get; set; }
         public int SortOrder { get; set; }
-        public bool LatencySite { get; set; }
-        public bool ShowOnProctor { get; set; }
     }
 }

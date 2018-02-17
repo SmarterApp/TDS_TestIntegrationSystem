@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TDSQASystemAPI.DAL.configs
+namespace TDSQASystemAPI.DAL.configs.dtos
 {
     /// <summary>
     /// Represents a single record in the <code>OSS_Configs..Client_TimeWindow</code> table.

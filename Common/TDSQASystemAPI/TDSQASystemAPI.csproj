@@ -163,8 +163,31 @@
     <Compile Include="Config\TestEnvironment.cs" />
     <Compile Include="DAL\ArchiveDB.cs" />
     <Compile Include="DAL\AssessmentRepository.cs" />
+    <Compile Include="DAL\configs\daos\AccommodationFamilyDAO.cs" />
+    <Compile Include="DAL\configs\daos\TesteeAttributeDAO.cs" />
+    <Compile Include="DAL\configs\dtos\AccommodationFamilyDTO.cs" />
+    <Compile Include="DAL\configs\dtos\LanguageDTO.cs" />
+    <Compile Include="DAL\configs\dtos\SegmentPropertiesDTO.cs" />
+    <Compile Include="DAL\configs\dtos\SubjectDTO.cs" />
+    <Compile Include="DAL\configs\dtos\ClientDTO.cs" />
+    <Compile Include="DAL\configs\dtos\FieldTestPriorityDTO.cs" />
+    <Compile Include="DAL\configs\dtos\GradeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TesteeAttributeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TesteeRelationshipAttributeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestEligibilityDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestFormPropertiesDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestGradeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestItemConstraintDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestItemTypeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestModeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestPropertiesDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestToolDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestToolTypeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestWindowDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TimeWindowDTO.cs" />
     <Compile Include="DAL\EmbeddedResource.cs" />
     <Compile Include="DAL\IAssessmentRepository.cs" />
+    <Compile Include="DAL\ITestPackageDao.cs" />
     <Compile Include="DAL\Sandlot.cs" />
     <Compile Include="DAL\TDSQC.cs" />
     <Compile Include="DAL\TestMergeDataAccess.cs" />
@@ -297,7 +320,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DAL\configs\" />
     <Folder Include="DAL\itembank\" />
   </ItemGroup>
   <ItemGroup>
