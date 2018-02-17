@@ -17,3 +17,20 @@ END
 GO
 GRANT CONTROL ON TYPE::dbo.TesteeAttributeType TO public
 GO
+IF NOT EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TesteeRelationshipAttributeType')
+BEGIN
+	CREATE TYPE dbo.TesteeRelationshipAttributeType AS TABLE
+	(
+		ClientName			varchar(50) NOT NULL,
+		TDS_ID				varchar(50) NOT NULL,
+		RTSName				varchar(50) NOT NULL,
+		Label				varchar(50),
+		ReportName			varchar(50),
+		AtLogin				varchar(25),		
+		SortOrder			int,
+		RelationshipType	varchar(50) NOT NULL
+	)
+END
+GO
+GRANT CONTROL ON TYPE::dbo.TesteeRelationshipAttributeType TO public
+GO

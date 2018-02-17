@@ -165,6 +165,7 @@
     <Compile Include="DAL\AssessmentRepository.cs" />
     <Compile Include="DAL\configs\daos\AccommodationFamilyDAO.cs" />
     <Compile Include="DAL\configs\daos\TesteeAttributeDAO.cs" />
+    <Compile Include="DAL\configs\daos\TesteeRelationshipAttributeDAO.cs" />
     <Compile Include="DAL\configs\dtos\AccommodationFamilyDTO.cs" />
     <Compile Include="DAL\configs\dtos\LanguageDTO.cs" />
     <Compile Include="DAL\configs\dtos\SegmentPropertiesDTO.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="DAL\TDSQC.cs" />
     <Compile Include="DAL\TestMergeDataAccess.cs" />
     <Compile Include="DAL\TestOpportunity.cs" />
+    <Compile Include="DAL\TestPackageDaoBase.cs" />
     <Compile Include="DAL\TISScoreMergerDAL.cs" />
     <Compile Include="DAL\XmlRepository.cs" />
     <Compile Include="Data\QASystemConfigSettings.cs" />
