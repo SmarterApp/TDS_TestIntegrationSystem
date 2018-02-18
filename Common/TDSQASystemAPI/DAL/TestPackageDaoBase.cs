@@ -54,9 +54,9 @@ namespace TDSQASystemAPI.DAL
         /// This value should follow the standard naming requirements/conventions for an MSSQL variable.
         /// </remarks>
         /// <example>
-        /// TvpName = "@tvpMyTableValuedParameter"
+        /// TvpVariableName = "@tvpMyTableValuedParameter"
         /// </example>
-        protected internal string TvpName { get; set; }
+        protected internal string TvpVariableName { get; set; }
 
         /// <summary>
         /// The name of the connection string in the app.config file.
@@ -74,7 +74,7 @@ namespace TDSQASystemAPI.DAL
                 using (var command = new SqlCommand(InsertSql, connection))
                 {
                     command.CommandType = CommandType.Text;
-                    var testeeAttributeParam = command.Parameters.AddWithValue(TvpName, recordsToSave.ToDataTable());
+                    var testeeAttributeParam = command.Parameters.AddWithValue(TvpVariableName, recordsToSave.ToDataTable());
                     testeeAttributeParam.SqlDbType = SqlDbType.Structured;
                     testeeAttributeParam.TypeName = TvpType;
 

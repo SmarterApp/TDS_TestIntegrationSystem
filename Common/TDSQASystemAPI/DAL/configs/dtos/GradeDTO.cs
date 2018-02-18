@@ -8,6 +8,5 @@
         public string GradeCode { get; set; }
         public string Grade { get; set; }
         public string ClientName { get; set; }
-        public string Origin { get; set; }
     }
 }

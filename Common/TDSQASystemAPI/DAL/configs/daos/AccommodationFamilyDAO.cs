@@ -1,17 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using TDSQASystemAPI.DAL.configs.dtos;
 
 namespace TDSQASystemAPI.DAL.configs.daos
 {
-    public class AccommodationFamilyDAO : ITestPackageDao<AccommodationFamilyDAO>
+    /// <summary>
+    /// A class for saving <code>AccommodationFamilyDTO</code>s to the <code>OSS_Configs..Client_AccommodationFamily</code> 
+    /// table
+    /// </summary>
+    public class AccommodationFamilyDAO : TestPackageDaoBase<AccommodationFamilyDTO>
     {
-        private readonly string SQL = "";
-        public void Insert(IList<AccommodationFamilyDAO> recordsToSave)
+        public AccommodationFamilyDAO()
         {
-            throw new NotImplementedException();
+            DbConnectionStringName = "configs";
+            TvpType = "AccommodationFamilyType";
+            TvpVariableName = "@tvpAccommodationFamilies";
+            InsertSql =
+                "INSERT \n" +
+                "   dbo.Client_AccommodationFamily (ClientName, Family, Label) \n" +
+                "SELECT \n" +
+                "   ClientName, \n" +
+                "   Family, \n" +
+                "   Label \n" +
+                "FROM \n" +
+                TvpVariableName;
+        }
+
+        public override void Insert(IList<AccommodationFamilyDTO> recordsToSave)
+        {
+            base.Insert(recordsToSave);
         }
     }
 }

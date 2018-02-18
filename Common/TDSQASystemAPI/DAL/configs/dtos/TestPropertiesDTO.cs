@@ -10,15 +10,17 @@
     public class TestPropertiesDTO
     {
         public string ClientName { get; set; }
-        public string TestID { get; set; }
+        public string TestId { get; set; }
         public bool IsSelectable { get; set; }
         public string Label { get; set; }
         public string SubjectName { get; set; }
         public int MaxOpportunities { get; set; }
-        public bool ScoreByTDS { get; set; }
+        public bool ScoreByTds { get; set; }
         public string AccommodationFamily { get; set; }
         public string ReportingInstrument { get; set; }
-        public string TideId { get; set; }
         public string GradeText { get; set; }
+        public string TideId => string.IsNullOrEmpty(ReportingInstrument)
+            ? string.Format("{0}-{1}", ReportingInstrument, SubjectName)
+            : null;
     }
 }

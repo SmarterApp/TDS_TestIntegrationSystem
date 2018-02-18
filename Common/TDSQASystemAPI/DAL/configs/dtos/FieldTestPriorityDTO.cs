@@ -5,6 +5,13 @@
     /// </summary>
     public class FieldTestPriorityDTO
     {
+        private const string DEFAULT_TEST_ID = "*"; // from line 124 of UpdateTDSConfigs
+
+        public FieldTestPriorityDTO()
+        {
+            TestId = DEFAULT_TEST_ID;
+        }
+
         public string TdsId { get; set; }
         public string ClientName { get; set; }
         public int Priority { get; set; }

@@ -8,6 +8,5 @@
         public string SubjectCode { get; set; }
         public string Subject { get; set; }
         public string ClientName { get; set; }
-        public string Origin { get; set; }
     }
 }

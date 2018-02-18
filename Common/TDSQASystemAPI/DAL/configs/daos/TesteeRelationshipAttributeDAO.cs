@@ -11,22 +11,22 @@ namespace TDSQASystemAPI.DAL.configs.daos
         public TesteeRelationshipAttributeDAO()
         {
             DbConnectionStringName = "configs";
-            TvpName = "@tvpTestRelationsihpAttributes";
+            TvpVariableName = "@tvpTestRelationsihpAttributes";
             TvpType = "TesteeRelationshipAttributeType";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TesteeRelationshipAttribute (ClientName, TDS_ID, RTSName, Label, ReportName, AtLogin, SortOrder, RelationshipType) \n" +
                 "SELECT \n" +
                 "   ClientName, \n" +
-                "   TDS_ID, \n" +
-                "   RTSName, \n" +
+                "   TdsId, \n" +
+                "   RtsName, \n" +
                 "   Label, \n" +
                 "   ReportName, \n" +
                 "   AtLogin, \n" +
                 "   SortOrder, \n" +
                 "   RelationshipType \n" +
                 "FROM \n" +
-                TvpName;
+                TvpVariableName;
         }
 
         public override void Insert(IList<TesteeRelationshipAttributeDTO> recordsToSave)

@@ -1,4 +1,6 @@
-﻿namespace TDSQASystemAPI.DAL.configs.dtos
+﻿using System;
+
+namespace TDSQASystemAPI.DAL.configs.dtos
 {
     /// <summary>
     /// Represents a single record in the <code>OSS_Configs..Client_TestMode</code> table.
@@ -9,12 +11,21 @@
     /// </remarks>
     public class TestModeDTO
     {
+        private const string MODE_ONLINE = "online"; // from line 162 of UpdateTDSConfigs
+        private const string MODE_PAPER = "paper"; // from line 170 of UpdateTDSConfigs
+        private const int SESSION_TYPE_ONLINE = 0; // from line 162 of UpdateTDSConfigs
+        private const int SESSION_TYPE_PAPER = 1; // from line 170 of UpdateTDSConfigs
+
         public string ClientName { get; set; }
         public string TestId { get; set; }
         public string TestKey { get; set; }
-        public string Mode { get; set; }
+        public string Mode => TestKey.IndexOf("online", StringComparison.OrdinalIgnoreCase) >= 0
+                    ? MODE_ONLINE
+                    : MODE_PAPER;
         public string Algorithm { get; set; }
-        public bool isSegmented { get; set; }
-        public int SessionType { get; set; }
+        public bool IsSegmented { get; set; }
+        public int SessionType => TestKey.IndexOf("online", StringComparison.OrdinalIgnoreCase) >= 0
+            ? SESSION_TYPE_ONLINE
+            : SESSION_TYPE_PAPER;
     }
 }

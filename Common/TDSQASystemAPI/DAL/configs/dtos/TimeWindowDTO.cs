@@ -7,9 +7,16 @@ namespace TDSQASystemAPI.DAL.configs.dtos
     /// </summary>
     public class TimeWindowDTO
     {
-        public string clientName { get; set; }
-        public string windowId { get; set; }
-        public DateTime startDate { get; set; }
-        public DateTime endDate { get; set; }
+        private const string DEFAULT_WINDOW_ID = "ANNUAL"; // line 117 of UpdateTDSConfigs
+
+        public TimeWindowDTO()
+        {
+            WindowId = DEFAULT_WINDOW_ID;
+        }
+
+        public string ClientName { get; set; }
+        public string WindowId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

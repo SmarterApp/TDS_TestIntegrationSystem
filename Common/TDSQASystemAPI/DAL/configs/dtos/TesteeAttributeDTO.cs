@@ -5,9 +5,9 @@
     /// </summary>
     public class TesteeAttributeDTO
     {
-        public string TdsAttributeId { get; set; }
+        public string RtsName { get; set; }
+        public string TdsId { get; set; }
         public string ClientName { get; set; }
-        public string ArtId { get; set; }
         public string ReportName { get; set; }
         public string Type { get; set; }
         public string Label { get; set; }
