@@ -11,10 +11,10 @@ namespace TDSQASystemAPI.DAL.configs.dtos
     /// </remarks>
     public class TestModeDTO
     {
-        private const string MODE_ONLINE = "online"; // from line 162 of UpdateTDSConfigs
-        private const string MODE_PAPER = "paper"; // from line 170 of UpdateTDSConfigs
-        private const int SESSION_TYPE_ONLINE = 0; // from line 162 of UpdateTDSConfigs
-        private const int SESSION_TYPE_PAPER = 1; // from line 170 of UpdateTDSConfigs
+        public const string MODE_ONLINE = "online"; // from line 162 of UpdateTDSConfigs
+        public const string MODE_PAPER = "paper"; // from line 170 of UpdateTDSConfigs
+        public const int SESSION_TYPE_ONLINE = 0; // from line 162 of UpdateTDSConfigs
+        public const int SESSION_TYPE_PAPER = 1; // from line 170 of UpdateTDSConfigs
 
         public string ClientName { get; set; }
         public string TestId { get; set; }

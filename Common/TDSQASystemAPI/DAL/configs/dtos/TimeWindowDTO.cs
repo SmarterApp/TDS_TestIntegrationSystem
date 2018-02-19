@@ -7,7 +7,7 @@ namespace TDSQASystemAPI.DAL.configs.dtos
     /// </summary>
     public class TimeWindowDTO
     {
-        private const string DEFAULT_WINDOW_ID = "ANNUAL"; // line 117 of UpdateTDSConfigs
+        public const string DEFAULT_WINDOW_ID = "ANNUAL"; // line 117 of UpdateTDSConfigs
 
         public TimeWindowDTO()
         {

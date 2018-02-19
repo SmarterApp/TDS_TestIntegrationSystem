@@ -6,12 +6,12 @@
     public class TestEligibilityDTO
     {
         // Default values from lines 239 - 242 of UpdateTDSConfigs
-        private const string RTS_NAME_DEFAULT = "EnrlGrdCd";
-        private const bool ENABLES_DEFAULT = true;
-        private const bool DISABLES_DEFAULT = false;
-        private const long ENTITY_TYPE_DEFAULT = 6L;
-        private const string ELIGIBILITY_TYPE_DEFAULT = "ATTRIBUTE";
-        private const int MATCH_TYPE_DEFAULT = 0;
+        public const string RTS_NAME_DEFAULT = "EnrlGrdCd";
+        public const bool ENABLES_DEFAULT = true;
+        public const bool DISABLES_DEFAULT = false;
+        public const long ENTITY_TYPE_DEFAULT = 6L;
+        public const string ELIGIBILITY_TYPE_DEFAULT = "ATTRIBUTE";
+        public const int MATCH_TYPE_DEFAULT = 0;
 
         public string ClientName { get; set; }
         public string TestId { get; set; }
