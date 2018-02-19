@@ -19,25 +19,26 @@ namespace TISUnitTests
             {
                 new TesteeAttributeDTO
                 {
-                    ArtId = "art-id-1",
+                    RtsName = "art-id-1",
                     AtLogin = "at-login-1",
                     ClientName = "unit-test",
                     Label = "label 1",
                     ReportName = "report name 1",
                     SortOrder = 1,
-                    TdsAttributeId = "tds-attribute-id 1",
+                    TdsId = "tds-attribute-id 1",
                     Type = "unit test"
                 },
                 new TesteeAttributeDTO
                 {
-                    ArtId = "art-id-2",
+                    RtsName = "art-id-2",
                     AtLogin = "at-login-2",
                     ClientName = "unit-test",
                     Label = "label 2",
                     ReportName = "report name 2",
                     SortOrder = 2,
-                    TdsAttributeId = "tds-attribute-id 2",
-                    Type = "unit test"
+                    TdsId = "tds-attribute-id 2",
+                    Type = "unit test",
+                    
                 }
             };
 

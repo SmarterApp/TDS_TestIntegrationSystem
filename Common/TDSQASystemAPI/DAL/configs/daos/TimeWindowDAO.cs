@@ -10,7 +10,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TimeWindowDAO()
         {
-            TvpVariableName = "@tvpTimeWindows";
+            DbConnectionStringName = "configs";
             TvpType = "TimeWindowType";
             InsertSql =
                 "INSERT \n" +
@@ -19,9 +19,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   ClientName, \n" +
                 "   WindowId, \n" +
                 "   StartDate, \n" +
-                "   EndDate \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   EndDate \n";
         }
 
         public override void Insert(IList<TimeWindowDTO> recordsToSave)

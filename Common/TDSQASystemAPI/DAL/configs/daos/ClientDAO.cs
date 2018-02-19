@@ -11,7 +11,6 @@ namespace TDSQASystemAPI.DAL.configs.daos
         public ClientDAO()
         {
             DbConnectionStringName = "configs";
-            TvpVariableName = "@tvpClient";
             TvpType = "ClientType";
             InsertSql =
                 "INSERT \n" +
@@ -19,9 +18,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "SELECT \n" +
                 "   [Name], \n" +
                 "   Internationalize, \n" +
-                "   DefaultLanguage \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   DefaultLanguage \n";
         }
 
         public override void Insert(IList<ClientDTO> recordsToSave)

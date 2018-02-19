@@ -5,6 +5,14 @@
     /// </summary>
     public class TestEligibilityDTO
     {
+        // Default values from lines 239 - 242 of UpdateTDSConfigs
+        private const string RTS_NAME_DEFAULT = "EnrlGrdCd";
+        private const bool ENABLES_DEFAULT = true;
+        private const bool DISABLES_DEFAULT = false;
+        private const long ENTITY_TYPE_DEFAULT = 6L;
+        private const string ELIGIBILITY_TYPE_DEFAULT = "ATTRIBUTE";
+        private const int MATCH_TYPE_DEFAULT = 0;
+
         public string ClientName { get; set; }
         public string TestId { get; set; }
         public string RtsName { get; set; }
@@ -14,5 +22,17 @@
         public long EntityType { get; set; } // _efk_EntityType
         public string EligibilityType { get; set; }
         public int MatchType { get; set; }
+
+        public TestEligibilityDTO()
+        {
+            RtsName = RTS_NAME_DEFAULT;
+            Enables = ENABLES_DEFAULT;
+            Disables = DISABLES_DEFAULT;
+            EntityType = ENTITY_TYPE_DEFAULT;
+            EligibilityType = ELIGIBILITY_TYPE_DEFAULT;
+            MatchType = MATCH_TYPE_DEFAULT;
+
+            // TODO: set value for RtsValue based on logic in CASE statement of line 241
+        }
     }
 }

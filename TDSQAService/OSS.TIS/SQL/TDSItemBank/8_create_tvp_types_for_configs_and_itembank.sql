@@ -233,3 +233,37 @@ CREATE TYPE dbo.TestGradeType AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.TestGradeType TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestEligibilityType')
+BEGIN
+	DROP TYPE dbo.TestEligibilityType;
+END
+GO
+CREATE TYPE dbo.TestEligibilityType AS TABLE
+(
+	ClientName		varchar(100) NOT NULL, 
+	TestId			varchar(150) NOT NULL, 
+	RtsName			varchar(100) NOT NULL,
+	Enables			bit NOT NULL,
+	Disables		bit NOT NULL,
+	RtsValue		varchar(400) NOT NULL,
+	EntityType		bigint NOT NULL,
+	EligibilityType	varchar(50),
+	MatchType		int NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestEligibilityType TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestEligibilityType')
+BEGIN
+	DROP TYPE dbo.TestEligibilityType;
+END
+GO
+CREATE TYPE dbo.TestEligibilityType AS TABLE
+(
+	ClientName		varchar(100) NOT NULL, 
+	TestId			varchar(150) NOT NULL, 
+	ItemType		varchar(25) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestEligibilityType TO public
+GO

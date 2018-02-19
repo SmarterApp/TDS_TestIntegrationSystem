@@ -11,7 +11,6 @@ namespace TDSQASystemAPI.DAL.configs.daos
         public TesteeRelationshipAttributeDAO()
         {
             DbConnectionStringName = "configs";
-            TvpVariableName = "@tvpTestRelationsihpAttributes";
             TvpType = "TesteeRelationshipAttributeType";
             InsertSql =
                 "INSERT \n" +
@@ -24,9 +23,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   ReportName, \n" +
                 "   AtLogin, \n" +
                 "   SortOrder, \n" +
-                "   RelationshipType \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   RelationshipType \n";
         }
 
         public override void Insert(IList<TesteeRelationshipAttributeDTO> recordsToSave)

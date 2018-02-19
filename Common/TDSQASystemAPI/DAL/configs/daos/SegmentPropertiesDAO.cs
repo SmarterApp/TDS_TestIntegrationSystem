@@ -12,7 +12,6 @@ namespace TDSQASystemAPI.DAL.configs.daos
         {
             DbConnectionStringName = "configs";
             TvpType = "SegmentPropertiesType";
-            TvpVariableName = "@tvpSegmentProperties";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_SegmentProperties (ClientName, SegmentID, SegmentPosition, ParentTest, IsPermeable, EntryApproval, ExitApproval, ItemReview, Label, ModeKey) \n" +
@@ -26,9 +25,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   ExitApproval, \n" +
                 "   ItemReview, \n" +
                 "   Label, \n" +
-                "   ModeKey \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   ModeKey \n";
         }
 
         public override void Insert(IList<SegmentPropertiesDTO> recordsToSave)

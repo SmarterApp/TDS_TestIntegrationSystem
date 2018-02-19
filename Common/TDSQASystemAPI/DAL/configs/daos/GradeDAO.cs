@@ -11,7 +11,6 @@ namespace TDSQASystemAPI.DAL.configs.daos
         public GradeDAO()
         {
             DbConnectionStringName = "configs";
-            TvpVariableName = "@tvpClientGrades";
             TvpType = "GradeType";
             InsertSql =
                 "INSERT \n" +
@@ -19,9 +18,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "SELECT \n" +
                 "   ClientName, \n" +
                 "   GradeCode, \n" +
-                "   Grade, \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   Grade, \n";
         }
 
         public override void Insert(IList<GradeDTO> recordsToSave)

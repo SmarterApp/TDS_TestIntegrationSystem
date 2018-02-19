@@ -12,7 +12,6 @@ namespace TDSQASystemAPI.DAL.configs.daos
         {
             DbConnectionStringName = "configs";
             TvpType = "TestModeType";
-            TvpVariableName = "@tvpTestModes";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestMode (ClientName, TestID, TestKey, Mode, SessionType)\n" +
@@ -21,9 +20,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   TestId, \n" +
                 "   TestKey, \n" +
                 "   Mode, \n" +
-                "   SessionType \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   SessionType \n";
         }
 
         public override void Insert(IList<TestModeDTO> recordsToSave)

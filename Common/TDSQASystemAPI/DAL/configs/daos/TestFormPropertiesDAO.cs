@@ -12,7 +12,6 @@ namespace TDSQASystemAPI.DAL.configs.daos
         {
             DbConnectionStringName = "configs";
             TvpType = "TestFormPropertiesType";
-            TvpVariableName = "@tvpTestFormProperties";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestFormProperties(clientname, _efk_TestForm, FormID, TestID, [Language], StartDate, EndDate, TestKey) \n" +
@@ -24,9 +23,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   [Language], \n" +
                 "   StartDate, \n" +
                 "   EndDate, \n" +
-                "   TestKey \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   TestKey \n";
         }
 
         public override void Insert(IList<TestFormPropertiesDTO> recordsToSave)

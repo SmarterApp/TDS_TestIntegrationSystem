@@ -11,15 +11,12 @@ namespace TDSQASystemAPI.DAL.configs.daos
         public SubjectDAO()
         {
             DbConnectionStringName = "configs";
-            TvpVariableName = "@tvpSubjects";
             TvpType = "SubjectType";
             InsertSql =
                 "INSERT \n" +
                 "   ClientName, \n" +
                 "   [Subject], \n" +
-                "   SubjectCode \n" +
-                "FROM" +
-                TvpVariableName;
+                "   SubjectCode \n";
         }
 
         public override void Insert(IList<SubjectDTO> recordsToSave)

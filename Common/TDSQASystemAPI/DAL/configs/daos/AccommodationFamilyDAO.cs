@@ -13,16 +13,13 @@ namespace TDSQASystemAPI.DAL.configs.daos
         {
             DbConnectionStringName = "configs";
             TvpType = "AccommodationFamilyType";
-            TvpVariableName = "@tvpAccommodationFamilies";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_AccommodationFamily (ClientName, Family, Label) \n" +
                 "SELECT \n" +
                 "   ClientName, \n" +
                 "   Family, \n" +
-                "   Label \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   Label \n";
         }
 
         public override void Insert(IList<AccommodationFamilyDTO> recordsToSave)

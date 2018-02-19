@@ -11,7 +11,6 @@ namespace TDSQASystemAPI.DAL.configs.daos
         public FieldTestPriorityDAO()
         {
             DbConnectionStringName = "configs";
-            TvpVariableName = "@tvpFieldTestPriorities";
             TvpType = "FieldTestPriorityType";
             InsertSql =
                 "INSERT \n" +
@@ -20,9 +19,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   ClientName, \n" +
                 "   TdsId, \n" +
                 "   Priority, \n" +
-                "   TestId \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   TestId \n";
         }
 
         public override void Insert(IList<FieldTestPriorityDTO> recordsToSave)

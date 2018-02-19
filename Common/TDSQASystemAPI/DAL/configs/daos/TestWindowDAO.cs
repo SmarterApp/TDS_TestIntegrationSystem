@@ -12,7 +12,6 @@ namespace TDSQASystemAPI.DAL.configs.daos
         {
             DbConnectionStringName = "configs";
             TvpType = "TestWindowType";
-            TvpVariableName = "@tvpTestWindowTypes";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestWindow (ClientName, TestId, WindowId, NumOpps, StartDate, EndDate) \n" +
@@ -22,9 +21,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   WindowId, \n" +
                 "   NumOpps, \n" +
                 "   StartDate, \n" +
-                "   EndDate, \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   EndDate \n";
         }
 
         public override void Insert(IList<TestWindowDTO> recordsToSave)

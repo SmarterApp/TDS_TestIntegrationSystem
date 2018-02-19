@@ -18,6 +18,9 @@ namespace TDSQASystemAPI.DAL
     /// <typeparam name="T">The type that should be persisted.</typeparam>
     public class TestPackageDaoBase<T> : ITestPackageDao<T>
     {
+        private string insertSql = "";
+        private const string DEFAULT_TVP_VARIABLE_NAME = "@tvpData";
+
         /// <summary>
         /// The SQL responsible for inserting the collection of records into the database.
         /// </summary>
@@ -36,27 +39,31 @@ namespace TDSQASystemAPI.DAL
         ///        "   AtLogin, \n" +
         ///        "   SortOrder, \n" +
         ///        "   RelationshipType \n" +
-        ///        "FROM \n" +
-        ///        TvpName;
         /// </code>
         /// </example>
-        protected internal string InsertSql { get; set; }
+        /// <remarks>
+        /// The default behavior of this method is to build an SQL statement that ends with "FROM @tvpData", meaning that
+        /// the source data to insert is stored in a table-valued parameter variable.  Consequently, the default
+        /// implementation of the Insert method expects a single parameter of <code>SqlDbType.Structured</code>. If the
+        /// SQL for this property needs to deviate from the pattern (i.e. if this property is overridden), then the
+        /// <code>Insert</code> method should also be overridden.
+        /// </remarks>
+        protected internal virtual string InsertSql {
+            get { return insertSql; }
+            set {
+                if (!value.EndsWith("\n"))
+                {
+                    value = value + "\n";
+                }
+
+                insertSql = string.Format("{0}FROM \n\t{1}", value, DEFAULT_TVP_VARIABLE_NAME);
+            }
+        }
 
         /// <summary>
         /// The type of the table-valued parameter used to pass the <code>IList<typeparamref name="T"/></code>.
         /// </summary>
         protected internal string TvpType { get; set; }
-
-        /// <summary>
-        /// The name of the table-valued parameter variable that will be used as the source of data to insert.
-        /// </summary>
-        /// <remarks>
-        /// This value should follow the standard naming requirements/conventions for an MSSQL variable.
-        /// </remarks>
-        /// <example>
-        /// TvpVariableName = "@tvpMyTableValuedParameter"
-        /// </example>
-        protected internal string TvpVariableName { get; set; }
 
         /// <summary>
         /// The name of the connection string in the app.config file.
@@ -74,7 +81,7 @@ namespace TDSQASystemAPI.DAL
                 using (var command = new SqlCommand(InsertSql, connection))
                 {
                     command.CommandType = CommandType.Text;
-                    var testeeAttributeParam = command.Parameters.AddWithValue(TvpVariableName, recordsToSave.ToDataTable());
+                    var testeeAttributeParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordsToSave.ToDataTable());
                     testeeAttributeParam.SqlDbType = SqlDbType.Structured;
                     testeeAttributeParam.TypeName = TvpType;
 

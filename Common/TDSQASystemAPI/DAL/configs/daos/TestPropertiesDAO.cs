@@ -12,7 +12,6 @@ namespace TDSQASystemAPI.DAL.configs.daos
         {
             DbConnectionStringName = "configs";
             TvpType = "TestPropertiesType";
-            TvpVariableName = "@tvpTestProperties";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestProperties (ClientName, TestID, IsSelectable, Label, SubjectName, MaxOpportunities, ScoreByTDS, AccommodationFamily,  ReportingInstrument, TIDE_ID, gradeText) \n" +
@@ -27,9 +26,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   AccommodationFamily, \n" +
                 "   ReportingInstrument, \n" +
                 "   TideId, \n" +
-                "   GradeText \n" +
-                "FROM \n" +
-                TvpVariableName;
+                "   GradeText \n";
         }
 
         public override void Insert(IList<TestPropertiesDTO> recordsToSave)
