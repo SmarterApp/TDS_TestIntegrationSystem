@@ -329,3 +329,23 @@ CREATE TYPE dbo.TestToolTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.TestToolTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestScoreFeatureTable')
+BEGIN
+	DROP TYPE dbo.TestScoreFeatureTable;
+END
+GO
+CREATE TYPE dbo.TestScoreFeatureTable AS TABLE
+(
+	ClientName			varchar(100) NOT NULL, 
+	[Type]				nvarchar(255) NOT NULL,
+	Code				nvarchar(255) NOT NULL,
+	[Value]				varchar(128) NOT NULL,
+	IsDefault			bit NOT NULL,
+	AllowCombine		bit NOT NULL,
+	ValueDescription	nvarchar(255),
+	Context				varchar(255) NOT NULL,
+	ContextType			varchar(50) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestScoreFeatureTable TO public
+GO
