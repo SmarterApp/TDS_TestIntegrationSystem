@@ -253,17 +253,79 @@ CREATE TYPE dbo.TestEligibilityType AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.TestEligibilityType TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestEligibilityType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestItemTypeType')
 BEGIN
-	DROP TYPE dbo.TestEligibilityType;
+	DROP TYPE dbo.TestItemTypeType;
 END
 GO
-CREATE TYPE dbo.TestEligibilityType AS TABLE
+CREATE TYPE dbo.TestItemTypeType AS TABLE
 (
 	ClientName		varchar(100) NOT NULL, 
 	TestId			varchar(150) NOT NULL, 
 	ItemType		varchar(25) NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestEligibilityType TO public
+GRANT CONTROL ON TYPE::dbo.TestItemTypeType TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestItemConstraintType')
+BEGIN
+	DROP TYPE dbo.TestItemConstraintType;
+END
+GO
+CREATE TYPE dbo.TestItemConstraintType AS TABLE
+(
+	ClientName		varchar(100) NOT NULL, 
+	TestId			varchar(255) NOT NULL, 
+	PropName		varchar(100) NOT NULL,
+	PropValue		varchar(100) NOT NULL,
+	ToolType		nvarchar(255) NOT NULL,
+	ToolValue		nvarchar(255) NOT NULL,
+	ItemIn			bit NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestItemConstraintType TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestToolTypeType')
+BEGIN
+	DROP TYPE dbo.TestToolTypeType;
+END
+GO
+CREATE TYPE dbo.TestToolTypeType AS TABLE
+(
+	ClientName				varchar(100) NOT NULL, 
+	Context					varchar(255) NOT NULL,
+	ContextType				varchar(50) NOT NULL,
+	ToolName				varchar(255) NOT NULL,
+	AllowChange				bit NOT NULL,
+	IsSelectable			bit NOT NULL,
+	IsVisible				bit NOT NULL,
+	StudentControl			bit NOT NULL,
+	IsFunctional			bit NOT NULL,
+	RtsFieldName			nvarchar(100),
+	IsRequired				bit NOT NULL,
+	TideSelectable			bit,
+	TideSelectableBySubject	bit NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestToolTypeType TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestToolType')
+BEGIN
+	DROP TYPE dbo.TestToolType;
+END
+GO
+CREATE TYPE dbo.TestToolType AS TABLE
+(
+	ClientName			varchar(100) NOT NULL, 
+	[Type]				nvarchar(255) NOT NULL,
+	Code				nvarchar(255) NOT NULL,
+	[Value]				varchar(128) NOT NULL,
+	IsDefault			bit NOT NULL,
+	AllowCombine		bit NOT NULL,
+	ValueDescription	nvarchar(255),
+	Context				varchar(255) NOT NULL,
+	ContextType			varchar(50) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestToolType TO public
 GO
