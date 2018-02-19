@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public FieldTestPriorityDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "FieldTestPriorityType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "FieldTestPriorityTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_FieldtestPriority (clientname, TDS_ID, priority, TestID) \n" +

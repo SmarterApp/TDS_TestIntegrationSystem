@@ -1,11 +1,11 @@
 ﻿USE OSS_Configs
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TesteeAttributeType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TesteeAttributeTable')
 BEGIN
-	DROP TYPE dbo.TesteeAttributeType
+	DROP TYPE dbo.TesteeAttributeTable
 END
 GO
-CREATE TYPE dbo.TesteeAttributeType AS TABLE
+CREATE TYPE dbo.TesteeAttributeTable AS TABLE
 (
 	RtsName			varchar(50) NOT NULL,
 	TdsId			varchar(50) NOT NULL,
@@ -17,14 +17,14 @@ CREATE TYPE dbo.TesteeAttributeType AS TABLE
 	SortOrder		int
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TesteeAttributeType TO public
+GRANT CONTROL ON TYPE::dbo.TesteeAttributeTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TesteeRelationshipAttributeType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TesteeRelationshipAttributeTable')
 BEGIN
-	DROP TYPE dbo.TesteeRelationshipAttributeType
+	DROP TYPE dbo.TesteeRelationshipAttributeTable
 END
 GO
-CREATE TYPE dbo.TesteeRelationshipAttributeType AS TABLE
+CREATE TYPE dbo.TesteeRelationshipAttributeTable AS TABLE
 (
 	ClientName			varchar(50) NOT NULL,
 	TdsId				varchar(50) NOT NULL,
@@ -36,28 +36,28 @@ CREATE TYPE dbo.TesteeRelationshipAttributeType AS TABLE
 	RelationshipType	varchar(50) NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TesteeRelationshipAttributeType TO public
+GRANT CONTROL ON TYPE::dbo.TesteeRelationshipAttributeTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'ClientType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'ClientTable')
 BEGIN
-	DROP TYPE dbo.ClientType
+	DROP TYPE dbo.ClientTable
 END
 GO
-CREATE TYPE dbo.ClientType AS TABLE
+CREATE TYPE dbo.ClientTable AS TABLE
 (
 	[Name]				varchar(100) NOT NULL,
 	Internationalize	bit NOT NULL,
 	DefaultLanguage		varchar(50) NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.ClientType TO public
+GRANT CONTROL ON TYPE::dbo.ClientTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TimeWindowType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TimeWindowTable')
 BEGIN
-	DROP TYPE dbo.TimeWindowType
+	DROP TYPE dbo.TimeWindowTable
 END
 GO
-CREATE TYPE dbo.TimeWindowType AS TABLE
+CREATE TYPE dbo.TimeWindowTable AS TABLE
 (
 	ClientName	varchar(100) NOT NULL,
 	WindowId	bit NOT NULL,
@@ -65,14 +65,14 @@ CREATE TYPE dbo.TimeWindowType AS TABLE
 	EndDate		datetime
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TimeWindowType TO public
+GRANT CONTROL ON TYPE::dbo.TimeWindowTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'FieldTestPriorityType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'FieldTestPriorityTable')
 BEGIN
-	DROP TYPE dbo.FieldTestPriorityType
+	DROP TYPE dbo.FieldTestPriorityTable
 END
 GO
-CREATE TYPE dbo.FieldTestPriorityType AS TABLE
+CREATE TYPE dbo.FieldTestPriorityTable AS TABLE
 (
 	ClientName	varchar(100) NOT NULL,
 	TdsId		varchar(50) NOT NULL,
@@ -80,56 +80,56 @@ CREATE TYPE dbo.FieldTestPriorityType AS TABLE
 	TestId		varchar(200) NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.FieldTestPriorityType TO public
+GRANT CONTROL ON TYPE::dbo.FieldTestPriorityTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'GradeType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'GradeTable')
 BEGIN
-	DROP TYPE dbo.GradeType
+	DROP TYPE dbo.GradeTable
 END
 GO
-CREATE TYPE dbo.GradeType AS TABLE
+CREATE TYPE dbo.GradeTable AS TABLE
 (
 	ClientName	varchar(100) NOT NULL,
 	GradeCode	varchar(25) NOT NULL,
 	Grade		varchar(64) NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.GradeType TO public
+GRANT CONTROL ON TYPE::dbo.GradeTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'SubjectType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'SubjectTable')
 BEGIN
-	DROP TYPE dbo.SubjectType
+	DROP TYPE dbo.SubjectTable
 END
 GO
-CREATE TYPE dbo.SubjectType AS TABLE
+CREATE TYPE dbo.SubjectTable AS TABLE
 (
 	ClientName	varchar(100) NOT NULL,
 	[Subject]	varchar(100) NOT NULL,
 	SubjectCode	varchar(25) NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.SubjectType TO public
+GRANT CONTROL ON TYPE::dbo.SubjectTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'AccommodationFamilyType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'AccommodationFamilyTable')
 BEGIN
-	DROP TYPE dbo.AccommodationFamilyType
+	DROP TYPE dbo.AccommodationFamilyTable
 END
 GO
-CREATE TYPE dbo.AccommodationFamilyType AS TABLE
+CREATE TYPE dbo.AccommodationFamilyTable AS TABLE
 (
 	ClientName	varchar(100) NOT NULL,
 	Family		varchar(50) NOT NULL,
 	Label		varchar(200) NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.AccommodationFamilyType TO public
+GRANT CONTROL ON TYPE::dbo.AccommodationFamilyTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestPropertiesType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestPropertiesTable')
 BEGIN
-	DROP TYPE dbo.TestPropertiesType;
+	DROP TYPE dbo.TestPropertiesTable;
 END
 GO
-CREATE TYPE dbo.TestPropertiesType AS TABLE
+CREATE TYPE dbo.TestPropertiesTable AS TABLE
 (
 	ClientName			varchar(100) NOT NULL,
 	TestId				varchar(255) NOT NULL,
@@ -144,14 +144,14 @@ CREATE TYPE dbo.TestPropertiesType AS TABLE
 	GradeText			varchar(50)
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestPropertiesType TO public
+GRANT CONTROL ON TYPE::dbo.TestPropertiesTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestModeType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestModeTable')
 BEGIN
-	DROP TYPE dbo.TestModeType;
+	DROP TYPE dbo.TestModeTable;
 END
 GO
-CREATE TYPE dbo.TestModeType AS TABLE
+CREATE TYPE dbo.TestModeTable AS TABLE
 (
 	ClientName		varchar(100) NOT NULL,
 	TestId			varchar(200) NOT NULL,
@@ -160,14 +160,14 @@ CREATE TYPE dbo.TestModeType AS TABLE
 	SessionType		int NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestModeType TO public
+GRANT CONTROL ON TYPE::dbo.TestModeTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'SegmentPropertiesType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'SegmentPropertiesTable')
 BEGIN
-	DROP TYPE dbo.SegmentPropertiesType;
+	DROP TYPE dbo.SegmentPropertiesTable;
 END
 GO
-CREATE TYPE dbo.SegmentPropertiesType AS TABLE
+CREATE TYPE dbo.SegmentPropertiesTable AS TABLE
 (
 	ClientName		varchar(100) NOT NULL, 
 	SegmentId		varchar(255) NOT NULL, 
@@ -181,14 +181,14 @@ CREATE TYPE dbo.SegmentPropertiesType AS TABLE
 	ModeKey			varchar(250)
 )
 GO
-GRANT CONTROL ON TYPE::dbo.SegmentPropertiesType TO public
+GRANT CONTROL ON TYPE::dbo.SegmentPropertiesTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestFormPropertiesType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestFormPropertiesTable')
 BEGIN
-	DROP TYPE dbo.TestFormPropertiesType;
+	DROP TYPE dbo.TestFormPropertiesTable;
 END
 GO
-CREATE TYPE dbo.TestFormPropertiesType AS TABLE
+CREATE TYPE dbo.TestFormPropertiesTable AS TABLE
 (
 	ClientName		varchar(100) NOT NULL, 
 	TestFormKey		varchar(50) NOT NULL, 
@@ -200,14 +200,14 @@ CREATE TYPE dbo.TestFormPropertiesType AS TABLE
 	TestKey			varchar(250)
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestFormPropertiesType TO public
+GRANT CONTROL ON TYPE::dbo.TestFormPropertiesTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestWindowType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestWindowTable')
 BEGIN
-	DROP TYPE dbo.TestWindowType;
+	DROP TYPE dbo.TestWindowTable;
 END
 GO
-CREATE TYPE dbo.TestWindowType AS TABLE
+CREATE TYPE dbo.TestWindowTable AS TABLE
 (
 	ClientName	varchar(100) NOT NULL, 
 	TestId		varchar(200) NOT NULL, 
@@ -217,28 +217,28 @@ CREATE TYPE dbo.TestWindowType AS TABLE
 	EndDate		datetime
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestWindowType TO public
+GRANT CONTROL ON TYPE::dbo.TestWindowTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestGradeType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestGradeTable')
 BEGIN
-	DROP TYPE dbo.TestGradeType;
+	DROP TYPE dbo.TestGradeTable;
 END
 GO
-CREATE TYPE dbo.TestGradeType AS TABLE
+CREATE TYPE dbo.TestGradeTable AS TABLE
 (
 	ClientName	varchar(100) NOT NULL, 
 	TestId		varchar(150) NOT NULL, 
 	Grade	varchar(25) NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestGradeType TO public
+GRANT CONTROL ON TYPE::dbo.TestGradeTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestEligibilityType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestEligibilityTable')
 BEGIN
-	DROP TYPE dbo.TestEligibilityType;
+	DROP TYPE dbo.TestEligibilityTable;
 END
 GO
-CREATE TYPE dbo.TestEligibilityType AS TABLE
+CREATE TYPE dbo.TestEligibilityTable AS TABLE
 (
 	ClientName		varchar(100) NOT NULL, 
 	TestId			varchar(150) NOT NULL, 
@@ -251,28 +251,28 @@ CREATE TYPE dbo.TestEligibilityType AS TABLE
 	MatchType		int NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestEligibilityType TO public
+GRANT CONTROL ON TYPE::dbo.TestEligibilityTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestItemTypeType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestItemTypeTable')
 BEGIN
-	DROP TYPE dbo.TestItemTypeType;
+	DROP TYPE dbo.TestItemTypeTable;
 END
 GO
-CREATE TYPE dbo.TestItemTypeType AS TABLE
+CREATE TYPE dbo.TestItemTypeTable AS TABLE
 (
 	ClientName		varchar(100) NOT NULL, 
 	TestId			varchar(150) NOT NULL, 
 	ItemType		varchar(25) NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestItemTypeType TO public
+GRANT CONTROL ON TYPE::dbo.TestItemTypeTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestItemConstraintType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestItemConstraintTable')
 BEGIN
-	DROP TYPE dbo.TestItemConstraintType;
+	DROP TYPE dbo.TestItemConstraintTable;
 END
 GO
-CREATE TYPE dbo.TestItemConstraintType AS TABLE
+CREATE TYPE dbo.TestItemConstraintTable AS TABLE
 (
 	ClientName		varchar(100) NOT NULL, 
 	TestId			varchar(255) NOT NULL, 
@@ -283,14 +283,14 @@ CREATE TYPE dbo.TestItemConstraintType AS TABLE
 	ItemIn			bit NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestItemConstraintType TO public
+GRANT CONTROL ON TYPE::dbo.TestItemConstraintTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestToolTypeType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestToolTypeTable')
 BEGIN
-	DROP TYPE dbo.TestToolTypeType;
+	DROP TYPE dbo.TestToolTypeTable;
 END
 GO
-CREATE TYPE dbo.TestToolTypeType AS TABLE
+CREATE TYPE dbo.TestToolTypeTable AS TABLE
 (
 	ClientName				varchar(100) NOT NULL, 
 	Context					varchar(255) NOT NULL,
@@ -307,14 +307,14 @@ CREATE TYPE dbo.TestToolTypeType AS TABLE
 	TideSelectableBySubject	bit NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestToolTypeType TO public
+GRANT CONTROL ON TYPE::dbo.TestToolTypeTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestToolType')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestToolTable')
 BEGIN
-	DROP TYPE dbo.TestToolType;
+	DROP TYPE dbo.TestToolTable;
 END
 GO
-CREATE TYPE dbo.TestToolType AS TABLE
+CREATE TYPE dbo.TestToolTable AS TABLE
 (
 	ClientName			varchar(100) NOT NULL, 
 	[Type]				nvarchar(255) NOT NULL,
@@ -327,5 +327,5 @@ CREATE TYPE dbo.TestToolType AS TABLE
 	ContextType			varchar(50) NOT NULL
 )
 GO
-GRANT CONTROL ON TYPE::dbo.TestToolType TO public
+GRANT CONTROL ON TYPE::dbo.TestToolTable TO public
 GO

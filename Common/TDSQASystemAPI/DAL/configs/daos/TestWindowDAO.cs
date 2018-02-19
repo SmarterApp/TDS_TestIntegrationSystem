@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TestWindowDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TestWindowType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TestWindowTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestWindow (ClientName, TestId, WindowId, NumOpps, StartDate, EndDate) \n" +

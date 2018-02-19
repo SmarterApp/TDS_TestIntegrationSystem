@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TestItemConstraintDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TestItemConstraintType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TestItemConstraintTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_Test_ItemConstraint (clientname, testID, propname, propvalue, tooltype, toolvalue, item_in) \n" +

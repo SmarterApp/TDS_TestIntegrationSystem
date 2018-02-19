@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public SubjectDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "SubjectType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "SubjectTable";
             InsertSql =
                 "INSERT \n" +
                 "   ClientName, \n" +

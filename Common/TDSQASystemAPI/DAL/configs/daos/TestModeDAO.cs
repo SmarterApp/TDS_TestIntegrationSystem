@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
         /// </summary>
         public TestModeDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TestModeType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TestModeTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestMode (ClientName, TestID, TestKey, Mode, SessionType)\n" +

@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public LanguageDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "LanguageType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "LanguageTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_Language (clientname, [Language], LanguageCode)\n" +

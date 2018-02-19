@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TestPropertiesDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TestPropertiesType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TestPropertiesTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestProperties (ClientName, TestID, IsSelectable, Label, SubjectName, MaxOpportunities, ScoreByTDS, AccommodationFamily,  ReportingInstrument, TIDE_ID, gradeText) \n" +

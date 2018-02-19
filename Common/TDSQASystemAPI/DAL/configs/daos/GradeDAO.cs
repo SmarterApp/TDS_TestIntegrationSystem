@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public GradeDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "GradeType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "GradeTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_Grade (ClientName, GradeCode, Grade) \n" +

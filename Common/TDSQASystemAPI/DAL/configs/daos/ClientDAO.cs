@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
         /// </summary>
         public ClientDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "ClientType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "ClientTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client ([Name], Internationalize, DefaultLanguage)\n" +

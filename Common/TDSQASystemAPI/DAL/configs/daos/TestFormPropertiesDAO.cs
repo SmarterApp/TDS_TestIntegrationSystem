@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TestFormPropertiesDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TestFormPropertiesType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TestFormPropertiesTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestFormProperties(clientname, _efk_TestForm, FormID, TestID, [Language], StartDate, EndDate, TestKey) \n" +

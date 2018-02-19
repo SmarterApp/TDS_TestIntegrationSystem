@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TestToolTypeDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TestToolTypeType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TestToolTypeTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestToolType (" +

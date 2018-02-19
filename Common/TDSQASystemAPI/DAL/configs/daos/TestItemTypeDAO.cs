@@ -10,11 +10,11 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TestItemTypeDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TestItemTypeType (ClientName, TestID, ItemType)";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TestItemTypeTable";
             InsertSql =
                 "INSERT \n" +
-                "   dbo.Client_Test_ItemTypes \n" +
+                "   dbo.Client_Test_ItemTypes (ClientName, TestID, ItemType) \n" +
                 "SELECT \n" +
                 "   ClientName, \n" +
                 "   TestId, \n" +

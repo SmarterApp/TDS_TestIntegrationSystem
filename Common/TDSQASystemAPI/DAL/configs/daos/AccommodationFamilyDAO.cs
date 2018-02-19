@@ -11,8 +11,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public AccommodationFamilyDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "AccommodationFamilyType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "AccommodationFamilyTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_AccommodationFamily (ClientName, Family, Label) \n" +

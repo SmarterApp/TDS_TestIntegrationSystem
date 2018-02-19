@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public SegmentPropertiesDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "SegmentPropertiesType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "SegmentPropertiesTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_SegmentProperties (ClientName, SegmentID, SegmentPosition, ParentTest, IsPermeable, EntryApproval, ExitApproval, ItemReview, Label, ModeKey) \n" +

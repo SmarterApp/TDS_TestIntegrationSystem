@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TestEligibilityDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TestEligibilityType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TestEligibilityTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TestEligibility (Clientname, TestID, RTSName, enables, disables, RTSValue, _efk_EntityType, eligibilityType, matchType) \n" +

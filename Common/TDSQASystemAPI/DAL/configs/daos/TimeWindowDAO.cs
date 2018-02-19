@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TimeWindowDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TimeWindowType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TimeWindowTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TimeWindow (ClientName, WindowID, StartDate, EndDate) \n" +

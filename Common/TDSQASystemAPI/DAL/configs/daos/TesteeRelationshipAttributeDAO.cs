@@ -10,8 +10,8 @@ namespace TDSQASystemAPI.DAL.configs.daos
     {
         public TesteeRelationshipAttributeDAO()
         {
-            DbConnectionStringName = "configs";
-            TvpType = "TesteeRelationshipAttributeType";
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            TvpType = "TesteeRelationshipAttributeTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.Client_TesteeRelationshipAttribute (ClientName, TDS_ID, RTSName, Label, ReportName, AtLogin, SortOrder, RelationshipType) \n" +
