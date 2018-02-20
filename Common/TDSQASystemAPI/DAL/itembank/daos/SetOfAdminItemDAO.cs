@@ -53,7 +53,8 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   IrtC, \n" +
                 "   IrtModel, \n" +
                 "   ClsString, \n" +
-                "   UpdatedTestVersion \n";
+                "   UpdatedTestVersion, \n" +
+                "   BVector \n";
         }
 
         public override void Insert(IList<SetOfAdminItemDTO> recordsToSave)

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TDSQASystemAPI.DAL.itembank.dtos
+﻿namespace TDSQASystemAPI.DAL.itembank.dtos
 {
     /// <summary>
     /// Represents a single record in the <code>OSS_Itembank..tblSetOfAdminItems</code> table.
@@ -30,5 +24,6 @@ namespace TDSQASystemAPI.DAL.itembank.dtos
         public string IrtModel { get; set; } // maps to irt_model in tblSetOfAdminItems
         public string ClsString { get; set; }
         public long UpdatedTestVersion { get; set; } // maps to updateconfig in tblSetOfAdminItems
+        public string BVector { get; set; } // this field is set on line 92 of spLoad_AdminItemMeasurementParms
     }
 }

@@ -278,12 +278,12 @@ CREATE TYPE dbo.AdminStrandTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.AdminStrandTable TO public
 GO
-IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'AdminStrandTable')
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'SetOfAdminItemTable')
 BEGIN
-	DROP TYPE dbo.AdminStrandTable
+	DROP TYPE dbo.SetOfAdminItemTable
 END
 GO
-CREATE TYPE dbo.AdminStrandTable AS TABLE
+CREATE TYPE dbo.SetOfAdminItemTable AS TABLE
 (
 	ItemKey				varchar(150) NOT NULL,
 	SegmentKey			varchar(250) NOT NULL,
@@ -303,8 +303,42 @@ CREATE TYPE dbo.AdminStrandTable AS TABLE
 	IrtC				float,
 	IrtModel			varchar(100),
 	ClsString			varchar(max),
-	UpdatedTestVersion	bigint
+	UpdatedTestVersion	bigint,
+	BVector				varchar(200)
 )
 GO
-GRANT CONTROL ON TYPE::dbo.AdminStrandTable TO public
+GRANT CONTROL ON TYPE::dbo.SetOfAdminItemTable TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'ItemScoreDimensionType')
+BEGIN
+	DROP TYPE dbo.ItemScoreDimensionType
+END
+GO
+CREATE TYPE dbo.ItemScoreDimensionType AS TABLE
+(
+	ItemScoreDimensionKey	uniqueidentifier NOT NULL,
+	ItemKey					varchar(150) NOT NULL,
+	SegmentKey				varchar(250) NOT NULL,
+	Dimension				varchar(255) NOT NULL,
+	ScorePoints				int NOT NULL,
+	[Weight]				float NOT NULL,
+	MeasurementModel		int NOT NULL,
+	RecodeRule				nvarchar(255)
+)
+GO
+GRANT CONTROL ON TYPE::dbo.ItemScoreDimensionType TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'ItemMeasurementParameterTable')
+BEGIN
+	DROP TYPE dbo.ItemMeasurementParameterTable
+END
+GO
+CREATE TYPE dbo.ItemMeasurementParameterTable AS TABLE
+(
+	ItemScoreDimensionKey	uniqueidentifier NOT NULL,
+	MeasurementParameterKey	int NOT NULL,
+	ParmValue				float
+)
+GO
+GRANT CONTROL ON TYPE::dbo.ItemMeasurementParameterTable TO public
 GO
