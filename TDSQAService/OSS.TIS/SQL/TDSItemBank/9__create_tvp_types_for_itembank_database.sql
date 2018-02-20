@@ -360,3 +360,22 @@ CREATE TYPE dbo.AdminStimulusTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.AdminStimulusTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestFormTable')
+BEGIN
+	DROP TYPE dbo.TestFormTable
+END
+GO
+CREATE TYPE dbo.TestFormTable AS TABLE
+(
+	SegmentKey		varchar(250) NOT NULL,
+	Cohort			varchar(20) NOT NULL,
+	[Language]		varchar(150),
+	TestFormKey		varchar(100) NOT NULL,
+	FormId			varchar(150),
+	ITSBankKey		bigint NOT NULL,
+	ITSKey			bigint NOT NULL,
+	TestVersion		bigint
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestFormTable TO public
+GO

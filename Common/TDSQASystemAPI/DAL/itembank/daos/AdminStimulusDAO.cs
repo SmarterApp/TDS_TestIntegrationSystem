@@ -4,7 +4,7 @@ using TDSQASystemAPI.DAL.itembank.dtos;
 namespace TDSQASystemAPI.DAL.itembank.daos
 {
     /// <summary>
-    /// A class for saving <code>AdminStimulusDTO</code>s to the <code>OSS_Itembank..tblAdminStimulsu</code> table
+    /// A class for saving <code>AdminStimulusDTO</code>s to the <code>OSS_Itembank..tblAdminStimulus</code> table
     /// </summary>
     public class AdminStimulusDAO : TestPackageDaoBase<AdminStimulusDTO>
     {
