@@ -12,7 +12,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
         {
             DbConnectionStringName = DatabaseConnectionStringNames.ITEMBANK;
             TvpType = "TestFormTable";
-            InsertSql = 
+            InsertSql =
                 "INSERT \n" +
                 "   dbo.TestForm (_fk_AdminSubject, Cohort, Language, _Key, FormID, _efk_ITSBank, _efk_ITSKey, LoadConfig) \n" +
                 "SELECT \n" +
@@ -23,7 +23,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   FormId, \n" +
                 "   ITSBankKey, \n" +
                 "   ITSKey, \n" +
-                "   TestVersion \n"
+                "   TestVersion \n";
         }
 
         public override void Insert(IList<TestFormDTO> recordsToSave)
