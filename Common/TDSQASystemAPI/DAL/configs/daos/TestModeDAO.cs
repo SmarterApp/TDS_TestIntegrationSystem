@@ -3,11 +3,11 @@ using TDSQASystemAPI.DAL.configs.dtos;
 
 namespace TDSQASystemAPI.DAL.configs.daos
 {
+    /// <summary>
+    /// A class for saving <code>TestModeDTO</code>s to the <code>OSS_Configs..Client_TestMode</code> table
+    /// </summary>
     public class TestModeDAO : TestPackageDaoBase<TestModeDTO>
     {
-        /// <summary>
-        /// A class for saving <code>TestModeDTO</code>s to the <code>OSS_Configs..Client_TestMode</code> table
-        /// </summary>
         public TestModeDAO()
         {
             DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
