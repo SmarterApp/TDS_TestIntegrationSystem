@@ -278,3 +278,33 @@ CREATE TYPE dbo.AdminStrandTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.AdminStrandTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'AdminStrandTable')
+BEGIN
+	DROP TYPE dbo.AdminStrandTable
+END
+GO
+CREATE TYPE dbo.AdminStrandTable AS TABLE
+(
+	ItemKey				varchar(150) NOT NULL,
+	SegmentKey			varchar(250) NOT NULL,
+	TestVersion			bigint,
+	StrandKey			varchar(150),
+	TestAdminKey		varchar(150),
+	GroupId				varchar(100),
+	ItemPosition		int,
+	IsFieldTest			int,
+	IsActive			bit,
+	BlockId				varchar(10),
+	IsRequired			bit,
+	GroupKey			varchar(100),
+	StrandName			varchar(150),
+	IrtA				float,
+	IrtB				varchar(150),
+	IrtC				float,
+	IrtModel			varchar(100),
+	ClsString			varchar(max),
+	UpdatedTestVersion	bigint
+)
+GO
+GRANT CONTROL ON TYPE::dbo.AdminStrandTable TO public
+GO
