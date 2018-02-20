@@ -6,7 +6,7 @@
     public class TestCohortDTO
     {
         public string SegmentKey { get; set; } // maps to _fk_adminsubject in TestCohort
-        public string Cohort { get; set; }
+        public int Cohort { get; set; }
         public double ItemRatio { get; set; }
     }
 }

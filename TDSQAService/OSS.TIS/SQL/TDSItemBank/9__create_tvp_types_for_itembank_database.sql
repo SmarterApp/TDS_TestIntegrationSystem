@@ -235,3 +235,46 @@ CREATE TYPE dbo.ItemSelectionParmTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.ItemSelectionParmTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestCohortTable')
+BEGIN
+	DROP TYPE dbo.TestCohortTable
+END
+GO
+CREATE TYPE dbo.TestCohortTable AS TABLE
+(
+	SegmentKey	varchar(250) NOT NULL,
+	Cohort		int NOT NULL,
+	ItemRatio	float NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestCohortTable TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'AdminStrandTable')
+BEGIN
+	DROP TYPE dbo.AdminStrandTable
+END
+GO
+CREATE TYPE dbo.AdminStrandTable AS TABLE
+(
+	AdminStrandKey				nvarchar(255) NOT NULL,
+	SegmentKey					varchar(250) NOT NULL,
+	StrandKey					varchar(150) NOT NULL,
+	MinItems					int,
+	MaxItems					int,
+	IsStrictMax					bit NOT NULL,
+	BlueprintWeight				float NOT NULL,
+	AdaptiveCut					float,
+	StartAbility				float,
+	StartInfo					float,
+	Scalar						float,
+	TestVersion					bigint,
+	LoadMin						int,
+	LoadMax						int,
+	PrecisionTarget				float,
+	PrecisionTargetMetWeight	float,
+	PrecisionTargetNotMetWeight	float,
+	AbilityWeight				float
+)
+GO
+GRANT CONTROL ON TYPE::dbo.AdminStrandTable TO public
+GO
