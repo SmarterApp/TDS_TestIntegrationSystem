@@ -342,3 +342,21 @@ CREATE TYPE dbo.ItemMeasurementParameterTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.ItemMeasurementParameterTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'AdminStimulusTable')
+BEGIN
+	DROP TYPE dbo.AdminStimulusTable
+END
+GO
+CREATE TYPE dbo.AdminStimulusTable AS TABLE
+(
+	StimulusKey			varchar(100) NOT NULL,
+	SegmentKey			varchar(250) NOT NULL,
+	NumItemsRequired	int NOT NULL,
+	MaxItems			int NOT NULL,
+	TestVersion			bigint,
+	GroupId				varchar(50),
+	UpdatedTestVersion	bigint
+)
+GO
+GRANT CONTROL ON TYPE::dbo.AdminStimulusTable TO public
+GO
