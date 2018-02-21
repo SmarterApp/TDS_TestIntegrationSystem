@@ -12,8 +12,8 @@
             TestId = DEFAULT_TEST_ID;
         }
 
-        public string TdsId { get; set; }
         public string ClientName { get; set; }
+        public string TdsId { get; set; }
         public int Priority { get; set; }
         public string TestId { get; set; }
     }

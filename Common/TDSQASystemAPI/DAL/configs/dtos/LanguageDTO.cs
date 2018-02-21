@@ -10,7 +10,7 @@
     public class LanguageDTO
     {
         public string ClientName { get; set; }
-        public string LanguageName { get; set; } // Language
+        public string Language { get; set; }
         public string LanguageCode { get; set; }
     }
 }

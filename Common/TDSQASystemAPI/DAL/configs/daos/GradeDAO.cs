@@ -18,7 +18,7 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "SELECT \n" +
                 "   ClientName, \n" +
                 "   GradeCode, \n" +
-                "   Grade, \n";
+                "   Grade \n";
         }
 
         public override void Insert(IList<GradeDTO> recordsToSave)

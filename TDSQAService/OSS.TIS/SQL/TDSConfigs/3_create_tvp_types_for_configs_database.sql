@@ -52,6 +52,20 @@ CREATE TYPE dbo.ClientTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.ClientTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'LanguageTable')
+BEGIN
+	DROP TYPE dbo.LanguageTable
+END
+GO
+CREATE TYPE dbo.LanguageTable AS TABLE
+(
+	ClientName		varchar(100) NOT NULL,
+	[Language]		varchar(100) NOT NULL,
+	LanguageCode	varchar(25) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.LanguageTable TO public
+GO
 IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TimeWindowTable')
 BEGIN
 	DROP TYPE dbo.TimeWindowTable

@@ -5,8 +5,8 @@
     /// </summary>
     public class GradeDTO
     {
+        public string ClientName { get; set; }
         public string GradeCode { get; set; }
         public string Grade { get; set; }
-        public string ClientName { get; set; }
     }
 }

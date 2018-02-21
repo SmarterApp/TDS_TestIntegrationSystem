@@ -6,7 +6,7 @@
     public class ClientDTO
     {
         public string Name { get; set; }
-        public string Internationalize { get; set; }
+        public bool Internationalize { get; set; }
         public string DefaultLanguage { get; set; }
     }
 }

@@ -72,11 +72,16 @@
   <ItemGroup>
     <Compile Include="controllers\AssessmentControllerIntegrationTest.cs" />
     <Compile Include="controllers\AssessmentsControllerUnitTest.cs" />
+    <Compile Include="daos\configs\AccommodationFamilyDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\ClientDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\FieldTestPriorityDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\GradeDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\LanguageDAOIntegrationTest.cs" />
     <Compile Include="utils\ReflectionObjectPopulator.cs" />
     <Compile Include="utils\TestPackageDaoIntegrationTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="extensions\ExtensionMethodUnitTests.cs" />
-    <Compile Include="daos\configs\TesteeAttributesDaoIntegrationTest.cs" />
+    <Compile Include="daos\configs\TesteeAttributesDAOIntegrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

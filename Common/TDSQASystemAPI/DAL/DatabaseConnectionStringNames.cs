@@ -19,5 +19,10 @@
         /// Name of the connection string in app.config that points to the OSS_TestScoringConfigs database.
         /// </summary>
         public const string SCORING = "scoring";
+
+        /// <summary>
+        /// Name of the connection string in app.config that points to the OSS_TIS database.
+        /// </summary>
+        public const string TDSQC = "TDSQC";
     }
 }
