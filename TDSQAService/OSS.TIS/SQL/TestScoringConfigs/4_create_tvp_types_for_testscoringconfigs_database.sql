@@ -60,3 +60,35 @@ CREATE TYPE dbo.FeatureComputationLocationTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.FeatureComputationLocationTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'ComputationRuleParameterTable')
+BEGIN
+	DROP TYPE dbo.ComputationRuleParameterTable
+END
+GO
+CREATE TYPE dbo.ComputationRuleParameterTable AS TABLE
+(
+	ComputationRuleParameterKey	uniqueidentifier NOT NULL,
+	ComputationRule				varchar(256) NOT NULL,
+	ParameterName				varchar(128) NOT NULL,
+	ParameterPosition			int NOT NULL,
+	IndexType					varchar(16),
+	[Type]						varchar(16) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.ComputationRuleParameterTable TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'ComputationRuleParameterValueTable')
+BEGIN
+	DROP TYPE dbo.ComputationRuleParameterValueTable
+END
+GO
+CREATE TYPE dbo.ComputationRuleParameterValueTable AS TABLE
+(
+	TestScoreFeatureKey			uniqueidentifier NOT NULL,
+	ComputationRuleParameterKey	uniqueidentifier NOT NULL,
+	[Index]						varchar(256) NOT NULL,
+	[Value]						varchar(256) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.ComputationRuleParameterValueTable TO public
+GO
