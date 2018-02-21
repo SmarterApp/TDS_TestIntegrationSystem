@@ -22,7 +22,7 @@ namespace TISUnitTests.daos.configs
             "   Name = 'unit-test'";
 
         [TestMethod]
-        public void ShouldSaveClientRecord()
+        public void ShouldSaveAClientRecord()
         {
             var clientList = new List<ClientDTO>
             {

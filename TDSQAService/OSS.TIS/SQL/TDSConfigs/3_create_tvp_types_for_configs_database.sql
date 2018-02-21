@@ -117,9 +117,9 @@ END
 GO
 CREATE TYPE dbo.SubjectTable AS TABLE
 (
-	ClientName	varchar(100) NOT NULL,
+	SubjectCode	varchar(25) NULL,
 	[Subject]	varchar(100) NOT NULL,
-	SubjectCode	varchar(25) NULL
+	ClientName	varchar(100) NOT NULL
 )
 GO
 GRANT CONTROL ON TYPE::dbo.SubjectTable TO public
@@ -363,3 +363,5 @@ CREATE TYPE dbo.TestScoreFeatureTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.TestScoreFeatureTable TO public
 GO
+
+select * from OSS_Configs.dbo.Client_TesteeRelationshipAttribute (nolock);

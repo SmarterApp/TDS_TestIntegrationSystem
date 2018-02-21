@@ -72,6 +72,7 @@
     <Content Include="SQL\TISDB\2_Configuration.sql" />
     <Content Include="SQL\TISDB\1_Create_Objects.sql" />
     <Content Include="SQL\TISDB\3_ScoringDaemonConfiguration.sql" />
+    <Content Include="SQL\TISDB\4_oss_tis_create_tvp_types_for_oss_tis_database.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\AIR.Configuration\AIR.Configuration.csproj">

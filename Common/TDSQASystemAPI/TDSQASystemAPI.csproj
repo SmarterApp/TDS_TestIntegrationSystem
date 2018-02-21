@@ -255,6 +255,8 @@
     <Compile Include="DAL\itembank\dtos\TestFormDTO.cs" />
     <Compile Include="DAL\itembank\dtos\TestFormItemDTO.cs" />
     <Compile Include="DAL\ITestPackageDao.cs" />
+    <Compile Include="DAL\osstis\daos\TestNameLookupDAO.cs" />
+    <Compile Include="DAL\osstis\dtos\TestNameLookupDTO.cs" />
     <Compile Include="DAL\Sandlot.cs" />
     <Compile Include="DAL\scoring\daos\ComputationRuleParameterDAO.cs" />
     <Compile Include="DAL\scoring\daos\ComputationRuleParameterValueDAO.cs" />

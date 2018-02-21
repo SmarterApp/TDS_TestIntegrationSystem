@@ -14,9 +14,11 @@ namespace TDSQASystemAPI.DAL.configs.daos
             TvpType = "SubjectTable";
             InsertSql =
                 "INSERT \n" +
-                "   ClientName, \n" +
+                "   dbo.Client_Subject(SubjectCode, [Subject], ClientName) \n" +
+                "SELECT \n" +
+                "   SubjectCode, \n" +
                 "   [Subject], \n" +
-                "   SubjectCode \n";
+                "   ClientName \n";
         }
 
         public override void Insert(IList<SubjectDTO> recordsToSave)

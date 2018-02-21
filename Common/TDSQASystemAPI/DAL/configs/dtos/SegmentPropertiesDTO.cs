@@ -11,7 +11,7 @@
     {
         public string ClientName { get; set; }
         public string SegmentId { get; set; }
-        public string SegmentPosition { get; set; }
+        public int SegmentPosition { get; set; }
         public string ParentTest { get; set; }
         public int IsPermeable { get; set; }
         public int EntryApproval { get; set; }

@@ -77,6 +77,10 @@
     <Compile Include="daos\configs\FieldTestPriorityDAOIntegrationTest.cs" />
     <Compile Include="daos\configs\GradeDAOIntegrationTest.cs" />
     <Compile Include="daos\configs\LanguageDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\SegmentPropertiesDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\SubjectDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\TesteeRelationshipAttributeDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\TestEligibiliyDAOIntegrationTest.cs" />
     <Compile Include="utils\ReflectionObjectPopulator.cs" />
     <Compile Include="utils\TestPackageDaoIntegrationTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
