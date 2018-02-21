@@ -12,7 +12,7 @@ using System.Transactions;
 using System.Xml;
 using TISServices.Services;
 
-namespace TISUnitTests
+namespace TISUnitTests.controllers
 {
     /// <summary>
     /// Conduct integration tests for the <code>AssessmentsController</code>.  These tests are intended to be "destructive" (that is, they may affect the database).

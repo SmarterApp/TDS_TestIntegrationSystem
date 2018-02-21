@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TDSQASystemAPI.Extensions;
 
-namespace TISUnitTests
+namespace TISUnitTests.extensions
 {
     /// <summary>
     /// Unit tests for the extension methods.
