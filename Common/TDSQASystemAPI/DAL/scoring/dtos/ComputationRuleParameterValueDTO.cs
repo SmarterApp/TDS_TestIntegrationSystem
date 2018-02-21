@@ -3,11 +3,11 @@
 namespace TDSQASystemAPI.DAL.scoring.dtos
 {
     /// <summary>
-    /// A class for saving <code>TestDTO</code>s to the <code>OSS_TestScoringConfigs..Test</code> table
+    /// Represents a single record in the <code>OSS_TestScoringConfigs..ComputationRuleParameterValue</code> table
     /// </summary>
     public class ComputationRuleParameterValueDTO
     {
-        public Guid TestScoreFeatureKey { get; set; }
+        public Guid TestScoreFeatureKey { get; set; } // maps to _fk_TestScoreFeature in ComputationRuleParameterValue
         public Guid ComputationRuleParameterKey { get; set; }
         public string Index { get; set; }
         public string Value { get; set; }

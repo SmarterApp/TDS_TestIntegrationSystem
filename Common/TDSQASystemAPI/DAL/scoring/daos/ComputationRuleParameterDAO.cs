@@ -4,7 +4,7 @@ using TDSQASystemAPI.DAL.scoring.dtos;
 namespace TDSQASystemAPI.DAL.scoring.daos
 {
     /// <summary>
-    /// A class for saving <code>TestDTO</code>s to the <code>OSS_TestScoringConfigs..Test</code> table
+    /// A class for saving <code>ComputationRuleParameterDTO</code>s to the <code>OSS_TestScoringConfigs..ComputationRuleParameter</code> table
     /// </summary>
     public class ComputationRuleParameterDAO : TestPackageDaoBase<ComputationRuleParameterDTO>
     {

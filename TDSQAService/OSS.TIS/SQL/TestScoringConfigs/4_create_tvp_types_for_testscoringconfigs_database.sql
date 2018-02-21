@@ -92,3 +92,32 @@ CREATE TYPE dbo.ComputationRuleParameterValueTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.ComputationRuleParameterValueTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'ConversionTableDescTable')
+BEGIN
+	DROP TYPE dbo.ConversionTableDescTable
+END
+GO
+CREATE TYPE dbo.ConversionTableDescTable AS TABLE
+(
+	ConversionTableDescKey	varchar(36) NOT NULL,
+	TableName				varchar(1000) NOT NULL,
+	ClientName				varchar(100) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.ConversionTableDescTable TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'ConversionTableTable')
+BEGIN
+	DROP TYPE dbo.ConversionTableTable
+END
+GO
+CREATE TYPE dbo.ConversionTableTable AS TABLE
+(
+	TableName	varchar(128) NOT NULL,
+	InValue		int NOT NULL,
+	OutValue	float NOT NULL,
+	ClientName	varchar(100) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.ConversionTableTable TO public
+GO
