@@ -28,3 +28,35 @@ CREATE TYPE dbo.TestGradeTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.TestGradeTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestScoreFeatureTable')
+BEGIN
+	DROP TYPE dbo.TestScoreFeatureTable
+END
+GO
+CREATE TYPE dbo.TestScoreFeatureTable AS TABLE
+(
+	TestScoreFeatureKey	uniqueidentifier NOT NULL,
+	ClientName			varchar(100) NOT NULL,
+	TestId				varchar(150) NOT NULL,
+	MeasureOf			varchar(150) NOT NULL,
+	MeasureLabel		varchar(150) NOT NULL,
+	IsScaled			bit NOT NULL,
+	ComputationRule		varchar(255) NOT NULL,
+	ComputationOrder	int NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestScoreFeatureTable TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'FeatureComputationLocationTable')
+BEGIN
+	DROP TYPE dbo.FeatureComputationLocationTable
+END
+GO
+CREATE TYPE dbo.FeatureComputationLocationTable AS TABLE
+(
+	TestScoreFeatureKey	uniqueidentifier NOT NULL,
+	[Location]			varchar(50) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.FeatureComputationLocationTable TO public
+GO
