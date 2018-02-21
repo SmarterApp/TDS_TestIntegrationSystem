@@ -435,3 +435,20 @@ CREATE TYPE dbo.AffinityGroupItemTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.AffinityGroupItemTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'PerformanceLevelTable')
+BEGIN
+	DROP TYPE dbo.PerformanceLevelTable
+END
+GO
+CREATE TYPE dbo.PerformanceLevelTable AS TABLE
+(
+	ContentKey	varchar(250) NOT NULL,
+	PLevel		int NOT NULL,
+	ThetaLo		float NOT NULL,
+	ThetaHi		float NOT NULL,
+	ScaledLo	float,
+	ScaledHi	float
+)
+GO
+GRANT CONTROL ON TYPE::dbo.PerformanceLevelTable TO public
+GO

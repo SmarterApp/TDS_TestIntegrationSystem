@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TDSQASystemAPI.DAL.scoring.dtos
+﻿namespace TDSQASystemAPI.DAL.scoring.dtos
 {
     /// <summary>
     /// Represents a single record in the <code>OSS_TestScoringConfigs..ConversionTables</code> table
