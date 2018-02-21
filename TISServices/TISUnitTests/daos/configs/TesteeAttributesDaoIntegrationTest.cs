@@ -5,7 +5,7 @@ using TDSQASystemAPI.DAL.configs.daos;
 using TDSQASystemAPI.DAL.configs.dtos;
 using TISUnitTests.utils;
 
-namespace TISUnitTests
+namespace TISUnitTests.daos.configs
 {
     [TestClass]
     public class TesteeAttributesDaoIntegrationTest : TestPackageDaoIntegrationTestBase

@@ -167,6 +167,8 @@
     <Compile Include="DAL\configs\daos\ClientDAO.cs" />
     <Compile Include="DAL\configs\daos\FieldTestPriorityDAO.cs" />
     <Compile Include="DAL\configs\daos\GradeDAO.cs" />
+    <Compile Include="DAL\configs\daos\LanguageDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestItemConstraintDAO.cs" />
     <Compile Include="DAL\configs\daos\SegmentPropertiesDAO.cs" />
     <Compile Include="DAL\configs\daos\SubjectDAO.cs" />
     <Compile Include="DAL\configs\daos\TesteeAttributeDAO.cs" />
@@ -177,6 +179,9 @@
     <Compile Include="DAL\configs\daos\TestItemTypeDAO.cs" />
     <Compile Include="DAL\configs\daos\TestModeDAO.cs" />
     <Compile Include="DAL\configs\daos\TestPropertiesDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestScoreFeatureDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestToolDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestToolTypeDAO.cs" />
     <Compile Include="DAL\configs\daos\TestWindowDAO.cs" />
     <Compile Include="DAL\configs\daos\TimeWindowDAO.cs" />
     <Compile Include="DAL\configs\dtos\AccommodationFamilyDTO.cs" />
@@ -195,14 +200,78 @@
     <Compile Include="DAL\configs\dtos\TestItemTypeDTO.cs" />
     <Compile Include="DAL\configs\dtos\TestModeDTO.cs" />
     <Compile Include="DAL\configs\dtos\TestPropertiesDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestScoreFeatureDTO.cs" />
     <Compile Include="DAL\configs\dtos\TestToolDTO.cs" />
     <Compile Include="DAL\configs\dtos\TestToolTypeDTO.cs" />
     <Compile Include="DAL\configs\dtos\TestWindowDTO.cs" />
     <Compile Include="DAL\configs\dtos\TimeWindowDTO.cs" />
+    <Compile Include="DAL\DatabaseConnectionStringNames.cs" />
     <Compile Include="DAL\EmbeddedResource.cs" />
     <Compile Include="DAL\IAssessmentRepository.cs" />
+    <Compile Include="DAL\itembank\daos\AaItemClDAO.cs" />
+    <Compile Include="DAL\itembank\daos\AdminStimulusDAO.cs" />
+    <Compile Include="DAL\itembank\daos\AdminStrandDAO.cs" />
+    <Compile Include="DAL\itembank\daos\AffinityGroupDAO.cs" />
+    <Compile Include="DAL\itembank\daos\AffinityGroupItemDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemMeasurementParameterDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemPropertyDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemScoreDimensionDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemSelectionParmDAO.cs" />
+    <Compile Include="DAL\itembank\daos\PerformanceLevelDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfAdminItemDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfAdminSubjectDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfItemStimuliDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfItemStrandDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfTestGradeDAO.cs" />
+    <Compile Include="DAL\itembank\daos\StimulusDAO.cs" />
+    <Compile Include="DAL\itembank\daos\StrandDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SubjectDAO.cs" />
+    <Compile Include="DAL\itembank\daos\TestAdminDAO.cs" />
+    <Compile Include="DAL\itembank\daos\TestCohortDAO.cs" />
+    <Compile Include="DAL\itembank\daos\TestFormDAO.cs" />
+    <Compile Include="DAL\itembank\daos\TestFormItemDAO.cs" />
+    <Compile Include="DAL\itembank\dtos\AaItemClDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\AdminStimulusDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\AdminStrandDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\AffinityGroupDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\AffinityGroupItemDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemMeasurementParameterDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemPropertyDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemScoreDimensionDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemSelectionParmDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\PerformanceLevelDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfAdminItemDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfAdminSubjectDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfItemStimuliDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfItemStrandDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfTestGradeDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\StimulusDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\StrandDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SubjectDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\TestAdminDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\TestCohortDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\TestFormDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\TestFormItemDTO.cs" />
     <Compile Include="DAL\ITestPackageDao.cs" />
     <Compile Include="DAL\Sandlot.cs" />
+    <Compile Include="DAL\scoring\daos\ComputationRuleParameterDAO.cs" />
+    <Compile Include="DAL\scoring\daos\ComputationRuleParameterValueDAO.cs" />
+    <Compile Include="DAL\scoring\daos\ConversionTableDAO.cs" />
+    <Compile Include="DAL\scoring\daos\ConversionTableDescDAO.cs" />
+    <Compile Include="DAL\scoring\daos\FeatureComputationLocationDAO.cs" />
+    <Compile Include="DAL\scoring\daos\TestDAO.cs" />
+    <Compile Include="DAL\scoring\daos\TestGradeDAO.cs" />
+    <Compile Include="DAL\scoring\daos\TestScoreFeatureDAO.cs" />
+    <Compile Include="DAL\scoring\dtos\ComputationRuleParameterDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\ComputationRuleParameterValueDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\ConversionTableDescDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\ConversionTableDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\FeatureComputationLocationDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\TestDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\TestGradeDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\TestScoreFeatureDTO.cs" />
     <Compile Include="DAL\TDSQC.cs" />
     <Compile Include="DAL\TestMergeDataAccess.cs" />
     <Compile Include="DAL\TestOpportunity.cs" />
@@ -334,9 +403,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DAL\itembank\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\TDS\Common\AIR.Common\AIR.Common.csproj">
       <Project>{e11c4060-59b5-401d-bf72-1f52156e64db}</Project>

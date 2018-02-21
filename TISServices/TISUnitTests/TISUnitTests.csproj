@@ -75,7 +75,7 @@
     <Compile Include="utils\TestPackageDaoIntegrationTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExtensionMethodUnitTests.cs" />
-    <Compile Include="TesteeAttributesDaoIntegrationTest.cs" />
+    <Compile Include="daos\configs\TesteeAttributesDaoIntegrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

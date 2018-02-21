@@ -63,10 +63,12 @@
     <Content Include="SQL\TDSItemBank\5_LoadPackages.sql" />
     <Content Include="SQL\TDSItemBank\6_TestToolConfiguration.sql" />
     <Content Include="SQL\TDSItemBank\7_create_procedure_spDeleteAssessment.sql" />
-    <Content Include="SQL\TDSItemBank\8_create_tvp_types_for_configs_and_itembank.sql" />
+    <Content Include="SQL\TDSConfigs\3_create_tvp_types_for_configs_database.sql" />
+    <Content Include="SQL\TDSItemBank\8_create_tvp_types_for_itembank_database.sql" />
     <Content Include="SQL\TestScoringConfigs\1_Tables.sql" />
     <Content Include="SQL\TestScoringConfigs\2_Views.sql" />
     <Content Include="SQL\TestScoringConfigs\3_Configuration.sql" />
+    <Content Include="SQL\TestScoringConfigs\4_create_tvp_types_for_testscoringconfigs_database.sql" />
     <Content Include="SQL\TISDB\2_Configuration.sql" />
     <Content Include="SQL\TISDB\1_Create_Objects.sql" />
     <Content Include="SQL\TISDB\3_ScoringDaemonConfiguration.sql" />
