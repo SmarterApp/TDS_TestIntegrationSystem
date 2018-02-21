@@ -19,13 +19,9 @@ namespace TDSQASystemAPI.DAL.configs.dtos
         public string ClientName { get; set; }
         public string TestId { get; set; }
         public string TestKey { get; set; }
-        public string Mode => TestKey.IndexOf("online", StringComparison.OrdinalIgnoreCase) >= 0
-                    ? MODE_ONLINE
-                    : MODE_PAPER;
+        public string Mode { get; set; }
         public string Algorithm { get; set; }
         public bool IsSegmented { get; set; }
-        public int SessionType => TestKey.IndexOf("online", StringComparison.OrdinalIgnoreCase) >= 0
-            ? SESSION_TYPE_ONLINE
-            : SESSION_TYPE_PAPER;
+        public int SessionType { get; set; }
     }
 }

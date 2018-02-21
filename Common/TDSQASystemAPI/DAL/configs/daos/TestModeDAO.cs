@@ -14,12 +14,14 @@ namespace TDSQASystemAPI.DAL.configs.daos
             TvpType = "TestModeTable";
             InsertSql =
                 "INSERT \n" +
-                "   dbo.Client_TestMode (ClientName, TestID, TestKey, Mode, SessionType)\n" +
+                "   dbo.Client_TestMode (ClientName, TestID, TestKey, Mode, Algorithm, IsSegmented, SessionType)\n" +
                 "SELECT \n" +
                 "   ClientName, \n" +
                 "   TestId, \n" +
                 "   TestKey, \n" +
                 "   Mode, \n" +
+                "   Algorithm, \n" +
+                "   IsSegmented, \n" +
                 "   SessionType \n";
         }
 

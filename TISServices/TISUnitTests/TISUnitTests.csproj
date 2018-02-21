@@ -84,6 +84,8 @@
     <Compile Include="daos\configs\TestFormPropertyDAOIntegrationTest.cs" />
     <Compile Include="daos\configs\TestGradeDAOIntegrationTest.cs" />
     <Compile Include="daos\configs\TesItemConstraintDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\TestItemTypeDAOIntegrationTest.cs" />
+    <Compile Include="daos\configs\TestModeDAOIntegrationTest.cs" />
     <Compile Include="utils\ReflectionObjectPopulator.cs" />
     <Compile Include="utils\TestPackageDaoIntegrationTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

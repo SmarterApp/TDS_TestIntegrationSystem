@@ -171,6 +171,8 @@ CREATE TYPE dbo.TestModeTable AS TABLE
 	TestId			varchar(200) NOT NULL,
 	TestKey			varchar(250),
 	Mode			varchar(50) NOT NULL,
+	[Algorithm]		varchar(50),
+	IsSegmented		bit,
 	SessionType		int NOT NULL
 )
 GO
@@ -363,5 +365,29 @@ CREATE TYPE dbo.TestScoreFeatureTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.TestScoreFeatureTable TO public
 GO
-
+/*
 select * from OSS_Configs.dbo.Client_TesteeRelationshipAttribute (nolock);
+
+sp_help Client_TestEligibility;
+
+select * from OSS_Configs.dbo.Client_TestEligibility (nolock);
+
+select * from OSS_Configs.dbo.Client_TestformProperties (nolock);
+
+select * from OSS_Configs.dbo.Client_TestGrades (nolock);
+
+select * from Client_Test_ItemConstraint (nolock);
+
+select * from Client_Test_ItemTypes (nolock);
+
+SELECT 
+   ClientName, 
+   TestId, 
+   ItemType
+FROM 
+   Client_Test_ItemTypes (nolock)
+WHERE
+   ClientName = 'unit-test-client-name'
+   AND TestId = 'unit-test-test-id'
+   AND ItemType = 'unit-test-item-type';
+   */
