@@ -379,3 +379,59 @@ CREATE TYPE dbo.TestFormTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.TestFormTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'TestFormItemTable')
+BEGIN
+	DROP TYPE dbo.TestFormItemTable
+END
+GO
+CREATE TYPE dbo.TestFormItemTable AS TABLE
+(
+	ItemKey			varchar(150) NOT NULL,
+	ITSFormKey		bigint NOT NULL,
+	FormPosition	int NOT NULL,
+	SegmentKey		varchar(250) NOT NULL,
+	TestFormKey		varchar(100),
+	IsActive		bit NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.TestFormItemTable TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'AffinityGroupTable')
+BEGIN
+	DROP TYPE dbo.AffinityGroupTable
+END
+GO
+CREATE TYPE dbo.AffinityGroupTable AS TABLE
+(
+	SegmentKey					varchar(250) NOT NULL,
+	GroupId						varchar(100) NOT NULL,
+	MinItems					int NOT NULL,
+	MaxItems					int NOT NULL,
+	[Weight]					float NOT NULL,
+	IsStrictMax					bit NOT NULL,
+	TestVersion					bigint,
+	UpdatedTestVersion			bigint,
+	AbilityWeight				float NOT NULL,
+	PrecisionTarget				float,
+	StartAbility				float,
+	StartInfo					float,
+	PrecisionTargetMetWeight	float,
+	PrecisionTargetNotMetWeight	float
+)
+GO
+GRANT CONTROL ON TYPE::dbo.AffinityGroupTable TO public
+GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'AffinityGroupItemTable')
+BEGIN
+	DROP TYPE dbo.AffinityGroupItemTable
+END
+GO
+CREATE TYPE dbo.AffinityGroupItemTable AS TABLE
+(
+	SegmentKey	varchar(250) NOT NULL,
+	GroupId		varchar(100) NOT NULL,
+	ItemKey		varchar(100) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.AffinityGroupItemTable TO public
+GO
