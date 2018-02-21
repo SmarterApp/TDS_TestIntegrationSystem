@@ -10,15 +10,15 @@ namespace TDSQASystemAPI.DAL.scoring.daos
     {
         public TestGradeDAO()
         {
-            DbConnectionStringName = DatabaseConnectionStringNames.SCORING;
+            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
             TvpType = "TestGradeTable";
             InsertSql =
                 "INSERT \n" +
-                "   dbo.TestGrades () \n" +
+                "   dbo.Client_TestGrades (ClientName, TestId, Grade) \n" +
                 "SELECT \n" +
                 "   ClientName, \n" +
                 "   TestId, \n" +
-                "   ReportingGrade \n";
+                "   Grade \n";
         }
 
         public override void Insert(IList<TestGradeDTO> recordsToSave)
