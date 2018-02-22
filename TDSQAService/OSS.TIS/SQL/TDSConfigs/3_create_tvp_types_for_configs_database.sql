@@ -74,7 +74,7 @@ GO
 CREATE TYPE dbo.TimeWindowTable AS TABLE
 (
 	ClientName	varchar(100) NOT NULL,
-	WindowId	bit NOT NULL,
+	WindowId	varchar(50) NOT NULL,
 	StartDate	datetime,
 	EndDate		datetime
 )
@@ -352,42 +352,12 @@ END
 GO
 CREATE TYPE dbo.TestScoreFeatureTable AS TABLE
 (
-	ClientName			varchar(100) NOT NULL, 
-	[Type]				nvarchar(255) NOT NULL,
-	Code				nvarchar(255) NOT NULL,
-	[Value]				varchar(128) NOT NULL,
-	IsDefault			bit NOT NULL,
-	AllowCombine		bit NOT NULL,
-	ValueDescription	nvarchar(255),
-	Context				varchar(255) NOT NULL,
-	ContextType			varchar(50) NOT NULL
+	ClientName		varchar(100) NOT NULL, 
+	TestId			varchar(255) NOT NULL,
+	MeasureOf		varchar(250) NOT NULL,
+	MeasureLabel	varchar(200) NOT NULL,
+	UseForAbility	bit NOT NULL
 )
 GO
 GRANT CONTROL ON TYPE::dbo.TestScoreFeatureTable TO public
 GO
-/*
-select * from OSS_Configs.dbo.Client_TesteeRelationshipAttribute (nolock);
-
-sp_help Client_TestEligibility;
-
-select * from OSS_Configs.dbo.Client_TestEligibility (nolock);
-
-select * from OSS_Configs.dbo.Client_TestformProperties (nolock);
-
-select * from OSS_Configs.dbo.Client_TestGrades (nolock);
-
-select * from Client_Test_ItemConstraint (nolock);
-
-select * from Client_Test_ItemTypes (nolock);
-
-SELECT 
-   ClientName, 
-   TestId, 
-   ItemType
-FROM 
-   Client_Test_ItemTypes (nolock)
-WHERE
-   ClientName = 'unit-test-client-name'
-   AND TestId = 'unit-test-test-id'
-   AND ItemType = 'unit-test-item-type';
-   */

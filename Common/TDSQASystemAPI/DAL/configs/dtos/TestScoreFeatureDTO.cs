@@ -15,12 +15,6 @@
         public string TestId { get; set; }
         public string MeasureOf { get; set; }
         public string MeasureLabel { get; set; }
-
-        /// <summary>
-        /// Logic expressed in line 47 of UpdateCOnfigs_Scorefeatures.
-        /// </summary>
-        public bool UseForAbility => MeasureLabel == MEASURE_LABEL_THETA_SCORE
-            ? true
-            : false;
+        public bool UseForAbility { get; set; }
     }
 }

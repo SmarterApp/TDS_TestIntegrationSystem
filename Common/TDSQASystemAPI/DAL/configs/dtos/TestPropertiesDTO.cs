@@ -18,9 +18,7 @@
         public bool ScoreByTds { get; set; }
         public string AccommodationFamily { get; set; }
         public string ReportingInstrument { get; set; }
+        public string TideId { get; set; }
         public string GradeText { get; set; }
-        public string TideId => string.IsNullOrEmpty(ReportingInstrument)
-            ? string.Format("{0}-{1}", ReportingInstrument, SubjectName)
-            : null;
     }
 }

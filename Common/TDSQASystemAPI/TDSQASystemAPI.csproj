@@ -179,7 +179,7 @@
     <Compile Include="DAL\configs\daos\TestItemTypeDAO.cs" />
     <Compile Include="DAL\configs\daos\TestModeDAO.cs" />
     <Compile Include="DAL\configs\daos\TestPropertiesDAO.cs" />
-    <Compile Include="DAL\configs\daos\TestScoreFeatureDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestScoreFeaturesDAO.cs" />
     <Compile Include="DAL\configs\daos\TestToolDAO.cs" />
     <Compile Include="DAL\configs\daos\TestToolTypeDAO.cs" />
     <Compile Include="DAL\configs\daos\TestWindowDAO.cs" />
