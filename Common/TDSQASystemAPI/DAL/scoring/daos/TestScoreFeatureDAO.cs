@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TDSQASystemAPI.DAL.configs.dtos;
+using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.DAL.scoring.daos
 {

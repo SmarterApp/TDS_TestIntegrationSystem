@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.configs.dtos;
-using TDSQASystemAPI.DAL.scoring.daos;
+using TDSQASystemAPI.DAL.configs.daos;
 using TISUnitTests.utils;
 
 namespace TISUnitTests.daos.configs
@@ -10,7 +10,7 @@ namespace TISUnitTests.daos.configs
     [TestClass]
     public class TestGradeDAOIntegrationTest : TestPackageDaoIntegrationTestBase<TestGradeDTO>
     {
-        private readonly ITestPackageDao<TestGradeDTO> testPackageDao = new TestGradeDAO();
+        private readonly ITestPackageDao<TestGradeDTO> testPackageDao = new TestGradesDAO();
         private readonly string sql = 
             "SELECT " +
             "   ClientName, \n" +

@@ -93,6 +93,10 @@
     <Compile Include="daos\configs\TestWindowDAOIntegrationTest.cs" />
     <Compile Include="daos\configs\TimeWindowDAOIntegrationTest.cs" />
     <Compile Include="daos\osstis\TestNameLookupDAOIntegrationTest.cs" />
+    <Compile Include="daos\scoring\ComputationRuleParameterDAOIntegrationTest.cs" />
+    <Compile Include="daos\scoring\TestDAOIntegrationTest.cs" />
+    <Compile Include="daos\scoring\TestGradeDAOIntegrationTest.cs" />
+    <Compile Include="daos\scoring\TestScoreFeatureDAOIntegrationTest.cs" />
     <Compile Include="utils\ReflectionObjectPopulator.cs" />
     <Compile Include="utils\TestPackageDaoIntegrationTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -124,9 +128,7 @@
     <Content Include="resources\test-packages\tis\scoring\%28SBAC_PT%29SBAC-IRP-ELA-11-COMBINED-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tis\scoring\%28SBAC_PT%29SBAC-IRP-MATH-3-COMBINED-Summer-2015-2016-UNIT-TEST.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="daos\scoring\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

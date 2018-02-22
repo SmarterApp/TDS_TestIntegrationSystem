@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TDSQASystemAPI.DAL.configs.dtos;
+using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.DAL.scoring.daos
 {
@@ -10,15 +10,15 @@ namespace TDSQASystemAPI.DAL.scoring.daos
     {
         public TestGradeDAO()
         {
-            DbConnectionStringName = DatabaseConnectionStringNames.CONFIGS;
+            DbConnectionStringName = DatabaseConnectionStringNames.SCORING;
             TvpType = "TestGradeTable";
             InsertSql =
                 "INSERT \n" +
-                "   dbo.Client_TestGrades (ClientName, TestId, Grade) \n" +
+                "   dbo.TestGrades (ClientName, TestId, ReportingGrade) \n" +
                 "SELECT \n" +
                 "   ClientName, \n" +
                 "   TestId, \n" +
-                "   Grade \n";
+                "   ReportingGrade \n";
         }
 
         public override void Insert(IList<TestGradeDTO> recordsToSave)

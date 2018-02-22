@@ -12,6 +12,6 @@ namespace TDSQASystemAPI.DAL.scoring.dtos
         public string ParameterName { get; set; }
         public int ParameterPosition { get;  set; }
         public string IndexType { get; set; }
-        public String Type { get; set; }
+        public string Type { get; set; }
     }
 }
