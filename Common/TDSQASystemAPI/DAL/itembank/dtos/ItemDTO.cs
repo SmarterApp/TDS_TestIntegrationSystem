@@ -16,7 +16,7 @@ namespace TDSQASystemAPI.DAL.itembank.dtos
         public string ItemType { get; set; }
         public string FilePath { get; set; }
         public string FileName { get; set; }
-        public DateTime DateLastUpdated => DateTime.UtcNow;
+        public DateTime DateLastUpdated { get; set; }
         public string ItemId { get; set; }
         public string Key { get; set; } // maps to _key in tblItem
         public long TestVersion { get; set; } // maps to loadconfig in tblItem

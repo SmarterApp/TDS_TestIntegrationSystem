@@ -37,9 +37,7 @@ namespace TISUnitTests.daos.osstis
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.OSS_TIS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(testNameLookupList[0].InstanceName, result.InstanceName);
-            Assert.AreEqual(testNameLookupList[0].TestName, result.TestName);
+            CompareResults(testNameLookupList[0], insertedRecords[0]);
         }
     }
 }
