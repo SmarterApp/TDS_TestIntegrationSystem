@@ -92,6 +92,7 @@
     <Compile Include="daos\configs\TestToolTypeDAOIntegrationTest.cs" />
     <Compile Include="daos\configs\TestWindowDAOIntegrationTest.cs" />
     <Compile Include="daos\configs\TimeWindowDAOIntegrationTest.cs" />
+    <Compile Include="daos\osstis\TestNameLookupDAOIntegrationTest.cs" />
     <Compile Include="utils\ReflectionObjectPopulator.cs" />
     <Compile Include="utils\TestPackageDaoIntegrationTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
