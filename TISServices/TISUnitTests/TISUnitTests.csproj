@@ -94,6 +94,10 @@
     <Compile Include="daos\configs\TimeWindowDAOIntegrationTest.cs" />
     <Compile Include="daos\osstis\TestNameLookupDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\ComputationRuleParameterDAOIntegrationTest.cs" />
+    <Compile Include="daos\scoring\ComputationRuleParameterValueDAOIntegrationTest.cs" />
+    <Compile Include="daos\scoring\ConversionTableDAOIntegrationTest.cs" />
+    <Compile Include="daos\scoring\ConversionTableDescDAOIntegrationTest.cs" />
+    <Compile Include="daos\scoring\FeatureComputationLocationDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\TestDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\TestGradeDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\TestScoreFeatureDAOIntegrationTest.cs" />
