@@ -12,8 +12,8 @@
     {
         public string TestId { get; set; }
         public string Grade { get; set; }
-        public bool RequireEnrollment => false; // logic on line 62 of tp.spLoad_TestGrades
+        public bool RequireEnrollment { get; set; } // logic on line 62 of tp.spLoad_TestGrades always sets this to false
         public string SegmentKey { get; set; } // maps to _fk_adminsubject in dbo.SetOfTestGrades
-        public string EnrolledSubject => null; // logic on line 64 of tp.spLoad_TestGrades
+        public string EnrolledSubject { get; set; } // logic on line 64 of tp.spLoad_TestGrades always sets this to null
     }
 }
