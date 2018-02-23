@@ -22,7 +22,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   BlueprintElementId, \n" +
                 "   ClientKey, \n" +
                 "   TreeLevel, \n" +
-                "   [Version] \n";
+                "   TestVersion \n";
         }
 
         public override void Insert(IList<StrandDTO> recordsToSave)
