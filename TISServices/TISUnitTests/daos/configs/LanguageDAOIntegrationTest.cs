@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.configs.daos;
@@ -42,10 +41,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(languageList[0].ClientName, result.ClientName);
-            Assert.AreEqual(languageList[0].Language, result.Language);
-            Assert.AreEqual(languageList[0].LanguageCode, result.LanguageCode);
+            CompareResults(languageList[0], insertedRecords[0]);
         }
     }
 }

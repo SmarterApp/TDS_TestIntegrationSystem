@@ -46,12 +46,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(testScoreFeaturesList[0].ClientName, result.ClientName);
-            Assert.AreEqual(testScoreFeaturesList[0].TestId, result.TestId);
-            Assert.AreEqual(testScoreFeaturesList[0].MeasureOf, result.MeasureOf);
-            Assert.AreEqual(testScoreFeaturesList[0].MeasureLabel, result.MeasureLabel);
-            Assert.AreEqual(testScoreFeaturesList[0].UseForAbility, result.UseForAbility);
+            CompareResults(testScoreFeaturesList[0], insertedRecords[0]);
         }
     }
 }

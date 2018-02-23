@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.configs.daos;
@@ -51,15 +50,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(testItemConstraintList[0].ClientName, result.ClientName);
-            Assert.AreEqual(testItemConstraintList[0].TestId, result.TestId);
-            Assert.AreEqual(testItemConstraintList[0].PropName, result.PropName);
-            Assert.AreEqual(testItemConstraintList[0].PropValue, result.PropValue);
-            Assert.AreEqual(testItemConstraintList[0].ToolType, result.ToolType);
-            Assert.AreEqual(testItemConstraintList[0].ToolValue, result.ToolValue);
-            Assert.AreEqual(testItemConstraintList[0].ItemIn, result.ItemIn);
-
+            CompareResults(testItemConstraintList[0], insertedRecords[0]);
         }
     }
 }

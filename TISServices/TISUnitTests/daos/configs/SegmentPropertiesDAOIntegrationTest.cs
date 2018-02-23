@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.configs.daos;
 using TDSQASystemAPI.DAL.configs.dtos;
-using TISUnitTests.utils;
 
 namespace TISUnitTests.daos.configs
 {
@@ -54,17 +53,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(segmentPropertiesList[0].ClientName, result.ClientName);
-            Assert.AreEqual(segmentPropertiesList[0].SegmentId, result.SegmentId);
-            Assert.AreEqual(segmentPropertiesList[0].SegmentPosition, result.SegmentPosition);
-            Assert.AreEqual(segmentPropertiesList[0].ParentTest, result.ParentTest);
-            Assert.AreEqual(segmentPropertiesList[0].IsPermeable, result.IsPermeable);
-            Assert.AreEqual(segmentPropertiesList[0].EntryApproval, result.EntryApproval);
-            Assert.AreEqual(segmentPropertiesList[0].ExitApproval, result.ExitApproval);
-            Assert.AreEqual(segmentPropertiesList[0].ItemReview, result.ItemReview);
-            Assert.AreEqual(segmentPropertiesList[0].Label, result.Label);
-            Assert.AreEqual(segmentPropertiesList[0].ModeKey, result.ModeKey);
+            CompareResults(segmentPropertiesList[0], insertedRecords[0]);
         }
     }
 }

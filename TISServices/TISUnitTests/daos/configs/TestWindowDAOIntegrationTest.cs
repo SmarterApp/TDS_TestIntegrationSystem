@@ -12,7 +12,6 @@ namespace TISUnitTests.daos.configs
     public class TestWindowDAOIntegrationTest : TestPackageDaoIntegrationTestBase<TestWindowDTO>
     {
         private readonly ITestPackageDao<TestWindowDTO> testPackageDao = new TestWindowDAO();
-        private readonly ITestPackageDao<TimeWindowDTO> timeWindowDao = new TimeWindowDAO();
         private readonly string sql =
             "SELECT \n" +
             "   ClientName, \n" +
@@ -25,23 +24,23 @@ namespace TISUnitTests.daos.configs
             "   Client_TestWindow \n" +
             "WHERE \n" +
             "   ClientName = 'unit-test-client-name'";
-        private IList<TimeWindowDTO> timeWindowList = new List<TimeWindowDTO>
-            {
-                new TimeWindowDTO
-                {
-                    ClientName = "unit-test-client-name",
-                    WindowId = "unit-test-window-id",
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now
-                }
-            };
+        private readonly TimeWindowDTO timeWindowSeedData = new TimeWindowDTO
+        {
+            ClientName = "unit-test-client-name",
+            WindowId = "unit-test-window-id",
+            StartDate = DateTime.Now,
+            EndDate = DateTime.Now
+        };
 
+        /// <summary>
+        /// Create seed data to satisfy foreign key constraints
+        /// </summary>
         [TestInitialize]
         public override void Setup()
         {
             base.Setup();
 
-            timeWindowDao.Insert(timeWindowList);
+            new TimeWindowDAO().Insert(new List<TimeWindowDTO> { timeWindowSeedData });
         }
 
         [TestMethod]
@@ -51,9 +50,9 @@ namespace TISUnitTests.daos.configs
             {
                 new TestWindowDTO
                 {
-                    ClientName = timeWindowList[0].ClientName,
+                    ClientName = timeWindowSeedData.ClientName,
                     TestId = "unit-test-test-id",
-                    WindowID = timeWindowList[0].WindowId,
+                    WindowID = timeWindowSeedData.WindowId,
                     NumOpps = 42,
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now
@@ -66,12 +65,7 @@ namespace TISUnitTests.daos.configs
 
             Assert.AreEqual(1, insertedRecords.Count);
             var result = insertedRecords[0];
-            Assert.AreEqual(testWindowList[0].ClientName, result.ClientName);
-            Assert.AreEqual(testWindowList[0].TestId, result.TestId);
-            Assert.AreEqual(testWindowList[0].WindowID, result.WindowID);
-            Assert.AreEqual(testWindowList[0].NumOpps, result.NumOpps);
-            Assert.AreEqual(testWindowList[0].StartDate.ToLongDateString(), result.StartDate.ToLongDateString());
-            Assert.AreEqual(testWindowList[0].EndDate.ToLongDateString(), result.EndDate.ToLongDateString());
+            CompareResults(testWindowList[0], insertedRecords[0]);
         }
     }
 }

@@ -40,10 +40,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(subjectList[0].ClientName, result.ClientName);
-            Assert.AreEqual(subjectList[0].Subject, result.Subject);
-            Assert.AreEqual(subjectList[0].SubjectCode, result.SubjectCode);
+            CompareResults(subjectList[0], insertedRecords[0]);
         }
     }
 }

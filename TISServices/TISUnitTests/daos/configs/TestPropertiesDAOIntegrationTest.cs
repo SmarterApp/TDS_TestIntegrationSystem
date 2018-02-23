@@ -56,18 +56,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(testPropertyList[0].ClientName, result.ClientName);
-            Assert.AreEqual(testPropertyList[0].TestId, result.TestId);
-            Assert.AreEqual(testPropertyList[0].IsSelectable, result.IsSelectable);
-            Assert.AreEqual(testPropertyList[0].Label, result.Label);
-            Assert.AreEqual(testPropertyList[0].SubjectName, result.SubjectName);
-            Assert.AreEqual(testPropertyList[0].MaxOpportunities, result.MaxOpportunities);
-            Assert.AreEqual(testPropertyList[0].ScoreByTds, result.ScoreByTds);
-            Assert.AreEqual(testPropertyList[0].AccommodationFamily, result.AccommodationFamily);
-            Assert.AreEqual(testPropertyList[0].ReportingInstrument, result.ReportingInstrument);
-            Assert.AreEqual(testPropertyList[0].TideId, result.TideId);
-            Assert.AreEqual(testPropertyList[0].GradeText, result.GradeText);
+            CompareResults(testPropertyList[0], insertedRecords[0]);
         }
     }
 }

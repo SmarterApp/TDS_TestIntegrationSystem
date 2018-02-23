@@ -62,25 +62,8 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(verificationSql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(2, insertedRecords.Count);
-            var firstResult = insertedRecords[0];
-            Assert.AreEqual(testeeAttributesList[0].RtsName, firstResult.RtsName);
-            Assert.AreEqual(testeeAttributesList[0].AtLogin, firstResult.AtLogin);
-            Assert.AreEqual(testeeAttributesList[0].ClientName, firstResult.ClientName);
-            Assert.AreEqual(testeeAttributesList[0].Label, firstResult.Label);
-            Assert.AreEqual(testeeAttributesList[0].ReportName, firstResult.ReportName);
-            Assert.AreEqual(testeeAttributesList[0].SortOrder, firstResult.SortOrder);
-            Assert.AreEqual(testeeAttributesList[0].TdsId, firstResult.TdsId);
-            Assert.AreEqual(testeeAttributesList[0].Type, firstResult.Type);
-
-            var secondResult = insertedRecords[1];
-            Assert.AreEqual(testeeAttributesList[1].RtsName, secondResult.RtsName);
-            Assert.AreEqual(testeeAttributesList[1].AtLogin, secondResult.AtLogin);
-            Assert.AreEqual(testeeAttributesList[1].ClientName, secondResult.ClientName);
-            Assert.AreEqual(testeeAttributesList[1].Label, secondResult.Label);
-            Assert.AreEqual(testeeAttributesList[1].ReportName, secondResult.ReportName);
-            Assert.AreEqual(testeeAttributesList[1].SortOrder, secondResult.SortOrder);
-            Assert.AreEqual(testeeAttributesList[1].TdsId, secondResult.TdsId);
-            Assert.AreEqual(testeeAttributesList[1].Type, secondResult.Type);
+            CompareResults(testeeAttributesList[0], insertedRecords[0]);
+            CompareResults(testeeAttributesList[1], insertedRecords[1]);
         }
     }
 }

@@ -51,15 +51,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(testFormPropertyList[0].ClientName, result.ClientName);
-            Assert.AreEqual(testFormPropertyList[0].TestFormKey, result.TestFormKey);
-            Assert.AreEqual(testFormPropertyList[0].FormId, result.FormId);
-            Assert.AreEqual(testFormPropertyList[0].TestId, result.TestId);
-            Assert.AreEqual(testFormPropertyList[0].Language, result.Language);
-            Assert.AreEqual(testFormPropertyList[0].StartDate.ToLongDateString(), result.StartDate.ToLongDateString());
-            Assert.AreEqual(testFormPropertyList[0].EndDate.ToLongDateString(), result.EndDate.ToLongDateString());
-            Assert.AreEqual(testFormPropertyList[0].Testkey, result.Testkey);
+            CompareResults(testFormPropertyList[0], insertedRecords[0]);
         }
     }
 }

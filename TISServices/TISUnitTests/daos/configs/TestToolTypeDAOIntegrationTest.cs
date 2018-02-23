@@ -1,9 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.configs.daos;
 using TDSQASystemAPI.DAL.configs.dtos;
@@ -66,21 +62,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(toolTypeList[0].ClientName, result.ClientName);
-            Assert.AreEqual(toolTypeList[0].Context, result.Context);
-            Assert.AreEqual(toolTypeList[0].ContextType, result.ContextType);
-            Assert.AreEqual(toolTypeList[0].ToolName, result.ToolName);
-            Assert.AreEqual(toolTypeList[0].AllowChange, result.AllowChange);
-            Assert.AreEqual(toolTypeList[0].IsSelectable, result.IsSelectable);
-            Assert.AreEqual(toolTypeList[0].IsVisible, result.IsVisible);
-            Assert.AreEqual(toolTypeList[0].StudentControl, result.StudentControl);
-            Assert.AreEqual(toolTypeList[0].IsFunctional, result.IsFunctional);
-            Assert.AreEqual(toolTypeList[0].RtsFieldName, result.RtsFieldName);
-            Assert.AreEqual(toolTypeList[0].IsRequired, result.IsRequired);
-            Assert.AreEqual(toolTypeList[0].TideSelectable, result.TideSelectable);
-            Assert.AreEqual(toolTypeList[0].TideSelectableBySubject, result.TideSelectableBySubject);
-
+            CompareResults(toolTypeList[0], insertedRecords[0]);
         }
     }
 }

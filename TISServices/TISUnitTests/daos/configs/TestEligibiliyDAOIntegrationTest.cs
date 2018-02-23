@@ -53,16 +53,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(testEligibilityList[0].ClientName, result.ClientName);
-            Assert.AreEqual(testEligibilityList[0].TestId, result.TestId);
-            Assert.AreEqual(testEligibilityList[0].RtsName, result.RtsName);
-            Assert.AreEqual(testEligibilityList[0].Enables, result.Enables);
-            Assert.AreEqual(testEligibilityList[0].Disables, result.Disables);
-            Assert.AreEqual(testEligibilityList[0].RtsValue, result.RtsValue);
-            Assert.AreEqual(testEligibilityList[0].EntityType, result.EntityType);
-            Assert.AreEqual(testEligibilityList[0].EligibilityType, result.EligibilityType);
-            Assert.AreEqual(testEligibilityList[0].MatchType, result.MatchType);
+            CompareResults(testEligibilityList[0], insertedRecords[0]);
         }
     }
 }

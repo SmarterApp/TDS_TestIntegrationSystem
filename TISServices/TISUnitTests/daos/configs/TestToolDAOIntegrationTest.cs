@@ -11,7 +11,6 @@ namespace TISUnitTests.daos.configs
     public class TestToolDAOIntegrationTest : TestPackageDaoIntegrationTestBase<TestToolDTO>
     {
         private readonly ITestPackageDao<TestToolDTO> testPackageDao = new TestToolDAO();
-        private readonly ITestPackageDao<TestToolTypeDTO> testToolTypeDao = new TestToolTypeDAO();
         private readonly string sql =
             "SELECT \n" +
             "   ClientName, \n" +
@@ -31,25 +30,22 @@ namespace TISUnitTests.daos.configs
             "   AND Code = 'unit-test-code' \n" +
             "   AND Context = 'unit-test-context' \n" +
             "   AND ContextType = 'unit-test-context-type'";
-        private readonly IList<TestToolTypeDTO> toolTypeListSeedData = new List<TestToolTypeDTO>
-            {
-                new TestToolTypeDTO
-                {
-                    ClientName = "unit-test-client-name",
-                    Context = "unit-test-context",
-                    ContextType = "unit-test-context-type",
-                    ToolName = "unit-test-tool-name",
-                    AllowChange = true,
-                    IsSelectable = true,
-                    IsVisible = true,
-                    StudentControl = true,
-                    IsFunctional = true,
-                    RtsFieldName = "unit-test-rts-field-name",
-                    IsRequired = true,
-                    TideSelectable = true,
-                    TideSelectableBySubject = true
-                }
-            };
+        private readonly TestToolTypeDTO toolTypeListSeedData = new TestToolTypeDTO
+        {
+            ClientName = "unit-test-client-name",
+            Context = "unit-test-context",
+            ContextType = "unit-test-context-type",
+            ToolName = "unit-test-tool-name",
+            AllowChange = true,
+            IsSelectable = true,
+            IsVisible = true,
+            StudentControl = true,
+            IsFunctional = true,
+            RtsFieldName = "unit-test-rts-field-name",
+            IsRequired = true,
+            TideSelectable = true,
+            TideSelectableBySubject = true
+        };
 
         /// <summary>
         /// Seed the database with a record in <code>OSS_Configs..Client_TestToolType</code> so foreign key constraints can be satisfied.
@@ -59,7 +55,7 @@ namespace TISUnitTests.daos.configs
         {
             base.Setup();
 
-            testToolTypeDao.Insert(toolTypeListSeedData);
+            new TestToolTypeDAO().Insert(new List<TestToolTypeDTO> { toolTypeListSeedData });
         }
 
         [TestMethod]
@@ -69,10 +65,10 @@ namespace TISUnitTests.daos.configs
             {
                 new TestToolDTO
                 {
-                    ClientName = toolTypeListSeedData[0].ClientName,
-                    Context = toolTypeListSeedData[0].Context,
-                    ContextType = toolTypeListSeedData[0].ContextType,
-                    Type = toolTypeListSeedData[0].ToolName,
+                    ClientName = toolTypeListSeedData.ClientName,
+                    Context = toolTypeListSeedData.Context,
+                    ContextType = toolTypeListSeedData.ContextType,
+                    Type = toolTypeListSeedData.ToolName,
                     Code = "unit-test-code",
                     Value = "unit-code-value",
                     IsDefault = true,
@@ -86,17 +82,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(testToolList[0].ClientName, result.ClientName);
-            Assert.AreEqual(testToolList[0].Context, result.Context);
-            Assert.AreEqual(testToolList[0].ContextType, result.ContextType);
-            Assert.AreEqual(testToolList[0].Type, result.Type);
-            Assert.AreEqual(testToolList[0].Code, result.Code);
-            Assert.AreEqual(testToolList[0].Value, result.Value);
-            Assert.AreEqual(testToolList[0].IsDefault, result.IsDefault);
-            Assert.AreEqual(testToolList[0].AllowCombine, result.AllowCombine);
-            Assert.AreEqual(testToolList[0].ValueDescription, result.ValueDescription);
-
+            CompareResults(testToolList[0], insertedRecords[0]);
         }
     }
 }

@@ -50,14 +50,7 @@ namespace TISUnitTests.daos.configs
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.CONFIGS);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(testModeList[0].ClientName, result.ClientName);
-            Assert.AreEqual(testModeList[0].TestId, result.TestId);
-            Assert.AreEqual(testModeList[0].TestKey, result.TestKey);
-            Assert.AreEqual(testModeList[0].Algorithm, result.Algorithm);
-            Assert.AreEqual(testModeList[0].IsSegmented, result.IsSegmented);
-            Assert.AreEqual(testModeList[0].Mode, result.Mode);
-            Assert.AreEqual(testModeList[0].SessionType, result.SessionType);
+            CompareResults(testModeList[0], insertedRecords[0]);
         }
     }
 }
