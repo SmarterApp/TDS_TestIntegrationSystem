@@ -256,24 +256,24 @@ END
 GO
 CREATE TYPE dbo.AdminStrandTable AS TABLE
 (
-	AdminStrandKey				nvarchar(255) NOT NULL,
-	SegmentKey					varchar(250) NOT NULL,
-	StrandKey					varchar(150) NOT NULL,
-	MinItems					int,
-	MaxItems					int,
-	IsStrictMax					bit NOT NULL,
-	BlueprintWeight				float NOT NULL,
-	AdaptiveCut					float,
-	StartAbility				float,
-	StartInfo					float,
-	Scalar						float,
-	TestVersion					bigint,
-	LoadMin						int,
-	LoadMax						int,
-	PrecisionTarget				float,
-	PrecisionTargetMetWeight	float,
-	PrecisionTargetNotMetWeight	float,
-	AbilityWeight				float
+	AdminStrandKey				nvarchar(255) NOT NULL, -- _key
+	SegmentKey					varchar(250) NOT NULL, -- _fk_adminsubject
+	StrandKey					varchar(150) NOT NULL, -- _fk_strand
+	MinItems					int, -- minitems
+	MaxItems					int, -- maxitems
+	IsStrictMax					bit NOT NULL, -- isstrictmax
+	BlueprintWeight				float NOT NULL, -- bpweight
+	AdaptiveCut					float, -- adaptivecut
+	StartAbility				float, -- startability
+	StartInfo					float, -- startinfo
+	Scalar						float, -- scalar
+	TestVersion					bigint, -- loadconfig
+	LoadMin						int, -- loadmin
+	LoadMax						int, -- loadmax
+	PrecisionTarget				float, -- precisiontarget
+	PrecisionTargetMetWeight	float, -- precisiontargetmetweight
+	PrecisionTargetNotMetWeight	float, -- precisiontargetnotmetweight
+	AbilityWeight				float -- abilityweight
 )
 GO
 GRANT CONTROL ON TYPE::dbo.AdminStrandTable TO public
@@ -302,7 +302,7 @@ CREATE TYPE dbo.SetOfAdminItemTable AS TABLE
 	IrtB				varchar(150),
 	IrtC				float,
 	IrtModel			varchar(100),
-	ClsString			varchar(max),
+	ClString			varchar(max),
 	UpdatedTestVersion	bigint,
 	BVector				varchar(200)
 )

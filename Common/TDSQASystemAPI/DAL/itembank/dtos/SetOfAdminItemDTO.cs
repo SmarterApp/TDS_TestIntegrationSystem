@@ -22,7 +22,7 @@
         public string IrtB { get; set; } // maps to irt_b in tblSetOfAdminItems
         public double IrtC { get; set; } // maps to irt_c in tblSetOfAdminItems
         public string IrtModel { get; set; } // maps to irt_model in tblSetOfAdminItems
-        public string ClsString { get; set; }
+        public string ClString { get; set; }
         public long UpdatedTestVersion { get; set; } // maps to updateconfig in tblSetOfAdminItems
         public string BVector { get; set; } // this field is set on line 92 of spLoad_AdminItemMeasurementParms
     }
