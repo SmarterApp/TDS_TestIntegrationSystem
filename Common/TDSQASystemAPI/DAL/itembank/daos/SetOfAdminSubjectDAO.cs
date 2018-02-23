@@ -90,7 +90,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   AdaptiveCut, \n" +
                 "   TooCloseSEs, \n" +
                 "   AbilityWeight, \n" +
-                "   ComputeAbilityWeights, \n" +
+                "   ComputeAbilityEstimates, \n" +
                 "   RcAbilityWeight, \n" +
                 "   PrecisionTargetMetWeight, \n" +
                 "   PrecisionTargetNotMetWeight, \n" +

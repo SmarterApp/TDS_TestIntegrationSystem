@@ -41,7 +41,7 @@
         public double AdaptiveCut { get; set; }
         public double TooCloseSEs { get; set; }
         public double AbilityWeight { get; set; }
-        public bool ComputeAbilityWeights { get; set; }
+        public bool ComputeAbilityEstimates { get; set; }
         public double RcAbilityWeight { get; set; }
         public double PrecisionTargetMetWeight { get; set; }
         public double PrecisionTargetNotMetWeight { get; set; }
