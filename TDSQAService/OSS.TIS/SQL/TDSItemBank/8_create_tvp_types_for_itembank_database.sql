@@ -354,8 +354,8 @@ CREATE TYPE dbo.AdminStimulusTable AS TABLE
 	NumItemsRequired	int NOT NULL,
 	MaxItems			int NOT NULL,
 	TestVersion			bigint,
-	GroupId				varchar(50),
-	UpdatedTestVersion	bigint
+	UpdatedTestVersion	bigint,
+	GroupId				varchar(50)
 )
 GO
 GRANT CONTROL ON TYPE::dbo.AdminStimulusTable TO public

@@ -21,8 +21,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   NumItemsRequired, \n" +
                 "   MaxItems, \n" +
                 "   TestVersion, \n" +
-                "   GroupId, " +
-                "   UpdatedTestVersion \n";
+                "   GroupId \n";
         }
 
         public override void Insert(IList<AdminStimulusDTO> recordsToSave)
