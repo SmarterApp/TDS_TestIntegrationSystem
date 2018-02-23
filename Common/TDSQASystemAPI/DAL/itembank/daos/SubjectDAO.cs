@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TDSQASystemAPI.DAL.configs.dtos;
+using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
 {
@@ -11,7 +11,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
         public SubjectDAO()
         {
             DbConnectionStringName = DatabaseConnectionStringNames.ITEMBANK;
-            TvpType = "";
+            TvpType = "SubjectTable";
             InsertSql =
                 "INSERT \n" +
                 "   dbo.tblSubject ([Name], Grade, _Key, _fk_Client, LoadConfig) \n" +

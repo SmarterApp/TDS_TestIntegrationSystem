@@ -12,7 +12,7 @@
         public string AdminKey { get; set; } // maps to _key in tblTestAdmin
         public string SchoolYear { get; set; }
         public string Season { get; set; }
-        public int ClientKey { get; set; } // maps to _fk_client in tblTestAdmin
+        public long ClientKey { get; set; } // maps to _fk_client in tblTestAdmin
         public string Description { get; set; } // calculated on line 46 of tp.spLoad_TestAdmin
         public long TestVersion { get; set; } // maps to loadconfig in tblTestAdmin
     }

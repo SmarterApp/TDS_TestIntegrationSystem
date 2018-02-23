@@ -10,7 +10,7 @@
     public class SubjectDTO
     {
         public string Name { get; set; }
-        public string Grade => ""; // line 25 of spLoad_Subject
+        public string Grade { get; set; }
         public string SubjectKey { get; set; } // maps to _Key
         public long ClientKey { get; set; } // maps to _fk_client
         public long TestVersion { get; set; } // maps to LoadConfig
