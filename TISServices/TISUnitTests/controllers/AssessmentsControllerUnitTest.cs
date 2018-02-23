@@ -7,7 +7,7 @@ using TDSQASystemAPI.BL;
 using TDSQASystemAPI.DAL;
 using TISServices.Services;
 
-namespace TISUnitTests
+namespace TISUnitTests.controllers
 {
     [TestClass]
     public class AssessmentsControllerUnitTest

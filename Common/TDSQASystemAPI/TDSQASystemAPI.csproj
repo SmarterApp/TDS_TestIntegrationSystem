@@ -93,8 +93,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DataAccess\Libraries\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\TISServices\TISServices\packages\Newtonsoft.Json.4.5.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\TISServices\TISServices\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System">
       <RequiredTargetFramework>4.5</RequiredTargetFramework>
@@ -116,20 +117,20 @@
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http">
-      <HintPath>..\..\TISServices\TISServices\packages\System.Net.Http.2.0.20126.16343\lib\net40\System.Net.Http.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Net.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\TISServices\TISServices\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Extensions.dll</HintPath>
+      <HintPath>..\..\TISServices\TISServices\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\TISServices\TISServices\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\TISServices\TISServices\packages\Microsoft.AspNet.WebApi.Client.5.2.4\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\TISServices\TISServices\packages\System.Net.Http.Formatting.Extension.5.2.3.0\lib\System.Net.Http.Primitives.dll</HintPath>
+      <HintPath>..\..\TISServices\TISServices\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
-      <HintPath>..\..\TISServices\TISServices\packages\System.Net.Http.2.0.20126.16343\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Net.Http.WebRequest.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
@@ -162,12 +163,121 @@
     <Compile Include="Config\TestEnvironment.cs" />
     <Compile Include="DAL\ArchiveDB.cs" />
     <Compile Include="DAL\AssessmentRepository.cs" />
+    <Compile Include="DAL\configs\daos\AccommodationFamilyDAO.cs" />
+    <Compile Include="DAL\configs\daos\ClientDAO.cs" />
+    <Compile Include="DAL\configs\daos\FieldTestPriorityDAO.cs" />
+    <Compile Include="DAL\configs\daos\GradeDAO.cs" />
+    <Compile Include="DAL\configs\daos\LanguageDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestItemConstraintDAO.cs" />
+    <Compile Include="DAL\configs\daos\SegmentPropertiesDAO.cs" />
+    <Compile Include="DAL\configs\daos\SubjectDAO.cs" />
+    <Compile Include="DAL\configs\daos\TesteeAttributeDAO.cs" />
+    <Compile Include="DAL\configs\daos\TesteeRelationshipAttributeDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestEligibilityDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestFormPropertiesDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestGradesDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestItemTypeDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestModeDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestPropertiesDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestScoreFeaturesDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestToolDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestToolTypeDAO.cs" />
+    <Compile Include="DAL\configs\daos\TestWindowDAO.cs" />
+    <Compile Include="DAL\configs\daos\TimeWindowDAO.cs" />
+    <Compile Include="DAL\configs\dtos\AccommodationFamilyDTO.cs" />
+    <Compile Include="DAL\configs\dtos\LanguageDTO.cs" />
+    <Compile Include="DAL\configs\dtos\SegmentPropertiesDTO.cs" />
+    <Compile Include="DAL\configs\dtos\SubjectDTO.cs" />
+    <Compile Include="DAL\configs\dtos\ClientDTO.cs" />
+    <Compile Include="DAL\configs\dtos\FieldTestPriorityDTO.cs" />
+    <Compile Include="DAL\configs\dtos\GradeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TesteeAttributeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TesteeRelationshipAttributeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestEligibilityDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestFormPropertiesDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestGradeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestItemConstraintDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestItemTypeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestModeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestPropertiesDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestScoreFeatureDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestToolDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestToolTypeDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TestWindowDTO.cs" />
+    <Compile Include="DAL\configs\dtos\TimeWindowDTO.cs" />
+    <Compile Include="DAL\DatabaseConnectionStringNames.cs" />
     <Compile Include="DAL\EmbeddedResource.cs" />
     <Compile Include="DAL\IAssessmentRepository.cs" />
+    <Compile Include="DAL\itembank\daos\AaItemClDAO.cs" />
+    <Compile Include="DAL\itembank\daos\AdminStimulusDAO.cs" />
+    <Compile Include="DAL\itembank\daos\AdminStrandDAO.cs" />
+    <Compile Include="DAL\itembank\daos\AffinityGroupDAO.cs" />
+    <Compile Include="DAL\itembank\daos\AffinityGroupItemDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemMeasurementParameterDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemPropertyDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemScoreDimensionDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ItemSelectionParmDAO.cs" />
+    <Compile Include="DAL\itembank\daos\PerformanceLevelDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfAdminItemDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfAdminSubjectDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfItemStimuliDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfItemStrandDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SetOfTestGradeDAO.cs" />
+    <Compile Include="DAL\itembank\daos\StimulusDAO.cs" />
+    <Compile Include="DAL\itembank\daos\StrandDAO.cs" />
+    <Compile Include="DAL\itembank\daos\SubjectDAO.cs" />
+    <Compile Include="DAL\itembank\daos\TestAdminDAO.cs" />
+    <Compile Include="DAL\itembank\daos\TestCohortDAO.cs" />
+    <Compile Include="DAL\itembank\daos\TestFormDAO.cs" />
+    <Compile Include="DAL\itembank\daos\TestFormItemDAO.cs" />
+    <Compile Include="DAL\itembank\dtos\AaItemClDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\AdminStimulusDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\AdminStrandDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\AffinityGroupDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\AffinityGroupItemDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemMeasurementParameterDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemPropertyDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemScoreDimensionDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ItemSelectionParmDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\PerformanceLevelDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfAdminItemDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfAdminSubjectDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfItemStimuliDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfItemStrandDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SetOfTestGradeDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\StimulusDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\StrandDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\SubjectDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\TestAdminDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\TestCohortDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\TestFormDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\TestFormItemDTO.cs" />
+    <Compile Include="DAL\ITestPackageDao.cs" />
+    <Compile Include="DAL\osstis\daos\TestNameLookupDAO.cs" />
+    <Compile Include="DAL\osstis\dtos\TestNameLookupDTO.cs" />
     <Compile Include="DAL\Sandlot.cs" />
+    <Compile Include="DAL\scoring\daos\ComputationRuleParameterDAO.cs" />
+    <Compile Include="DAL\scoring\daos\ComputationRuleParameterValueDAO.cs" />
+    <Compile Include="DAL\scoring\daos\ConversionTableDAO.cs" />
+    <Compile Include="DAL\scoring\daos\ConversionTableDescDAO.cs" />
+    <Compile Include="DAL\scoring\daos\FeatureComputationLocationDAO.cs" />
+    <Compile Include="DAL\scoring\daos\TestDAO.cs" />
+    <Compile Include="DAL\scoring\daos\TestGradeDAO.cs" />
+    <Compile Include="DAL\scoring\daos\TestScoreFeatureDAO.cs" />
+    <Compile Include="DAL\scoring\dtos\ComputationRuleParameterDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\ComputationRuleParameterValueDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\ConversionTableDescDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\ConversionTableDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\FeatureComputationLocationDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\TestDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\TestGradeDTO.cs" />
+    <Compile Include="DAL\scoring\dtos\TestScoreFeatureDTO.cs" />
     <Compile Include="DAL\TDSQC.cs" />
     <Compile Include="DAL\TestMergeDataAccess.cs" />
     <Compile Include="DAL\TestOpportunity.cs" />
+    <Compile Include="DAL\TestPackageDaoBase.cs" />
     <Compile Include="DAL\TISScoreMergerDAL.cs" />
     <Compile Include="DAL\XmlRepository.cs" />
     <Compile Include="Data\QASystemConfigSettings.cs" />
@@ -325,4 +435,9 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
+  <Import Project="..\..\TISServices\TISServices\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\TISServices\TISServices\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\..\TISServices\TISServices\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\..\TISServices\TISServices\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
 </Project>
