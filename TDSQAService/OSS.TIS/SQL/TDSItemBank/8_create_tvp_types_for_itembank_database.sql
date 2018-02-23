@@ -45,7 +45,7 @@ CREATE TYPE dbo.StimulusTable AS TABLE
 	ItsKey				bigint NOT NULL,
 	ClientId			varchar(100),
 	FilePath			varchar(50),
-	[FileNme]			varchar(50),
+	[FileName]			varchar(50),
 	DateLastUpdated		datetime,
 	PassageKey			varchar(150),
 	TestVersion			bigint

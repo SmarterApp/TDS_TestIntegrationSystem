@@ -12,11 +12,11 @@ namespace TDSQASystemAPI.DAL.itembank.dtos
     public class StimulusDTO
     {
         public long ItemBankKey { get; set; } // maps to _efk_itembank in tblStimulus
-        public long ItsKey { get; set; } // mapst to _efk_ITSKey in tblStimulus
-        public string ClientKey => null; // logic from line 36 of spLoad_Stimuli
+        public long ItsKey { get; set; } // maps to _efk_ITSKey in tblStimulus
+        public string ClientKey { get; set; } // logic from line 36 of spLoad_Stimuli always sets this to null
         public string FilePath { get; set; }
         public string FileName { get; set; }
-        public DateTime DateLastUpdated => DateTime.Now; // logic from line 39 of spLoad_Stimuli
+        public DateTime DateLastUpdated { get; set; } // logic from line 39 of spLoad_Stimuli sets this to "now"
         public string PassageKey { get; set; } // maps to _key in tblStimulus
         public long TestVersion { get; set; } // maps to loadConfig in tblStimulus
     }
