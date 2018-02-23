@@ -12,7 +12,7 @@
         public const string COHORT_DEFAULT = "Default";
 
         public string SegmentKey { get; set; } // maps to _fk_adminsubject in TestForm
-        public string Cohort => COHORT_DEFAULT; // logic from line 25 of spLoad_AdminForms
+        public string Cohort { get; set; } // logic from line 25 of spLoad_AdminForms sets this to "Default"
         public string Language { get; set; }
         public string TestFormKey { get; set; } // maps to _key in TestForm
         public string FormId { get; set; }
