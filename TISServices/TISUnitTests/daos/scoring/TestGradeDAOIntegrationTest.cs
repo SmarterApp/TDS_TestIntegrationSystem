@@ -1,9 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.scoring.daos;
 using TDSQASystemAPI.DAL.scoring.dtos;
@@ -65,10 +61,7 @@ namespace TISUnitTests.daos.scoring
             var insertedRecords = GetInsertedRecords(string.Format(sql, CLIENT_NAME, seedDataTest.TestId, "unit-test"), DatabaseConnectionStringNames.SCORING);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(gradeList[0].ClientName, result.ClientName);
-            Assert.AreEqual(gradeList[0].TestId, result.TestId);
-            Assert.AreEqual(gradeList[0].ReportingGrade, result.ReportingGrade);
+            CompareResults(gradeList[0], insertedRecords[0]);
         }
     }
 }

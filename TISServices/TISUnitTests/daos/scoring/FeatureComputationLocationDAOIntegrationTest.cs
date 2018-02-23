@@ -79,10 +79,7 @@ namespace TISUnitTests.daos.scoring
             var insertedRecords = GetInsertedRecords(string.Format(sql, seedDataTestScoreFeatureKey, COMPUTATION_LOCATION_NAME), DatabaseConnectionStringNames.SCORING);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(locationList[0].TestScoreFeatureKey, result.TestScoreFeatureKey);
-            Assert.AreEqual(locationList[0].Location, result.Location);
-
+            CompareResults(locationList[0], insertedRecords[0]);
         }
     }
 }

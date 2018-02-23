@@ -1,9 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.scoring.daos;
 using TDSQASystemAPI.DAL.scoring.dtos;
@@ -91,12 +88,7 @@ namespace TISUnitTests.daos.scoring
                 DatabaseConnectionStringNames.SCORING);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(valueList[0].TestScoreFeatureKey, result.TestScoreFeatureKey);
-            Assert.AreEqual(valueList[0].ComputationRuleParameterKey, result.ComputationRuleParameterKey);
-            Assert.AreEqual(valueList[0].Index, result.Index);
-            Assert.AreEqual(valueList[0].Value, result.Value);
-
+            CompareResults(valueList[0], insertedRecords[0]);
         }
     }
 }

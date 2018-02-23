@@ -47,13 +47,7 @@ namespace TISUnitTests.daos.scoring
             var insertedRecords = GetInsertedRecords(string.Format(sql, mockPrimaryKey), DatabaseConnectionStringNames.SCORING);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(ruleParamList[0].ComputationRuleParameterKey, result.ComputationRuleParameterKey);
-            Assert.AreEqual(ruleParamList[0].ComputationRule, result.ComputationRule);
-            Assert.AreEqual(ruleParamList[0].ParameterName, result.ParameterName);
-            Assert.AreEqual(ruleParamList[0].ParameterPosition, result.ParameterPosition);
-            Assert.AreEqual(ruleParamList[0].IndexType, result.IndexType);
-            Assert.AreEqual(ruleParamList[0].Type, result.Type);
+            CompareResults(ruleParamList[0], insertedRecords[0]);
         }
     }
 }

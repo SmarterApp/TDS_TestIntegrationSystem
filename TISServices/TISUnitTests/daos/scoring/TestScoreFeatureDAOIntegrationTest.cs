@@ -74,15 +74,7 @@ namespace TISUnitTests.daos.scoring
             var insertedRecords = GetInsertedRecords(string.Format(sql, testScoreFeatureKey, COMPUTATION_RULE_NAME, CLIENT_NAME), DatabaseConnectionStringNames.SCORING);
 
             Assert.AreEqual(1, insertedRecords.Count);
-            var result = insertedRecords[0];
-            Assert.AreEqual(testScoreFeatureList[0].TestScoreFeatureKey, result.TestScoreFeatureKey);
-            Assert.AreEqual(testScoreFeatureList[0].ClientName, result.ClientName);
-            Assert.AreEqual(testScoreFeatureList[0].TestId, result.TestId);
-            Assert.AreEqual(testScoreFeatureList[0].MeasureOf, result.MeasureOf);
-            Assert.AreEqual(testScoreFeatureList[0].MeasureLabel, result.MeasureLabel);
-            Assert.AreEqual(testScoreFeatureList[0].IsScaled, result.IsScaled);
-            Assert.AreEqual(testScoreFeatureList[0].ComputationRule, result.ComputationRule);
-            Assert.AreEqual(testScoreFeatureList[0].ComputationOrder, result.ComputationOrder);
+            CompareResults(testScoreFeatureList[0], insertedRecords[0]);
         }
     }
 }
