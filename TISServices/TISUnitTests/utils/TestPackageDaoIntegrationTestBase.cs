@@ -53,7 +53,7 @@ namespace TISUnitTests.utils
             var comparisonResult = Comparer.Compare(expected, actual);
             if (!comparisonResult.AreEqual)
             {
-                Assert.Fail(string.Format("Comparison failure!  The following differences were recorded: \n{0}", comparisonResult.DifferencesString));
+                Assert.Fail(string.Format("Comparison failure!  The following differences were recorded:\n{0}", comparisonResult.DifferencesString));
             }
         }
 
