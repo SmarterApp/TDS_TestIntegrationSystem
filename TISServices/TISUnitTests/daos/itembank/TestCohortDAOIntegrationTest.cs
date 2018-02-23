@@ -38,6 +38,8 @@ namespace TISUnitTests.daos.itembank
             testPackageDao.Insert(cohortList);
 
             var insertedRecords = GetInsertedRecords(sql, DatabaseConnectionStringNames.ITEMBANK);
+
+            Assert.AreEqual(1, insertedRecords.Count);
             CompareResults(cohortList[0], insertedRecords[0]);
         }
     }
