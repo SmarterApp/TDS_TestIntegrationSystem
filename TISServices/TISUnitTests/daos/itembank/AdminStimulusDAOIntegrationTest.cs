@@ -84,6 +84,9 @@ namespace TISUnitTests.daos.itembank
             BlueprintMetricFunction = "unit-test-bp-func"
         };
 
+        /// <summary>
+        /// Create seed data to satisfy foreign key constraints
+        /// </summary>
         [TestInitialize]
         public override void Setup()
         {
