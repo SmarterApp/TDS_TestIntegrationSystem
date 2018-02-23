@@ -17,7 +17,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   dbo.PerformanceLevels (_fk_content, PLevel, ThetaLo, ThetaHi, ScaledLo, ScaledHi) \n" +
                 "SELECT \n" +
                 "   ContentKey, \n" +
-                "   PLeveln \n" +
+                "   PLevel, \n" +
                 "   ThetaLo, \n" +
                 "   ThetaHi, \n" +
                 "   ScaledLo, \n" +
