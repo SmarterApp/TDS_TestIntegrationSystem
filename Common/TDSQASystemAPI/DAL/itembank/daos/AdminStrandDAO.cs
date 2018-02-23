@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
@@ -42,7 +38,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   SegmentKey, \n" +
                 "   StrandKey, \n" +
                 "   MinItems, \n" +
-                "   MaxItems \n" +
+                "   MaxItems, \n" +
                 "   IsStrictMax, \n" +
                 "   BlueprintWeight, \n" +
                 "   AdaptiveCut, \n" +
@@ -51,7 +47,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   Scalar, \n" +
                 "   TestVersion, \n" +
                 "   LoadMin, \n" +
-                "   LoadMax, n" +
+                "   LoadMax, \n" +
                 "   PrecisionTarget, \n" +
                 "   PrecisionTargetMetWeight, \n" +
                 "   PrecisionTargetNotMetWeight, \n" +
