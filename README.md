@@ -67,17 +67,19 @@ TIS requires Visual Studio 2012 to build. The Deployment steps are as follows -
 * `<root>\TDSQAService\OSS.TIS\SQL\TISDB\2_Configuration_IAB Tests.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TISDB\2_Configuration_ICA_OP Tests.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TISDB\3_ScoringDaemonConfiguration.sql`   (** this script will require a couple of variables to be set prior to running)
-
+* `<root>\TDSQAService\OSS.TIS\SQL\TISDB\4_oss_tis_create_tvp_types_for_oss_tis_database.sql`
 4) Deploy the `[Db server].OSS_TestScoringConfigs` database objects by running the following scripts in order:
 
 * `<root>\TDSQAService\OSS.TIS\SQL\TestScoringConfigs\1_Tables.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TestScoringConfigs\2_Views.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TestScoringConfigs\3_Configuration.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TestScoringConfigs\4_create_tvp_types_for_testscoringconfigs_database.sql`
 
 5) Deploy the `[Db server].OSS_Configs` database objects by running the following scripts in order:
 
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSConfigs\1_Create_Objects.sql`  (** Ignore the SQL warnings.)
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSConfigs\2_Configuration.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TDSConfigs\3_create_tvp_types_for_configs_database.sql`
 
 
 6) Deploy the `[Db server].OSS_Itembank` database objects by running the following scripts in order:
@@ -89,6 +91,7 @@ TIS requires Visual Studio 2012 to build. The Deployment steps are as follows -
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\5_LoadPackages.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\6_TestToolConfiguration.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\7_create_procedure_spDeleteAssessment.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TDSItemBank\8_create_tvp_types_for_itembank_database.sql`
 
 7) Deploy TISService code at `tis_opentestsystem/` [App server]
 

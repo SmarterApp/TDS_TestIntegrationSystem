@@ -319,6 +319,7 @@
     <Compile Include="TestMerge\RelatedTestOpportunity.cs" />
     <Compile Include="TestMerge\TestMerge.cs" />
     <Compile Include="TestMerge\TestMergeConfiguration.cs" />
+    <Compile Include="TestPackage\TestPackageXsd.cs" />
     <Compile Include="TestResults\Comment.cs" />
     <Compile Include="TestResults\ErasureResponse.cs" />
     <Compile Include="TestResults\GenericVariable.cs" />
