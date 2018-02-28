@@ -25,12 +25,13 @@ namespace TDSQASystemAPI.TestPackage.utils
             // 1.  test package -> assessment(s)
             // 2.  assesmment -> segment(s)
             testPackage.Assessment.ForEach(a => a.TestPackage = testPackage);
-            testPackage.Assessment.SelectMany(a => a.Segments, (a, s) => s.Assessment = a);
+            testPackage.Assessment = testPackage.Assessment.SelectMany(a => a.Segments, (a, s) => s.Assessment = a)
+                .ToArray();
 
             var allSegments = from a in testPackage.Assessment
                               from s in a.Segments
                               select s;
-                           
+
             // The segment's Item property can be a form (for fixed-form assessments) or a pool of items (for an 
             // adaptive assessment).  Set the appropriate properties based on the type that's stored in the
             // AssessmentSegment's Item property.
@@ -38,9 +39,11 @@ namespace TDSQASystemAPI.TestPackage.utils
             {
                 if (segment.Item is AssessmentSegmentSegmentForms)
                 {
-                    var form = segment.Item as AssessmentSegmentSegmentFormsSegmentForm;
-                    form.AssessmentSegment = segment;
-                    form.ItemGroup.ForEach(ig => AssembleItemGroup(ig, testPackage, segment, form));
+                    foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                    { 
+                        form.AssessmentSegment = segment;
+                        form.ItemGroup.ForEach(ig => AssembleItemGroup(ig, testPackage, segment, form));
+                    }
                 }
                 else
                 {

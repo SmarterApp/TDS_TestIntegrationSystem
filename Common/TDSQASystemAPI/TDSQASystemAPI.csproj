@@ -321,8 +321,15 @@
     <Compile Include="TestMerge\TestMerge.cs" />
     <Compile Include="TestMerge\TestMergeConfiguration.cs" />
     <Compile Include="TestPackage\Assessment.cs" />
-    <Compile Include="TestPackage\TestPackage.cs" />
+    <Compile Include="TestPackage\AssessmentSegment.cs" />
+    <Compile Include="TestPackage\AssessmentSegmentSegmentFormsSegmentForm.cs" />
+    <Compile Include="TestPackage\ItemGroup.cs" />
+    <Compile Include="TestPackage\ItemGroupItem.cs" />
+    <Compile Include="TestPackage\ItemGroupItemTeacherHandScoring.cs" />
+    <Compile Include="TestPackage\ItemGroupStimulus.cs" />
+    <Compile Include="TestPackage\PresentationsPresentation.cs" />
     <Compile Include="TestPackage\TestPackageXsd.cs" />
+    <Compile Include="TestPackage\utils\TestPackageAssembler.cs" />
     <Compile Include="TestResults\Comment.cs" />
     <Compile Include="TestResults\ErasureResponse.cs" />
     <Compile Include="TestResults\GenericVariable.cs" />
@@ -375,9 +382,6 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="TestPackage\xsd\v3-test-package.xsd">
-      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
