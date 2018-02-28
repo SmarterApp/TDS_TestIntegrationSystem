@@ -115,8 +115,5 @@ namespace TISUnitTests.testpackages
                 .Presentations[0];
             Assert.AreEqual("English", presentation.GetLabel());
         }
-
-        [TestMethod]
-
     }
 }
