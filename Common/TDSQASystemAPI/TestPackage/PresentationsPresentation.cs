@@ -20,7 +20,8 @@ namespace TDSQASystemAPI.TestPackage
         /// </summary>
         /// <remarks>
         /// <para>
-        /// THIS METHOD SHOULD BE USED INSTEAD OF THE label PROPERTY.
+        /// THIS METHOD SHOULD BE USED INSTEAD OF THE label PROPERTY.  The logic for this method comes from
+        /// the <code>getLabel()</code>method in /TDS_SupportTool/client/src/main/java/tds/testpackage/model/Presentation.java
         /// </para>
         /// <para>
         /// There is no easy way to override a property in a partial class, so this method is used to 

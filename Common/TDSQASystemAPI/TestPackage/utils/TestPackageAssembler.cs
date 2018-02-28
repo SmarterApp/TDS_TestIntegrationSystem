@@ -6,17 +6,18 @@ using System.Xml.Serialization;
 namespace TDSQASystemAPI.TestPackage.utils
 {
     /// <summary>
-    /// 
+    /// A class for building up a complete <code>TestPackage</code> after the XML has been deserialized.
     /// </summary>
     public class TestPackageAssembler
     {
         private static readonly XmlSerializer xmlSerializer = new XmlSerializer(typeof(TestPackage));
 
         /// <summary>
-        /// Create a <code>TestPackage</code> instance from 
+        /// Create a <code>TestPackage</code> instance from XML.  The returned <code>TestPackage</code> will
+        /// have the required parent -> child relationships established between the elements that need them.
         /// </summary>
         /// <param name="reader">An <code>XmlReader</code> containing the test package's XML.</param>
-        /// <returns></returns>
+        /// <returns>A <code>TestPackage</code> with the parent -> child relationships established.</returns>
         public static TestPackage FromXml(XmlReader reader)
         {
             var testPackage = xmlSerializer.Deserialize(reader) as TestPackage;
@@ -56,7 +57,7 @@ namespace TDSQASystemAPI.TestPackage.utils
         }
 
         /// <summary>
-        /// 
+        /// Set up the parent -> child associations for the data stored within an <code>ItemGroup</code>.
         /// </summary>
         /// <param name="itemGroup">The <code>ItemGroup</code> to assemble</param>
         /// <param name="testPackage">The <code>TestPackage</code> that ultimately owns this <code>ItemGroup</code></param>
