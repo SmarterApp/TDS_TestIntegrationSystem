@@ -8,6 +8,9 @@ namespace TDSQASystemAPI.TestPackage
     /// </summary>
     public partial class AssessmentSegmentSegmentFormsSegmentForm
     {
+        /// <summary>
+        /// The <code>AssessmentSegment</code> that owns this <code>AssessmentSegmentSegmentFormsSegmentForm</code>.
+        /// </summary>
         [XmlIgnore]
         public AssessmentSegment AssessmentSegment { get; set; }
     }

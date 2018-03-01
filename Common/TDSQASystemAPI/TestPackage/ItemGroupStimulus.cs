@@ -8,6 +8,9 @@ namespace TDSQASystemAPI.TestPackage
     /// </summary>
     public partial class ItemGroupStimulus
     {
+        /// <summary>
+        /// The <code>TestPackage</code> that owns this <code>ItemGroupStimulus</code>.
+        /// </summary>
         [XmlIgnore]
         public TestPackage TestPackage { get; set; }
     }

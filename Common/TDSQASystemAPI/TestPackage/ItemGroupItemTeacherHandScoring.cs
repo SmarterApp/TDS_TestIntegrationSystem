@@ -8,9 +8,15 @@ namespace TDSQASystemAPI.TestPackage
     /// </summary>
     public partial class ItemGroupItemTeacherHandScoring
     {
+        /// <summary>
+        /// The <code>TestPackage</code> that owns this <code>ItemGroupItemTeacherHandScoring</code>
+        /// </summary>
         [XmlIgnore]
         public TestPackage TestPackage { get; set; }
 
+        /// <summary>
+        /// The <code>ItemGroupItem</code> that owns this <code>ItemGroupItemTeacherHandScoring</code>.
+        /// </summary>
         [XmlIgnore]
         public ItemGroupItem ItemGroupItem { get; set; }
     }

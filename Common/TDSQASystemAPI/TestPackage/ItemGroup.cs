@@ -8,11 +8,14 @@ namespace TDSQASystemAPI.TestPackage
     /// </summary>
     public partial class ItemGroup
     {
+        /// <summary>
+        /// The <code>AssessmentSegment</code> that owns this <code>ItemGroup</code>.
+        /// </summary>
         [XmlIgnore]
         public AssessmentSegment AssessmentSegment { get; set; }
 
         /// <summary>
-        /// Get the "key" of this ItemGroup.
+        /// Get the "key"/unique identifier of this <code>ItemGroup</code>.
         /// </summary>
         /// <remarks>
         /// The convention is:
