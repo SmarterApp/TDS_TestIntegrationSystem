@@ -8,11 +8,14 @@ namespace TDSQASystemAPI.TestPackage
     /// </summary>
     public partial class Assessment
     {
+        /// <summary>
+        /// The <code>TestPackage</code> that owns this <code>Assessment</code>.
+        /// </summary>
         [XmlIgnore]
         public TestPackage TestPackage { get; set; }
 
         /// <summary>
-        /// Get the full unique identifier of this <code>Assessment</code>
+        /// Get the full unique identifier of this <code>Assessment</code>.
         /// </summary>
         [XmlIgnore]
         public string Key
