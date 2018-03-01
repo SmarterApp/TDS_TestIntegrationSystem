@@ -157,6 +157,7 @@
     <Content Include="AppReadme\Compare-NET-Objects-Help.txt" />
     <Content Include="resources\scoring-package.xml" />
     <Content Include="resources\test-packages\new-xsd\scoring-rules.xml" />
+    <Content Include="resources\test-packages\new-xsd\segment-blueprint-element.xml" />
     <Content Include="resources\test-packages\new-xsd\test-specification-sample-1.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29IRP-Perf-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />

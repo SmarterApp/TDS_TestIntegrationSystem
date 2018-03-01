@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
+using System.Xml.Serialization;
 using TDSQASystemAPI.TestPackage;
 using TDSQASystemAPI.TestPackage.utils;
 
@@ -11,15 +14,20 @@ namespace TISUnitTests.testpackages
     {
         private const string TEST_PACKAGE_XML_FILE = @"..\..\resources\test-packages\new-xsd\test-specification-sample-1.xml";
         private const string SCORING_RULES_XML_FILE = @"..\..\resources\test-packages\new-xsd\scoring-rules.xml";
-        private const string DEPENDENCIES_DEFAULT_XML_FILE = @"..\..\resources\test-packages\new-xsd\dependencies-boolean-defaults.xml";
+        private const string SEGMENT_BLUEPRINT_XML_FILE = @"..\..\resources\test-packages\new-xsd\segment-blueprint-element.xml";
+
+
+        TestPackage testPackage = null;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+        }
 
         [TestMethod]
         public void ShouldBuildATestPackageFromXml()
         {
-            TestPackage testPackage = null;
-            testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
-
-            Assert.IsNotNull(testPackage);
             Assert.AreEqual("SBAC_PT", testPackage.publisher);
             Assert.AreEqual("MATH", testPackage.subject);
 
@@ -75,9 +83,6 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldBuildATestPackageFromXmlWithAssessmentKeys()
         {
-            TestPackage testPackage = null;
-            testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
-
             var catAssessment = testPackage.Assessment[0];
             Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", catAssessment.Key);
             Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", catAssessment.Segments[0].Key);
@@ -90,11 +95,10 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldDeserializeAnItemScoreParameterWithAnItemScoreDimension()
         {
-            TestPackage testPackage = null;
             testPackage = TestPackageAssembler.FromXml(new XmlTextReader(SCORING_RULES_XML_FILE));
 
-            var assessmentSegmentForms = testPackage.Assessment[0].Segments[0].Item as AssessmentSegmentSegmentForms;
-            var dimension = assessmentSegmentForms.SegmentForm[0]
+            var assessmentSegmentForm = testPackage.Assessment[0].Segments[0].Item as AssessmentSegmentSegmentForms;
+            var dimension = assessmentSegmentForm.SegmentForm[0]
                 .ItemGroup[0]
                 .Item[0]
                 .ItemScoreDimension.dimension;
@@ -105,15 +109,36 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldGetTheCorrectPresentationLabelWhenTheLabelIsNull()
         {
-            TestPackage testPackage = null;
-            testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
-
-            // TODO:  Consider creating a derived class for PresentationsPresentation?
             var assessmentSegmentPool = testPackage.Assessment[0].Segments[0].Item as AssessmentSegmentPool;
             var presentation = assessmentSegmentPool.ItemGroup[0]
                 .Item[0]
                 .Presentations[0];
             Assert.AreEqual("English", presentation.GetLabel());
+        }
+
+        [TestMethod]
+        public void ShouldBuildCorrectItemGroupKeys()
+        {
+            var firstAssessmentPool = testPackage.Assessment[0].Segments[0].Item as AssessmentSegmentPool;
+            var itemGroup = firstAssessmentPool.ItemGroup[0];
+
+            Assert.AreEqual("I-187-1899", itemGroup.Key);
+
+            var secondAssessmentForm = testPackage.Assessment[1].Segments[0].Item as AssessmentSegmentSegmentForms;
+            var formItemGroup = secondAssessmentForm.SegmentForm[0].ItemGroup[0];
+
+            Assert.AreEqual("G-187-3688-0", formItemGroup.Key);
+        }
+
+        [TestMethod]
+        public void ShouldDeserializeSegmentBlueprintElementFromXmlWithEmptyListDefaults()
+        {
+            testPackage = TestPackageAssembler.FromXml(new XmlTextReader(SEGMENT_BLUEPRINT_XML_FILE));
+
+            var segmentBlueprints = testPackage.Assessment[0].Segments[0].SegmentBlueprint;
+            Assert.AreEqual(1, segmentBlueprints[0].ItemSelection.Length);
+            Assert.AreEqual(1, segmentBlueprints[1].ItemSelection.Length);
+            Assert.IsNull(segmentBlueprints[2].ItemSelection);
         }
     }
 }
