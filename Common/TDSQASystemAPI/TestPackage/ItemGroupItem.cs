@@ -1,4 +1,7 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Serialization;
 
 namespace TDSQASystemAPI.TestPackage
 {
@@ -16,5 +19,30 @@ namespace TDSQASystemAPI.TestPackage
 
         [XmlIgnore]
         public ItemGroup ItemGroup { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Position
+        {
+            get
+            {
+                IEnumerable<ItemGroupItem> allItems;
+
+                if (SegmentForm != null)
+                {
+                    allItems = from ig in SegmentForm.ItemGroup
+                               from item in ig.Item
+                               select item;
+                }
+                else
+                {
+                    allItems = from item in ItemGroup.Item
+                               select item;
+                }
+
+                return Array.IndexOf(allItems.ToArray(), this) + 1;
+            }
+        }
     }
 }

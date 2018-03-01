@@ -128,6 +128,7 @@
     <Compile Include="daos\scoring\TestDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\TestGradeDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\TestScoreFeatureDAOIntegrationTest.cs" />
+    <Compile Include="testpackages\ItemPositionUnitTest.cs" />
     <Compile Include="testpackages\TestPackageAssemblerUnitTest.cs" />
     <Compile Include="utils\ReflectionObjectPopulator.cs" />
     <Compile Include="utils\TestPackageDaoIntegrationTestBase.cs" />
