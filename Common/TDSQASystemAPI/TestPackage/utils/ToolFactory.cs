@@ -11,48 +11,48 @@ namespace TDSQASystemAPI.TestPackage.utils
         /// <summary>
         /// Define a map of the "universal" tools with their default configuration settings.
         /// </summary>
-        private static readonly IDictionary<string, ToolsTool> defaultToolMap = new Dictionary<string, ToolsTool>
+        private static readonly IDictionary<string, DefaultToolConfiguration> defaultToolMap = new Dictionary<string, DefaultToolConfiguration>
         {
-            { "American Sign Language", new ToolsTool { name = "American Sign Language", studentPackageFieldName = "TDS_Acc-ASL" } },
-            { "Audio Playback Controls", new ToolsTool { name ="Audio Playback Controls", studentPackageFieldName = "TDSAcc-AudioPlaybackControls", Visible = false } },
-            { "Braille Transcript", new ToolsTool { name ="Braille Transcript", studentPackageFieldName = "TDSAcc-BrailleTranscript", Visible = false } },
-            { "Braille Type", new ToolsTool { name = "Braille Type", studentPackageFieldName = "TDSAcc-BrailleType", DependsOnToolType = "Lanuage" } },
-            { "Calculator", new ToolsTool { name ="Calculator", studentPackageFieldName = "TDSAcc-Calculator", DependsOnToolType = "Language" } },
-            { "Closed Captioning", new ToolsTool { name = "Closed Captioning", studentPackageFieldName = "TDSACC-NFCLOSEDCAP", DependsOnToolType = "Language" } },
-            { "Color Choices", new ToolsTool { name = "Color Choices", studentPackageFieldName = "TDSAcc-ColorChoices", DependsOnToolType = "Language" } },
-            { "Dictionary", new ToolsTool { name = "Dictionary", studentPackageFieldName = "TDSAcc-Dictionary", DependsOnToolType = "Language" } },
-            { "Emboss", new ToolsTool { name = "Emboss", studentPackageFieldName = "TDSAcc-Emboss", DependsOnToolType = "Braille Type" } },
-            { "Emboss Request Type", new ToolsTool { name = "Emboss Request Type", studentPackageFieldName = "TDSAcc-EmbossRequestType", DependsOnToolType = "Braille Type"} },
-            { "Expandable Passages", new ToolsTool { name = "Expandable Passages", studentPackageFieldName = "TDSAcc-ExpandablePassages", DependsOnToolType = "Language" } },
-            { "Font Type", new ToolsTool { name = "Font Type", studentPackageFieldName = "TDSAcc-FontType", Visible = false } },
-            { "Global Notes", new ToolsTool { name = "Global Notes", studentPackageFieldName = "TDSAcc-GlobalNotes" } },
-            { "Hardware Checks", new ToolsTool { name = "Hardware Checks", studentPackageFieldName = "TDSAcc-HWCheck", Visible = false} },
-            { "Highlight", new ToolsTool { name = "Highlight", studentPackageFieldName = "TDSAcc-Highlight" } },
-            { "Item Font Size", new ToolsTool { name = "Item Font Size", studentPackageFieldName = "TDSAcc-ItemFontSize", Visible =false } },
-            { "Item Tools Menu", new ToolsTool { name = "Item Tools Menu", studentPackageFieldName = "TDSAcc-ITM", Visible = false } },
-            { "Language", new ToolsTool { name = "Language", studentPackageFieldName = "TDSAcc-Language", allowChange = false, required = true } },
-            { "Mark for Review", new ToolsTool { name = "Mark for Review" ,studentPackageFieldName = "TDSAcc-MarkForReview", DependsOnToolType = "Language" } },
-            { "Masking", new ToolsTool { name = "Masking", studentPackageFieldName = "TDSAcc-Masking", DependsOnToolType = "Language" } },
-            { "Mute System Volume", new ToolsTool { name = "Mute System Volume", studentPackageFieldName = "TDSAcc-Mute", DependsOnToolType = "Language", Visible = false } },
-            { "Non-Embedded Accommodations", new ToolsTool { name = "Non-Embedded Accommodations", studentPackageFieldName = "TDSAcc-NonEmbedAcc", allowMultiple = true, Functional = false } },
-            { "Non-Embedded Designated Supports", new ToolsTool { name = "Non-Embedded Designated Supports", studentPackageFieldName = "TDSAcc-DesigSup", Functional = false, allowMultiple = true } },
-            { "Passage Font Size", new ToolsTool { name = "Passage Font Size", studentPackageFieldName = "TDSAcc-FontSize", Visible = false } },
-            { "Print on Request", new ToolsTool { name = "Print on Request", studentPackageFieldName = "TDSAcc-PrintOnRequest", DependsOnToolType = "Language" } },
-            { "Print Size", new ToolsTool { name = "Print Size", studentPackageFieldName = "TDSAcc-PrintSize", required = true } },
-            { "Review Screen Layout", new ToolsTool { name = "Review Screen Layout", studentPackageFieldName = "TDSAcc-RvScrn", Visible = false } },
-            { "Streamlined Mode", new ToolsTool { name = "Streamlined Mode", studentPackageFieldName = "TDSAcc-EAM", DependsOnToolType = "Language" } },
-            { "Strikethrough", new ToolsTool { name = "Strikethrough", studentPackageFieldName = "TDSAcc-Strikethrough", DependsOnToolType = "Lanaguage" } },
-            { "Student Comments", new ToolsTool { name = "Student Comments", studentPackageFieldName = "TDSAcc-StudentComments" } },
-            { "System Volume Control", new ToolsTool { name = "System Volume Control", studentPackageFieldName = "TDSAcc-SVC", Visible = false } },
-            { "Test Progress Indicator", new ToolsTool { name = "Test Progress Indicator", studentPackageFieldName = "TDSAcc-TPI", Visible = false } },
-            { "Test Shell", new ToolsTool { name = "Test Shell", studentPackageFieldName = "TDSAcc-TestShell", Visible = false } },
-            { "Thesaurus", new ToolsTool { name = "Thesaurus", studentPackageFieldName = "TDSAcc-Thesaurus", DependsOnToolType = "Language" } },
-            { "TTS", new ToolsTool { name = "TTS", studentPackageFieldName = "TDSAcc-TTS", DependsOnToolType = "Language" } },
-            { "TTS Audio Adjustments", new ToolsTool { name = "TTS Audio Adjustments", studentPackageFieldName = "TDSAcc-TTSAdjust", Visible = false, DependsOnToolType = "Language" } },
-            { "TTS Pausing", new ToolsTool { name = "TTS Pausing", studentPackageFieldName = "TDSAcc-TTSPausing", Visible = false, DependsOnToolType = "Language" } },
-            { "TTX Business Rules", new ToolsTool { name = "TTX Business Rules", studentPackageFieldName = "TDSAcc-TTXBusinessRules", Visible = false, DependsOnToolType = "Language" } },
-            { "Tutorial", new ToolsTool { name = "Tutorial", studentPackageFieldName = "TDSAcc-Tutorial", Visible = false, DependsOnToolType = "Language" } },
-            { "Word List", new ToolsTool { name = "Word List", studentPackageFieldName = "TDSAcc-WordList", DependsOnToolType = "Language" } }
+            { "American Sign Language", new DefaultToolConfiguration { Name = "American Sign Language", StudentPackageFieldName = "TDS_Acc-ASL" } },
+            { "Audio Playback Controls", new DefaultToolConfiguration { Name ="Audio Playback Controls", StudentPackageFieldName = "TDSAcc-AudioPlaybackControls", Visible = false } },
+            { "Braille Transcript", new DefaultToolConfiguration { Name ="Braille Transcript", StudentPackageFieldName = "TDSAcc-BrailleTranscript", Visible = false } },
+            { "Braille Type", new DefaultToolConfiguration { Name = "Braille Type", StudentPackageFieldName = "TDSAcc-BrailleType", DependsOnToolType = "Lanuage" } },
+            { "Calculator", new DefaultToolConfiguration { Name ="Calculator", StudentPackageFieldName = "TDSAcc-Calculator", DependsOnToolType = "Language" } },
+            { "Closed Captioning", new DefaultToolConfiguration { Name = "Closed Captioning", StudentPackageFieldName = "TDSACC-NFCLOSEDCAP", DependsOnToolType = "Language" } },
+            { "Color Choices", new DefaultToolConfiguration { Name = "Color Choices", StudentPackageFieldName = "TDSAcc-ColorChoices", DependsOnToolType = "Language" } },
+            { "Dictionary", new DefaultToolConfiguration { Name = "Dictionary", StudentPackageFieldName = "TDSAcc-Dictionary", DependsOnToolType = "Language" } },
+            { "Emboss", new DefaultToolConfiguration { Name = "Emboss", StudentPackageFieldName = "TDSAcc-Emboss", DependsOnToolType = "Braille Type" } },
+            { "Emboss Request Type", new DefaultToolConfiguration { Name = "Emboss Request Type", StudentPackageFieldName = "TDSAcc-EmbossRequestType", DependsOnToolType = "Braille Type"} },
+            { "Expandable Passages", new DefaultToolConfiguration { Name = "Expandable Passages", StudentPackageFieldName = "TDSAcc-ExpandablePassages", DependsOnToolType = "Language" } },
+            { "Font Type", new DefaultToolConfiguration { Name = "Font Type", StudentPackageFieldName = "TDSAcc-FontType", Visible = false } },
+            { "Global Notes", new DefaultToolConfiguration { Name = "Global Notes", StudentPackageFieldName = "TDSAcc-GlobalNotes" } },
+            { "Hardware Checks", new DefaultToolConfiguration { Name = "Hardware Checks", StudentPackageFieldName = "TDSAcc-HWCheck", Visible = false} },
+            { "Highlight", new DefaultToolConfiguration { Name = "Highlight", StudentPackageFieldName = "TDSAcc-Highlight" } },
+            { "Item Font Size", new DefaultToolConfiguration { Name = "Item Font Size", StudentPackageFieldName = "TDSAcc-ItemFontSize", Visible =false } },
+            { "Item Tools Menu", new DefaultToolConfiguration { Name = "Item Tools Menu", StudentPackageFieldName = "TDSAcc-ITM", Visible = false } },
+            { "Language", new DefaultToolConfiguration { Name = "Language", StudentPackageFieldName = "TDSAcc-Language", AllowChange = false, Required = true } },
+            { "Mark for Review", new DefaultToolConfiguration { Name = "Mark for Review" ,StudentPackageFieldName = "TDSAcc-MarkForReview", DependsOnToolType = "Language" } },
+            { "Masking", new DefaultToolConfiguration { Name = "Masking", StudentPackageFieldName = "TDSAcc-Masking", DependsOnToolType = "Language" } },
+            { "Mute System Volume", new DefaultToolConfiguration { Name = "Mute System Volume", StudentPackageFieldName = "TDSAcc-Mute", DependsOnToolType = "Language", Visible = false } },
+            { "Non-Embedded Accommodations", new DefaultToolConfiguration { Name = "Non-Embedded Accommodations", StudentPackageFieldName = "TDSAcc-NonEmbedAcc", AllowMultiple = true, Functional = false } },
+            { "Non-Embedded Designated Supports", new DefaultToolConfiguration { Name = "Non-Embedded Designated Supports", StudentPackageFieldName = "TDSAcc-DesigSup", Functional = false, AllowMultiple = true } },
+            { "Passage Font Size", new DefaultToolConfiguration { Name = "Passage Font Size", StudentPackageFieldName = "TDSAcc-FontSize", Visible = false } },
+            { "Print on Request", new DefaultToolConfiguration { Name = "Print on Request", StudentPackageFieldName = "TDSAcc-PrintOnRequest", DependsOnToolType = "Language" } },
+            { "Print Size", new DefaultToolConfiguration { Name = "Print Size", StudentPackageFieldName = "TDSAcc-PrintSize", Required = true } },
+            { "Review Screen Layout", new DefaultToolConfiguration { Name = "Review Screen Layout", StudentPackageFieldName = "TDSAcc-RvScrn", Visible = false } },
+            { "Streamlined Mode", new DefaultToolConfiguration { Name = "Streamlined Mode", StudentPackageFieldName = "TDSAcc-EAM", DependsOnToolType = "Language" } },
+            { "Strikethrough", new DefaultToolConfiguration { Name = "Strikethrough", StudentPackageFieldName = "TDSAcc-Strikethrough", DependsOnToolType = "Lanaguage" } },
+            { "Student Comments", new DefaultToolConfiguration { Name = "Student Comments", StudentPackageFieldName = "TDSAcc-StudentComments" } },
+            { "System Volume Control", new DefaultToolConfiguration { Name = "System Volume Control", StudentPackageFieldName = "TDSAcc-SVC", Visible = false } },
+            { "Test Progress Indicator", new DefaultToolConfiguration { Name = "Test Progress Indicator", StudentPackageFieldName = "TDSAcc-TPI", Visible = false } },
+            { "Test Shell", new DefaultToolConfiguration { Name = "Test Shell", StudentPackageFieldName = "TDSAcc-TestShell", Visible = false } },
+            { "Thesaurus", new DefaultToolConfiguration { Name = "Thesaurus", StudentPackageFieldName = "TDSAcc-Thesaurus", DependsOnToolType = "Language" } },
+            { "TTS", new DefaultToolConfiguration { Name = "TTS", StudentPackageFieldName = "TDSAcc-TTS", DependsOnToolType = "Language" } },
+            { "TTS Audio Adjustments", new DefaultToolConfiguration { Name = "TTS Audio Adjustments", StudentPackageFieldName = "TDSAcc-TTSAdjust", Visible = false, DependsOnToolType = "Language" } },
+            { "TTS Pausing", new DefaultToolConfiguration { Name = "TTS Pausing", StudentPackageFieldName = "TDSAcc-TTSPausing", Visible = false, DependsOnToolType = "Language" } },
+            { "TTX Business Rules", new DefaultToolConfiguration { Name = "TTX Business Rules", StudentPackageFieldName = "TDSAcc-TTXBusinessRules", Visible = false, DependsOnToolType = "Language" } },
+            { "Tutorial", new DefaultToolConfiguration { Name = "Tutorial", StudentPackageFieldName = "TDSAcc-Tutorial", Visible = false, DependsOnToolType = "Language" } },
+            { "Word List", new DefaultToolConfiguration { Name = "Word List", StudentPackageFieldName = "TDSAcc-WordList", DependsOnToolType = "Language" } }
         };
 
         /// <summary>
@@ -71,31 +71,25 @@ namespace TDSQASystemAPI.TestPackage.utils
         /// <returns>A new <code>ToolsTool</code> instance with the </returns>
         public static ToolsTool GetInstance(XElement toolElement)
         {
-            defaultToolMap.TryGetValue(toolElement.Attribute("name").Value, out ToolsTool defaultTool);
+            defaultToolMap.TryGetValue((toolElement.Attribute("name")?.Value ?? string.Empty), out DefaultToolConfiguration defaultTool);
 
-            string name = toolElement.Attribute("name").Value
-                ?? throw new InvalidOperationException("A tool must have a name and one was not supplied");
+            string name = toolElement.Attribute("name")?.Value
+                ?? throw new InvalidOperationException("A tool must have a name attribute and one was not supplied");
             string studentPackageFieldName = toolElement.Attribute("studentPackageFieldName")?.Value
-                ?? (defaultTool == null
-                    ? throw new InvalidOperationException("A tool must have a Student Package Field Name")
-                    : defaultTool.studentPackageFieldName);
-            string type = toolElement.Attribute("type")?.Value 
-                ?? (defaultTool?.type);
+                ?? defaultTool?.StudentPackageFieldName 
+                ?? throw new InvalidOperationException("A tool must have a Student Package Field Name attribute and 'studentPackageField' was not supplied");
+            string type = toolElement.Attribute("type")?.Value ?? (defaultTool?.Type);
 
-            bool allowChange = TryGetBooleanAttributeValue(toolElement, "allowChange")
-                ?? (defaultTool == null ? true : defaultTool.allowChange);
-            bool allowMultiple = TryGetBooleanAttributeValue(toolElement, "allowMultiple")
-                ?? (defaultTool == null ? false : defaultTool.allowMultiple);
-            bool disableOnGuest = TryGetBooleanAttributeValue(toolElement, "disableOnGuest")
-                ?? (defaultTool == null ? false : defaultTool.disableOnGuest);
-            bool isRequired = TryGetBooleanAttributeValue(toolElement, "required")
-                ?? (defaultTool == null ? false : defaultTool.required);
-            bool isVisible = TryGetBooleanAttributeValue(toolElement, "visible")
-                ?? (defaultTool == null ? true : defaultTool.Visible);
-            bool isStudentControl = TryGetBooleanAttributeValue(toolElement, "studentControl")
-                ?? (defaultTool == null ? false : defaultTool.StudentControl);
-            bool isSelectable = TryGetBooleanAttributeValue(toolElement, "selectable")
-                ?? (defaultTool == null ? true : defaultTool.Selectable);
+            int sortOrder = TryGetIntAttributeValue(toolElement, "sortOrder") ?? defaultTool?.SortOrder ?? 0;
+
+            bool allowChange = TryGetBooleanAttributeValue(toolElement, "allowChange") ?? defaultTool?.AllowChange ?? true;
+            bool allowMultiple = TryGetBooleanAttributeValue(toolElement, "allowMultiple") ?? defaultTool?.AllowMultiple ?? false;
+            bool disableOnGuest = TryGetBooleanAttributeValue(toolElement, "disableOnGuest") ?? defaultTool?.DisableOnGuest ?? false;
+            bool isRequired = TryGetBooleanAttributeValue(toolElement, "required") ?? defaultTool?.Required ?? false;
+            bool isVisible = TryGetBooleanAttributeValue(toolElement, "visible") ?? defaultTool?.Visible ?? true;
+            bool isStudentControl = TryGetBooleanAttributeValue(toolElement, "studentControl") ?? defaultTool?.StudentControl ?? false;
+            bool isSelectable = TryGetBooleanAttributeValue(toolElement, "selectable") ?? defaultTool?.Selectable ?? true;
+            bool isFunctional = TryGetBooleanAttributeValue(toolElement, "functional") ?? defaultTool?.Functional ?? false;
 
             ToolsToolOption[] options = GetOptions(toolElement);
 
@@ -105,11 +99,11 @@ namespace TDSQASystemAPI.TestPackage.utils
                 allowMultiple = allowMultiple,
                 DependsOnToolType = defaultTool?.DependsOnToolType,
                 disableOnGuest = disableOnGuest,
-                Functional = defaultTool == null ? true : defaultTool.Functional,
+                Functional = isFunctional,
                 name = name,
                 Options = options,
                 required = isRequired,
-                sortOrder = TryGetIntAttributeValue(toolElement, "sortOrder") ?? 0,
+                sortOrder = sortOrder,
                 studentPackageFieldName = studentPackageFieldName,
                 type = type,
                 Visible = isVisible,

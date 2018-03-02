@@ -113,7 +113,7 @@ namespace TDSQASystemAPI.TestPackage.utils
         /// Build a <code>ToolsTool</code> collection from the Tools elements contained in an <code>XElement</code>.
         /// </summary>
         /// <remarks>
-        /// Typlically Tool elements can be found at two levels:
+        /// Typically Tool elements can be found at two levels:
         /// 
         /// 1.  Assessment-wide:  These are Tool elements that are stored within the Assessment XML.  These tools are
         /// available in every segment of the assessment.

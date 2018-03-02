@@ -323,6 +323,7 @@
     <Compile Include="TestPackage\Assessment.cs" />
     <Compile Include="TestPackage\AssessmentSegment.cs" />
     <Compile Include="TestPackage\AssessmentSegmentSegmentFormsSegmentForm.cs" />
+    <Compile Include="TestPackage\DefaultToolConfiguration.cs" />
     <Compile Include="TestPackage\ItemGroup.cs" />
     <Compile Include="TestPackage\ItemGroupItem.cs" />
     <Compile Include="TestPackage\ItemGroupItemTeacherHandScoring.cs" />
