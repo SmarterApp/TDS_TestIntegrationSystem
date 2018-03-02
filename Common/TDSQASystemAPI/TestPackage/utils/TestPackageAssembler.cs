@@ -120,8 +120,9 @@ namespace TDSQASystemAPI.TestPackage.utils
         /// 2.  Segment-specific:  These Tool elements are stored within the Segment XML.  These tools are only available
         /// in the segment in which they are defined. 
         /// </remarks>
-        /// <param name="elementWithTools"></param>
-        /// <returns></returns>
+        /// <param name="elementWithTools">The <code>XElement</code> containing "Tool" element(s) that need to be converted
+        /// to <code>ToolsTool</code>s.</param>
+        /// <returns>An array of <code>ToolsTool</code>s built from the <code>XElement</code> fragment.</returns>
         private static ToolsTool[] AssembleTools(XElement elementWithTools)
         {
             var toolElements = from e in elementWithTools.Descendants("Tool")
