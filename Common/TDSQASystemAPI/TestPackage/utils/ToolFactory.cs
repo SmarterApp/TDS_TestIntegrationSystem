@@ -73,6 +73,15 @@ namespace TDSQASystemAPI.TestPackage.utils
         {
             defaultToolMap.TryGetValue(toolElement.Attribute("name").Value, out ToolsTool defaultTool);
 
+            string name = toolElement.Attribute("name").Value
+                ?? throw new InvalidOperationException("A tool must have a name and one was not supplied");
+            string studentPackageFieldName = toolElement.Attribute("studentPackageFieldName")?.Value
+                ?? (defaultTool == null
+                    ? throw new InvalidOperationException("A tool must have a Student Package Field Name")
+                    : defaultTool.studentPackageFieldName);
+            string type = toolElement.Attribute("type")?.Value 
+                ?? (defaultTool?.type);
+
             bool allowChange = TryGetBooleanAttributeValue(toolElement, "allowChange")
                 ?? (defaultTool == null ? true : defaultTool.allowChange);
             bool allowMultiple = TryGetBooleanAttributeValue(toolElement, "allowMultiple")
@@ -81,11 +90,6 @@ namespace TDSQASystemAPI.TestPackage.utils
                 ?? (defaultTool == null ? false : defaultTool.disableOnGuest);
             bool isRequired = TryGetBooleanAttributeValue(toolElement, "required")
                 ?? (defaultTool == null ? false : defaultTool.required);
-            string studentPackageFieldName = toolElement.Attribute("studentPackageFieldName")?.Value
-                ?? (defaultTool == null 
-                    ? throw new InvalidOperationException("A tool must have a Student Package Field Name") 
-                    : defaultTool.studentPackageFieldName);
-            string type = toolElement.Attribute("type")?.Value ?? (defaultTool?.type);
             bool isVisible = TryGetBooleanAttributeValue(toolElement, "visible")
                 ?? (defaultTool == null ? true : defaultTool.Visible);
             bool isStudentControl = TryGetBooleanAttributeValue(toolElement, "studentControl")
@@ -102,7 +106,7 @@ namespace TDSQASystemAPI.TestPackage.utils
                 DependsOnToolType = defaultTool?.DependsOnToolType,
                 disableOnGuest = disableOnGuest,
                 Functional = defaultTool == null ? true : defaultTool.Functional,
-                name = toolElement.Attribute("name").Value ?? throw new InvalidOperationException("A tool must have a name and one was not supplied"),
+                name = name,
                 Options = options,
                 required = isRequired,
                 sortOrder = TryGetIntAttributeValue(toolElement, "sortOrder") ?? 0,
@@ -158,7 +162,6 @@ namespace TDSQASystemAPI.TestPackage.utils
         private static ToolsToolOption[] GetOptions(XElement toolElement)
         {
             var options = toolElement.Elements("Options");
-
 
             // Tell the serializer what the root is to prevent the "xmlns = '' was not expected" error
             var optionRoot = new XmlRootAttribute
