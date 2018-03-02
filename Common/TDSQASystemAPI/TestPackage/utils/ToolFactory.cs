@@ -6,6 +6,9 @@ using System.Xml.Serialization;
 
 namespace TDSQASystemAPI.TestPackage.utils
 {
+    /// <summary>
+    /// A class for building a fully hydrated <code>ToolsTool</code> object from an XML fragment.
+    /// </summary>
     public class ToolFactory
     {
         /// <summary>
