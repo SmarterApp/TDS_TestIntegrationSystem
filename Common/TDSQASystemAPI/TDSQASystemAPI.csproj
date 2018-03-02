@@ -329,7 +329,9 @@
     <Compile Include="TestPackage\ItemGroupStimulus.cs" />
     <Compile Include="TestPackage\PresentationsPresentation.cs" />
     <Compile Include="TestPackage\TestPackageXsd.cs" />
+    <Compile Include="TestPackage\ToolsTool.cs" />
     <Compile Include="TestPackage\utils\TestPackageAssembler.cs" />
+    <Compile Include="TestPackage\utils\ToolFactory.cs" />
     <Compile Include="TestResults\Comment.cs" />
     <Compile Include="TestResults\ErasureResponse.cs" />
     <Compile Include="TestResults\GenericVariable.cs" />

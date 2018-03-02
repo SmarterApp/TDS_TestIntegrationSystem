@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace TDSQASystemAPI.TestPackage.utils
@@ -20,12 +21,25 @@ namespace TDSQASystemAPI.TestPackage.utils
         /// <returns>A <code>TestPackage</code> with the parent -> child relationships established.</returns>
         public static TestPackage FromXml(XmlReader reader)
         {
-            var testPackage = xmlSerializer.Deserialize(reader) as TestPackage;
+            var testPackageXDocument = XDocument.Load(reader);
+            var testPackage = xmlSerializer.Deserialize(testPackageXDocument.CreateReader()) as TestPackage;
+      
+            // WIRE UP ASSESSMENTS
+            // 1.  Set the assesment's parent test package property
+            // 2.  Build up the Assessment-wide Tools
+            testPackage.Assessment.ForEach(a => 
+            {
+                a.TestPackage = testPackage;
 
-            // Wire up parent -> child relationships for:
-            // 1.  test package -> assessment(s)
-            // 2.  assesmment -> segment(s)
-            testPackage.Assessment.ForEach(a => a.TestPackage = testPackage);
+                var assessmentElement = testPackageXDocument.Root.Elements("Assessment")
+                    .Where(el => el.Attribute("id").Value.Equals(a.id))
+                    .First();
+
+                a.Tools = AssembleTools(assessmentElement);
+            });
+
+            // WIRE UP SEGMENTS
+            // 1. Set the segment's parent Assessment property
             testPackage.Assessment = testPackage.Assessment.SelectMany(a => a.Segments, (a, s) => s.Assessment = a)
                 .ToArray();
 
@@ -51,6 +65,13 @@ namespace TDSQASystemAPI.TestPackage.utils
                     var pool = segment.Item as AssessmentSegmentPool;
                     pool.ItemGroup.ForEach(ig => AssembleItemGroup(ig, testPackage, segment));
                 }
+
+                // Get the XML for the segment-specific tools and build them.
+                var segmentElement = testPackageXDocument.Descendants("Segment")
+                    .Where(s => s.Attribute("id").Value.Equals(segment.id))
+                    .First();
+
+                segment.Tools = AssembleTools(segmentElement);
             }
 
             return testPackage;
@@ -86,6 +107,34 @@ namespace TDSQASystemAPI.TestPackage.utils
             {
                 itemGroup.Stimulus.TestPackage = testPackage;
             }
+        }
+
+        /// <summary>
+        /// Build a <code>ToolsTool</code> collection from the Tools elements contained in an <code>XElement</code>.
+        /// </summary>
+        /// <remarks>
+        /// Typlically Tool elements can be found at two levels:
+        /// 
+        /// 1.  Assessment-wide:  These are Tool elements that are stored within the Assessment XML.  These tools are
+        /// available in every segment of the assessment.
+        /// 2.  Segment-specific:  These Tool elements are stored within the Segment XML.  These tools are only available
+        /// in the segment in which they are defined. 
+        /// </remarks>
+        /// <param name="elementWithTools"></param>
+        /// <returns></returns>
+        private static ToolsTool[] AssembleTools(XElement elementWithTools)
+        {
+            var toolElements = from e in elementWithTools.Descendants("Tool")
+                               select e;
+
+            var tools = new List<ToolsTool>();
+            toolElements.ForEach(el =>
+            {
+                var tool = ToolFactory.GetInstance(el);
+                tools.Add(tool);
+            });
+
+            return tools.ToArray();
         }
     }
 }
