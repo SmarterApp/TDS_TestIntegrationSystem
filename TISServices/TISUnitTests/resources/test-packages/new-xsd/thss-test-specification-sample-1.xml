@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestPackage
+        publisher="SBAC_PT" publishDate="2015-08-19T18:13:51.0" subject="ELA" type="summative" version="12516" bankKey="187" academicYear="2017-2018">
+  <Blueprint>
+    <BlueprintElement id="SBAC-Perf-ELA-11" type="assessment"/>
+    <BlueprintElement id="SBAC_PT-ELA-Undesignated" type="strand"/>
+  </Blueprint>
+  <Assessment id="SBAC-Perf-ELA-11" label="G11 ELA Performance Task">
+    <Grades>
+      <Grade value="11"/>
+    </Grades>
+    <Segments>
+      <Segment id="SBAC-IRP-Perf-MATH-11" position="1" algorithmType="fixedform" algorithmImplementation="FAIRWAY ROUNDROBIN">
+        <SegmentForms>
+          <SegmentForm id="IRP::MathG11::Perf::SP15" cohort="Default">
+            <Presentations>
+              <Presentation code="ENU"/>
+            </Presentations>
+            <ItemGroup id="1035">
+              <Stimulus id="3759" />
+              <Item id="2703" type="WER" handScored="true">
+                <Presentations>
+                  <Presentation code="ENU"/>
+                  <Presentation code="ENU-Braille"/>
+                </Presentations>
+                <BlueprintReferences>
+                  <BlueprintReference idRef="SBAC-Perf-ELA-11"/>
+                  <BlueprintReference idRef="SBAC_PT-ELA-Undesignated"/>
+                </BlueprintReferences>
+                <ItemScoreDimension measurementModel="IRTGPC" dimension="C" scorePoints="2" weight="1.000000000000000e+000">
+                  <ItemScoreParameter measurementParameter="a" value="4.969300000000000e-001" />
+                  <ItemScoreParameter measurementParameter="b0" value="1.451730000000000e+000" />
+                  <ItemScoreParameter measurementParameter="b1" value="9.537300000000000e-001" />
+                </ItemScoreDimension>
+                <!--<ItemScoreDimension measurementModel="IRTGPC" dimension="D" scorePoints="4" weight="1.000000000000000e+000">-->
+                <!--<ItemScoreParameter measurementParameter="a" value="5.329000000000000e-001" />-->
+                <!--<ItemScoreParameter measurementParameter="b0" value="-4.511900000000000e-001" />-->
+                <!--<ItemScoreParameter measurementParameter="b1" value="9.468600000000000e-001" />-->
+                <!--<ItemScoreParameter measurementParameter="b2" value="2.731340000000000e+000" />-->
+                <!--<ItemScoreParameter measurementParameter="b3" value="4.805220000000000e+000" />-->
+                <!--</ItemScoreDimension>-->
+                <TeacherHandScoring baseUrl="C:\src\tss\Item-Manager\OH_ Items" exemplar="G3_2703_TM.pdf" trainingGuide="G3_2703_SG.pdf" layout="WAI" description="Mandatory Financial Literacy Classes - SBAC_Field">
+                  <rubriclist>
+                    <rubric scorepoint="4">
+                      <name>        Rubric 4</name>
+                      <val>
+                        <![CDATA[<p style="">&#xA0;</p><p><dl><dt style="float: left; margin-top: 1px; margin-bottom: -1em;">a)</dt><dd style="float: top;padding-left:1.5000em; padding-left:1.5000em; "><p style="font-style:normal; font-weight:normal; ">Inference here.</p></dd><dt style="float: left; margin-top: 1px; margin-bottom: -1em;">b)</dt><dd style="float: top;padding-left:1.5000em; padding-left:1.5000em; "><p style="font-style:normal; font-weight:normal; ">Text-supported example: “....” (paragraph reference)</p></dd><dt style="float: left; margin-top: 1px; margin-bottom: -1em;">c)</dt><dd style="float: top;padding-left:1.5000em; padding-left:1.5000em; "><p style="font-style:normal; font-weight:normal; ">Inference here.</p></dd><dt style="float: left; margin-top: 1px; margin-bottom: -1em;">d)</dt><dd style="float: top;padding-left:1.5000em; padding-left:1.5000em; "><p style="font-style:normal; font-weight:normal; ">Text-supported example: “....” (paragraph reference)</p></dd></dl></p>]]>
+                      </val>
+                    </rubric>
+                    <samplelist maxval="4" minval="4">
+                      <sample purpose="OtherExemplar" scorepoint="4">
+                        <name>4-Point Other Official Sample Answers      </name>
+                        <annotation />
+                        <samplecontent>
+                          <![CDATA[<p style="">&#xA0;</p>]]>
+                        </samplecontent>
+                      </sample>
+                    </samplelist>
+                    <rubric scorepoint="3">
+                      <name>        Rubric 3</name>
+                      <val>
+                        <![CDATA[<p style="">&#xA0;</p>]]>
+                      </val>
+                    </rubric>
+                    <samplelist maxval="3" minval="3">
+                      <sample purpose="Exemplar" scorepoint="3">
+                        <name>3-Point Official Sample Answer      </name>
+                        <annotation />
+                        <samplecontent>
+                          <![CDATA[<p style="">&#xA0;</p>]]>
+                        </samplecontent>
+                      </sample>
+                    </samplelist>
+                    <rubric scorepoint="2">
+                      <name>        Rubric 2</name>
+                      <val>
+                        <![CDATA[<p style="">&#xA0;</p>]]>
+                      </val>
+                    </rubric>
+                    <samplelist maxval="2" minval="2">
+                      <sample purpose="Exemplar" scorepoint="2">
+                        <name>2-Point Official Sample Answer      </name>
+                        <annotation />
+                        <samplecontent>
+                          <![CDATA[<p style="">&#xA0;</p>]]>
+                        </samplecontent>
+                      </sample>
+                    </samplelist>
+                    <rubric scorepoint="1">
+                      <name>        Rubric 1</name>
+                      <val>
+                        <![CDATA[<p style="">&#xA0;</p>]]>
+                      </val>
+                    </rubric>
+                    <samplelist maxval="1" minval="1">
+                      <sample purpose="Exemplar" scorepoint="1">
+                        <name>1-Point Official Sample Answer      </name>
+                        <annotation />
+                        <samplecontent>
+                          <![CDATA[<p style="">&#xA0;</p>]]>
+                        </samplecontent>
+                      </sample>
+                    </samplelist>
+                    <rubric scorepoint="0">
+                      <name>        Rubric 0</name>
+                      <val>
+                        <![CDATA[<p style="">&#xA0;</p>]]>
+                      </val>
+                    </rubric>
+                    <samplelist maxval="0" minval="0">
+                      <sample purpose="Exemplar" scorepoint="0">
+                        <name>0-Point Official Sample Answer      </name>
+                        <annotation />
+                        <samplecontent>
+                          <![CDATA[<p style="">&#xA0;</p>]]>
+                        </samplecontent>
+                      </sample>
+                    </samplelist>
+                  </rubriclist>
+                  <Dimensions>
+                    <![CDATA[
+                                            [
+                                                {
+                                                    "conditions": [
+                                                    {
+                                                        "code": "B",
+                                                        "description": "Blank"
+                                                    },
+                                                    {
+                                                        "code": "I",
+                                                        "description": "Insufficient"
+                                                    },
+                                                    {
+                                                        "code": "L",
+                                                        "description": "Non-Scorable Language"
+                                                    }
+                                                    ],
+                                                    "description": "CONVENTIONS",
+                                                    "maxPoints": "2",
+                                                    "minPoints": "0"
+                                                },
+                                                {
+                                                    "conditions": [
+                                                    {
+                                                        "code": "B",
+                                                        "description": "Blank"
+                                                    },
+                                                    {
+                                                        "code": "I",
+                                                        "description": "Insufficient"
+                                                    },
+                                                    {
+                                                        "code": "L",
+                                                        "description": "Non-Scorable Language"
+                                                    }
+                                                    ],
+                                                    "description": "ELABORATION",
+                                                    "maxPoints": "3",
+                                                    "minPoints": "0"
+                                                },
+                                                {
+                                                    "conditions": [
+                                                    {
+                                                        "code": "B",
+                                                        "description": "Blank"
+                                                    },
+                                                    {
+                                                        "code": "I",
+                                                        "description": "Insufficient"
+                                                    },
+                                                    {
+                                                        "code": "L",
+                                                        "description": "Non-Scorable Language"
+                                                    }
+                                                    ],
+                                                    "description": "ORGANIZATION",
+                                                    "maxPoints": "3",
+                                                    "minPoints": "0"
+                                                }
+                                            ]
+                                        ]]>
+                  </Dimensions>
+                </TeacherHandScoring>
+              </Item>
+            </ItemGroup>
+          </SegmentForm>
+        </SegmentForms>
+      </Segment>
+    </Segments>
+    <Tools>
+      <Tool name="Expandable Passages">
+        <Options>
+          <Option code="TDS_ExpandablePassages0" sortOrder="0" />
+          <Option code="TDS_ExpandablePassages1" sortOrder="1" />
+        </Options>
+      </Tool>
+    </Tools>
+  </Assessment>
+</TestPackage>
+

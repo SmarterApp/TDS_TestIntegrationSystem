@@ -143,6 +143,7 @@
     <Reference Include="System.Xml">
       <RequiredTargetFramework>4.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acknowledgement\Message.cs" />
@@ -319,6 +320,19 @@
     <Compile Include="TestMerge\RelatedTestOpportunity.cs" />
     <Compile Include="TestMerge\TestMerge.cs" />
     <Compile Include="TestMerge\TestMergeConfiguration.cs" />
+    <Compile Include="TestPackage\Assessment.cs" />
+    <Compile Include="TestPackage\AssessmentSegment.cs" />
+    <Compile Include="TestPackage\AssessmentSegmentSegmentFormsSegmentForm.cs" />
+    <Compile Include="TestPackage\DefaultToolConfiguration.cs" />
+    <Compile Include="TestPackage\ItemGroup.cs" />
+    <Compile Include="TestPackage\ItemGroupItem.cs" />
+    <Compile Include="TestPackage\ItemGroupItemTeacherHandScoring.cs" />
+    <Compile Include="TestPackage\ItemGroupStimulus.cs" />
+    <Compile Include="TestPackage\PresentationsPresentation.cs" />
+    <Compile Include="TestPackage\TestPackageXsd.cs" />
+    <Compile Include="TestPackage\ToolsTool.cs" />
+    <Compile Include="TestPackage\utils\TestPackageAssembler.cs" />
+    <Compile Include="TestPackage\utils\ToolFactory.cs" />
     <Compile Include="TestResults\Comment.cs" />
     <Compile Include="TestResults\ErasureResponse.cs" />
     <Compile Include="TestResults\GenericVariable.cs" />
