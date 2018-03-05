@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using TDSQASystemAPI.DAL.utils;
 using TDSQASystemAPI.Extensions;
 
 namespace TDSQASystemAPI.DAL
@@ -18,8 +19,11 @@ namespace TDSQASystemAPI.DAL
     /// <typeparam name="T">The type that should be persisted.</typeparam>
     public class TestPackageDaoBase<T> : ITestPackageDao<T>
     {
-        private string insertSql = "";
         private const string DEFAULT_TVP_VARIABLE_NAME = "@tvpData";
+        private const string DEFAULT_CRITERIA_VARIABLE_NAME = "@criteria";
+
+        private string insertSql = string.Empty;
+        private readonly ReflectionObjectPopulator<T> reflectionObjectPopulator = new ReflectionObjectPopulator<T>();
 
         /// <summary>
         /// The SQL responsible for inserting the collection of records into the database.
@@ -60,6 +64,8 @@ namespace TDSQASystemAPI.DAL
             }
         }
 
+        protected internal string SelectSql { get; set; }
+
         /// <summary>
         /// The type of the table-valued parameter used to pass the <code>IList<typeparamref name="T"/></code>.
         /// </summary>
@@ -89,6 +95,35 @@ namespace TDSQASystemAPI.DAL
                     command.ExecuteNonQuery();
                 }
             }
+        }
+
+        /// <summary>
+        /// Get a collection of records from the database.
+        /// </summary>
+        /// <remarks>
+        /// The SQL columns must match the object's property names exactly.  Any database columns that do not match
+        /// the property name exactly must be aliased.
+        /// </remarks>
+        /// <param name="sql">The SQL to execute against the database.</param>
+        /// <param name="criteria">The value to look for</param>
+        /// <returns>A <code>List<typeparamref name="T"/></code> built from the records contained in the <code>IDataReader</code>.</returns>
+        public virtual List<T> Find(object criteria)
+        {
+            var results = new List<T>();
+
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
+            {
+                using (var command = new SqlCommand(SelectSql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(DEFAULT_CRITERIA_VARIABLE_NAME, criteria);
+
+                    connection.Open();
+                    results = reflectionObjectPopulator.GetListFromDataReader(command.ExecuteReader());
+                }
+            }
+
+            return results;
         }
     }
 }

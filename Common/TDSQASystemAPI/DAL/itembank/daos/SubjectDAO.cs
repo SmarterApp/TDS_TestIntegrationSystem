@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TDSQASystemAPI.DAL.itembank.dtos;
+﻿using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
 {
@@ -21,11 +20,17 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   SubjectKey, \n" +
                 "   ClientKey, \n" +
                 "   TestVersion \n";
-        }
-
-        public override void Insert(IList<SubjectDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
+            SelectSql =
+                "SELECT \n" +
+                "   [Name], \n" +
+                "   Grade, \n" +
+                "   _key AS SubjectKey, \n" +
+                "   _fk_client AS ClientKey, \n" +
+                "   loadconfig AS TestVersion \n" +
+                "FROM \n" +
+                "   tblSubject \n" +
+                "WHERE \n" +
+                "   _key = @primaryKey";
         }
     }
 }

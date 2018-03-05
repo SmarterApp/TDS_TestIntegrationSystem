@@ -153,6 +153,8 @@
     <Compile Include="BL\LockingTestCollection.cs" />
     <Compile Include="BL\Sandlot.cs" />
     <Compile Include="BL\TestOpportunity.cs" />
+    <Compile Include="BL\testpackage\administration\IItembankConfigurationDataService.cs" />
+    <Compile Include="BL\testpackage\administration\ItembankConfigurationDataService.cs" />
     <Compile Include="BL\XmlRepository.cs" />
     <Compile Include="Config\AdministrationInfo.cs" />
     <Compile Include="Config\IProjectMetaDataLoader.cs" />
@@ -214,6 +216,7 @@
     <Compile Include="DAL\itembank\daos\AdminStrandDAO.cs" />
     <Compile Include="DAL\itembank\daos\AffinityGroupDAO.cs" />
     <Compile Include="DAL\itembank\daos\AffinityGroupItemDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ClientDAO.cs" />
     <Compile Include="DAL\itembank\daos\ItemDAO.cs" />
     <Compile Include="DAL\itembank\daos\ItemMeasurementParameterDAO.cs" />
     <Compile Include="DAL\itembank\daos\ItemPropertyDAO.cs" />
@@ -237,6 +240,7 @@
     <Compile Include="DAL\itembank\dtos\AdminStrandDTO.cs" />
     <Compile Include="DAL\itembank\dtos\AffinityGroupDTO.cs" />
     <Compile Include="DAL\itembank\dtos\AffinityGroupItemDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ClientDTO.cs" />
     <Compile Include="DAL\itembank\dtos\ItemDTO.cs" />
     <Compile Include="DAL\itembank\dtos\ItemMeasurementParameterDTO.cs" />
     <Compile Include="DAL\itembank\dtos\ItemPropertyDTO.cs" />
@@ -280,6 +284,7 @@
     <Compile Include="DAL\TestOpportunity.cs" />
     <Compile Include="DAL\TestPackageDaoBase.cs" />
     <Compile Include="DAL\TISScoreMergerDAL.cs" />
+    <Compile Include="DAL\utils\ReflectionObjectPopulator.cs" />
     <Compile Include="DAL\XmlRepository.cs" />
     <Compile Include="Data\QASystemConfigSettings.cs" />
     <Compile Include="Acknowledgement\IAcknowledgementTargetFactory.cs" />
@@ -419,7 +424,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BL\testpackage\scoring\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\TDS\Common\AIR.Common\AIR.Common.csproj">
       <Project>{e11c4060-59b5-401d-bf72-1f52156e64db}</Project>
