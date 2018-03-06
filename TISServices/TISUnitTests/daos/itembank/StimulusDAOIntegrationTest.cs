@@ -16,11 +16,10 @@ namespace TISUnitTests.daos.itembank
             "SELECT \n" +
             "   _efk_itembank AS ItemBankKey, \n" +
             "   _efk_itskey AS ItsKey, \n" +
-            "   ClientId AS ClientKey, \n" +
             "   FilePath, \n" +
             "   [FileName], \n" +
             "   DateLastUpdated, \n" +
-            "   _key AS PassageKey, \n" +
+            "   _key AS StimulusKey, \n" +
             "   loadconfig AS TestVersion \n" +
             "FROM \n" +
             "   tblStimulus \n" +
@@ -36,11 +35,10 @@ namespace TISUnitTests.daos.itembank
                 {
                     ItemBankKey = 42L,
                     ItsKey = 99L,
-                    ClientKey = "unit-test-client-key",
                     FilePath = "unit-test-file-path",
                     FileName ="unit-test-file-name",
                     DateLastUpdated = DateTime.Now,
-                    PassageKey = "unit-test-stim-key",
+                    StimulusKey = "unit-test-stim-key",
                     TestVersion = 999L
                 }
             };

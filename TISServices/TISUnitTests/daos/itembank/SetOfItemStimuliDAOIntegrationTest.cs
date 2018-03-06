@@ -41,11 +41,10 @@ namespace TISUnitTests.daos.itembank
         {
             ItemBankKey = 42L,
             ItsKey = 99L,
-            ClientKey = "unit-test-client-key",
             FilePath = "unit-test-file-path",
             FileName = "unit-test-file-name",
             DateLastUpdated = DateTime.Now,
-            PassageKey = "unit-test-stim-key",
+            StimulusKey = "unit-test-stim-key",
             TestVersion = 999L
         };
 
@@ -69,7 +68,7 @@ namespace TISUnitTests.daos.itembank
                 new SetOfItemStimuliDTO
                 {
                     ItemKey = seedDataItem.Key,
-                    StimulusKey = seedDataStimulus.PassageKey,
+                    StimulusKey = seedDataStimulus.StimulusKey,
                     SegmentKey = "unit-test-segment-key",
                     TestVersion = 99L
                 }
