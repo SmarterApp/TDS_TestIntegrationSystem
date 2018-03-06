@@ -30,7 +30,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "FROM \n" +
                 "   tblSubject \n" +
                 "WHERE \n" +
-                "   _key = @primaryKey";
+                "   _key = @criteria";
         }
     }
 }

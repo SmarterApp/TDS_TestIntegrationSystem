@@ -165,6 +165,7 @@
     <Content Include="resources\test-packages\new-xsd\segment-blueprint-element.xml" />
     <Content Include="resources\test-packages\new-xsd\test-specification-sample-1.xml" />
     <Content Include="resources\test-packages\new-xsd\thss-test-specification-sample-1.xml" />
+    <Content Include="resources\test-packages\new-xsd\V2-%28SBAC_PT%29IRP-GRADE-11-MATH-EXAMPLE.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29IRP-Perf-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-MATH-3-Summer-2015-2016-UNIT-TEST.xml" />
