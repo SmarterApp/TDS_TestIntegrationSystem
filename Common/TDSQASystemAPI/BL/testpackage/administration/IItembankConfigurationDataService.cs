@@ -1,14 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.BL.testpackage.administration
 {
+    /// <summary>
+    /// An interface for interacting with the static/"lookup" Test Package data.
+    /// </summary>
     public interface IItembankConfigurationDataService
     {
+        /// <summary>
+        /// Create a new collection of Items
+        /// </summary>
+        /// <param name="testPackage">The <code>TestPackage.TestPackage</code> containing the items.</param>
+        void CreateItems(TestPackage.TestPackage testPackage);
+
+        /// <summary>
+        /// Create a new collection of Stimuli
+        /// </summary>
+        /// <param name="testPackage">The <code>TestPackage.TestPackage</code> containing the stimuli.</param>
+        void CreateStimuli(TestPackage.TestPackage testPackage);
+
         /// <summary>
         /// Create a new subject.
         /// </summary>

@@ -11,10 +11,16 @@ namespace TDSQASystemAPI.BL.testpackage.administration
     public class ItembankConfigurationDataService : IItembankConfigurationDataService
     {
         private readonly string[] CLAIM_AND_TARGET_TYPES = new string[] { "strand", "contentlevel", "claim" };
+        private const string ITEM_FILE_NAME_PATTERN = "item-{0}-{1}.xml";
+        private const string ITEM_FILE_PATH_PATTERN = "item-{0}-{1}/";
+        private const string STIMULUS_FILE_NAME_PATTERN = "stim-{0}-{1}.xml";
+        private const string STIMULUS_FILE_PATH_PATTERN = "stim-{0}-{1}/";
 
         private readonly ITestPackageDao<SubjectDTO> subjectDAO;
         private readonly ITestPackageDao<ClientDTO> clientDAO;
         private readonly ITestPackageDao<StrandDTO> strandDAO;
+        private readonly ITestPackageDao<ItemDTO> itemDAO;
+        private readonly ITestPackageDao<StimulusDTO> stimuliDAO;
 
         /// <summary>
         /// Default constructor to create new <code>ITestPackageDao<SubjectDTO></code> and
@@ -26,15 +32,77 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             subjectDAO = new SubjectDAO();
             clientDAO = new ClientDAO();
             strandDAO = new StrandDAO();
+            itemDAO = new ItemDAO();
+            stimuliDAO = new StimulusDAO();
         }
 
         public ItembankConfigurationDataService(ITestPackageDao<SubjectDTO> subjectDAO, 
                                                 ITestPackageDao<ClientDTO> clientDAO,
-                                                ITestPackageDao<StrandDTO> strandDAO)
+                                                ITestPackageDao<StrandDTO> strandDAO,
+                                                ITestPackageDao<ItemDTO> itemDAO,
+                                                ITestPackageDao<StimulusDTO> stimuliDAO)
         {
             this.subjectDAO = subjectDAO;
             this.clientDAO = clientDAO;
             this.strandDAO = strandDAO;
+            this.itemDAO = itemDAO;
+            this.stimuliDAO = stimuliDAO;
+        }
+
+        public void CreateItems(TestPackage.TestPackage testPackage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateStimuli(TestPackage.TestPackage testPackage)
+        {
+            var allSegments = from a in testPackage.Assessment
+                              from s in a.Segments
+                              select s;
+
+            // Collect all the stimuli, regardless of their source (i.e. either a form or an item pool).
+            List<ItemGroupStimulus> allStimuli = new List<ItemGroupStimulus>();
+            foreach (var segment in allSegments)
+            {
+                if (segment.Item is AssessmentSegmentSegmentForms)
+                {
+                    foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                    {
+                        var stimuli = from ig in form.ItemGroup
+                                      where ig.Stimulus != null
+                                      select ig.Stimulus;
+                        if (stimuli.Any())
+                        { 
+                            allStimuli.AddRange(stimuli);
+                        }
+                    }
+                }
+                else
+                {
+                    var pool = segment.Item as AssessmentSegmentPool;
+                    var stimuli = from ig in pool.ItemGroup
+                                  where ig.Stimulus != null
+                                  select ig.Stimulus;
+                    if (stimuli.Any())
+                    {
+                        allStimuli.AddRange(stimuli);
+                    }
+                }
+            }
+
+            var stimuliDtos = from s in allStimuli
+                              select new StimulusDTO
+                              {
+                                  ItemBankKey = testPackage.bankKey,
+                                  ItsKey = long.Parse(s.id),
+                                  TestVersion = (long)testPackage.version,
+                                  FileName = string.Format(STIMULUS_FILE_NAME_PATTERN, testPackage.bankKey, s.id),
+                                  FilePath = string.Format(STIMULUS_FILE_PATH_PATTERN, testPackage.bankKey, s.id),
+                                  DateLastUpdated = DateTime.Now,
+                                  StimulusKey = string.Format("{0}-{1}", testPackage.bankKey, s.id)
+                              };
+
+            stimuliDAO.Insert(stimuliDtos.ToList());
         }
 
         public IDictionary<string, StrandDTO> CreateStrands(TestPackage.TestPackage testPackage)

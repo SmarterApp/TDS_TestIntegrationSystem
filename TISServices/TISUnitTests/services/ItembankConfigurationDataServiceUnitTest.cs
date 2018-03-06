@@ -19,6 +19,8 @@ namespace TISUnitTests.services
         private readonly Mock<ITestPackageDao<ClientDTO>> mockClientDao = new Mock<ITestPackageDao<ClientDTO>>();
         private readonly Mock<ITestPackageDao<SubjectDTO>> mockSubjectDao = new Mock<ITestPackageDao<SubjectDTO>>();
         private readonly Mock<ITestPackageDao<StrandDTO>> mockStrandDao = new Mock<ITestPackageDao<StrandDTO>>();
+        private readonly Mock<ITestPackageDao<ItemDTO>> mockItemDao = new Mock<ITestPackageDao<ItemDTO>>();
+        private readonly Mock<ITestPackageDao<StimulusDTO>> mockStimulusDao = new Mock<ITestPackageDao<StimulusDTO>>();
 
         private IItembankConfigurationDataService itembankConfigurationDataService;
         private TestPackage testPackage = new TestPackage
@@ -34,7 +36,9 @@ namespace TISUnitTests.services
             itembankConfigurationDataService =
                 new ItembankConfigurationDataService(mockSubjectDao.Object, 
                     mockClientDao.Object, 
-                    mockStrandDao.Object);
+                    mockStrandDao.Object,
+                    mockItemDao.Object,
+                    mockStimulusDao.Object);
         }
 
         [TestMethod]
@@ -183,6 +187,25 @@ namespace TISUnitTests.services
             mockStrandDao.Verify(dao => dao.Insert(It.IsAny<List<StrandDTO>>()), Times.Never);
 
             Assert.AreEqual(string.Format("Could not find a client record with name '{0}'", testPackage.publisher), exception.Message);
+        }
+
+        [TestMethod]
+        public void Stimuli_ShoulsCreateaACollectionOfStimuli()
+        {
+            var loadedTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            mockStimulusDao.Setup(dao => dao.Insert(It.IsAny<List<StimulusDTO>>()));
+
+            itembankConfigurationDataService.CreateStimuli(loadedTestPackage);
+
+            mockStimulusDao.Verify(dao => dao.Insert(It.Is<List<StimulusDTO>>(stimuli =>
+                stimuli.Count == 1
+                    && stimuli[0].ItemBankKey == 187
+                    && stimuli[0].ItsKey == 3688
+                    && stimuli[0].StimulusKey.Equals("187-3688")
+                    && stimuli[0].FilePath.Equals("stim-187-3688/")
+                    && stimuli[0].FileName.Equals("stim-187-3688.xml")
+                    && stimuli[0].TestVersion == (long)loadedTestPackage.version)));
         }
     }
 }
