@@ -174,7 +174,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     key,
                     subjectKey,
                     testVersion,
-                    ++treeLevel);
+                    treeLevel + 1);
             }
         }
     }
