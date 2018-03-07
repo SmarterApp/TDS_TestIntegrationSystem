@@ -51,7 +51,63 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateItems(TestPackage.TestPackage testPackage)
         {
-            throw new NotImplementedException();
+            var allSegments = from a in testPackage.Assessment
+                              from s in a.Segments
+                              select s;
+
+            // Collect all the items, regardless of their source (i.e. either a form or an item pool).
+            List<ItemDTO> allItems = new List<ItemDTO>();
+            foreach (var segment in allSegments)
+            {
+                if (segment.Item is AssessmentSegmentSegmentForms)
+                {
+                    foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                    {
+                        var items = from ig in form.ItemGroup
+                                    from item in ig.Item
+                                    select new ItemDTO
+                                    {
+                                        ItemBankKey = testPackage.bankKey,
+                                        ItemKey = long.Parse(item.id),
+                                        ScorePoints = item.ItemScoreDimension.scorePoints,
+                                        DateLastUpdated = DateTime.Now,
+                                        FileName = string.Format(ITEM_FILE_NAME_PATTERN, testPackage.bankKey, item.id),
+                                        FilePath = string.Format(ITEM_FILE_PATH_PATTERN, testPackage.bankKey, item.id),
+                                        ItemType = item.type,
+                                        Key = string.Format("{0}-{1}", testPackage.bankKey, item.id),
+                                        TestVersion = (long)testPackage.version
+                                    };
+                        if (items.Any())
+                        {
+                            allItems.AddRange(items);
+                        }
+                    }
+                }
+                else
+                {
+                    var pool = segment.Item as AssessmentSegmentPool;
+                    var items = from ig in pool.ItemGroup
+                                from item in ig.Item
+                                select new ItemDTO
+                                {
+                                    ItemBankKey = testPackage.bankKey,
+                                    ItemKey = long.Parse(item.id),
+                                    ScorePoints = item.ItemScoreDimension.scorePoints,
+                                    DateLastUpdated = DateTime.Now,
+                                    FileName = string.Format(ITEM_FILE_NAME_PATTERN, testPackage.bankKey, item.id),
+                                    FilePath = string.Format(ITEM_FILE_PATH_PATTERN, testPackage.bankKey, item.id),
+                                    ItemType = item.type,
+                                    Key = string.Format("{0}-{1}", testPackage.bankKey, item.id),
+                                    TestVersion = (long)testPackage.version
+                                };
+                    if (items.Any())
+                    {
+                        allItems.AddRange(items);
+                    }
+                }
+
+                itemDAO.Insert(allItems);
+            }
         }
 
         public void CreateStimuli(TestPackage.TestPackage testPackage)
@@ -61,7 +117,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                               select s;
 
             // Collect all the stimuli, regardless of their source (i.e. either a form or an item pool).
-            List<ItemGroupStimulus> allStimuli = new List<ItemGroupStimulus>();
+            List<StimulusDTO> allStimuli = new List<StimulusDTO>();
             foreach (var segment in allSegments)
             {
                 if (segment.Item is AssessmentSegmentSegmentForms)
@@ -70,7 +126,16 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     {
                         var stimuli = from ig in form.ItemGroup
                                       where ig.Stimulus != null
-                                      select ig.Stimulus;
+                                      select new StimulusDTO
+                                      {
+                                          ItemBankKey = testPackage.bankKey,
+                                          ItsKey = long.Parse(ig.Stimulus.id),
+                                          TestVersion = (long)testPackage.version,
+                                          FileName = string.Format(STIMULUS_FILE_NAME_PATTERN, testPackage.bankKey, ig.Stimulus.id),
+                                          FilePath = string.Format(STIMULUS_FILE_PATH_PATTERN, testPackage.bankKey, ig.Stimulus.id),
+                                          DateLastUpdated = DateTime.Now,
+                                          StimulusKey = string.Format("{0}-{1}", testPackage.bankKey, ig.Stimulus.id)
+                                      };
                         if (stimuli.Any())
                         { 
                             allStimuli.AddRange(stimuli);
@@ -82,7 +147,16 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     var pool = segment.Item as AssessmentSegmentPool;
                     var stimuli = from ig in pool.ItemGroup
                                   where ig.Stimulus != null
-                                  select ig.Stimulus;
+                                  select new StimulusDTO
+                                  {
+                                      ItemBankKey = testPackage.bankKey,
+                                      ItsKey = long.Parse(ig.Stimulus.id),
+                                      TestVersion = (long)testPackage.version,
+                                      FileName = string.Format(STIMULUS_FILE_NAME_PATTERN, testPackage.bankKey, ig.Stimulus.id),
+                                      FilePath = string.Format(STIMULUS_FILE_PATH_PATTERN, testPackage.bankKey, ig.Stimulus.id),
+                                      DateLastUpdated = DateTime.Now,
+                                      StimulusKey = string.Format("{0}-{1}", testPackage.bankKey, ig.Stimulus.id)
+                                  };
                     if (stimuli.Any())
                     {
                         allStimuli.AddRange(stimuli);
@@ -90,19 +164,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 }
             }
 
-            var stimuliDtos = from s in allStimuli
-                              select new StimulusDTO
-                              {
-                                  ItemBankKey = testPackage.bankKey,
-                                  ItsKey = long.Parse(s.id),
-                                  TestVersion = (long)testPackage.version,
-                                  FileName = string.Format(STIMULUS_FILE_NAME_PATTERN, testPackage.bankKey, s.id),
-                                  FilePath = string.Format(STIMULUS_FILE_PATH_PATTERN, testPackage.bankKey, s.id),
-                                  DateLastUpdated = DateTime.Now,
-                                  StimulusKey = string.Format("{0}-{1}", testPackage.bankKey, s.id)
-                              };
-
-            stimuliDAO.Insert(stimuliDtos.ToList());
+            stimuliDAO.Insert(allStimuli);
         }
 
         public IDictionary<string, StrandDTO> CreateStrands(TestPackage.TestPackage testPackage)

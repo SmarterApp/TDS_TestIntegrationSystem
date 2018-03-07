@@ -59,10 +59,10 @@ namespace TISUnitTests.services
             mockSubjectDao.Verify(dao => dao.Find(subjectKey));
             mockSubjectDao.Verify(dao => dao.Insert(It.Is<List<SubjectDTO>>(subject => 
                 subject.Count == 1 
-                && subject[0].Name.Equals(testPackage.subject)
-                && subject[0].Grade.Equals(string.Empty)
-                && subject[0].ClientKey == 99
-                && subject[0].TestVersion == 42L)));
+                    && subject[0].Name.Equals(testPackage.subject)
+                    && subject[0].Grade.Equals(string.Empty)
+                    && subject[0].ClientKey == 99
+                    && subject[0].TestVersion == 42L)));
         }
 
         [TestMethod]
@@ -206,6 +206,20 @@ namespace TISUnitTests.services
                     && stimuli[0].FilePath.Equals("stim-187-3688/")
                     && stimuli[0].FileName.Equals("stim-187-3688.xml")
                     && stimuli[0].TestVersion == (long)loadedTestPackage.version)));
+        }
+
+        [TestMethod]
+        public void Item_SouldCreateACollectionOfItems()
+        {
+            var loadedTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()));
+
+            itembankConfigurationDataService.CreateItems(loadedTestPackage);
+
+            mockItemDao.Verify(dao => dao.Insert(It.Is<List<ItemDTO>>(items => 
+                items.Count == 20)));
+
         }
     }
 }

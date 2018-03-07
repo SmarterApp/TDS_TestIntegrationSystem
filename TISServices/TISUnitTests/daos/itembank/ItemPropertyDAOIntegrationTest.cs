@@ -38,7 +38,7 @@ namespace TISUnitTests.daos.itembank
             FileName = "unit-test-name",
             DateLastUpdated = DateTime.Now,
             Key = ITEM_KEY,
-            ItemId = "unit-test-id",
+            ScorePoints = 13,
             TestVersion = 42L
         };
 

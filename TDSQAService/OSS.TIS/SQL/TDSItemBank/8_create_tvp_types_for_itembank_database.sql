@@ -62,10 +62,10 @@ CREATE TYPE dbo.ItemTable AS TABLE
 	ItemBankKey			bigint NOT NULL,
 	ItemKey				bigint NOT NULL,
 	ItemType			varchar(50),
+	ScorePoint			int,
 	FilePath			varchar(50),
 	[FileName]			varchar(50),
 	DateLastUpdated		datetime,
-	ItemId				varchar(80),
 	[Key]				varchar(150) NOT NULL,
 	TestVersion			bigint
 )
