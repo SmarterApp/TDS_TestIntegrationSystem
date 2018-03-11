@@ -8,6 +8,7 @@ using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.itembank.dtos;
 using TDSQASystemAPI.TestPackage;
 using TDSQASystemAPI.TestPackage.utils;
+using TISUnitTests.utils;
 
 namespace TISUnitTests.services
 {
@@ -21,6 +22,9 @@ namespace TISUnitTests.services
         private readonly Mock<ITestPackageDao<StrandDTO>> mockStrandDao = new Mock<ITestPackageDao<StrandDTO>>();
         private readonly Mock<ITestPackageDao<ItemDTO>> mockItemDao = new Mock<ITestPackageDao<ItemDTO>>();
         private readonly Mock<ITestPackageDao<StimulusDTO>> mockStimulusDao = new Mock<ITestPackageDao<StimulusDTO>>();
+        private readonly Mock<ITestPackageDao<AaItemClDTO>> mockAaItemClDao = new Mock<ITestPackageDao<AaItemClDTO>>();
+        private readonly Mock<ITestPackageDao<SetOfItemStrandDTO>> mockSetOfItemStrandDao = new Mock<ITestPackageDao<SetOfItemStrandDTO>>();
+        private readonly Mock<ITestPackageDao<SetOfItemStimuliDTO>> mockSetOfItemStimuliDao = new Mock<ITestPackageDao<SetOfItemStimuliDTO>>();
 
         private IItembankConfigurationDataService itembankConfigurationDataService;
         private TestPackage testPackage = new TestPackage
@@ -38,7 +42,10 @@ namespace TISUnitTests.services
                     mockClientDao.Object, 
                     mockStrandDao.Object,
                     mockItemDao.Object,
-                    mockStimulusDao.Object);
+                    mockStimulusDao.Object,
+                    mockAaItemClDao.Object,
+                    mockSetOfItemStrandDao.Object,
+                    mockSetOfItemStimuliDao.Object);
         }
 
         [TestMethod]
@@ -220,6 +227,25 @@ namespace TISUnitTests.services
             mockItemDao.Verify(dao => dao.Insert(It.Is<List<ItemDTO>>(items => 
                 items.Count == 20)));
 
+        }
+
+        [TestMethod]
+        public void SetOfItemStrand_ShouldCreateASetOfItemStrandCollection()
+        {
+            var testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var strandMap = StrandBuilder.GetStrandDTODictionary(testPackage);
+
+            mockAaItemClDao.Setup(dao => dao.Insert(It.IsAny<List<AaItemClDTO>>()))
+                .Verifiable();
+            mockSetOfItemStrandDao.Setup(dao => dao.Insert(It.IsAny<IList<SetOfItemStrandDTO>>()))
+                .Verifiable();
+
+            itembankConfigurationDataService.LinkItemToStrands(testPackage, strandMap);
+
+            //mockAaItemClDao.Verify(dao => dao.Insert(It.Is<List<AaItemClDTO>>(result =>
+            //    result.Count == 108)));
+            mockSetOfItemStrandDao.Verify(dao => dao.Insert(It.Is<IList<SetOfItemStrandDTO>>(result =>
+                result.Count == 20)));
         }
     }
 }

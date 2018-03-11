@@ -33,5 +33,16 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// <returns>A <code>IDictionary<string, StrandDTO></code> where the key is the strand's name and the value is the 
         /// <code>StrandDTO</code> the name points to.</returns>
         IDictionary<string, StrandDTO> CreateStrands(TestPackage.TestPackage testPackage);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="strandMap"></param>
+        void LinkItemToStrands(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        void LinkItemsToStimuli(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap);
     }
 }

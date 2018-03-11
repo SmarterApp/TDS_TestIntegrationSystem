@@ -99,6 +99,7 @@ namespace TDSQASystemAPI.TestPackage.utils
             foreach (var item in itemGroup.Item)
             {
                 item.TestPackage = testPackage;
+                item.AssessmentSegment = segment;
                 item.SegmentForm = form;
                 item.ItemGroup = itemGroup;
                 if (item.TeacherHandScoring != null)

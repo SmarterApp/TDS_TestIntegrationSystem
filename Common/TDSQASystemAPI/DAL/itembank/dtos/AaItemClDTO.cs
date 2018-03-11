@@ -2,6 +2,9 @@
 {
     /// <summary>
     /// Represents a single record in the <code>OSS_Itembank..AA_ItemCL</code> table
+    /// <remarks>
+    /// Referred to as "Targets"
+    /// </remarks>
     /// </summary>
     public class AaItemClDTO
     {

@@ -6,8 +6,13 @@ namespace TDSQASystemAPI.DAL.itembank.dtos
     /// Represents a single record in the <code>OSS_Itembank..tblStrand</code> table.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// This class is a subset of all the fields on the <code>OSS_Itembank..tblStrand</code> table; fields that are not referenced by an INSERT/UPDATE 
     /// in <code>OSS_Itembank.tp.spLoader_Main</code> (or the procedures it calls) aare not included.
+    /// </para>
+    /// <para>
+    /// Referred to as "Claim".
+    /// </para>
     /// </remarks>
     public class StrandDTO
     {

@@ -130,11 +130,14 @@
     <Compile Include="daos\scoring\TestGradeDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\TestScoreFeatureDAOIntegrationTest.cs" />
     <Compile Include="services\ItembankConfigurationDataServiceUnitTest.cs" />
+    <Compile Include="testpackages\ItemGroupItemBlueprintReferenceUnitTest.cs" />
     <Compile Include="testpackages\ItemPositionUnitTest.cs" />
     <Compile Include="testpackages\TeacherHandScoringUnitTest.cs" />
     <Compile Include="testpackages\TestPackageAssemblerUnitTest.cs" />
+    <Compile Include="testpackages\TestPackageMethodUnitTest.cs" />
     <Compile Include="testpackages\ToolDefaultsUnitTest.cs" />
     <Compile Include="utils\ReflectionObjectPopulator.cs" />
+    <Compile Include="utils\StrandBuilder.cs" />
     <Compile Include="utils\TestPackageDaoIntegrationTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="extensions\ExtensionMethodUnitTests.cs" />

@@ -18,6 +18,12 @@ namespace TDSQASystemAPI.TestPackage
         public TestPackage TestPackage { get; set; }
 
         /// <summary>
+        /// The <code>AssessmentSegment</code> that owns this <code>ItemGroupItem</code>.
+        /// </summary>
+        [XmlIgnore]
+        public AssessmentSegment AssessmentSegment { get; set; }
+
+        /// <summary>
         /// The <code>AssessmentSegmentSegmentFormsSegmentForm</code> that owns this <code>ItemGroupItem</code>.
         /// 
         /// CAN BE NULL.
@@ -34,6 +40,12 @@ namespace TDSQASystemAPI.TestPackage
         /// </summary>
         [XmlIgnore]
         public ItemGroup ItemGroup { get; set; }
+
+        /// <summary>
+        /// Return the identifier/"key" of this <code>ItemGroupItem</code>
+        /// </summary>
+        [XmlIgnore]
+        public string Key { get { return string.Format("{0}-{1}", TestPackage.bankKey, id); } }
 
         /// <summary>
         /// Get the ordinal position of this <code>ItemGroupItem</code>.

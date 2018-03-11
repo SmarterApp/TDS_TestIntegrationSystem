@@ -331,9 +331,11 @@
     <Compile Include="TestPackage\DefaultToolConfiguration.cs" />
     <Compile Include="TestPackage\ItemGroup.cs" />
     <Compile Include="TestPackage\ItemGroupItem.cs" />
+    <Compile Include="TestPackage\ItemGroupItemBlueprintReference.cs" />
     <Compile Include="TestPackage\ItemGroupItemTeacherHandScoring.cs" />
     <Compile Include="TestPackage\ItemGroupStimulus.cs" />
     <Compile Include="TestPackage\PresentationsPresentation.cs" />
+    <Compile Include="TestPackage\TestPackage.cs" />
     <Compile Include="TestPackage\TestPackageXsd.cs" />
     <Compile Include="TestPackage\ToolsTool.cs" />
     <Compile Include="TestPackage\utils\TestPackageAssembler.cs" />
