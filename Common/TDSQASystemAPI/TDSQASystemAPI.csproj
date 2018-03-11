@@ -328,6 +328,7 @@
     <Compile Include="TestPackage\Assessment.cs" />
     <Compile Include="TestPackage\AssessmentSegment.cs" />
     <Compile Include="TestPackage\AssessmentSegmentSegmentFormsSegmentForm.cs" />
+    <Compile Include="TestPackage\BlueprintElement.cs" />
     <Compile Include="TestPackage\DefaultToolConfiguration.cs" />
     <Compile Include="TestPackage\ItemGroup.cs" />
     <Compile Include="TestPackage\ItemGroupItem.cs" />
@@ -338,6 +339,7 @@
     <Compile Include="TestPackage\TestPackage.cs" />
     <Compile Include="TestPackage\TestPackageXsd.cs" />
     <Compile Include="TestPackage\ToolsTool.cs" />
+    <Compile Include="TestPackage\utils\BlueprintElementTypes.cs" />
     <Compile Include="TestPackage\utils\TestPackageAssembler.cs" />
     <Compile Include="TestPackage\utils\ToolFactory.cs" />
     <Compile Include="TestResults\Comment.cs" />

@@ -6,13 +6,17 @@ using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.itembank.daos;
 using TDSQASystemAPI.DAL.itembank.dtos;
 using TDSQASystemAPI.TestPackage;
+using TDSQASystemAPI.TestPackage.utils;
 
 namespace TDSQASystemAPI.BL.testpackage.administration
 {
     public class ItembankConfigurationDataService : IItembankConfigurationDataService
     {
         private readonly string[] CLAIM_AND_TARGET_TYPES = new string[] { "strand", "contentlevel", "target", "claim" };
-        private const string ITEM_FILE_NAME_PATTERN = "item-{0}-{1}.xml";
+        private readonly string[] CONTENT_LEVEL_AND_TARGET_TYPES = new string[] { "contentlevel", "target" };
+        private readonly string[] STRAND_AND_CLAIM_TYPES = new string[] { "strand", "claim" };
+
+    private const string ITEM_FILE_NAME_PATTERN = "item-{0}-{1}.xml";
         private const string ITEM_FILE_PATH_PATTERN = "item-{0}-{1}/";
         private const string STIMULUS_FILE_NAME_PATTERN = "stim-{0}-{1}.xml";
         private const string STIMULUS_FILE_PATH_PATTERN = "stim-{0}-{1}/";
@@ -169,14 +173,17 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public void LinkItemToStrands(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap)
         {
             var items = testPackage.GetAllItems();
+            var allTestPackageBlueprintElements = testPackage.GetAllTestPackageBlueprintElements();
 
             // Create all the item -> content level links
-            CreateItemLevelContent(testPackage, items, strandMap);
+            CreateItemLevelContent(allTestPackageBlueprintElements, items, strandMap);
 
             // Create the item -> strand links
             var strandDtos = from item in items
                              from bpRef in item.BlueprintReferences
-                             where bpRef.idRef.Contains("|")
+                             join blueprint in allTestPackageBlueprintElements
+                                 on bpRef.idRef equals blueprint.Value.id
+                             where blueprint.Value.IsClaimOrTarget()
                              select new SetOfItemStrandDTO
                              {
                                  ItemKey = item.Key,
@@ -273,17 +280,19 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         }
 
         /// <summary>
-        /// 
+        /// Create records to describe the content levels for each <code>ItemGroupItem</code> contained within the 
+        /// <code>TestPackage</code>.
         /// </summary>
-        /// <param name="testPackage"></param>
-        /// <param name="items"></param>
-        /// <param name="strandMap"></param>
-        private void CreateItemLevelContent(TestPackage.TestPackage testPackage, 
+        /// <param name="allTestPackageBlueprintElements">A <code>IReadOnlyDictionary</code> of all the <code>BlueprintElements</code> contained
+        /// within the <code>TestPackage</code>.  The key is the <code>BlueprintElement</code>'s id, and the value is the
+        /// <code>BlueprintElement</code>.</param>
+        /// <param name="items">A collection of all the <code>ItemGroupItem</code>s contained within the <code>TestPackage</code></param>
+        /// <param name="strandMap">A <code>IDictionary</code> of all the <code>StrandDTO</code>s that were built earlier in 
+        /// the load process.</param>
+        private void CreateItemLevelContent(IReadOnlyDictionary<string, BlueprintElement> allTestPackageBlueprintElements, 
                                             IReadOnlyCollection<ItemGroupItem> items, 
                                             IDictionary<string, StrandDTO> strandMap)
         {
-            var allTestPackageBlueprintElements = testPackage.GetAllTestPackageBlueprintElements();
-
             var allAaItemClDtos = new List<AaItemClDTO>();
             foreach (var item in items)
             {
@@ -298,8 +307,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         var contentLevelAaItemClDtos = from strand in strandMap
                                                        join lvl in bp.GetContentLevels()
                                                            on strand.Key equals lvl
-                                                       where CLAIM_AND_TARGET_TYPES.Contains(strand.Value.Type)
-                                                           || strand.Value.Type.Equals("affinitygroup", StringComparison.InvariantCultureIgnoreCase)
+                                                       where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Value.Type)
+                                                           || strand.Value.Type.Equals(BlueprintElementTypes.AFFINITY_GROUP, StringComparison.InvariantCultureIgnoreCase)
                                                        select new AaItemClDTO
                                                        {
                                                            ContentLevel = string.Format("{0}-{1}", item.TestPackage.publisher, strand.Key),
@@ -313,8 +322,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     {
                         var strandAffinityAaItemClDtos = from testPkgBp in allTestPackageBlueprintElements
                                                          where testPkgBp.Key.Equals(bp.idRef)
-                                                             && (CLAIM_AND_TARGET_TYPES.Contains(testPkgBp.Value.type)
-                                                                 || testPkgBp.Value.type.Equals("affinitygroup", StringComparison.InvariantCultureIgnoreCase))
+                                                             && (testPkgBp.Value.IsClaimOrTarget()
+                                                                 || testPkgBp.Value.type.Equals(BlueprintElementTypes.AFFINITY_GROUP, StringComparison.InvariantCultureIgnoreCase))
                                                          select new AaItemClDTO
                                                          {
                                                              ContentLevel = bp.idRef,

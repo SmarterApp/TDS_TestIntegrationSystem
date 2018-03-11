@@ -242,8 +242,8 @@ namespace TISUnitTests.services
 
             itembankConfigurationDataService.LinkItemToStrands(testPackage, strandMap);
 
-            //mockAaItemClDao.Verify(dao => dao.Insert(It.Is<List<AaItemClDTO>>(result =>
-            //    result.Count == 108)));
+            mockAaItemClDao.Verify(dao => dao.Insert(It.Is<List<AaItemClDTO>>(result =>
+                result.Count == 108)));
             mockSetOfItemStrandDao.Verify(dao => dao.Insert(It.Is<IList<SetOfItemStrandDTO>>(result =>
                 result.Count == 20)));
         }
