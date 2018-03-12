@@ -80,7 +80,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 .Select(g => g.Key);
 
             var allItemProperties = new List<ItemPropertyDTO>();
-            foreach(var item in allTestPackageItems)
+            foreach (var item in allTestPackageItems)
             {
                 // Build --ITEMTYPE-- property
                 allItemProperties.Add(new ItemPropertyDTO()
