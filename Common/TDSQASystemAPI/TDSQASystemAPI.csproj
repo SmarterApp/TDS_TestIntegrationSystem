@@ -341,7 +341,7 @@
     <Compile Include="TestPackage\ToolsTool.cs" />
     <Compile Include="TestPackage\utils\BlueprintElementTypes.cs" />
     <Compile Include="TestPackage\utils\TestPackageMapper.cs" />
-    <Compile Include="TestPackage\utils\ToolFactory.cs" />
+    <Compile Include="TestPackage\utils\ToolMapper.cs" />
     <Compile Include="TestResults\Comment.cs" />
     <Compile Include="TestResults\ErasureResponse.cs" />
     <Compile Include="TestResults\GenericVariable.cs" />

@@ -139,7 +139,7 @@ namespace TDSQASystemAPI.TestPackage.utils
             var tools = new List<ToolsTool>();
             toolElements.ForEach(el =>
             {
-                var tool = ToolFactory.GetInstance(el);
+                var tool = ToolMapper.FromXml(el);
                 tools.Add(tool);
             });
 

@@ -19,7 +19,7 @@ namespace TISUnitTests.testpackages
 
             var toolElement = XElement.Parse(printRequestXmlToolFragment);
 
-            var result = ToolFactory.GetInstance(toolElement);
+            var result = ToolMapper.FromXml(toolElement);
 
             Assert.AreEqual("Print Size", result.name);
             Assert.AreEqual("TDSAcc-PrintSize", result.studentPackageFieldName);
@@ -34,7 +34,7 @@ namespace TISUnitTests.testpackages
 
             var toolElement = XElement.Parse(printRequestXmlToolFragment);
 
-            var result = ToolFactory.GetInstance(toolElement);
+            var result = ToolMapper.FromXml(toolElement);
 
             Assert.AreEqual("Print Size", result.name);
             Assert.AreEqual("TDSAcc-PrintSize", result.studentPackageFieldName);
@@ -62,7 +62,7 @@ namespace TISUnitTests.testpackages
 
             var toolElement = XElement.Parse(calculatorToolXmlFragment);
 
-            var result = ToolFactory.GetInstance(toolElement);
+            var result = ToolMapper.FromXml(toolElement);
 
             // Verify the Tool settings/configuration
             Assert.AreEqual("Calculator", result.name);
@@ -111,7 +111,7 @@ namespace TISUnitTests.testpackages
 
             var toolElement = XElement.Parse(toolFragment);
 
-            var exception = Assert.ThrowsException<InvalidOperationException>(() => ToolFactory.GetInstance(toolElement));
+            var exception = Assert.ThrowsException<InvalidOperationException>(() => ToolMapper.FromXml(toolElement));
             Assert.AreEqual("A tool must have a Student Package Field Name attribute and 'studentPackageField' was not supplied",
                 exception.Message);
         }
@@ -124,7 +124,7 @@ namespace TISUnitTests.testpackages
 
             var toolElement = XElement.Parse(toolFragment);
 
-            var exception = Assert.ThrowsException<InvalidOperationException>(() => ToolFactory.GetInstance(toolElement));
+            var exception = Assert.ThrowsException<InvalidOperationException>(() => ToolMapper.FromXml(toolElement));
             Assert.AreEqual("A tool must have a name attribute and one was not supplied",
                 exception.Message);
         }
