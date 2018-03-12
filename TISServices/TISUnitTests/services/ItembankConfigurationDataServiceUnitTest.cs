@@ -25,6 +25,7 @@ namespace TISUnitTests.services
         private readonly Mock<ITestPackageDao<AaItemClDTO>> mockAaItemClDao = new Mock<ITestPackageDao<AaItemClDTO>>();
         private readonly Mock<ITestPackageDao<SetOfItemStrandDTO>> mockSetOfItemStrandDao = new Mock<ITestPackageDao<SetOfItemStrandDTO>>();
         private readonly Mock<ITestPackageDao<SetOfItemStimuliDTO>> mockSetOfItemStimuliDao = new Mock<ITestPackageDao<SetOfItemStimuliDTO>>();
+        private readonly Mock<ITestPackageDao<ItemPropertyDTO>> mockItemPropertyDao = new Mock<ITestPackageDao<ItemPropertyDTO>>();
 
         private IItembankConfigurationDataService itembankConfigurationDataService;
         private TestPackage testPackage = new TestPackage
@@ -45,7 +46,8 @@ namespace TISUnitTests.services
                     mockStimulusDao.Object,
                     mockAaItemClDao.Object,
                     mockSetOfItemStrandDao.Object,
-                    mockSetOfItemStimuliDao.Object);
+                    mockSetOfItemStimuliDao.Object,
+                    mockItemPropertyDao.Object);
         }
 
         [TestMethod]
@@ -260,12 +262,29 @@ namespace TISUnitTests.services
 
             mockSetOfItemStimuliDao.Verify(dao => dao.Insert(It.Is<List<SetOfItemStimuliDTO>>(result =>
                 result.Count == 2
-                && result[0].SegmentKey.Equals("(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018")
-                && result[0].StimulusKey.Equals("187-3688")
-                && result[0].ItemKey.Equals("187-1434")
-                && result[1].SegmentKey.Equals("(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018")
-                && result[1].StimulusKey.Equals("187-3688")
-                && result[1].ItemKey.Equals("187-1432"))));
+                    && result[0].SegmentKey.Equals("(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018")
+                    && result[0].StimulusKey.Equals("187-3688")
+                    && result[0].ItemKey.Equals("187-1434")
+                    && result[1].SegmentKey.Equals("(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018")
+                    && result[1].StimulusKey.Equals("187-3688")
+                    && result[1].ItemKey.Equals("187-1432")
+                )));
+        }
+
+        [TestMethod]
+        public void ItemProperties_ShouldCreateItemPropertiesForTestPackage()
+        {
+            var testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            mockItemPropertyDao.Setup(dao => dao.Insert(It.IsAny<List<ItemPropertyDTO>>()));
+
+            itembankConfigurationDataService.CreateItemProperties(testPackage);
+
+            mockItemPropertyDao.Verify(dao => dao.Insert(It.Is<List<ItemPropertyDTO>>(result =>
+                result.Count == 60 // 3 properties per item; 20 items in testPackage
+                    && result.FindAll(r => r.ItemKey.Equals("187-2029")).Count == 3
+                    && result.Find(r => r.PropertyName.Equals("language", StringComparison.InvariantCultureIgnoreCase)).PropertyValue.Equals("ENU")
+                )));
         }
     }
 }

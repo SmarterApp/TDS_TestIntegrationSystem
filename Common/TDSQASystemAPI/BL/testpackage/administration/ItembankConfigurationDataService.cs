@@ -12,14 +12,14 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 {
     public class ItembankConfigurationDataService : IItembankConfigurationDataService
     {
-        private readonly string[] CLAIM_AND_TARGET_TYPES = new string[] { "strand", "contentlevel", "target", "claim" };
-        private readonly string[] CONTENT_LEVEL_AND_TARGET_TYPES = new string[] { "contentlevel", "target" };
-        private readonly string[] STRAND_AND_CLAIM_TYPES = new string[] { "strand", "claim" };
-
-    private const string ITEM_FILE_NAME_PATTERN = "item-{0}-{1}.xml";
+        private const string ITEM_FILE_NAME_PATTERN = "item-{0}-{1}.xml";
         private const string ITEM_FILE_PATH_PATTERN = "item-{0}-{1}/";
         private const string STIMULUS_FILE_NAME_PATTERN = "stim-{0}-{1}.xml";
         private const string STIMULUS_FILE_PATH_PATTERN = "stim-{0}-{1}/";
+
+        private const string ITEM_TYPE_PROP_NAME = "--ITEMTYPE--";
+        private const string LANGUAGE_PROP_NAME = "Language";
+        private const string GRADE_PROP_NAME = "Grade";
 
         private readonly ITestPackageDao<SubjectDTO> subjectDAO;
         private readonly ITestPackageDao<ClientDTO> clientDAO;
@@ -29,6 +29,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly ITestPackageDao<AaItemClDTO> aaItemClDao;
         private readonly ITestPackageDao<SetOfItemStrandDTO> setOfItemStrandDao;
         private readonly ITestPackageDao<SetOfItemStimuliDTO> setOfItemStimuliDao;
+        private readonly ITestPackageDao<ItemPropertyDTO> itemPropertyDao;
 
         /// <summary>
         /// Default constructor to create new <code>ITestPackageDao<SubjectDTO></code> and
@@ -45,6 +46,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             aaItemClDao = new AaItemClDAO();
             setOfItemStrandDao = new SetOfItemStrandDAO();
             setOfItemStimuliDao = new SetOfItemStimuliDAO();
+            itemPropertyDao = new ItemPropertyDAO();
         }
 
         public ItembankConfigurationDataService(ITestPackageDao<SubjectDTO> subjectDAO, 
@@ -54,7 +56,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                 ITestPackageDao<StimulusDTO> stimuliDAO,
                                                 ITestPackageDao<AaItemClDTO> aaItemClDao,
                                                 ITestPackageDao<SetOfItemStrandDTO> setOfItemStrandDao,
-                                                ITestPackageDao<SetOfItemStimuliDTO> setOfItemStimuliDao)
+                                                ITestPackageDao<SetOfItemStimuliDTO> setOfItemStimuliDao,
+                                                ITestPackageDao<ItemPropertyDTO> itemPropertyDao)
         {
             this.subjectDAO = subjectDAO;
             this.clientDAO = clientDAO;
@@ -64,8 +67,53 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.aaItemClDao = aaItemClDao;
             this.setOfItemStrandDao = setOfItemStrandDao;
             this.setOfItemStimuliDao = setOfItemStimuliDao;
+            this.itemPropertyDao = itemPropertyDao;
         }
 
+        public void CreateItemProperties(TestPackage.TestPackage testPackage)
+        {
+            var allTestPackageItems = testPackage.GetAllItems();
+            var allGrades = (from a in testPackage.Assessment
+                             from g in a.Grades
+                             select g)
+                .GroupBy(g => g.value)
+                .Select(g => g.Key);
+
+            var allItemProperties = new List<ItemPropertyDTO>();
+            foreach(var item in allTestPackageItems)
+            {
+                // Build --ITEMTYPE-- property
+                allItemProperties.Add(new ItemPropertyDTO()
+                {
+                    ItemKey = item.Key,
+                    PropertyName = ITEM_TYPE_PROP_NAME,
+                    PropertyValue = item.type,
+                    SegmentKey = item.AssessmentSegment.Key
+                });
+
+                // Build language item property for each presentation included in the item.
+                item.Presentations.ForEach(language => allItemProperties.Add(new ItemPropertyDTO()
+                {
+                    ItemKey = item.Key,
+                    PropertyName = LANGUAGE_PROP_NAME,
+                    PropertyValue = language.code,
+                    SegmentKey = item.AssessmentSegment.Key
+                }));
+
+                // Build grade item property for each grade included in the test package.
+                allGrades.ForEach(grade =>
+                    allItemProperties.Add(new ItemPropertyDTO()
+                    {
+                        ItemKey = item.Key,
+                        PropertyName = GRADE_PROP_NAME,
+                        PropertyValue = grade,
+                        SegmentKey = item.AssessmentSegment.Key
+                    }));
+            }
+
+            itemPropertyDao.Insert(allItemProperties);
+        }
+            
         public void CreateItems(TestPackage.TestPackage testPackage)
         {
             var allItems = testPackage.GetAllItems();
@@ -255,7 +303,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             foreach (var blueprintElement in blueprintElements)
             {
                 // For claims and targets, the convention is to prepend the client name to the id
-                var key = CLAIM_AND_TARGET_TYPES.Contains(blueprintElement.type)
+                var key = BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(blueprintElement.type)
                     ? string.Format("{0}-{1}", client.Name, blueprintElement.id)
                     : blueprintElement.id;
 

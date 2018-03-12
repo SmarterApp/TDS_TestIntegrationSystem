@@ -9,13 +9,19 @@ namespace TDSQASystemAPI.BL.testpackage.administration
     public interface IItembankConfigurationDataService
     {
         /// <summary>
-        /// Create a new collection of Items
+        /// Create a collection of item properties for each item included in the teset package.
+        /// </summary>
+        /// <param name="testPackage"></param>
+        void CreateItemProperties(TestPackage.TestPackage testPackage);
+
+        /// <summary>
+        /// Create a new collection of Items for each item included in the test package.
         /// </summary>
         /// <param name="testPackage">The <code>TestPackage.TestPackage</code> containing the items.</param>
         void CreateItems(TestPackage.TestPackage testPackage);
 
         /// <summary>
-        /// Create a new collection of Stimuli
+        /// Create a new collection of Stimuli for each stimulus included in the test package.
         /// </summary>
         /// <param name="testPackage">The <code>TestPackage.TestPackage</code> containing the stimuli.</param>
         void CreateStimuli(TestPackage.TestPackage testPackage);
@@ -35,14 +41,16 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         IDictionary<string, StrandDTO> CreateStrands(TestPackage.TestPackage testPackage);
 
         /// <summary>
-        /// 
+        /// Insert records that will establish links between items and strand blueprints
         /// </summary>
+        /// /// <param name="testPackage">The <code>TestPackage.TestPackage</code> containing the subject information.</param>
         /// <param name="strandMap"></param>
         void LinkItemToStrands(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap);
 
         /// <summary>
-        /// 
+        /// Insert records that will establish links between items and stimuli.
         /// </summary>
+        /// <param name="testPackage"></param>
         void LinkItemsToStimuli(TestPackage.TestPackage testPackage);
     }
 }
