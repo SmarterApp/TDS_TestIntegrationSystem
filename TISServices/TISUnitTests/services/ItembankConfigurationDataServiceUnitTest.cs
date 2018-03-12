@@ -245,7 +245,27 @@ namespace TISUnitTests.services
             mockAaItemClDao.Verify(dao => dao.Insert(It.Is<List<AaItemClDTO>>(result =>
                 result.Count == 108)));
             mockSetOfItemStrandDao.Verify(dao => dao.Insert(It.Is<IList<SetOfItemStrandDTO>>(result =>
-                result.Count == 20)));
+            result.Count == 20)));
+        }
+
+        [TestMethod]
+        public void SetOfItemStimuli_ShouldCreateASetOfItemStimuli()
+        {
+            var testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            mockSetOfItemStimuliDao.Setup(dao => dao.Insert(It.IsAny<List<SetOfItemStimuliDTO>>()))
+                .Verifiable();
+
+            itembankConfigurationDataService.LinkItemsToStimuli(testPackage);
+
+            mockSetOfItemStimuliDao.Verify(dao => dao.Insert(It.Is<List<SetOfItemStimuliDTO>>(result =>
+                result.Count == 2
+                && result[0].SegmentKey.Equals("(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018")
+                && result[0].StimulusKey.Equals("187-3688")
+                && result[0].ItemKey.Equals("187-1434")
+                && result[1].SegmentKey.Equals("(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018")
+                && result[1].StimulusKey.Equals("187-3688")
+                && result[1].ItemKey.Equals("187-1432"))));
         }
     }
 }

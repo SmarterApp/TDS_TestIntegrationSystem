@@ -165,9 +165,20 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             subjectDAO.Insert(new List<SubjectDTO> { newSubjectDto });
         }
 
-        public void LinkItemsToStimuli(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap)
+        public void LinkItemsToStimuli(TestPackage.TestPackage testPackage)
         {
-            throw new NotImplementedException();
+            var allTestPackageStimuli = testPackage.GetAllStimuli();
+
+            var itemStimuliDtos = from stimulus in allTestPackageStimuli
+                                  from item in stimulus.ItemGroup.Item
+                                  select new SetOfItemStimuliDTO
+                                  {
+                                      ItemKey = item.Key,
+                                      StimulusKey = stimulus.Key,
+                                      SegmentKey = stimulus.AssessmentSegment.Key
+                                  };
+
+            setOfItemStimuliDao.Insert(itemStimuliDtos.ToList());
         }
 
         public void LinkItemToStrands(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap)

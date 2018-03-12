@@ -71,6 +71,7 @@ namespace TDSQASystemAPI.TestPackage
                     foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
                     {
                         var stimuli = from ig in form.ItemGroup
+                                      where ig.Stimulus != null
                                       select ig.Stimulus;
                         if (stimuli.Any())
                         {
@@ -82,6 +83,7 @@ namespace TDSQASystemAPI.TestPackage
                 {
                     var pool = segment.Item as AssessmentSegmentPool;
                     var stimuli = from ig in pool.ItemGroup
+                                  where ig.Stimulus != null
                                   select ig.Stimulus;
                     if (stimuli.Any())
                     {

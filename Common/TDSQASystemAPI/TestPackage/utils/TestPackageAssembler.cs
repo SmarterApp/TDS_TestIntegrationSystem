@@ -112,6 +112,8 @@ namespace TDSQASystemAPI.TestPackage.utils
             if (itemGroup.Stimulus != null)
             {
                 itemGroup.Stimulus.TestPackage = testPackage;
+                itemGroup.Stimulus.AssessmentSegment = segment;
+                itemGroup.Stimulus.ItemGroup = itemGroup;
             }
         }
 

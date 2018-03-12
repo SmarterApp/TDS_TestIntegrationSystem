@@ -43,6 +43,6 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// <summary>
         /// 
         /// </summary>
-        void LinkItemsToStimuli(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap);
+        void LinkItemsToStimuli(TestPackage.TestPackage testPackage);
     }
 }

@@ -14,6 +14,12 @@ namespace TDSQASystemAPI.TestPackage
         [XmlIgnore]
         public TestPackage TestPackage { get; set; }
 
+        [XmlIgnore]
+        public AssessmentSegment AssessmentSegment { get; set; }
+
+        [XmlIgnore]
+        public ItemGroup ItemGroup { get; set; }
+
         /// <summary>
         /// Return the identifier/"key" of this <code>ItemGroupStimulus</code>
         /// </summary>
