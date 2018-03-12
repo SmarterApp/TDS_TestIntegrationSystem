@@ -9,7 +9,7 @@ namespace TDSQASystemAPI.TestPackage.utils
     /// <summary>
     /// A class for building up a complete <code>TestPackage</code> after the XML has been deserialized.
     /// </summary>
-    public class TestPackageAssembler
+    public class TestPackageMapper
     {
         private static readonly XmlSerializer xmlSerializer = new XmlSerializer(typeof(TestPackage));
 

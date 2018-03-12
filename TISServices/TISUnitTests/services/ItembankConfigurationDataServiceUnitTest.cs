@@ -113,7 +113,7 @@ namespace TISUnitTests.services
         [TestMethod]
         public void Strand_ShouldCreateACollectionOfStrands()
         {
-            var loadedTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
             var subjectKey = string.Format("{0}-{1}", loadedTestPackage.publisher, loadedTestPackage.subject);
             var mockClient = new ClientDTO { Name = loadedTestPackage.publisher, ClientKey = 99 };
             var mockSubject = new SubjectDTO { Name = loadedTestPackage.subject, ClientKey = 99 };
@@ -201,7 +201,7 @@ namespace TISUnitTests.services
         [TestMethod]
         public void Stimuli_ShoulsCreateaACollectionOfStimuli()
         {
-            var loadedTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
 
             mockStimulusDao.Setup(dao => dao.Insert(It.IsAny<List<StimulusDTO>>()));
 
@@ -220,7 +220,7 @@ namespace TISUnitTests.services
         [TestMethod]
         public void Item_SouldCreateACollectionOfItems()
         {
-            var loadedTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
 
             mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()));
 
@@ -234,7 +234,7 @@ namespace TISUnitTests.services
         [TestMethod]
         public void SetOfItemStrand_ShouldCreateASetOfItemStrandCollection()
         {
-            var testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
             var strandMap = StrandBuilder.GetStrandDTODictionary(testPackage);
 
             mockAaItemClDao.Setup(dao => dao.Insert(It.IsAny<List<AaItemClDTO>>()))
@@ -253,7 +253,7 @@ namespace TISUnitTests.services
         [TestMethod]
         public void SetOfItemStimuli_ShouldCreateASetOfItemStimuli()
         {
-            var testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
 
             mockSetOfItemStimuliDao.Setup(dao => dao.Insert(It.IsAny<List<SetOfItemStimuliDTO>>()))
                 .Verifiable();
@@ -274,7 +274,7 @@ namespace TISUnitTests.services
         [TestMethod]
         public void ItemProperties_ShouldCreateItemPropertiesForTestPackage()
         {
-            var testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
 
             mockItemPropertyDao.Setup(dao => dao.Insert(It.IsAny<List<ItemPropertyDTO>>()));
 

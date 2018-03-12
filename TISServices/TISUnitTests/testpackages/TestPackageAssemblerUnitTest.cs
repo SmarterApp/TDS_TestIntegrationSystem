@@ -22,7 +22,7 @@ namespace TISUnitTests.testpackages
         [TestInitialize]
         public void Setup()
         {
-            testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldDeserializeAnItemScoreParameterWithAnItemScoreDimension()
         {
-            testPackage = TestPackageAssembler.FromXml(new XmlTextReader(SCORING_RULES_XML_FILE));
+            testPackage = TestPackageMapper.FromXml(new XmlTextReader(SCORING_RULES_XML_FILE));
 
             var assessmentSegmentForm = testPackage.Assessment[0].Segments[0].Item as AssessmentSegmentSegmentForms;
             var dimension = assessmentSegmentForm.SegmentForm[0]
@@ -133,7 +133,7 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldDeserializeSegmentBlueprintElementFromXmlWithEmptyListDefaults()
         {
-            testPackage = TestPackageAssembler.FromXml(new XmlTextReader(SEGMENT_BLUEPRINT_XML_FILE));
+            testPackage = TestPackageMapper.FromXml(new XmlTextReader(SEGMENT_BLUEPRINT_XML_FILE));
 
             var segmentBlueprints = testPackage.Assessment[0].Segments[0].SegmentBlueprint;
             Assert.AreEqual(1, segmentBlueprints[0].ItemSelection.Length);

@@ -14,7 +14,7 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldDeserializeAThssPackageAndHaveParentObjectsWiredUp()
         {
-            var thssTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(THSS_TEST_PACKAGE_XML));
+            var thssTestPackage = TestPackageMapper.FromXml(new XmlTextReader(THSS_TEST_PACKAGE_XML));
 
             Assert.AreEqual("SBAC_PT", thssTestPackage.publisher);
             Assert.AreEqual("ELA", thssTestPackage.subject);
@@ -32,7 +32,7 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldDeserializeAThssPackageAndContainRubricLists()
         {
-            var thssTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(THSS_TEST_PACKAGE_XML));
+            var thssTestPackage = TestPackageMapper.FromXml(new XmlTextReader(THSS_TEST_PACKAGE_XML));
 
             var forms = thssTestPackage.Assessment[0].Segments[0].Item as AssessmentSegmentSegmentForms;
             var rubricList = forms.SegmentForm[0]
