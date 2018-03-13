@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.itembank.daos;
@@ -21,8 +20,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private const string LANGUAGE_PROP_NAME = "Language";
         private const string GRADE_PROP_NAME = "Grade";
 
-        private readonly ITestPackageDao<SubjectDTO> subjectDAO;
-        private readonly ITestPackageDao<ClientDTO> clientDAO;
+        private readonly IItembankConfigurationDataQueryService itembankConfigurationDataQueryService;
+        private readonly ITestPackageDao<SubjectDTO> subjectDao;
         private readonly ITestPackageDao<StrandDTO> strandDAO;
         private readonly ITestPackageDao<ItemDTO> itemDAO;
         private readonly ITestPackageDao<StimulusDTO> stimuliDAO;
@@ -38,8 +37,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// </summary>
         public ItembankConfigurationDataService()
         {
-            subjectDAO = new SubjectDAO();
-            clientDAO = new ClientDAO();
+            itembankConfigurationDataQueryService = new ItembankConfigurationDataQueryService();
+            subjectDao = new SubjectDAO();
             strandDAO = new StrandDAO();
             itemDAO = new ItemDAO();
             stimuliDAO = new StimulusDAO();
@@ -49,8 +48,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             itemPropertyDao = new ItemPropertyDAO();
         }
 
-        public ItembankConfigurationDataService(ITestPackageDao<SubjectDTO> subjectDAO, 
-                                                ITestPackageDao<ClientDTO> clientDAO,
+        public ItembankConfigurationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
+                                                ITestPackageDao<SubjectDTO> subjectDao,
                                                 ITestPackageDao<StrandDTO> strandDAO,
                                                 ITestPackageDao<ItemDTO> itemDAO,
                                                 ITestPackageDao<StimulusDTO> stimuliDAO,
@@ -59,8 +58,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                 ITestPackageDao<SetOfItemStimuliDTO> setOfItemStimuliDao,
                                                 ITestPackageDao<ItemPropertyDTO> itemPropertyDao)
         {
-            this.subjectDAO = subjectDAO;
-            this.clientDAO = clientDAO;
+            this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
+            this.subjectDao = subjectDao;
             this.strandDAO = strandDAO;
             this.itemDAO = itemDAO;
             this.stimuliDAO = stimuliDAO;
@@ -158,15 +157,14 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public IDictionary<string, StrandDTO> CreateStrands(TestPackage.TestPackage testPackage)
         {
-            var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
+            var subjectKey = testPackage.GetSubjectKey();
 
-            var subjectList = subjectDAO.Find(subjectKey);
-            if (subjectList == null || !subjectList.Any())
+            var existingSubject = itembankConfigurationDataQueryService.FindSubject(subjectKey);
+            var existingClient = itembankConfigurationDataQueryService.FindClientByName(testPackage.publisher);
+            if (existingClient == null)
             {
-                throw new InvalidOperationException(string.Format("Could not find a subject for '{0}'", subjectKey));
+                throw new InvalidOperationException(string.Format("Could not find a client record with name '{0}'", testPackage.publisher));
             }
-
-            var client = GetClient(testPackage.publisher);
 
             var blueprintElements = from bp in testPackage.Blueprint
                           select bp;
@@ -177,7 +175,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
             BuildStrandsWithHierarchyFromBlueprintElements(blueprintElements,
                 newStrands,
-                client,
+                existingClient,
                 initialParentKey,
                 subjectKey,
                 (long)testPackage.version,
@@ -190,16 +188,20 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateSubject(TestPackage.TestPackage testPackage)
         {
-            var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
+            var subjectKey = testPackage.GetSubjectKey();
 
             // If a subject already exists, exit; there's nothing to do
-            var existingSubject = subjectDAO.Find(subjectKey);
-            if (existingSubject != null && existingSubject.Any())
+            var existingSubject = itembankConfigurationDataQueryService.FindSubject(subjectKey);
+            if (existingSubject == null)
             {
                 return;
             }
 
-            var client = GetClient(testPackage.publisher);
+            var client = itembankConfigurationDataQueryService.FindClientByName(testPackage.publisher);
+            if (client == null)
+            {
+                throw new InvalidOperationException(string.Format("Could not find a client record with name '{0}'", testPackage.publisher));
+            }
 
             var newSubjectDto = new SubjectDTO
             {
@@ -210,7 +212,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 TestVersion = (long)testPackage.version
             };
 
-            subjectDAO.Insert(new List<SubjectDTO> { newSubjectDto });
+            subjectDao.Insert(new List<SubjectDTO> { newSubjectDto });
         }
 
         public void LinkItemsToStimuli(TestPackage.TestPackage testPackage)
@@ -252,22 +254,6 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                              };
 
             setOfItemStrandDao.Insert(strandDtos.ToList());
-        }
-
-        /// <summary>
-        /// Look up the <code>TestPackage</code>'s client.
-        /// </summary>
-        /// <param name="clientName">The name of the client to find.  This will stored in the <code>TestPackage.publisher</code> field.</param>
-        /// <returns>The <code>ClientDTO</code> representing the client that "owns" this <code>TestPackage</code>.</returns>
-        private ClientDTO GetClient(string clientName)
-        {
-            var clientList = clientDAO.Find(clientName);
-            if (clientList == null || !clientList.Any())
-            {
-                throw new InvalidOperationException(string.Format("Could not find a client record with name '{0}'", clientName));
-            }
-
-            return clientList.First();
         }
 
         /// <summary>

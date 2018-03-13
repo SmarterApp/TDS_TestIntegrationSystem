@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -64,7 +65,15 @@ namespace TDSQASystemAPI.DAL
             }
         }
 
+        /// <summary>
+        /// The SQL responsible for fetching a collection of records from the database.
+        /// </summary>
         protected internal string SelectSql { get; set; }
+
+        /// <summary>
+        /// The SQL responsible for updating a collection of existing records in the database.
+        /// </summary>
+        protected internal string UpdateSql { get; set; }
 
         /// <summary>
         /// The type of the table-valued parameter used to pass the <code>IList<typeparamref name="T"/></code>.
@@ -87,14 +96,26 @@ namespace TDSQASystemAPI.DAL
                 using (var command = new SqlCommand(InsertSql, connection))
                 {
                     command.CommandType = CommandType.Text;
-                    var testeeAttributeParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordsToSave.ToDataTable());
-                    testeeAttributeParam.SqlDbType = SqlDbType.Structured;
-                    testeeAttributeParam.TypeName = TvpType;
+                    var tableParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordsToSave.ToDataTable());
+                    tableParam.SqlDbType = SqlDbType.Structured;
+                    tableParam.TypeName = TvpType;
 
                     connection.Open();
                     command.ExecuteNonQuery();
                 }
             }
+        }
+
+        /// <summary>
+        /// Update an existing record int he database (which is specified by the connection string)
+        /// </summary>
+        /// <remarks>
+        /// Unlike the other methods in this class, the <code>Update()</code> method expects the entire UPDATE SQL statement 
+        /// </remarks>
+        /// <param name="recordToUpdate">The <code>T</code> record to update.</param>
+        public virtual void Update(T recordToUpdate)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

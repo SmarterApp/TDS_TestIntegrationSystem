@@ -96,9 +96,14 @@ namespace TDSQASystemAPI.TestPackage
         }
 
         /// <summary>
-        /// 
+        /// Collect all of the <code>BlueprintElement</code>s from this <code>TestPackage</code> as a flattened map.
+        /// <remarks>
+        /// Since <code>BlueprintElement</code>s can be nested n-levels deep, "flattening" the hierarchy makes looking up a 
+        /// <code>BlueprintElement</code> by its identifier simpler.
+        /// </remarks>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A <code>IReadOnlyDictionary</code> of <code>BlueprintElement</code>s.  The key is the <code>BlueprintElement</code>'s identifier
+        /// and the value is the <code>BlueprintElement</code>.</returns>
         public IReadOnlyDictionary<string, BlueprintElement> GetAllTestPackageBlueprintElements()
         {
             var flattenedBlueprintDictionary = new Dictionary<string, BlueprintElement>();
@@ -106,6 +111,15 @@ namespace TDSQASystemAPI.TestPackage
             BuildFlatBlueprintElementList(Blueprint, flattenedBlueprintDictionary);
 
             return new ReadOnlyDictionary<string, BlueprintElement>(flattenedBlueprintDictionary);
+        }
+
+        /// <summary>
+        /// Get this <code>TestPackage</code>'s subject key.
+        /// </summary>
+        /// <returns>This <code>TestPackage</code>'s subject ke in the correct format.</returns>
+        public string GetSubjectKey()
+        {
+            return string.Format("{0}-{1}", publisher, subject);
         }
 
         /// <summary>

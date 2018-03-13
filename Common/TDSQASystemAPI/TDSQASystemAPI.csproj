@@ -153,7 +153,11 @@
     <Compile Include="BL\LockingTestCollection.cs" />
     <Compile Include="BL\Sandlot.cs" />
     <Compile Include="BL\TestOpportunity.cs" />
+    <Compile Include="BL\testpackage\administration\IItembankAdministrationDataService.cs" />
+    <Compile Include="BL\testpackage\administration\IItembankConfigurationDataQueryService.cs" />
     <Compile Include="BL\testpackage\administration\IItembankConfigurationDataService.cs" />
+    <Compile Include="BL\testpackage\administration\ItembankAdministrationDataService.cs" />
+    <Compile Include="BL\testpackage\administration\ItembankConfigurationDataQueryService.cs" />
     <Compile Include="BL\testpackage\administration\ItembankConfigurationDataService.cs" />
     <Compile Include="BL\XmlRepository.cs" />
     <Compile Include="Config\AdministrationInfo.cs" />

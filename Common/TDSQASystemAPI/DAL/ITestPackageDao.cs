@@ -20,5 +20,11 @@ namespace TDSQASystemAPI.DAL
         /// <param name="criteria"></param>
         /// <returns></returns>
         List<T> Find(object criteria);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recordToUpdate"></param>
+        void Update(T recordToUpdate);
     }
 }

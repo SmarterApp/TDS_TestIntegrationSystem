@@ -26,6 +26,7 @@ namespace TISUnitTests.services
         private readonly Mock<ITestPackageDao<SetOfItemStrandDTO>> mockSetOfItemStrandDao = new Mock<ITestPackageDao<SetOfItemStrandDTO>>();
         private readonly Mock<ITestPackageDao<SetOfItemStimuliDTO>> mockSetOfItemStimuliDao = new Mock<ITestPackageDao<SetOfItemStimuliDTO>>();
         private readonly Mock<ITestPackageDao<ItemPropertyDTO>> mockItemPropertyDao = new Mock<ITestPackageDao<ItemPropertyDTO>>();
+        private readonly Mock<IItembankConfigurationDataQueryService> mockItembankConfigurationQueryService = new Mock<IItembankConfigurationDataQueryService>();
 
         private IItembankConfigurationDataService itembankConfigurationDataService;
         private TestPackage testPackage = new TestPackage
@@ -39,8 +40,8 @@ namespace TISUnitTests.services
         public void Setup()
         {
             itembankConfigurationDataService =
-                new ItembankConfigurationDataService(mockSubjectDao.Object, 
-                    mockClientDao.Object, 
+                new ItembankConfigurationDataService(mockItembankConfigurationQueryService.Object, 
+                    mockSubjectDao.Object,
                     mockStrandDao.Object,
                     mockItemDao.Object,
                     mockStimulusDao.Object,
@@ -57,8 +58,8 @@ namespace TISUnitTests.services
 
             mockClientDao.Setup(dao => dao.Find(testPackage.publisher))
                 .Returns(new List<ClientDTO> { new ClientDTO { Name = testPackage.publisher, ClientKey = 99 } });
-            mockSubjectDao.Setup(dao => dao.Find(subjectKey))
-                .Returns(new List<SubjectDTO>());
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(It.IsAny<string>()))
+                .Returns((SubjectDTO)null);
             mockSubjectDao.Setup(dao => dao.Insert(It.IsAny<IList<SubjectDTO>>()))
                 .Verifiable();
 
@@ -81,8 +82,10 @@ namespace TISUnitTests.services
 
             mockClientDao.Setup(dao => dao.Find(testPackage.publisher))
                 .Returns(new List<ClientDTO> { new ClientDTO { Name = testPackage.publisher, ClientKey = 99 } });
-            mockSubjectDao.Setup(dao => dao.Find(subjectKey))
-                .Returns(new List<SubjectDTO> { new SubjectDTO { Name = testPackage.subject, ClientKey = 99 } });
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(It.IsAny<string>()))
+                .Returns(new SubjectDTO { Name = testPackage.subject, ClientKey = 99 });
+            mockSubjectDao.Setup(dao => dao.Insert(It.IsAny<IList<SubjectDTO>>()))
+                .Verifiable();
 
             itembankConfigurationDataService.CreateSubject(testPackage);
 
@@ -96,10 +99,10 @@ namespace TISUnitTests.services
         {
             var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
 
-            mockClientDao.Setup(dao => dao.Find(testPackage.publisher))
-                .Returns(new List<ClientDTO>());
-            mockSubjectDao.Setup(dao => dao.Find(subjectKey))
-                .Returns(new List<SubjectDTO>());
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
+                .Returns((ClientDTO)null);
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(subjectKey))
+                .Returns((SubjectDTO)null);
 
             var exception = 
                 Assert.ThrowsException<InvalidOperationException>(() => itembankConfigurationDataService.CreateSubject(testPackage));
