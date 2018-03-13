@@ -38,9 +38,9 @@ namespace TISUnitTests.services
                 publisher = "UNIT_TEST"
             };
 
-            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindTestAdmin(It.IsAny<string>()))
+            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindTestAdmin(testPackage.publisher))
                 .Returns((TestAdminDTO)null);
-            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindClientByName(It.IsAny<string>()))
+            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
                 .Returns(new ClientDTO { ClientKey = 42L, Name = testPackage.publisher });
             mockTestAdminDao.Setup(dao => dao.Insert(It.IsAny<List<TestAdminDTO>>()))
                 .Verifiable();
@@ -77,9 +77,9 @@ namespace TISUnitTests.services
                 TestVersion = 99L
             };
 
-            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindTestAdmin(It.IsAny<string>()))
+            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindTestAdmin(testPackage.publisher))
                 .Returns(existingTestAdminDto);
-            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindClientByName(It.IsAny<string>()))
+            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
                 .Returns(new ClientDTO { ClientKey = 42L, Name = testPackage.publisher });
             mockTestAdminDao.Setup(dao => dao.Insert(It.IsAny<List<TestAdminDTO>>()))
                 .Verifiable();
@@ -108,9 +108,9 @@ namespace TISUnitTests.services
                 publisher = "UNIT_TEST"
             };
 
-            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindTestAdmin(It.IsAny<string>()))
+            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindTestAdmin(testPackage.publisher))
                 .Verifiable();
-            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindClientByName(It.IsAny<string>()))
+            mockItembankConfigurationDataQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
                 .Returns(null as ClientDTO);
             mockTestAdminDao.Setup(dao => dao.Insert(It.IsAny<List<TestAdminDTO>>()))
                 .Verifiable();
