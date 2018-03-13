@@ -56,17 +56,17 @@ namespace TISUnitTests.services
         {
             var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
 
-            mockClientDao.Setup(dao => dao.Find(testPackage.publisher))
-                .Returns(new List<ClientDTO> { new ClientDTO { Name = testPackage.publisher, ClientKey = 99 } });
-            mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(It.IsAny<string>()))
-                .Returns((SubjectDTO)null);
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
+                .Returns(new ClientDTO { Name = testPackage.publisher, ClientKey = 99 });
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(subjectKey))
+                .Returns(null as SubjectDTO);
             mockSubjectDao.Setup(dao => dao.Insert(It.IsAny<IList<SubjectDTO>>()))
                 .Verifiable();
 
             itembankConfigurationDataService.CreateSubject(testPackage);
 
-            mockClientDao.Verify(dao => dao.Find(testPackage.publisher));
-            mockSubjectDao.Verify(dao => dao.Find(subjectKey));
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindClientByName(testPackage.publisher));
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindSubject(subjectKey));
             mockSubjectDao.Verify(dao => dao.Insert(It.Is<List<SubjectDTO>>(subject => 
                 subject.Count == 1 
                     && subject[0].Name.Equals(testPackage.subject)
@@ -80,8 +80,8 @@ namespace TISUnitTests.services
         {
             var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
 
-            mockClientDao.Setup(dao => dao.Find(testPackage.publisher))
-                .Returns(new List<ClientDTO> { new ClientDTO { Name = testPackage.publisher, ClientKey = 99 } });
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
+                .Returns(new ClientDTO { Name = testPackage.publisher, ClientKey = 99L });
             mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(It.IsAny<string>()))
                 .Returns(new SubjectDTO { Name = testPackage.subject, ClientKey = 99 });
             mockSubjectDao.Setup(dao => dao.Insert(It.IsAny<IList<SubjectDTO>>()))
@@ -89,8 +89,8 @@ namespace TISUnitTests.services
 
             itembankConfigurationDataService.CreateSubject(testPackage);
 
-            mockSubjectDao.Verify(dao => dao.Find(subjectKey));
-            mockClientDao.Verify(dao => dao.Find(testPackage.publisher), Times.Never);
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindSubject(subjectKey));
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindClientByName(testPackage.publisher), Times.Never);
             mockSubjectDao.Verify(dao => dao.Insert(It.IsAny<IList<SubjectDTO>>()), Times.Never);
         }
 
@@ -100,14 +100,14 @@ namespace TISUnitTests.services
             var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
 
             mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
-                .Returns((ClientDTO)null);
+                .Returns(null as ClientDTO);
             mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(subjectKey))
-                .Returns((SubjectDTO)null);
+                .Returns(null as SubjectDTO);
 
             var exception = 
                 Assert.ThrowsException<InvalidOperationException>(() => itembankConfigurationDataService.CreateSubject(testPackage));
 
-            mockClientDao.Verify(dao => dao.Find(testPackage.publisher));
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindClientByName(testPackage.publisher));
             mockSubjectDao.Verify(dao => dao.Insert(It.IsAny<List<SubjectDTO>>()), Times.Never);
 
             Assert.AreEqual("Could not find a client record with name 'unit-test-publisher'", exception.Message);
@@ -121,17 +121,17 @@ namespace TISUnitTests.services
             var mockClient = new ClientDTO { Name = loadedTestPackage.publisher, ClientKey = 99 };
             var mockSubject = new SubjectDTO { Name = loadedTestPackage.subject, ClientKey = 99 };
 
-            mockClientDao.Setup(dao => dao.Find(loadedTestPackage.publisher))
-                .Returns(new List<ClientDTO> { mockClient });
-            mockSubjectDao.Setup(dao => dao.Find(subjectKey))
-                .Returns(new List<SubjectDTO> { mockSubject });
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(loadedTestPackage.publisher))
+                .Returns(mockClient);
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(subjectKey))
+                .Returns(mockSubject);
             mockStrandDao.Setup(dao => dao.Insert(It.IsAny<IList<StrandDTO>>()))
                 .Verifiable();
 
             IDictionary<string, StrandDTO> result = itembankConfigurationDataService.CreateStrands(loadedTestPackage);
 
-            mockClientDao.Verify(dao => dao.Find(loadedTestPackage.publisher));
-            mockSubjectDao.Verify(dao => dao.Find(subjectKey));
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(loadedTestPackage.publisher));
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(subjectKey));
             mockStrandDao.Verify(dao => dao.Insert(It.Is<IList<StrandDTO>>(list => list.Count == 77))); // 77 nested BP elements in the example Test Package
 
             // Verify a leaf-level StrandDTO
@@ -161,18 +161,18 @@ namespace TISUnitTests.services
             var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
             var mockClient = new ClientDTO { Name = testPackage.publisher, ClientKey = 99 };
 
-            mockClientDao.Setup(dao => dao.Find(testPackage.publisher))
-                .Returns(new List<ClientDTO> { mockClient });
-            mockSubjectDao.Setup(dao => dao.Find(subjectKey))
-                .Returns(new List<SubjectDTO>());
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
+                .Returns(mockClient);
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(subjectKey))
+                .Returns(null as SubjectDTO);
             mockStrandDao.Setup(dao => dao.Insert(It.IsAny<IList<StrandDTO>>()))
                 .Verifiable();
 
             var exception = 
                 Assert.ThrowsException<InvalidOperationException>(() => itembankConfigurationDataService.CreateStrands(testPackage));
 
-            mockClientDao.Verify(dao => dao.Find(testPackage.publisher), Times.Never);
-            mockSubjectDao.Verify(dao => dao.Find(subjectKey));
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindClientByName(testPackage.publisher), Times.Never);
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindSubject(subjectKey));
             mockStrandDao.Verify(dao => dao.Insert(It.IsAny<List<StrandDTO>>()), Times.Never);
 
             Assert.AreEqual(string.Format("Could not find a subject for '{0}'", subjectKey), exception.Message);
@@ -184,18 +184,18 @@ namespace TISUnitTests.services
             var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
             var mockSubject = new SubjectDTO { Name = testPackage.subject, ClientKey = 99 };
 
-            mockClientDao.Setup(dao => dao.Find(testPackage.publisher))
-                .Returns(new List<ClientDTO>());
-            mockSubjectDao.Setup(dao => dao.Find(subjectKey))
-                .Returns(new List<SubjectDTO> { mockSubject });
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
+                .Returns(null as ClientDTO);
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(subjectKey))
+                .Returns(mockSubject);
             mockStrandDao.Setup(dao => dao.Insert(It.IsAny<IList<StrandDTO>>()))
                 .Verifiable();
 
             var exception =
                 Assert.ThrowsException<InvalidOperationException>(() => itembankConfigurationDataService.CreateStrands(testPackage));
 
-            mockClientDao.Verify(dao => dao.Find(testPackage.publisher));
-            mockSubjectDao.Verify(dao => dao.Find(subjectKey));
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindClientByName(testPackage.publisher));
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindSubject(subjectKey));
             mockStrandDao.Verify(dao => dao.Insert(It.IsAny<List<StrandDTO>>()), Times.Never);
 
             Assert.AreEqual(string.Format("Could not find a client record with name '{0}'", testPackage.publisher), exception.Message);
