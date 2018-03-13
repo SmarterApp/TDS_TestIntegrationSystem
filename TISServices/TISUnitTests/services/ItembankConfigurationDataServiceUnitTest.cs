@@ -54,10 +54,10 @@ namespace TISUnitTests.services
         [TestMethod]
         public void Subject_ShouldCreateANewSubject()
         {
-            var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
+            var subjectKey = testPackage.GetSubjectKey();
 
             mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
-                .Returns(new ClientDTO { Name = testPackage.publisher, ClientKey = 99 });
+                .Returns(new ClientDTO { Name = testPackage.publisher, ClientKey = 99L });
             mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(subjectKey))
                 .Returns(null as SubjectDTO);
             mockSubjectDao.Setup(dao => dao.Insert(It.IsAny<IList<SubjectDTO>>()))
@@ -71,19 +71,19 @@ namespace TISUnitTests.services
                 subject.Count == 1 
                     && subject[0].Name.Equals(testPackage.subject)
                     && subject[0].Grade.Equals(string.Empty)
-                    && subject[0].ClientKey == 99
+                    && subject[0].ClientKey == 99L
                     && subject[0].TestVersion == 42L)));
         }
 
         [TestMethod]
         public void Subject_ShouldNotCreateASubjectIfItAlreadyExists()
         {
-            var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
+            var subjectKey = testPackage.GetSubjectKey();
 
             mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
                 .Returns(new ClientDTO { Name = testPackage.publisher, ClientKey = 99L });
             mockItembankConfigurationQueryService.Setup(svc => svc.FindSubject(It.IsAny<string>()))
-                .Returns(new SubjectDTO { Name = testPackage.subject, ClientKey = 99 });
+                .Returns(new SubjectDTO { Name = testPackage.subject, ClientKey = 99L });
             mockSubjectDao.Setup(dao => dao.Insert(It.IsAny<IList<SubjectDTO>>()))
                 .Verifiable();
 
@@ -97,7 +97,7 @@ namespace TISUnitTests.services
         [TestMethod]
         public void Subject_ShouldThrowInvalidOperationExceptionIfThereIsNoClientRecord()
         {
-            var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
+            var subjectKey = testPackage.GetSubjectKey();
 
             mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
                 .Returns(null as ClientDTO);
@@ -117,7 +117,7 @@ namespace TISUnitTests.services
         public void Strand_ShouldCreateACollectionOfStrands()
         {
             var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
-            var subjectKey = string.Format("{0}-{1}", loadedTestPackage.publisher, loadedTestPackage.subject);
+            var subjectKey = loadedTestPackage.GetSubjectKey();
             var mockClient = new ClientDTO { Name = loadedTestPackage.publisher, ClientKey = 99 };
             var mockSubject = new SubjectDTO { Name = loadedTestPackage.subject, ClientKey = 99 };
 
@@ -159,7 +159,7 @@ namespace TISUnitTests.services
         public void Strand_ShouldThrowExceptionWhenSubjectCannotBeFound()
         {
             var subjectKey = string.Format("{0}-{1}", testPackage.publisher, testPackage.subject);
-            var mockClient = new ClientDTO { Name = testPackage.publisher, ClientKey = 99 };
+            var mockClient = new ClientDTO { Name = testPackage.publisher, ClientKey = 99L };
 
             mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
                 .Returns(mockClient);

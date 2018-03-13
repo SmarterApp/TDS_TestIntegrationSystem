@@ -160,6 +160,11 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             var subjectKey = testPackage.GetSubjectKey();
 
             var existingSubject = itembankConfigurationDataQueryService.FindSubject(subjectKey);
+            if (existingSubject == null)
+            {
+                throw new InvalidOperationException(string.Format("Could not find a subject for '{0}'", subjectKey));
+            }
+
             var existingClient = itembankConfigurationDataQueryService.FindClientByName(testPackage.publisher);
             if (existingClient == null)
             {
@@ -192,7 +197,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
             // If a subject already exists, exit; there's nothing to do
             var existingSubject = itembankConfigurationDataQueryService.FindSubject(subjectKey);
-            if (existingSubject == null)
+            if (existingSubject != null)
             {
                 return;
             }
