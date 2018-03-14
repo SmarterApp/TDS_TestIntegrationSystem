@@ -30,10 +30,16 @@ namespace TDSQASystemAPI.TestPackage.utils
       
             // WIRE UP ASSESSMENTS
             // 1.  Set the assesment's parent test package property
-            // 2.  Build up the Assessment-wide Tools
+            // 2.  Update each segment's Assessment property to denote its parent assessment
+            // 3.  Build up the Assessment-wide Tools
             testPackage.Assessment.ForEach(a => 
             {
                 a.TestPackage = testPackage;
+
+                a.Segments.ForEach(s =>
+                {
+                    s.Assessment = a;
+                });
 
                 var assessmentElement = testPackageXDocument.Root.Elements("Assessment")
                     .Where(el => el.Attribute("id").Value.Equals(a.id))
@@ -42,11 +48,7 @@ namespace TDSQASystemAPI.TestPackage.utils
                 a.Tools = AssembleTools(assessmentElement);
             });
 
-            // WIRE UP SEGMENTS
-            // 1. Set the segment's parent Assessment property
-            testPackage.Assessment = testPackage.Assessment.SelectMany(a => a.Segments, (a, s) => s.Assessment = a)
-                .ToArray();
-
+            // WIRE UP SEGMENTS            
             var allSegments = from a in testPackage.Assessment
                               from s in a.Segments
                               select s;

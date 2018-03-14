@@ -344,6 +344,8 @@
     <Compile Include="TestPackage\TestPackageXsd.cs" />
     <Compile Include="TestPackage\ToolsTool.cs" />
     <Compile Include="TestPackage\utils\BlueprintElementTypes.cs" />
+    <Compile Include="TestPackage\utils\ItemSelectionDefaults.cs" />
+    <Compile Include="TestPackage\utils\SelectionAlgorithmTypes.cs" />
     <Compile Include="TestPackage\utils\TestPackageMapper.cs" />
     <Compile Include="TestPackage\utils\ToolMapper.cs" />
     <Compile Include="TestResults\Comment.cs" />

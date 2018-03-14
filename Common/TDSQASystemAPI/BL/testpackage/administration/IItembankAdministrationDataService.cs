@@ -14,5 +14,11 @@
         /// </summary>
         /// <param name="testPackage">The <code>TestPackage</code> containing the test administration data.</param>
         void SaveTestAdministration(TestPackage.TestPackage testPackage);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testPackage">The <code>TestPackage</code> containing the administration subject data.</param>
+        void CreateSetOfAdminSubjects(TestPackage.TestPackage testPackage);
     }
 }

@@ -135,7 +135,7 @@
     <Compile Include="testpackages\ItemGroupItemBlueprintReferenceUnitTest.cs" />
     <Compile Include="testpackages\ItemPositionUnitTest.cs" />
     <Compile Include="testpackages\TeacherHandScoringUnitTest.cs" />
-    <Compile Include="testpackages\TestPackageAssemblerUnitTest.cs" />
+    <Compile Include="testpackages\TestPackagemapperUnitTest.cs" />
     <Compile Include="testpackages\TestPackageMethodUnitTest.cs" />
     <Compile Include="testpackages\ToolDefaultsUnitTest.cs" />
     <Compile Include="utils\ReflectionObjectPopulator.cs" />
@@ -171,6 +171,9 @@
     <Content Include="resources\test-packages\new-xsd\test-specification-sample-1.xml" />
     <Content Include="resources\test-packages\new-xsd\thss-test-specification-sample-1.xml" />
     <Content Include="resources\test-packages\new-xsd\V2-%28SBAC_PT%29IRP-GRADE-11-MATH-EXAMPLE.xml" />
+    <Content Include="resources\test-packages\new-xsd\V2-%28SBAC_PT%29IRP-GRADE-11-MATH-MULTI-SEGMENT-EXAMPLE.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29IRP-Perf-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-MATH-3-Summer-2015-2016-UNIT-TEST.xml" />

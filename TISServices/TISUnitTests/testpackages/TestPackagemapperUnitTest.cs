@@ -10,9 +10,10 @@ using TDSQASystemAPI.TestPackage.utils;
 namespace TISUnitTests.testpackages
 {
     [TestClass]
-    public class TestPackageAssemblerUnitTest
+    public class TestPackagemapperUnitTest
     {
         private const string TEST_PACKAGE_XML_FILE = @"..\..\resources\test-packages\new-xsd\test-specification-sample-1.xml";
+        private const string MULTI_SEGMENT_SINGLE_ASSESSMENT_TEST_PACKAGE_XML_FILE = @"..\..\resources\test-packages\new-xsd\V2-(SBAC_PT)IRP-GRADE-11-MATH-MULTI-SEGMENT-EXAMPLE.xml";
         private const string SCORING_RULES_XML_FILE = @"..\..\resources\test-packages\new-xsd\scoring-rules.xml";
         private const string SEGMENT_BLUEPRINT_XML_FILE = @"..\..\resources\test-packages\new-xsd\segment-blueprint-element.xml";
 
@@ -139,6 +140,19 @@ namespace TISUnitTests.testpackages
             Assert.AreEqual(1, segmentBlueprints[0].ItemSelection.Length);
             Assert.AreEqual(1, segmentBlueprints[1].ItemSelection.Length);
             Assert.IsNull(segmentBlueprints[2].ItemSelection);
+        }
+
+        [TestMethod]
+        public void ShouldDeserializeATestPackageWithASingleAssessmentAndMultipleSegments()
+        {
+            // File has one assessment with two segments
+            var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(MULTI_SEGMENT_SINGLE_ASSESSMENT_TEST_PACKAGE_XML_FILE));
+
+            Assert.AreEqual(1, loadedTestPackage.Assessment.Length);
+            Assert.AreEqual(2, loadedTestPackage.Assessment[0].Segments.Length);
+
+            Assert.IsNotNull(loadedTestPackage.Assessment[0].Segments[0].Assessment);
+            Assert.IsNotNull(loadedTestPackage.Assessment[0].Segments[1].Assessment);
         }
     }
 }

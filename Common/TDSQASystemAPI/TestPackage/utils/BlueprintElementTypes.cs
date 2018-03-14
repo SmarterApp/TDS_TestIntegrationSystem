@@ -4,7 +4,7 @@
     /// Identify and cateogrize the various types of <code>BlueprintElement</code>s that can be specified in a 
     /// <code>TestPackage</code>.
     /// </summary>
-    public class BlueprintElementTypes
+    public sealed class BlueprintElementTypes
     {
         public const string STRAND = "strand";
         public const string CONTENT_LEVEL = "contentlevel";

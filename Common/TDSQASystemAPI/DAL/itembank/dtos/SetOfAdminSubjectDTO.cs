@@ -19,8 +19,8 @@
         public int MaxItems { get; set; }
         public double Slope { get; set; }
         public double Intercept { get; set; }
-        public int FieldTestStartPosition { get; set; } // maps to ftstartpos in tblSetOfAdminSubjects
-        public int FieldTestEndPosition { get; set; } // maps to ftendpos in tblSetOfAdminSubjects
+        public int? FieldTestStartPosition { get; set; } // maps to ftstartpos in tblSetOfAdminSubjects
+        public int? FieldTestEndPosition { get; set; } // maps to ftendpos in tblSetOfAdminSubjects
         public int FieldTestMinItems { get; set; } // maps to ftminitems in tblSetOfAdminSubjects
         public int FieldTestMaxItems { get; set; } // maps to ftmaxitems in tblSetOfAdminSubjects
         public string SelectionAlgorithm { get; set; }
@@ -37,9 +37,9 @@
         public long TestVersion { get; set; }  // maps to loadconfig in tblSetOfAdminSubjects
         public string Contract { get; set; }
         public string TestType { get; set; }
-        public double PrecisionTarget { get; set; }
-        public double AdaptiveCut { get; set; }
-        public double TooCloseSEs { get; set; }
+        public double? PrecisionTarget { get; set; }
+        public double? AdaptiveCut { get; set; }
+        public double? TooCloseSEs { get; set; }
         public double AbilityWeight { get; set; }
         public bool ComputeAbilityEstimates { get; set; }
         public double RcAbilityWeight { get; set; }
