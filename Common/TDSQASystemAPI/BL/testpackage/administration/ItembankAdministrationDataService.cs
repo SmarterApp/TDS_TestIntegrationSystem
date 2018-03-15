@@ -16,12 +16,14 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly ITestPackageDao<TestAdminDTO> testAdminDao;
         private readonly ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao;
         private readonly ITestPackageDao<AdminStrandDTO> adminStrandDao;
+        private readonly ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao;
 
         public ItembankAdministrationDataService()
         {
             setOfAdminSubjectDao = new SetOfAdminSubjectDAO();
             testAdminDao = new TestAdminDAO();
             adminStrandDao = new AdminStrandDAO();
+            setOfAdminItemDao = new SetOfAdminItemDAO();
             itembankConfigurationDataQueryService = 
                 new ItembankConfigurationDataQueryService(new SubjectDAO(), new ClientDAO(), testAdminDao);
             
@@ -30,12 +32,14 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public ItembankAdministrationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
                                                  ITestPackageDao<TestAdminDTO> testAdminDao,
                                                  ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao,
-                                                 ITestPackageDao<AdminStrandDTO> adminStrandDao)
+                                                 ITestPackageDao<AdminStrandDTO> adminStrandDao,
+                                                 ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.testAdminDao = testAdminDao;
             this.setOfAdminSubjectDao = setOfAdminSubjectDao;
             this.adminStrandDao = adminStrandDao;
+            this.setOfAdminItemDao = setOfAdminItemDao;
         }
 
         public void CreateAdminStrands(TestPackage.TestPackage testPackge, IDictionary<string, StrandDTO> strandMap)
@@ -85,6 +89,70 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 };
 
             adminStrandDao.Insert(segmentAdminStrandDtos.ToList());
+        }
+
+        public void CreateSetOfAdminItems(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap)
+        {
+            var setOfAdminItemDtos = 
+                from item in testPackage.GetAllItems()
+                    let irtA = (from p in item.ItemScoreDimension.ItemScoreParameter
+                                where p.measurementParameter.ToLower().Trim().Equals("a")
+                                orderby p.value descending
+                                select p.value)
+                    let irtB = (from p in item.ItemScoreDimension.ItemScoreParameter
+                                where p.measurementParameter.ToLower().Trim().StartsWith("b")
+                                select p.value).Average()
+                    let irtC = (from p in item.ItemScoreDimension.ItemScoreParameter
+                                where p.measurementParameter.ToLower().Trim().Equals("c")
+                                orderby p.value descending
+                                select p.value)
+                    let claimName = (from bpRef in item.BlueprintReferences
+                                     join strand in strandMap
+                                         on bpRef.idRef equals strand.Key
+                                     where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Value.Type)
+                                     select BlueprintElementTypes.CLAIM_TYPES.Contains(strand.Value.Type)
+                                         ? strand.Value.Key
+                                         : strand.Value.Key.Substring(0, strand.Value.Key.IndexOf('|'))).First()
+                    let leafTargetKey = (from bpRef in item.BlueprintReferences
+                                         join strand in strandMap
+                                             on bpRef.idRef equals strand.Key
+                                         where BlueprintElementTypes.TARGET_TYPES.Contains(strand.Value.Type) 
+                                             && strand.Value.IsLeafTarget
+                                         select strand.Value.Key)
+                    let bVector = irtB == SetOfAdminItemDefaults.IRT_B
+                        ? string.Format("{0:0.000000000000000}", irtB)
+                        : string.Join(";", (from p in item.ItemScoreDimension.ItemScoreParameter
+                            where p.measurementParameter.ToLower().Trim().StartsWith("b")
+                            select string.Format("{0:0.000000000000000}", p.value)).ToArray())
+                    select new SetOfAdminItemDTO
+                    {
+                        ItemKey = item.Key,
+                        SegmentKey = item.AssessmentSegment.Key,
+                        GroupId = item.ItemGroup.Key,
+                        GroupKey = string.Format("{0}_{1}", item.ItemGroup.Key, SetOfAdminItemDefaults.BLOCK_ID),
+                        ItemPosition = item.Position,
+                        IsFieldTest = item.fieldTest,
+                        IsActive = true,
+                        IrtB = irtB.ToString("0.000000000000000"),
+                        IsRequired = item.responseRequired,
+                        BlockId = SetOfAdminItemDefaults.BLOCK_ID,
+                        TestAdminKey = testPackage.publisher,
+                        StrandKey = leafTargetKey.Any() 
+                            ? leafTargetKey.First() 
+                            : claimName,
+                        TestVersion = (long)testPackage.version,
+                        UpdatedTestVersion = (long)testPackage.version,
+                        StrandName = claimName,
+                        IrtA = irtA.Any() ? irtA.First() : SetOfAdminItemDefaults.IRT_A,
+                        IrtC = irtC.Any() ? irtC.First() : SetOfAdminItemDefaults.IRT_C,
+                        IrtModel = item.ItemScoreDimension.measurementModel,
+                        ClString = item.AssessmentSegment.algorithmType.ToLower().Contains("adaptive")
+                            ? CreateClString(item.BlueprintReferences, strandMap)
+                            : null,
+                        BVector = bVector
+                    };
+
+            setOfAdminItemDao.Insert(setOfAdminItemDtos.ToList());
         }
 
         public void CreateSetOfAdminSubjects(TestPackage.TestPackage testPackage)
@@ -236,6 +304,18 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             {
                 testAdminDao.Update(newTestAdmin);
             }
+        }
+
+        private string CreateClString(ItemGroupItemBlueprintReference[] itemBpRefs, IDictionary<string, StrandDTO> strandMap)
+        {
+            var strandKeys = from bpRef in itemBpRefs
+                             join strand in strandMap
+                                 on bpRef.idRef equals strand.Key
+                             where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Value.Type)
+                                 || strand.Value.Type.Equals(BlueprintElementTypes.AFFINITY_GROUP)
+                             select strand.Value.Key;
+
+            return string.Join(";", strandKeys.ToArray());
         }
     }
 }

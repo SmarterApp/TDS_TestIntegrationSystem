@@ -346,6 +346,7 @@
     <Compile Include="TestPackage\utils\BlueprintElementTypes.cs" />
     <Compile Include="TestPackage\utils\ItemSelectionDefaults.cs" />
     <Compile Include="TestPackage\utils\SelectionAlgorithmTypes.cs" />
+    <Compile Include="TestPackage\utils\SetOfAdminItemDefaults.cs" />
     <Compile Include="TestPackage\utils\TestPackageMapper.cs" />
     <Compile Include="TestPackage\utils\ToolMapper.cs" />
     <Compile Include="TestResults\Comment.cs" />

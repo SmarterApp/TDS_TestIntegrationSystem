@@ -22,6 +22,7 @@ namespace TISUnitTests.services
         private Mock<ITestPackageDao<TestAdminDTO>> mockTestAdminDao = new Mock<ITestPackageDao<TestAdminDTO>>();
         private Mock<ITestPackageDao<SetOfAdminSubjectDTO>> mockSetOfAdminSubjectDao = new Mock<ITestPackageDao<SetOfAdminSubjectDTO>>();
         private Mock<ITestPackageDao<AdminStrandDTO>> mockAdminStrandDao = new Mock<ITestPackageDao<AdminStrandDTO>>();
+        private Mock<ITestPackageDao<SetOfAdminItemDTO>> mockSetOfAdminItemDao = new Mock<ITestPackageDao<SetOfAdminItemDTO>>();
         private Mock<IItembankConfigurationDataQueryService> mockItembankConfigurationDataQueryService = new Mock<IItembankConfigurationDataQueryService>();
 
         private IItembankAdministrationDataService itembankAdministrationDataService;
@@ -33,7 +34,8 @@ namespace TISUnitTests.services
                 new ItembankAdministrationDataService(mockItembankConfigurationDataQueryService.Object,
                     mockTestAdminDao.Object,
                     mockSetOfAdminSubjectDao.Object,
-                    mockAdminStrandDao.Object);
+                    mockAdminStrandDao.Object,
+                    mockSetOfAdminItemDao.Object);
         }
 
         [TestMethod]
@@ -178,6 +180,22 @@ namespace TISUnitTests.services
 
             mockAdminStrandDao.Verify(dao => dao.Insert(It.Is<List<AdminStrandDTO>>(result =>
                 EvaluateShouldCreateACollectionOfAdminStrands(result))));
+        }
+
+        [TestMethod]
+        public void SetOfAdminItem_ShouldCreateASetOfAdminItemsCollection()
+        {
+            // This test package has two assessments, each with one segment
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var strandMap = StrandBuilder.GetStrandDTODictionary(testPackage);
+
+            mockSetOfAdminItemDao.Setup(dao => dao.Insert(It.IsAny<List<SetOfAdminItemDTO>>()))
+                .Verifiable();
+
+            itembankAdministrationDataService.CreateSetOfAdminItems(testPackage, strandMap);
+
+            mockSetOfAdminItemDao.Verify(dao => dao.Insert(It.Is<List<SetOfAdminItemDTO>>(result =>
+                EvaluateShouldCreateASetOfAdminItemsCollection(result))));
         }
 
         private bool EvaluateShouldInsertSetOfAdminSubjectRecordsForAllSegments(List<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
@@ -417,7 +435,7 @@ namespace TISUnitTests.services
         {
             Assert.AreEqual(62, adminStrandDtos.Count);
 
-            var savedContentLevel = adminStrandDtos.First(x => x.StrandKey.Equals("UNIT-TEST-1|F-IF|K|m|F-IF.1"));
+            var savedContentLevel = adminStrandDtos.First(x => x.StrandKey.Equals("SBAC_PT-1|F-IF|K|m|F-IF.1"));
 
             Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", savedContentLevel.SegmentKey);
             Assert.AreEqual(0, savedContentLevel.MinItems);
@@ -426,7 +444,7 @@ namespace TISUnitTests.services
             Assert.AreEqual(1D, savedContentLevel.BlueprintWeight);
             Assert.AreEqual(8185L, savedContentLevel.TestVersion);
 
-            var savedStrand = adminStrandDtos.First(dto => dto.StrandKey.Equals("UNIT-TEST-1"));
+            var savedStrand = adminStrandDtos.First(dto => dto.StrandKey.Equals("SBAC_PT-1"));
 
             Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", savedStrand.SegmentKey);
             Assert.AreEqual(string.Format("{0}-{1}", savedStrand.SegmentKey, savedStrand.StrandKey), savedStrand.AdminStrandKey);
@@ -441,6 +459,43 @@ namespace TISUnitTests.services
             Assert.IsNull(savedStrand.LoadMin);
             Assert.IsNull(savedStrand.LoadMax);
 
+            // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
+            // exception before this line is hit.
+            return true;
+        }
+
+        private bool EvaluateShouldCreateASetOfAdminItemsCollection(List<SetOfAdminItemDTO> setOfAdminItemDtos)
+        {
+            Assert.AreEqual(20, setOfAdminItemDtos.Count);
+
+            var itemToVerify = setOfAdminItemDtos.First(dto => dto.ItemKey.Equals("187-2029"));
+
+            Assert.AreEqual("I-187-2029_A", itemToVerify.GroupKey);
+            Assert.AreEqual("I-187-2029", itemToVerify.GroupId);
+            Assert.AreEqual(1, itemToVerify.ItemPosition);
+            Assert.IsFalse(itemToVerify.IsFieldTest);
+            Assert.IsTrue(itemToVerify.IsActive);
+            Assert.AreEqual("0.678030000000000", itemToVerify.IrtB);
+            Assert.AreEqual("A", itemToVerify.BlockId);
+            Assert.IsTrue(itemToVerify.IsRequired);
+            Assert.AreEqual("SBAC_PT", itemToVerify.TestAdminKey);
+            Assert.AreEqual("SBAC_PT-3|G-SRT|A|NA|NA", itemToVerify.StrandKey);
+            Assert.AreEqual(8185L, itemToVerify.TestVersion);
+            Assert.AreEqual("SBAC_PT-3", itemToVerify.StrandName);
+            Assert.AreEqual(0.53279F, itemToVerify.IrtA);
+            Assert.AreEqual(0F, itemToVerify.IrtC);
+            Assert.AreEqual("IRT3PLn", itemToVerify.IrtModel);
+            Assert.AreEqual("0.678030000000000", itemToVerify.BVector);
+            Assert.AreEqual("G11Math_DOK2;SBAC_PT-3|G-SRT|A|NA|NA", itemToVerify.ClString);
+            
+            var itemGroupMemberToVerify = setOfAdminItemDtos.First(dto => dto.ItemKey.Equals("187-1432"));
+            Assert.AreEqual("G-187-3688-0_A", itemGroupMemberToVerify.GroupKey);
+            Assert.AreEqual("G-187-3688-0", itemGroupMemberToVerify.GroupId);
+            Assert.AreEqual(2, itemGroupMemberToVerify.ItemPosition);
+            Assert.AreEqual("-0.401550000000000;0.762370000000000", itemGroupMemberToVerify.BVector);
+
+            // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
+            // exception before this line is hit.
             return true;
         }
     }

@@ -32,5 +32,12 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// <param name="strandMap">A map of <code>StrandDTO</code>s that map to records in the 
         /// <code>OSS_Itembank..tblStrand</code> table.</param>
         void CreateAdminStrands(TestPackage.TestPackage testPackge, IDictionary<string, StrandDTO> strandMap);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testPackage"></param>
+        /// <param name="strandMap"></param>
+        void CreateSetOfAdminItems(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap);
     }
 }

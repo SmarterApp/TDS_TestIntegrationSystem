@@ -2,6 +2,7 @@
 using System.Linq;
 using TDSQASystemAPI.DAL.itembank.dtos;
 using TDSQASystemAPI.TestPackage;
+using TDSQASystemAPI.TestPackage.utils;
 
 namespace TISUnitTests.utils
 {
@@ -14,14 +15,14 @@ namespace TISUnitTests.utils
             var initialTreeLevel = 1;
             var initialParentKey = string.Empty;
             var newStrands = new List<StrandDTO>();
-            var unitTestClient = new ClientDTO { Name = "UNIT-TEST", ClientKey = 99L };
+            var unitTestClient = new ClientDTO { Name = "SBAC_PT", ClientKey = 2L };
 
 
             BuildStrandsWithHierarchyFromBlueprintElements(blueprintElements,
                 newStrands,
                 unitTestClient,
                 initialParentKey,
-                "UNIT_TEST-ELA",
+                "SBAC_PT-MATH",
                 (long)testPackage.version,
                 initialTreeLevel);
 
@@ -36,7 +37,6 @@ namespace TISUnitTests.utils
                                                                            long testVersion,
                                                                            int treeLevel)
         {
-            var CLAIM_AND_TARGET_TYPES = new string[] { "strand", "contentlevel", "claim" };
             if (blueprintElements == null || !blueprintElements.Any())
             {
                 return;
@@ -45,7 +45,7 @@ namespace TISUnitTests.utils
             foreach (var blueprintElement in blueprintElements)
             {
                 // For claims and targets, the convention is to prepend the client name to the id
-                var key = CLAIM_AND_TARGET_TYPES.Contains(blueprintElement.type)
+                var key = BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(blueprintElement.type)
                     ? string.Format("{0}-{1}", client.Name, blueprintElement.id)
                     : blueprintElement.id;
 
