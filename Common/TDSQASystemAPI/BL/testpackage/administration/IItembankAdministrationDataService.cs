@@ -1,4 +1,7 @@
-﻿namespace TDSQASystemAPI.BL.testpackage.administration
+﻿using System.Collections.Generic;
+using TDSQASystemAPI.DAL.itembank.dtos;
+
+namespace TDSQASystemAPI.BL.testpackage.administration
 {
     /// <summary>
     /// 
@@ -16,9 +19,18 @@
         void SaveTestAdministration(TestPackage.TestPackage testPackage);
 
         /// <summary>
-        /// 
+        /// Insert a collection of administration subject records to describe the <code>TesPackage</code>'s
+        /// Assessments and Segments.
         /// </summary>
         /// <param name="testPackage">The <code>TestPackage</code> containing the administration subject data.</param>
         void CreateSetOfAdminSubjects(TestPackage.TestPackage testPackage);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testPackge">The <code>TestPackage</code> containing the administration strand data.</param>
+        /// <param name="strandMap">A map of <code>StrandDTO</code>s that map to records in the 
+        /// <code>OSS_Itembank..tblStrand</code> table.</param>
+        void CreateAdminStrands(TestPackage.TestPackage testPackge, IDictionary<string, StrandDTO> strandMap);
     }
 }

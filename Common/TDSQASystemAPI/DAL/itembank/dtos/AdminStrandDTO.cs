@@ -16,16 +16,16 @@
         public int MaxItems { get; set; }
         public bool IsStrictMax { get; set; }
         public double BlueprintWeight { get; set; } // maps to bpWeight in tblAdminStrand
-        public double AdaptiveCut { get; set; }
-        public double StartAbility { get; set; }
-        public double StartInfo { get; set; }
-        public double Scalar { get; set; }
+        public double? AdaptiveCut { get; set; }
+        public double? StartAbility { get; set; }
+        public double? StartInfo { get; set; }
+        public double? Scalar { get; set; }
         public long TestVersion { get; set; } // maps to loadconfig in tblAdminStrand
-        public int LoadMin { get; set; }
-        public int LoadMax { get; set; }
-        public double PrecisionTarget { get; set; }
-        public double PrecisionTargetMetWeight { get; set; }
-        public double PrecisionTargetNotMetWeight { get; set; }
-        public double AbilityWeight { get; set; }
+        public int? LoadMin { get; set; }
+        public int? LoadMax { get; set; }
+        public double? PrecisionTarget { get; set; }
+        public double? PrecisionTargetMetWeight { get; set; }
+        public double? PrecisionTargetNotMetWeight { get; set; }
+        public double? AbilityWeight { get; set; }
     }
 }

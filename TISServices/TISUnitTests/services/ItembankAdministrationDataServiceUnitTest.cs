@@ -9,6 +9,7 @@ using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.itembank.dtos;
 using TDSQASystemAPI.TestPackage;
 using TDSQASystemAPI.TestPackage.utils;
+using TISUnitTests.utils;
 
 namespace TISUnitTests.services
 {
@@ -19,7 +20,8 @@ namespace TISUnitTests.services
         private const string MULTI_SEGMENT_TEST_PACKAGE_XML_FILE = @"..\..\resources\test-packages\new-xsd\V2-(SBAC_PT)IRP-GRADE-11-MATH-MULTI-SEGMENT-EXAMPLE.xml";
 
         private Mock<ITestPackageDao<TestAdminDTO>> mockTestAdminDao = new Mock<ITestPackageDao<TestAdminDTO>>();
-        private Mock<ITestPackageDao<SetOfAdminSubjectDTO>> mockSetOfAdminDao = new Mock<ITestPackageDao<SetOfAdminSubjectDTO>>();
+        private Mock<ITestPackageDao<SetOfAdminSubjectDTO>> mockSetOfAdminSubjectDao = new Mock<ITestPackageDao<SetOfAdminSubjectDTO>>();
+        private Mock<ITestPackageDao<AdminStrandDTO>> mockAdminStrandDao = new Mock<ITestPackageDao<AdminStrandDTO>>();
         private Mock<IItembankConfigurationDataQueryService> mockItembankConfigurationDataQueryService = new Mock<IItembankConfigurationDataQueryService>();
 
         private IItembankAdministrationDataService itembankAdministrationDataService;
@@ -30,7 +32,8 @@ namespace TISUnitTests.services
             itembankAdministrationDataService =
                 new ItembankAdministrationDataService(mockItembankConfigurationDataQueryService.Object,
                     mockTestAdminDao.Object,
-                    mockSetOfAdminDao.Object);
+                    mockSetOfAdminSubjectDao.Object,
+                    mockAdminStrandDao.Object);
         }
 
         [TestMethod]
@@ -137,12 +140,12 @@ namespace TISUnitTests.services
             // This test package has two assessments, each with one segment
             var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
 
-            mockSetOfAdminDao.Setup(dao => dao.Insert(It.IsAny<List<SetOfAdminSubjectDTO>>()))
+            mockSetOfAdminSubjectDao.Setup(dao => dao.Insert(It.IsAny<List<SetOfAdminSubjectDTO>>()))
                 .Verifiable();
 
             itembankAdministrationDataService.CreateSetOfAdminSubjects(testPackage);
 
-            mockSetOfAdminDao.Verify(dao => dao.Insert(It.Is<IList<SetOfAdminSubjectDTO>>(result => 
+            mockSetOfAdminSubjectDao.Verify(dao => dao.Insert(It.Is<IList<SetOfAdminSubjectDTO>>(result => 
                 EvaluateShouldInsertSetOfAdminSubjectRecordsForAllSegments(result.ToList()))));
         }
 
@@ -152,13 +155,29 @@ namespace TISUnitTests.services
             // This test package has one assessment with tw segments
             var testPackage = TestPackageMapper.FromXml(new XmlTextReader(MULTI_SEGMENT_TEST_PACKAGE_XML_FILE));
 
-            mockSetOfAdminDao.Setup(dao => dao.Insert(It.IsAny<List<SetOfAdminSubjectDTO>>()))
+            mockSetOfAdminSubjectDao.Setup(dao => dao.Insert(It.IsAny<List<SetOfAdminSubjectDTO>>()))
                 .Verifiable();
 
             itembankAdministrationDataService.CreateSetOfAdminSubjects(testPackage);
 
-            mockSetOfAdminDao.Verify(dao => dao.Insert(It.Is<List<SetOfAdminSubjectDTO>>(result =>
+            mockSetOfAdminSubjectDao.Verify(dao => dao.Insert(It.Is<List<SetOfAdminSubjectDTO>>(result =>
                 EvaluateShouldCreateSetOfAdminRecordsForAMultiSegmentedAssessment(result))));
+        }
+
+        [TestMethod]
+        public void AdminStrand_ShouldCreateACollectionOfAdminStrands()
+        {
+            // This test package has two assessments, each with one segment
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var strandMap = StrandBuilder.GetStrandDTODictionary(testPackage);
+
+            mockAdminStrandDao.Setup(dao => dao.Insert(It.IsAny<List<AdminStrandDTO>>()))
+                .Verifiable();
+
+            itembankAdministrationDataService.CreateAdminStrands(testPackage, strandMap);
+
+            mockAdminStrandDao.Verify(dao => dao.Insert(It.Is<List<AdminStrandDTO>>(result =>
+                EvaluateShouldCreateACollectionOfAdminStrands(result))));
         }
 
         private bool EvaluateShouldInsertSetOfAdminSubjectRecordsForAllSegments(List<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
@@ -391,6 +410,37 @@ namespace TISUnitTests.services
 
             // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
             // exception before this line is hit.
+            return true;
+        }
+
+        private bool EvaluateShouldCreateACollectionOfAdminStrands(List<AdminStrandDTO> adminStrandDtos)
+        {
+            Assert.AreEqual(62, adminStrandDtos.Count);
+
+            var savedContentLevel = adminStrandDtos.First(x => x.StrandKey.Equals("UNIT-TEST-1|F-IF|K|m|F-IF.1"));
+
+            Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", savedContentLevel.SegmentKey);
+            Assert.AreEqual(0, savedContentLevel.MinItems);
+            Assert.AreEqual(1, savedContentLevel.MaxItems);
+            Assert.IsNull(savedContentLevel.AdaptiveCut);
+            Assert.AreEqual(1D, savedContentLevel.BlueprintWeight);
+            Assert.AreEqual(8185L, savedContentLevel.TestVersion);
+
+            var savedStrand = adminStrandDtos.First(dto => dto.StrandKey.Equals("UNIT-TEST-1"));
+
+            Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", savedStrand.SegmentKey);
+            Assert.AreEqual(string.Format("{0}-{1}", savedStrand.SegmentKey, savedStrand.StrandKey), savedStrand.AdminStrandKey);
+            Assert.AreEqual(4, savedStrand.MinItems);
+            Assert.AreEqual(4, savedStrand.MaxItems);
+            Assert.AreEqual(-31.7137D, savedStrand.AdaptiveCut);
+            Assert.AreEqual(-31.7137D, savedStrand.StartAbility);
+            Assert.AreEqual(0, savedStrand.StartInfo);
+            Assert.AreEqual(5D, savedStrand.Scalar);
+            Assert.AreEqual(1D, savedStrand.BlueprintWeight);
+            Assert.AreEqual(8185L, savedStrand.TestVersion);
+            Assert.IsNull(savedStrand.LoadMin);
+            Assert.IsNull(savedStrand.LoadMax);
+
             return true;
         }
     }

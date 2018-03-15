@@ -15,11 +15,13 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly IItembankConfigurationDataQueryService itembankConfigurationDataQueryService;
         private readonly ITestPackageDao<TestAdminDTO> testAdminDao;
         private readonly ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao;
+        private readonly ITestPackageDao<AdminStrandDTO> adminStrandDao;
 
         public ItembankAdministrationDataService()
         {
             setOfAdminSubjectDao = new SetOfAdminSubjectDAO();
             testAdminDao = new TestAdminDAO();
+            adminStrandDao = new AdminStrandDAO();
             itembankConfigurationDataQueryService = 
                 new ItembankConfigurationDataQueryService(new SubjectDAO(), new ClientDAO(), testAdminDao);
             
@@ -27,11 +29,62 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public ItembankAdministrationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
                                                  ITestPackageDao<TestAdminDTO> testAdminDao,
-                                                 ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao)
+                                                 ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao,
+                                                 ITestPackageDao<AdminStrandDTO> adminStrandDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.testAdminDao = testAdminDao;
             this.setOfAdminSubjectDao = setOfAdminSubjectDao;
+            this.adminStrandDao = adminStrandDao;
+        }
+
+        public void CreateAdminStrands(TestPackage.TestPackage testPackge, IDictionary<string, StrandDTO> strandMap)
+        {
+            var segmentAdminStrandDtos =
+                from assessment in testPackge.Assessment
+                from segment in assessment.Segments
+                from segBp in segment.SegmentBlueprint
+                where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strandMap[segBp.idRef].Type)
+                let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
+                select new AdminStrandDTO
+                {
+                    AdminStrandKey = string.Format("{0}-{1}", segment.Key, strandMap[segBp.idRef].Key),
+                    SegmentKey = segment.Key,
+                    StrandKey = strandMap[segBp.idRef].Key,
+                    MinItems = segBp.minExamItems,
+                    MaxItems = segBp.maxExamItems,
+                    AdaptiveCut = itemSelectionProperties.ContainsKey("adaptivecut") 
+                        ? itemSelectionProperties["adaptivecut"]?.ToNullableDouble() 
+                        : null,
+                    StartAbility = itemSelectionProperties.ContainsKey("startability")
+                        ? itemSelectionProperties["startability"]?.ToNullableDouble()
+                        : null,
+                    StartInfo = itemSelectionProperties.ContainsKey("startinfo")
+                        ? itemSelectionProperties["startinfo"]?.ToNullableDouble()
+                        : null,
+                    Scalar = itemSelectionProperties.ContainsKey("scalar")
+                        ? itemSelectionProperties["scalar"]?.ToNullableDouble()
+                        : null,
+                    LoadMin = assessment.IsSegmented() ? segBp.minExamItems as int? : null,
+                    LoadMax = assessment.IsSegmented() ? segBp.maxExamItems as int? : null,
+                    IsStrictMax = bool.Parse(itemSelectionProperties.GetOrDefault("isstrictmax", "false")),
+                    BlueprintWeight = float.Parse(itemSelectionProperties.GetOrDefault("bpweight", "0")),
+                    TestVersion = (long)testPackge.version,
+                    PrecisionTarget = itemSelectionProperties.ContainsKey("precisiontarget")
+                        ? itemSelectionProperties["precisiontarget"]?.ToNullableDouble()
+                        : null,
+                    PrecisionTargetMetWeight = itemSelectionProperties.ContainsKey("precisiontargetmetweight")
+                        ? itemSelectionProperties["precisiontargetmetweight"]?.ToNullableDouble()
+                        : null,
+                    PrecisionTargetNotMetWeight = itemSelectionProperties.ContainsKey("precisiontargetnotmetweight")
+                        ? itemSelectionProperties["precisiontargetnotmetweight"]?.ToNullableDouble()
+                        : null,
+                    AbilityWeight = itemSelectionProperties.ContainsKey("abilityweight")
+                        ? itemSelectionProperties["abilityweight"]?.ToNullableDouble()
+                        : null
+                };
+
+            adminStrandDao.Insert(segmentAdminStrandDtos.ToList());
         }
 
         public void CreateSetOfAdminSubjects(TestPackage.TestPackage testPackage)
