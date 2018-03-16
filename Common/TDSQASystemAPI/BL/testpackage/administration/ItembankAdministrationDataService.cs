@@ -19,6 +19,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao;
         private readonly ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao;
         private readonly ITestPackageDao<ItemMeasurementParameterDTO> itemMeasurementParameterDao;
+        private readonly ITestPackageDao<AdminStimulusDTO> setOfAdminStimuliDao;
 
         /// <summary>
         /// A map of the measurement models that are available.  This map comes from the 
@@ -73,6 +74,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             setOfAdminItemDao = new SetOfAdminItemDAO();
             itemScoreDimensionDao = new ItemScoreDimensionDAO();
             itemMeasurementParameterDao = new ItemMeasurementParameterDAO();
+            setOfAdminStimuliDao = new AdminStimulusDAO();
             itembankConfigurationDataQueryService = 
                 new ItembankConfigurationDataQueryService(new SubjectDAO(), new ClientDAO(), testAdminDao);
             
@@ -84,7 +86,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                  ITestPackageDao<AdminStrandDTO> adminStrandDao,
                                                  ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao,
                                                  ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao,
-                                                 ITestPackageDao<ItemMeasurementParameterDTO> itemMeasurementParameterDao)
+                                                 ITestPackageDao<ItemMeasurementParameterDTO> itemMeasurementParameterDao,
+                                                 ITestPackageDao<AdminStimulusDTO> setOfAdminStimuliDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.testAdminDao = testAdminDao;
@@ -93,6 +96,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.setOfAdminItemDao = setOfAdminItemDao;
             this.itemScoreDimensionDao = itemScoreDimensionDao;
             this.itemMeasurementParameterDao = itemMeasurementParameterDao;
+            this.setOfAdminStimuliDao = setOfAdminStimuliDao;
         }
 
         public void CeateItemMeasurementParameters(TestPackage.TestPackage testPackage)
@@ -139,6 +143,27 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                             };
 
             itemMeasurementParameterDao.Insert(itemMeasurementParameters.ToList());
+        }
+
+        public void CreateAdminStimuli(TestPackage.TestPackage testPackage)
+        {
+            var adminStimuliDtos = from stimulus in testPackage.GetAllStimuli()
+                                   select new AdminStimulusDTO
+                                   {
+                                       StimulusKey = stimulus.Key,
+                                       SegmentKey = stimulus.AssessmentSegment.Key,
+                                       NumItemsRequired = stimulus.ItemGroup.maxResponses.Equals("ALL", StringComparison.InvariantCultureIgnoreCase)
+                                           ? -1
+                                           : int.Parse(stimulus.ItemGroup.maxResponses),
+                                       MaxItems = stimulus.ItemGroup.maxItems.Equals("ALL", StringComparison.InvariantCultureIgnoreCase)
+                                           ? -1
+                                           : int.Parse(stimulus.ItemGroup.maxItems),
+                                       TestVersion = (long)testPackage.version,
+                                       UpdatedTestVersion = (long)testPackage.version,
+                                       GroupId = stimulus.ItemGroup.Key
+                                   };
+
+            setOfAdminStimuliDao.Insert(adminStimuliDtos.ToList());                   
         }
 
         public void CreateAdminStrands(TestPackage.TestPackage testPackge, IDictionary<string, StrandDTO> strandMap)

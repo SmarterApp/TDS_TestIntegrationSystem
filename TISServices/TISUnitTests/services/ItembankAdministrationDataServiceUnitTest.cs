@@ -25,6 +25,7 @@ namespace TISUnitTests.services
         private Mock<ITestPackageDao<SetOfAdminItemDTO>> mockSetOfAdminItemDao = new Mock<ITestPackageDao<SetOfAdminItemDTO>>();
         private Mock<ITestPackageDao<ItemScoreDimensionDTO>> mockItemScoreDimensionDao = new Mock<ITestPackageDao<ItemScoreDimensionDTO>>();
         private Mock<ITestPackageDao<ItemMeasurementParameterDTO>> mockItemMeasurementParameterDao = new Mock<ITestPackageDao<ItemMeasurementParameterDTO>>();
+        private Mock<ITestPackageDao<AdminStimulusDTO>> mockSetOfAdminStimuliDao = new Mock<ITestPackageDao<AdminStimulusDTO>>();
         private Mock<IItembankConfigurationDataQueryService> mockItembankConfigurationDataQueryService = new Mock<IItembankConfigurationDataQueryService>();
 
         private IItembankAdministrationDataService itembankAdministrationDataService;
@@ -39,7 +40,8 @@ namespace TISUnitTests.services
                     mockAdminStrandDao.Object,
                     mockSetOfAdminItemDao.Object,
                     mockItemScoreDimensionDao.Object,
-                    mockItemMeasurementParameterDao.Object);
+                    mockItemMeasurementParameterDao.Object,
+                    mockSetOfAdminStimuliDao.Object);
         }
 
         [TestMethod]
@@ -220,6 +222,21 @@ namespace TISUnitTests.services
 
             mockItemMeasurementParameterDao.Verify(dao => dao.Insert(It.Is<List<ItemMeasurementParameterDTO>>(result =>
                 EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemMeasurementParameters(result))));
+        }
+
+        [TestMethod]
+        public void AdminStimuli_ShouldCreateACollectionOfAdminStimuli()
+        {
+            // This test package has two assessments, each with one segment
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            mockSetOfAdminStimuliDao.Setup(dao => dao.Insert(It.IsAny<List<AdminStimulusDTO>>()))
+                .Verifiable();
+
+            itembankAdministrationDataService.CreateAdminStimuli(testPackage);
+
+            mockSetOfAdminStimuliDao.Verify(dao => dao.Insert(It.Is<List<AdminStimulusDTO>>(result =>
+                EvaluateShouldCreateACollectionOfAdminStimuli(result))));
         }
 
         private bool EvaluateShouldInsertSetOfAdminSubjectRecordsForAllSegments(List<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
@@ -557,6 +574,24 @@ namespace TISUnitTests.services
             var lastItemMeasurementParameter = itemMeasurementParameterDtos.Last();
             Assert.AreEqual(2, lastItemMeasurementParameter.MeasurementParameterKey);
             Assert.AreEqual(0.76237F, lastItemMeasurementParameter.ParmValue);
+
+            // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
+            // exception before this line is hit.
+            return true;
+        }
+
+        private bool EvaluateShouldCreateACollectionOfAdminStimuli(List<AdminStimulusDTO> adminStimuliDtos)
+        {
+            Assert.AreEqual(1, adminStimuliDtos.Count);
+
+            var firstStimuli = adminStimuliDtos[0];
+            Assert.AreEqual("187-3688", firstStimuli.StimulusKey);
+            Assert.AreEqual("(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018", firstStimuli.SegmentKey);
+            Assert.AreEqual(-1, firstStimuli.NumItemsRequired);
+            Assert.AreEqual(-1, firstStimuli.MaxItems);
+            Assert.AreEqual(8185L, firstStimuli.TestVersion);
+            Assert.AreEqual(8185L, firstStimuli.UpdatedTestVersion);
+            Assert.AreEqual("G-187-3688-0", firstStimuli.GroupId);
 
             // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
             // exception before this line is hit.

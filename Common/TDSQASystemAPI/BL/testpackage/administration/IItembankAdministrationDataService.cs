@@ -45,5 +45,11 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// </summary>
         /// <param name="testPackage"></param>
         void CeateItemMeasurementParameters(TestPackage.TestPackage testPackage);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testPackage"></param>
+        void CreateAdminStimuli(TestPackage.TestPackage testPackage);
     }
 }
