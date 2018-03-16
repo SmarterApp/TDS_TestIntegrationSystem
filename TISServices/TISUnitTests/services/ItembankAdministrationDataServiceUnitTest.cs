@@ -23,6 +23,8 @@ namespace TISUnitTests.services
         private Mock<ITestPackageDao<SetOfAdminSubjectDTO>> mockSetOfAdminSubjectDao = new Mock<ITestPackageDao<SetOfAdminSubjectDTO>>();
         private Mock<ITestPackageDao<AdminStrandDTO>> mockAdminStrandDao = new Mock<ITestPackageDao<AdminStrandDTO>>();
         private Mock<ITestPackageDao<SetOfAdminItemDTO>> mockSetOfAdminItemDao = new Mock<ITestPackageDao<SetOfAdminItemDTO>>();
+        private Mock<ITestPackageDao<ItemScoreDimensionDTO>> mockItemScoreDimensionDao = new Mock<ITestPackageDao<ItemScoreDimensionDTO>>();
+        private Mock<ITestPackageDao<ItemMeasurementParameterDTO>> mockItemMeasurementParameterDao = new Mock<ITestPackageDao<ItemMeasurementParameterDTO>>();
         private Mock<IItembankConfigurationDataQueryService> mockItembankConfigurationDataQueryService = new Mock<IItembankConfigurationDataQueryService>();
 
         private IItembankAdministrationDataService itembankAdministrationDataService;
@@ -35,7 +37,9 @@ namespace TISUnitTests.services
                     mockTestAdminDao.Object,
                     mockSetOfAdminSubjectDao.Object,
                     mockAdminStrandDao.Object,
-                    mockSetOfAdminItemDao.Object);
+                    mockSetOfAdminItemDao.Object,
+                    mockItemScoreDimensionDao.Object,
+                    mockItemMeasurementParameterDao.Object);
         }
 
         [TestMethod]
@@ -196,6 +200,26 @@ namespace TISUnitTests.services
 
             mockSetOfAdminItemDao.Verify(dao => dao.Insert(It.Is<List<SetOfAdminItemDTO>>(result =>
                 EvaluateShouldCreateASetOfAdminItemsCollection(result))));
+        }
+
+        [TestMethod]
+        public void ItemMeasurementParameter_ShouldCreateAnItemMeasurementParameterCollection()
+        {
+            // This test package has two assessments, each with one segment
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            mockItemScoreDimensionDao.Setup(dao => dao.Insert(It.IsAny<List<ItemScoreDimensionDTO>>()))
+                .Verifiable();
+            mockItemMeasurementParameterDao.Setup(dao => dao.Insert(It.IsAny<List<ItemMeasurementParameterDTO>>()))
+                .Verifiable();
+
+            itembankAdministrationDataService.CeateItemMeasurementParameters(testPackage);
+
+            mockItemScoreDimensionDao.Verify(dao => dao.Insert(It.Is<List<ItemScoreDimensionDTO>>(result => 
+                EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemScoreDimensions(result))));
+
+            mockItemMeasurementParameterDao.Verify(dao => dao.Insert(It.Is<List<ItemMeasurementParameterDTO>>(result =>
+                EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemMeasurementParameters(result))));
         }
 
         private bool EvaluateShouldInsertSetOfAdminSubjectRecordsForAllSegments(List<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
@@ -493,6 +517,46 @@ namespace TISUnitTests.services
             Assert.AreEqual("G-187-3688-0", itemGroupMemberToVerify.GroupId);
             Assert.AreEqual(2, itemGroupMemberToVerify.ItemPosition);
             Assert.AreEqual("-0.401550000000000;0.762370000000000", itemGroupMemberToVerify.BVector);
+
+            // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
+            // exception before this line is hit.
+            return true;
+        }
+
+        private bool EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemScoreDimensions(List<ItemScoreDimensionDTO> itemScoreDimensionDtos)
+        {
+            Assert.AreEqual(20, itemScoreDimensionDtos.Count);
+
+            var anItemScoreDimensionDto = itemScoreDimensionDtos.First(dto => dto.ItemKey.Equals("187-1930"));
+            Assert.IsNotNull(anItemScoreDimensionDto.ItemScoreDimensionKey);
+            Assert.AreEqual(string.Empty, anItemScoreDimensionDto.Dimension);
+            Assert.AreEqual(string.Empty, anItemScoreDimensionDto.RecodeRule);
+            Assert.AreEqual(1, anItemScoreDimensionDto.ScorePoints);
+            Assert.AreEqual(1D, anItemScoreDimensionDto.Weight);
+            Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", anItemScoreDimensionDto.SegmentKey);
+            Assert.AreEqual(4, anItemScoreDimensionDto.MeasurementModel);
+
+            // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
+            // exception before this line is hit.
+            return true;
+        }
+
+        private bool EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemMeasurementParameters(List<ItemMeasurementParameterDTO> itemMeasurementParameterDtos)
+        {
+            Assert.AreEqual(61, itemMeasurementParameterDtos.Count);
+
+            var firstItemMeasurementParameter = itemMeasurementParameterDtos[0];
+            Assert.AreEqual(0, firstItemMeasurementParameter.MeasurementParameterKey);
+            Assert.AreEqual(1, firstItemMeasurementParameter.ParmValue);
+
+
+            var secondItemMeasurementParameter = itemMeasurementParameterDtos[1];
+            Assert.AreEqual(1, secondItemMeasurementParameter.MeasurementParameterKey);
+            Assert.AreEqual(1E-15F, secondItemMeasurementParameter.ParmValue);
+
+            var lastItemMeasurementParameter = itemMeasurementParameterDtos.Last();
+            Assert.AreEqual(2, lastItemMeasurementParameter.MeasurementParameterKey);
+            Assert.AreEqual(0.76237F, lastItemMeasurementParameter.ParmValue);
 
             // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
             // exception before this line is hit.

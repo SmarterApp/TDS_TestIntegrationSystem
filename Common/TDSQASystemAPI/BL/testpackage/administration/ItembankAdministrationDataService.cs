@@ -17,6 +17,53 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao;
         private readonly ITestPackageDao<AdminStrandDTO> adminStrandDao;
         private readonly ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao;
+        private readonly ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao;
+        private readonly ITestPackageDao<ItemMeasurementParameterDTO> itemMeasurementParameterDao;
+
+        /// <summary>
+        /// A map of the measurement models that are available.  This map comes from the 
+        /// <code>OSS_Itembank..MeasurementModel</code> table.  The <code>OSS_Itembank..MeasurementModel</code> is
+        /// populated via a seed data script that is run when TIS is first deployed.
+        /// </summary>
+        private readonly Dictionary<string, int> measurementModelMap = new Dictionary<string, int>
+        {
+            { "IRT3pl", 1 },
+            { "IRTPCL", 2 },
+            { "raw", 3 },
+            { "IRT3PLn", 4 },
+            { "IRTGPC", 5 }
+        };
+
+        /// <summary>
+        /// An in-memory representation of what the <code>OSS_Itembank..MeasurementParameter</code> table looks like.
+        /// While the <code>Description</code> field is not in use here, it can be useful to have for reference.
+        /// </summary>
+        private readonly IList<MeasurementParameter> measurementParameterLookup = new List<MeasurementParameter>
+        {
+            // IRT3pl
+            new MeasurementParameter(1, 0, "a", "Slope (a)"),
+            new MeasurementParameter(1, 1, "b", "Difficulty (b)"),
+            new MeasurementParameter(1, 2, "c", "Guessing (c)"),
+            // IRTPCL
+            new MeasurementParameter(2, 0, "b0", "Difficulty cut 0 (b0)"),
+            new MeasurementParameter(2, 1, "b1", "Difficulty cut 1 (b1)"),
+            new MeasurementParameter(2, 2, "b2", "Difficulty cut 2 (b2)"),
+            new MeasurementParameter(2, 3, "b3", "Difficulty cut 3 (b3)"),
+            new MeasurementParameter(2, 4, "b4", "Difficulty cut 4 (b4)"),
+            new MeasurementParameter(2, 5, "b5", "Difficulty cut 5 (b5)"),
+            // IRT3PLn
+            new MeasurementParameter(4, 0, "a", "Slope (a)"),
+            new MeasurementParameter(4, 1, "b", "Difficulty (b)"),
+            new MeasurementParameter(4, 2, "c", "Guessing (c)"),
+            // IRTGPC
+            new MeasurementParameter(5, 0, "a", "Slope (a)"),
+            new MeasurementParameter(5, 1, "b0", "Difficulty cut 0 (b0)"),
+            new MeasurementParameter(5, 2, "b1", "Difficulty cut 1 (b1)"),
+            new MeasurementParameter(5, 3, "b2", "Difficulty cut 2 (b2)"),
+            new MeasurementParameter(5, 4, "b3", "Difficulty cut 3 (b3)"),
+            new MeasurementParameter(5, 5, "b4", "Difficulty cut 4 (b4)"),
+            new MeasurementParameter(5, 6, "b5", "Difficulty cut 5 (b5)")
+        };
 
         public ItembankAdministrationDataService()
         {
@@ -24,6 +71,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             testAdminDao = new TestAdminDAO();
             adminStrandDao = new AdminStrandDAO();
             setOfAdminItemDao = new SetOfAdminItemDAO();
+            itemScoreDimensionDao = new ItemScoreDimensionDAO();
+            itemMeasurementParameterDao = new ItemMeasurementParameterDAO();
             itembankConfigurationDataQueryService = 
                 new ItembankConfigurationDataQueryService(new SubjectDAO(), new ClientDAO(), testAdminDao);
             
@@ -33,13 +82,63 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                  ITestPackageDao<TestAdminDTO> testAdminDao,
                                                  ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao,
                                                  ITestPackageDao<AdminStrandDTO> adminStrandDao,
-                                                 ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao)
+                                                 ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao,
+                                                 ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao,
+                                                 ITestPackageDao<ItemMeasurementParameterDTO> itemMeasurementParameterDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.testAdminDao = testAdminDao;
             this.setOfAdminSubjectDao = setOfAdminSubjectDao;
             this.adminStrandDao = adminStrandDao;
             this.setOfAdminItemDao = setOfAdminItemDao;
+            this.itemScoreDimensionDao = itemScoreDimensionDao;
+            this.itemMeasurementParameterDao = itemMeasurementParameterDao;
+        }
+
+        public void CeateItemMeasurementParameters(TestPackage.TestPackage testPackage)
+        {
+            var allItems = testPackage.GetAllItems();
+            var itemScoreDimensionDtos = from item in allItems
+                                         let dimension = item.ItemScoreDimension
+                                         select new ItemScoreDimensionDTO
+                                         {
+                                             Dimension = dimension.dimension ?? string.Empty,
+                                             RecodeRule = string.Empty,
+                                             ScorePoints = dimension.scorePoints,
+                                             Weight = dimension.weight,
+                                             ItemScoreDimensionKey = Guid.NewGuid(),
+                                             SegmentKey = item.AssessmentSegment.Key,
+                                             ItemKey = item.Key,
+                                             MeasurementModel = measurementModelMap[dimension.measurementModel]
+                                         };
+
+            itemScoreDimensionDao.Insert(itemScoreDimensionDtos.ToList());
+
+            var scoreDimensionMap = (from dimensionDto in itemScoreDimensionDtos
+                                    join item in allItems
+                                        on dimensionDto.ItemKey equals item.Key
+                                    select new
+                                    {
+                                        ItemKey = item.Key,
+                                        DimensionKey = dimensionDto.ItemScoreDimensionKey,
+                                        MeasurementModelKey = dimensionDto.MeasurementModel
+                                    });
+
+            var itemMeasurementParameters = from item in allItems
+                                            from param in item.ItemScoreDimension.ItemScoreParameter
+                                            join dimensionDto in scoreDimensionMap
+                                                on item.Key equals dimensionDto.ItemKey
+                                            select new ItemMeasurementParameterDTO
+                                            {
+                                                ItemScoreDimensionKey = dimensionDto.DimensionKey,
+                                                MeasurementParameterKey = (from p in measurementParameterLookup
+                                                                           where p.MeasurementModelKey == dimensionDto.MeasurementModelKey
+                                                                                && p.Name.Equals(param.measurementParameter)
+                                                                           select p).First().Number,
+                                                ParmValue = param.value
+                                            };
+
+            itemMeasurementParameterDao.Insert(itemMeasurementParameters.ToList());
         }
 
         public void CreateAdminStrands(TestPackage.TestPackage testPackge, IDictionary<string, StrandDTO> strandMap)
@@ -306,6 +405,14 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             }
         }
 
+        /// <summary>
+        /// Build up a "Target String" for an admin item.
+        /// </summary>
+        /// <param name="itemBpRefs">The collection of <code>ItemGroupItemBlueprintReference</code> associated to the
+        /// <code>ItemGroupItem</code> being affected.</param>
+        /// <param name="strandMap">The collection of <code>StrandDTO</code>s built for this <code>TestPackage</code>.</param>
+        /// <returns>A semi-colon delimited <code>string</code> containing all the claim and target keys for the
+        /// admin item record.</returns>
         private string CreateClString(ItemGroupItemBlueprintReference[] itemBpRefs, IDictionary<string, StrandDTO> strandMap)
         {
             var strandKeys = from bpRef in itemBpRefs

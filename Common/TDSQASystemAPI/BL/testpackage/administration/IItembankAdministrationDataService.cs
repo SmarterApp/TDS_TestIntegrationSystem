@@ -39,5 +39,11 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// <param name="testPackage"></param>
         /// <param name="strandMap"></param>
         void CreateSetOfAdminItems(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="testPackage"></param>
+        void CeateItemMeasurementParameters(TestPackage.TestPackage testPackage);
     }
 }

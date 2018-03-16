@@ -333,6 +333,7 @@
     <Compile Include="TestPackage\AssessmentSegment.cs" />
     <Compile Include="TestPackage\AssessmentSegmentSegmentFormsSegmentForm.cs" />
     <Compile Include="TestPackage\BlueprintElement.cs" />
+    <Compile Include="TestPackage\MeasurementParameter.cs" />
     <Compile Include="TestPackage\DefaultToolConfiguration.cs" />
     <Compile Include="TestPackage\ItemGroup.cs" />
     <Compile Include="TestPackage\ItemGroupItem.cs" />
