@@ -282,7 +282,32 @@ namespace TISUnitTests.services
             Assert.AreEqual(mockTdsTesForm.Cohort, insertedTestForm.Cohort);
         }
 
-        private bool EvaluateShouldInsertSetOfAdminSubjectRecordsForAllSegments(List<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
+        [TestMethod]
+        public void TestFormItem_ShouldCreateACollectionOfTestFormItemDtos()
+        {
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var fixedFormSegmentKey = "(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018";
+            var mockTdsTesForm = new TestFormDTO
+            {
+                TestFormKey = "187-2112",
+                SegmentKey = "(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018",
+                ITSBankKey = 2112L,
+                ITSKey = 2112L,
+                Language = "ENU",
+                FormId = "IRP::MathG11::Perf::SP15",
+                Cohort = "Default"
+            };
+
+            mockTestFormItemDao.Setup(dao => dao.Insert(It.IsAny<List<TestFormItemDTO>>()))
+                .Verifiable();
+
+            itembankAdministrationDataService.CreateTestFormItems(testPackage, new List<TestFormDTO> { mockTdsTesForm });
+
+            mockTestFormItemDao.Verify(dao => dao.Insert(It.Is<List<TestFormItemDTO>>(result =>
+                EvaluateShouldCreateACollectionOfTestFormItemDtos(result))));
+        }
+
+        private bool EvaluateShouldInsertSetOfAdminSubjectRecordsForAllSegments(IList<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
         {
             Assert.AreEqual(2, setOfAdminSubjectDtos.Count);
 
@@ -377,7 +402,7 @@ namespace TISUnitTests.services
             return true;
         }
 
-        private bool EvaluateShouldCreateSetOfAdminRecordsForAMultiSegmentedAssessment(List<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
+        private bool EvaluateShouldCreateSetOfAdminRecordsForAMultiSegmentedAssessment(IList<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
         {
             Assert.AreEqual(3, setOfAdminSubjectDtos.Count);
 
@@ -515,7 +540,7 @@ namespace TISUnitTests.services
             return true;
         }
 
-        private bool EvaluateShouldCreateACollectionOfAdminStrands(List<AdminStrandDTO> adminStrandDtos)
+        private bool EvaluateShouldCreateACollectionOfAdminStrands(IList<AdminStrandDTO> adminStrandDtos)
         {
             Assert.AreEqual(62, adminStrandDtos.Count);
 
@@ -548,7 +573,7 @@ namespace TISUnitTests.services
             return true;
         }
 
-        private bool EvaluateShouldCreateASetOfAdminItemsCollection(List<SetOfAdminItemDTO> setOfAdminItemDtos)
+        private bool EvaluateShouldCreateASetOfAdminItemsCollection(IList<SetOfAdminItemDTO> setOfAdminItemDtos)
         {
             Assert.AreEqual(20, setOfAdminItemDtos.Count);
 
@@ -583,7 +608,7 @@ namespace TISUnitTests.services
             return true;
         }
 
-        private bool EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemScoreDimensions(List<ItemScoreDimensionDTO> itemScoreDimensionDtos)
+        private bool EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemScoreDimensions(IList<ItemScoreDimensionDTO> itemScoreDimensionDtos)
         {
             Assert.AreEqual(20, itemScoreDimensionDtos.Count);
 
@@ -601,7 +626,7 @@ namespace TISUnitTests.services
             return true;
         }
 
-        private bool EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemMeasurementParameters(List<ItemMeasurementParameterDTO> itemMeasurementParameterDtos)
+        private bool EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemMeasurementParameters(IList<ItemMeasurementParameterDTO> itemMeasurementParameterDtos)
         {
             Assert.AreEqual(61, itemMeasurementParameterDtos.Count);
 
@@ -623,7 +648,7 @@ namespace TISUnitTests.services
             return true;
         }
 
-        private bool EvaluateShouldCreateACollectionOfAdminStimuli(List<AdminStimulusDTO> adminStimuliDtos)
+        private bool EvaluateShouldCreateACollectionOfAdminStimuli(IList<AdminStimulusDTO> adminStimuliDtos)
         {
             Assert.AreEqual(1, adminStimuliDtos.Count);
 
@@ -636,6 +661,29 @@ namespace TISUnitTests.services
             Assert.AreEqual(8185L, firstStimuli.UpdatedTestVersion);
             Assert.AreEqual("G-187-3688-0", firstStimuli.GroupId);
 
+            // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
+            // exception before this line is hit.
+            return true;
+        }
+
+        private bool EvaluateShouldCreateACollectionOfTestFormItemDtos(IList<TestFormItemDTO> testFormItemDtos)
+        {
+            Assert.AreEqual(2, testFormItemDtos.Count);
+
+            var firstTestFormItem = testFormItemDtos[0];
+            Assert.IsTrue(firstTestFormItem.IsActive);
+            Assert.AreEqual(2112L, firstTestFormItem.ITSFormKey);
+            Assert.AreEqual(1, firstTestFormItem.FormPosition);
+            Assert.AreEqual("187-2112", firstTestFormItem.TestFormKey);
+            Assert.AreEqual("187-1434", firstTestFormItem.ItemKey);
+
+            var secondTestFormItem = testFormItemDtos[1];
+            Assert.IsTrue(secondTestFormItem.IsActive);
+            Assert.AreEqual(2112L, secondTestFormItem.ITSFormKey);
+            Assert.AreEqual(2, secondTestFormItem.FormPosition);
+            Assert.AreEqual("187-2112", secondTestFormItem.TestFormKey);
+            Assert.AreEqual("187-1432", secondTestFormItem.ItemKey);
+                
             // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
             // exception before this line is hit.
             return true;

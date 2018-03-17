@@ -426,7 +426,39 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateTestFormItems(TestPackage.TestPackage testPackage, IList<TestFormDTO> testForms)
         {
-            throw new NotImplementedException();
+            var fixedFormSegments = from assessment in testPackage.Assessment
+                                    from segment in assessment.Segments
+                                    where segment.algorithmType.ToLower().Trim().Equals(SelectionAlgorithmTypes.FIXED_FORM)
+                                    select segment;
+
+            var fixedFormItems = new List<ItemGroupItem>();
+            foreach (var segment in fixedFormSegments)
+            {
+                foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                {
+                    var items = from ig in form.ItemGroup
+                                from item in ig.Item
+                                select item;
+                    if (items.Any())
+                    {
+                        fixedFormItems.AddRange(items);
+                    }
+                }
+            }
+
+            var formItemDtos = from item in fixedFormItems
+                               let testForm = testForms.First(f => f.FormId.Equals(item.SegmentForm.id))
+                               select new TestFormItemDTO
+                               {
+                                   FormPosition = item.Position,
+                                   SegmentKey = item.SegmentForm.AssessmentSegment.Key,
+                                   IsActive = true,
+                                   ItemKey = item.Key,
+                                   TestFormKey = testForm.TestFormKey,
+                                   ITSFormKey = testForm.ITSKey
+                               };
+
+            testFormItemDao.Insert(formItemDtos.ToList());
         }
 
         public List<TestFormDTO> CreateTestForms(TestPackage.TestPackage testPackage)
