@@ -20,6 +20,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao;
         private readonly ITestPackageDao<ItemMeasurementParameterDTO> itemMeasurementParameterDao;
         private readonly ITestPackageDao<AdminStimulusDTO> setOfAdminStimuliDao;
+        private readonly ITestPackageDao<TestFormDTO> testFormDao;
+        private readonly ITestPackageDao<TestFormItemDTO> testFormItemDao;
 
         /// <summary>
         /// A map of the measurement models that are available.  This map comes from the 
@@ -89,6 +91,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             itemScoreDimensionDao = new ItemScoreDimensionDAO();
             itemMeasurementParameterDao = new ItemMeasurementParameterDAO();
             setOfAdminStimuliDao = new AdminStimulusDAO();
+            testFormDao = new TestFormDAO();
+            testFormItemDao = new TestFormItemDAO();
             itembankConfigurationDataQueryService = 
                 new ItembankConfigurationDataQueryService(new SubjectDAO(), new ClientDAO(), testAdminDao);
             
@@ -101,7 +105,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                  ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao,
                                                  ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao,
                                                  ITestPackageDao<ItemMeasurementParameterDTO> itemMeasurementParameterDao,
-                                                 ITestPackageDao<AdminStimulusDTO> setOfAdminStimuliDao)
+                                                 ITestPackageDao<AdminStimulusDTO> setOfAdminStimuliDao,
+                                                 ITestPackageDao<TestFormDTO> testFormDao,
+                                                 ITestPackageDao<TestFormItemDTO> testFormItemDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.testAdminDao = testAdminDao;
@@ -111,6 +117,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.itemScoreDimensionDao = itemScoreDimensionDao;
             this.itemMeasurementParameterDao = itemMeasurementParameterDao;
             this.setOfAdminStimuliDao = setOfAdminStimuliDao;
+            this.testFormDao = testFormDao;
+            this.testFormItemDao = testFormItemDao;
         }
 
         public void CeateItemMeasurementParameters(TestPackage.TestPackage testPackage)
@@ -414,6 +422,28 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             }
 
             setOfAdminSubjectDao.Insert(setOfAdminSubjectsList);
+        }
+
+        public void CreateTestFormItems(TestPackage.TestPackage testPackage, IList<TestFormDTO> testForms)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<TestFormDTO> CreateTestForms(TestPackage.TestPackage testPackage)
+        {
+            var testForms = new List<TestFormDTO>();
+            var fixedFormSegments = from assessment in testPackage.Assessment
+                                    from segment in assessment.Segments
+                                    where segment.algorithmType.ToLower().Trim().Equals(SelectionAlgorithmTypes.FIXED_FORM)
+                                    select segment;
+
+            // Query the TDS itembank database, collecting the test forms that were created during the TDS test package
+            // load process.
+            fixedFormSegments.ForEach(s => testForms.AddRange(testFormDao.Find(s.Key)));
+
+            testFormDao.Insert(testForms);
+
+            return testForms;
         }
 
         public void SaveTestAdministration(TestPackage.TestPackage testPackage)

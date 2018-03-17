@@ -26,6 +26,9 @@ namespace TISUnitTests.services
         private Mock<ITestPackageDao<ItemScoreDimensionDTO>> mockItemScoreDimensionDao = new Mock<ITestPackageDao<ItemScoreDimensionDTO>>();
         private Mock<ITestPackageDao<ItemMeasurementParameterDTO>> mockItemMeasurementParameterDao = new Mock<ITestPackageDao<ItemMeasurementParameterDTO>>();
         private Mock<ITestPackageDao<AdminStimulusDTO>> mockSetOfAdminStimuliDao = new Mock<ITestPackageDao<AdminStimulusDTO>>();
+        private Mock<ITestPackageDao<TestFormDTO>> mockTestFormDao = new Mock<ITestPackageDao<TestFormDTO>>();
+        private Mock<ITestPackageDao<TestFormItemDTO>> mockTestFormItemDao = new Mock<ITestPackageDao<TestFormItemDTO>>();
+
         private Mock<IItembankConfigurationDataQueryService> mockItembankConfigurationDataQueryService = new Mock<IItembankConfigurationDataQueryService>();
 
         private IItembankAdministrationDataService itembankAdministrationDataService;
@@ -41,7 +44,9 @@ namespace TISUnitTests.services
                     mockSetOfAdminItemDao.Object,
                     mockItemScoreDimensionDao.Object,
                     mockItemMeasurementParameterDao.Object,
-                    mockSetOfAdminStimuliDao.Object);
+                    mockSetOfAdminStimuliDao.Object,
+                    mockTestFormDao.Object,
+                    mockTestFormItemDao.Object);
         }
 
         [TestMethod]
@@ -237,6 +242,44 @@ namespace TISUnitTests.services
 
             mockSetOfAdminStimuliDao.Verify(dao => dao.Insert(It.Is<List<AdminStimulusDTO>>(result =>
                 EvaluateShouldCreateACollectionOfAdminStimuli(result))));
+        }
+
+        [TestMethod]
+        public void TestForm_ShouldCreateACollectionOfTestForms()
+        {
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var fixedFormSegmentKey = "(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018";
+            var mockTdsTesForm = new TestFormDTO
+            {
+                TestFormKey = "187-2112",
+                SegmentKey = "(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018",
+                ITSBankKey = 2112L,
+                ITSKey = 2112L,
+                Language = "ENU",
+                FormId = "IRP::MathG11::Perf::SP15",
+                Cohort = "Default"
+            };
+
+            mockTestFormDao.Setup(dao => dao.Find(It.IsAny<string>()))
+                .Returns(new List<TestFormDTO> { mockTdsTesForm });
+            mockTestFormDao.Setup(dao => dao.Insert(It.IsAny<List<TestFormDTO>>()))
+                .Verifiable();
+
+            var result = itembankAdministrationDataService.CreateTestForms(testPackage);
+
+            mockTestFormDao.Verify(dao => dao.Find(fixedFormSegmentKey));
+            mockTestFormDao.Verify(dao => dao.Insert(It.IsAny<List<TestFormDTO>>()));
+
+            Assert.AreEqual(1, result.Count);
+
+            var insertedTestForm = result[0];
+            Assert.AreEqual(mockTdsTesForm.TestFormKey, insertedTestForm.TestFormKey);
+            Assert.AreEqual(mockTdsTesForm.SegmentKey, insertedTestForm.SegmentKey);
+            Assert.AreEqual(mockTdsTesForm.ITSBankKey, insertedTestForm.ITSBankKey);
+            Assert.AreEqual(mockTdsTesForm.ITSKey, insertedTestForm.ITSKey);
+            Assert.AreEqual(mockTdsTesForm.Language, insertedTestForm.Language);
+            Assert.AreEqual(mockTdsTesForm.FormId, insertedTestForm.FormId);
+            Assert.AreEqual(mockTdsTesForm.Cohort, insertedTestForm.Cohort);
         }
 
         private bool EvaluateShouldInsertSetOfAdminSubjectRecordsForAllSegments(List<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
