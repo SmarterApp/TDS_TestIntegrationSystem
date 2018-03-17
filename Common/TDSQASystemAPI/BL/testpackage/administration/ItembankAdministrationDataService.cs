@@ -26,6 +26,20 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// <code>OSS_Itembank..MeasurementModel</code> table.  The <code>OSS_Itembank..MeasurementModel</code> is
         /// populated via a seed data script that is run when TIS is first deployed.
         /// </summary>
+        /// <remarks>
+        /// <para>
+        /// These values match up with what is described in the <code>Model</code> enum from
+        /// <code>./TestScoringEngine/ScoringEngine/MeasurementModels/IRTModelFactory.cs</code>:
+        /// <example>
+        /// public enum Model { Unknown = 0, IRT3PL = 1, IRTPCL = 2, raw = 3, IRT3PLn = 4, IRTGPC = 5, IRTGRL = 6 };
+        /// </example>
+        /// </para>
+        /// These values differ slightly from what is described in the TDS <code>itembank.measurementmodel</code>:
+        /// * In TDS: the IRT3PLn id is 1 and IRT3pl is 4.  
+        ///   * As long as the identifiers are consistent within the system it should be fine.
+        /// In both TDS and TIS, the IRTGRL record is missing; there is no record in the <code>measurementmodel</code>
+        /// table with an identifier of 6.
+        /// </remarks>
         private readonly Dictionary<string, int> measurementModelMap = new Dictionary<string, int>
         {
             { "IRT3pl", 1 },
