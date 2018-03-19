@@ -17,6 +17,12 @@ namespace TDSQASystemAPI.DAL
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="recordToSave"></param>
+        void Insert(T recordToSave);
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
         List<T> Find(object criteria);

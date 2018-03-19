@@ -105,5 +105,48 @@ namespace TDSQASystemAPI.Extensions
 
             return dataTable;
         }
+
+        public static DataTable ToDataTable<T>(this T item, string tableName = "dataTable")
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            var dataTable = new DataTable(tableName);
+
+            if (typeof(T).IsValueType || typeof(T).Equals(typeof(string)))
+            {
+                var column = new DataColumn("Value");
+                dataTable.Columns.Add(column);
+                    var dataRow = dataTable.NewRow();
+                    dataRow[0] = item;
+                    dataTable.Rows.Add(dataRow);
+            }
+            else
+            {
+                var properties = TypeDescriptor.GetProperties(typeof(T));
+                foreach (PropertyDescriptor prop in properties)
+                {
+                    dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                }
+
+                    var dataRow = dataTable.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                    {
+                        try
+                        {
+                            dataRow[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+                        }
+                        catch (Exception e)
+                        {
+                            dataRow[prop.Name] = DBNull.Value;
+                        }
+                    }
+                    dataTable.Rows.Add(dataRow);
+            }
+
+            return dataTable;
+        }
     }
 }

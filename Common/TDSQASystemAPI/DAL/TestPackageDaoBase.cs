@@ -98,6 +98,27 @@ namespace TDSQASystemAPI.DAL
         }
 
         /// <summary>
+        /// Insert a record into the database (which is specified by the connection string)
+        /// </summary>
+        /// <param name="recordToSave">The <code>typeparamref name="T"</code> of record to persist.</param>
+        public virtual void Insert(T recordToSave)
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
+            {
+                using (var command = new SqlCommand(InsertSql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    var testeeAttributeParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordToSave.ToDataTable());
+                    testeeAttributeParam.SqlDbType = SqlDbType.Structured;
+                    testeeAttributeParam.TypeName = TvpType;
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        /// <summary>
         /// Get a collection of records from the database.
         /// </summary>
         /// <remarks>
