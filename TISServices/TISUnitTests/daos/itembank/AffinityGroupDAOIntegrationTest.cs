@@ -117,7 +117,7 @@ namespace TISUnitTests.daos.itembank
                     GroupId = "unit-test-group-id",
                     MinItems = 1,
                     MaxItems = 2,
-                    Weight = 5D,
+                    BlueprintWeight = 5D,
                     IsStrictMax = true,
                     TestVersion = 99L,
                     UpdatedTestVersion = 100L,

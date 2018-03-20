@@ -28,6 +28,8 @@ namespace TISUnitTests.services
         private Mock<ITestPackageDao<AdminStimulusDTO>> mockSetOfAdminStimuliDao = new Mock<ITestPackageDao<AdminStimulusDTO>>();
         private Mock<ITestPackageDao<TestFormDTO>> mockTestFormDao = new Mock<ITestPackageDao<TestFormDTO>>();
         private Mock<ITestPackageDao<TestFormItemDTO>> mockTestFormItemDao = new Mock<ITestPackageDao<TestFormItemDTO>>();
+        private Mock<ITestPackageDao<AffinityGroupDTO>> mockAffinityGroupDao = new Mock<ITestPackageDao<AffinityGroupDTO>>();
+        private Mock<ITestPackageDao<AffinityGroupItemDTO>> mockAffinityGroupItemDao = new Mock<ITestPackageDao<AffinityGroupItemDTO>>();
 
         private Mock<IItembankConfigurationDataQueryService> mockItembankConfigurationDataQueryService = new Mock<IItembankConfigurationDataQueryService>();
 
@@ -46,7 +48,9 @@ namespace TISUnitTests.services
                     mockItemMeasurementParameterDao.Object,
                     mockSetOfAdminStimuliDao.Object,
                     mockTestFormDao.Object,
-                    mockTestFormItemDao.Object);
+                    mockTestFormItemDao.Object,
+                    mockAffinityGroupDao.Object,
+                    mockAffinityGroupItemDao.Object);
         }
 
         [TestMethod]
@@ -247,6 +251,7 @@ namespace TISUnitTests.services
         [TestMethod]
         public void TestForm_ShouldCreateACollectionOfTestForms()
         {
+            // This test package has two assessments, each with one segment
             var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
             var fixedFormSegmentKey = "(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018";
             var mockTdsTesForm = new TestFormDTO
@@ -285,6 +290,7 @@ namespace TISUnitTests.services
         [TestMethod]
         public void TestFormItem_ShouldCreateACollectionOfTestFormItemDtos()
         {
+            // This test package has two assessments, each with one segment
             var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
             var fixedFormSegmentKey = "(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018";
             var mockTdsTesForm = new TestFormDTO
@@ -305,6 +311,25 @@ namespace TISUnitTests.services
 
             mockTestFormItemDao.Verify(dao => dao.Insert(It.Is<List<TestFormItemDTO>>(result =>
                 EvaluateShouldCreateACollectionOfTestFormItemDtos(result))));
+        }
+
+        [TestMethod]
+        public void AffinityGroup_ShouldCreateACollectionOfAffinityGroupsAndItems()
+        {
+            // This test package has two assessments, each with one segment
+            var testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            mockAffinityGroupDao.Setup(dao => dao.Insert(It.IsAny<IList<AffinityGroupDTO>>()))
+                .Verifiable();
+            mockAffinityGroupItemDao.Setup(dao => dao.Insert(It.IsAny<IList<AffinityGroupItemDTO>>()))
+                .Verifiable();
+
+            itembankAdministrationDataService.CreateAffinityGroups(testPackage);
+
+            mockAffinityGroupDao.Verify(dao => dao.Insert(It.Is<IList<AffinityGroupDTO>>(result => 
+                EvaluateShouldCreateACollectionOfAffinityGroups(result))));
+            mockAffinityGroupItemDao.Verify(dao => dao.Insert(It.Is<IList<AffinityGroupItemDTO>>(result =>
+                EvaluateShouldCreateACollectionOfAffinityGroupItems(result))));
         }
 
         private bool EvaluateShouldInsertSetOfAdminSubjectRecordsForAllSegments(IList<SetOfAdminSubjectDTO> setOfAdminSubjectDtos)
@@ -684,6 +709,37 @@ namespace TISUnitTests.services
             Assert.AreEqual("187-2112", secondTestFormItem.TestFormKey);
             Assert.AreEqual("187-1432", secondTestFormItem.ItemKey);
                 
+            // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
+            // exception before this line is hit.
+            return true;
+        }
+
+        private bool EvaluateShouldCreateACollectionOfAffinityGroups(IList<AffinityGroupDTO> affinityGroups)
+        {
+            // Verify AffinityGroups
+            Assert.AreEqual(3, affinityGroups.Count);
+
+            var firstAffinityGroup = affinityGroups.First(ag => ag.GroupId.Equals("G11Math_DOK2", StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsNull(firstAffinityGroup.AbilityWeight);
+            Assert.AreEqual(2, firstAffinityGroup.MinItems);
+            Assert.AreEqual(8, firstAffinityGroup.MaxItems);
+            Assert.IsFalse(firstAffinityGroup.IsStrictMax);
+            Assert.AreEqual(1D, firstAffinityGroup.BlueprintWeight);
+            Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", firstAffinityGroup.SegmentKey);
+
+            // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
+            // exception before this line is hit.
+            return true;
+        }
+
+        private bool EvaluateShouldCreateACollectionOfAffinityGroupItems(IList<AffinityGroupItemDTO> affinityGroupItems)
+        {
+            Assert.AreEqual(18, affinityGroupItems.Count);
+
+            var affinityGroupItem = affinityGroupItems.First(agi => agi.ItemKey.Equals("187-2029"));
+            Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", affinityGroupItem.SegmentKey);
+            Assert.AreEqual("G11Math_DOK2", affinityGroupItem.GroupId);
+
             // If all the Assertions pass, this method passes.  Otherwise, the Assert will throw an
             // exception before this line is hit.
             return true;

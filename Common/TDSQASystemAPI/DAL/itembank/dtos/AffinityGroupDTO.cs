@@ -13,15 +13,15 @@
         public string GroupId { get; set; }
         public int MinItems { get; set; }
         public int MaxItems { get; set; }
-        public double Weight { get; set; }
+        public double? BlueprintWeight { get; set; } // maps to weight in AffinityGroup
         public bool IsStrictMax { get; set; }
         public long TestVersion { get; set; } // maps to loadconfig in AffinityGroup
         public long UpdatedTestVersion { get; set; } // maps to updateconfig in AffinityGroup
-        public double AbilityWeight { get; set; }
-        public double PrecisionTarget { get; set; }
-        public double StartAbility { get; set; }
-        public double StartInfo { get; set; }
-        public double PrecisionTargetMetWeight { get; set; }
-        public double PrecisionTargetNotMetWeight { get; set; }
+        public double? AbilityWeight { get; set; }
+        public double? PrecisionTarget { get; set; }
+        public double? StartAbility { get; set; }
+        public double? StartInfo { get; set; }
+        public double? PrecisionTargetMetWeight { get; set; }
+        public double? PrecisionTargetNotMetWeight { get; set; }
     }
 }

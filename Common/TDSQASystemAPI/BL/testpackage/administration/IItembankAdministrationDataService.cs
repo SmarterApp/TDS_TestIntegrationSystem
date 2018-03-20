@@ -78,5 +78,11 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// <param name="testPackage">The <code>TestPackage</code> being loaded.</param>
         /// <param name="testForms">The collection of <code>TestFormDTO</code>s for this <code>TestPackage</code>.</param>
         void CreateTestFormItems(TestPackage.TestPackage testPackage, IList<TestFormDTO> testForms);
+
+        /// <summary>
+        /// Create <code>AffinityGroup</code>s and thier associated items for the <code>TestPackage</code>.
+        /// </summary>
+        /// <param name="testPackage">TestPackage</code> being loaded.</param>
+        void CreateAffinityGroups(TestPackage.TestPackage testPackage);
     }
 }

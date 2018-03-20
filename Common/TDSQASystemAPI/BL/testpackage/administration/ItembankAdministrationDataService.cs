@@ -22,6 +22,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly ITestPackageDao<AdminStimulusDTO> setOfAdminStimuliDao;
         private readonly ITestPackageDao<TestFormDTO> testFormDao;
         private readonly ITestPackageDao<TestFormItemDTO> testFormItemDao;
+        private readonly ITestPackageDao<AffinityGroupDTO> affinityGroupDao;
+        private readonly ITestPackageDao<AffinityGroupItemDTO> affinityGroupItemDao;
 
         /// <summary>
         /// A map of the measurement models that are available.  This map comes from the 
@@ -93,6 +95,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             setOfAdminStimuliDao = new AdminStimulusDAO();
             testFormDao = new TestFormDAO();
             testFormItemDao = new TestFormItemDAO();
+            affinityGroupDao = new AffinityGroupDAO();
+            affinityGroupItemDao = new AffinityGroupItemDAO();
             itembankConfigurationDataQueryService = 
                 new ItembankConfigurationDataQueryService(new SubjectDAO(), new ClientDAO(), testAdminDao);
             
@@ -107,7 +111,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                  ITestPackageDao<ItemMeasurementParameterDTO> itemMeasurementParameterDao,
                                                  ITestPackageDao<AdminStimulusDTO> setOfAdminStimuliDao,
                                                  ITestPackageDao<TestFormDTO> testFormDao,
-                                                 ITestPackageDao<TestFormItemDTO> testFormItemDao)
+                                                 ITestPackageDao<TestFormItemDTO> testFormItemDao,
+                                                 ITestPackageDao<AffinityGroupDTO> affinityGroupDao,
+                                                 ITestPackageDao<AffinityGroupItemDTO> affinityGroupItemDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.testAdminDao = testAdminDao;
@@ -119,6 +125,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.setOfAdminStimuliDao = setOfAdminStimuliDao;
             this.testFormDao = testFormDao;
             this.testFormItemDao = testFormItemDao;
+            this.affinityGroupDao = affinityGroupDao;
+            this.affinityGroupItemDao = affinityGroupItemDao;
         }
 
         public void CeateItemMeasurementParameters(TestPackage.TestPackage testPackage)
@@ -235,6 +243,65 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 };
 
             adminStrandDao.Insert(segmentAdminStrandDtos.ToList());
+        }
+
+        public void CreateAffinityGroups(TestPackage.TestPackage testPackage)
+        {
+            var affinityGroupBlueprintElements = from blueprint in testPackage.GetAllTestPackageBlueprintElements()
+                                                 where blueprint.Value.type.Equals(BlueprintElementTypes.AFFINITY_GROUP)
+                                                 select blueprint;
+
+            var affinityGroupDtos =
+                from assessment in testPackage.Assessment
+                from segment in assessment.Segments
+                from segmentBp in segment.SegmentBlueprint
+                join affinityGroupBp in affinityGroupBlueprintElements
+                    on segmentBp.idRef equals affinityGroupBp.Key
+                let itemSelectionProperties = segmentBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
+                select new AffinityGroupDTO
+                {
+                    SegmentKey = segment.Key,
+                    GroupId = segmentBp.idRef,
+                    MinItems = segmentBp.minExamItems,
+                    MaxItems = segmentBp.maxExamItems,
+                    IsStrictMax = bool.Parse(itemSelectionProperties.GetOrDefault("isstrictmax", "false")),
+                    BlueprintWeight = float.Parse(itemSelectionProperties.GetOrDefault("bpweight", "0")),
+                    StartAbility = itemSelectionProperties.ContainsKey("startability")
+                        ? itemSelectionProperties["startability"]?.ToNullableDouble()
+                        : null,
+                    StartInfo = itemSelectionProperties.ContainsKey("startinfo")
+                        ? itemSelectionProperties["startinfo"]?.ToNullableDouble()
+                        : null,
+                    AbilityWeight = itemSelectionProperties.ContainsKey("abilityweight")
+                        ? itemSelectionProperties["abilityweight"]?.ToNullableDouble()
+                        : null,
+                    PrecisionTarget = itemSelectionProperties.ContainsKey("precisiontarget")
+                        ? itemSelectionProperties["precisiontarget"]?.ToNullableDouble()
+                        : null,
+                    PrecisionTargetMetWeight = itemSelectionProperties.ContainsKey("precisiontargetmetweight")
+                        ? itemSelectionProperties["precisiontargetmetweight"]?.ToNullableDouble()
+                        : null,
+                    PrecisionTargetNotMetWeight = itemSelectionProperties.ContainsKey("precisiontargetnotmetweight")
+                        ? itemSelectionProperties["precisiontargetnotmetweight"]?.ToNullableDouble()
+                        : null,
+                    TestVersion = (long)testPackage.version,
+                    UpdatedTestVersion = (long)testPackage.version 
+                };
+
+            affinityGroupDao.Insert(affinityGroupDtos.ToList());
+
+            var affinityGroupItemDtos = from item in testPackage.GetAllItems()
+                                        from itemBp in item.BlueprintReferences
+                                        join affinityGroupBp in affinityGroupBlueprintElements
+                                            on itemBp.idRef equals affinityGroupBp.Key
+                                        select new AffinityGroupItemDTO
+                                        {
+                                            SegmentKey = item.AssessmentSegment.Key,
+                                            ItemKey = item.Key,
+                                            GroupId = itemBp.idRef
+                                        };
+
+            affinityGroupItemDao.Insert(affinityGroupItemDtos.ToList());
         }
 
         public void CreateSetOfAdminItems(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap)
