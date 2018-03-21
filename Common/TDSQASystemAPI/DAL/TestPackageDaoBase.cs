@@ -68,6 +68,8 @@ namespace TDSQASystemAPI.DAL
 
         protected internal string ExistsSql { get; set; }
 
+        protected internal string FindByExampleSql { get; set; }
+
         /// <summary>
         /// The type of the table-valued parameter used to pass the <code>IList<typeparamref name="T"/></code>.
         /// </summary>
@@ -126,6 +128,10 @@ namespace TDSQASystemAPI.DAL
         /// <param name="recordToSave">The <code>typeparamref name="T"</code> of record to persist.</param>
         public virtual bool Exists(T recordToCheck)
         {
+            if (string.IsNullOrEmpty(ExistsSql))
+            {
+                throw new System.InvalidOperationException("Exists SQL is not defined");
+            }
             var exists = false;
             using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
             {
@@ -133,7 +139,7 @@ namespace TDSQASystemAPI.DAL
                 {
                     command.CommandType = CommandType.Text;
 
-                    ExistsAddParameter(recordToCheck, command.Parameters);
+                    AddNaturalKeys(recordToCheck, command.Parameters);
 
                     connection.Open();
                     var count = int.Parse(command.ExecuteScalar().ToString());
@@ -143,7 +149,39 @@ namespace TDSQASystemAPI.DAL
             return exists;
         }
 
-        virtual protected void ExistsAddParameter(T record, SqlParameterCollection parameters)
+        virtual protected void AddNaturalKeys(T record, SqlParameterCollection parameters)
+        {
+        }
+
+
+        /// <summary>
+        /// Insert a record into the database (which is specified by the connection string)
+        /// </summary>
+        /// <param name="recordToSave">The <code>typeparamref name="T"</code> of record to persist.</param>
+        public virtual List<T> FindByExample(T recordToCheck)
+        {
+            if (string.IsNullOrEmpty(FindByExampleSql))
+            {
+                throw new System.InvalidOperationException("FindByExample SQL is not defined");
+            }
+
+            var results = new List<T>();
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
+            {
+                using (var command = new SqlCommand(FindByExampleSql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+
+                    AddNaturalKeys(recordToCheck, command.Parameters);
+
+                    connection.Open();
+                    results = reflectionObjectPopulator.GetListFromDataReader(command.ExecuteReader());
+                }
+            }
+            return results;
+        }
+
+        virtual protected void FindByExampleAddParameter(T record, SqlParameterCollection parameters)
         {
         }
 

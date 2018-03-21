@@ -28,6 +28,7 @@ namespace TISUnitTests.services
             service.CreateGrade(loadedTestPackage);
             service.CreateScoreFeature(loadedTestPackage);
             service.CreateComputationRuleParameters(loadedTestPackage);
+            service.CreateComputationRuleParameterValue(loadedTestPackage);
             service.CreatePerformanceLevels(loadedTestPackage);            
         }
     }

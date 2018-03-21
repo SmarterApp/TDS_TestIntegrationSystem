@@ -27,9 +27,22 @@ namespace TDSQASystemAPI.DAL.scoring.daos
                 "t.ComputationRule = @ComputationRule AND " +
                 "t.ParameterName = @ParameterName AND " +
                 "t.ParameterPosition = @ParameterPosition";
+            FindByExampleSql = 
+                "SELECT " + 
+                "   _Key AS ComputationRuleParameterKey, " +
+                "   ComputationRule, " +
+                "   ParameterName, " +
+                "   ParameterPosition, " +
+                "   IndexType, " +
+                "   [Type] " +
+                "FROM dbo.ComputationRuleParameters t " + 
+                "WHERE " +
+                "   t.ComputationRule = @ComputationRule AND " +
+                "   t.ParameterName = @ParameterName AND " +
+                "   t.ParameterPosition = @ParameterPosition";
         }
 
-        override protected void ExistsAddParameter(ComputationRuleParameterDTO computationRuleParameterDTO, SqlParameterCollection parameters)
+        override protected void AddNaturalKeys(ComputationRuleParameterDTO computationRuleParameterDTO, SqlParameterCollection parameters)
         {
             parameters.AddWithValue("@ComputationRule", computationRuleParameterDTO.ComputationRule);
             parameters.AddWithValue("@ParameterName", computationRuleParameterDTO.ParameterName);

@@ -25,7 +25,7 @@ namespace TDSQASystemAPI.DAL.scoring.daos
             ExistsSql = "SELECT count(*) FROM dbo.Test t WHERE t.clientname = @clientName AND t.testID = @testID AND t._efk_Subject = @subject";
         }
 
-        override protected void ExistsAddParameter(TestDTO testDTO, SqlParameterCollection parameters)
+        override protected void AddNaturalKeys(TestDTO testDTO, SqlParameterCollection parameters)
         {
             parameters.AddWithValue("@clientName", testDTO.ClientName);
             parameters.AddWithValue("@testID", testDTO.TestId);

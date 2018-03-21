@@ -30,9 +30,21 @@ namespace TDSQASystemAPI.DAL.scoring.daos
 
             ExistsSql = "SELECT count(*) FROM dbo.TestScoreFeature t WHERE " +
                 "t.ClientName = @clientName AND t.TestID = @testID AND t.computationRule = @computationRule AND t.measureOf = @measureOf";
+            FindByExampleSql =
+                "SELECT \n" +
+                "   _Key as TestScoreFeatureKey, \n" +
+                "   ClientName, \n" +
+                "   TestId, \n" +
+                "   MeasureOf, \n" +
+                "   MeasureLabel, \n" +
+                "   IsScaled, \n" +
+                "   ComputationRule, \n" +
+                "   ComputationOrder \n" +
+                "FROM dbo.TestScoreFeature t WHERE " +
+                "t.ClientName = @clientName AND t.TestID = @testID AND t.computationRule = @computationRule AND t.measureOf = @measureOf";
         }
 
-        override protected void ExistsAddParameter(TestScoreFeatureDTO testScoreFeature, SqlParameterCollection parameters) 
+        override protected void AddNaturalKeys(TestScoreFeatureDTO testScoreFeature, SqlParameterCollection parameters) 
         { 
             parameters.AddWithValue("@clientName", testScoreFeature.ClientName);
             parameters.AddWithValue("@testID", testScoreFeature.TestId);

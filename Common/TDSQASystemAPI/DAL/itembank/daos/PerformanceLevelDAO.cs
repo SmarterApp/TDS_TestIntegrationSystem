@@ -28,7 +28,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
             ExistsSql = "SELECT count(*) FROM dbo.PerformanceLevels t WHERE t._fk_content = @content AND t.PLevel = @pLevel";
         }
 
-        override protected void ExistsAddParameter(PerformanceLevelDTO performanceLevelDTO, SqlParameterCollection parameters)
+        override protected void AddNaturalKeys(PerformanceLevelDTO performanceLevelDTO, SqlParameterCollection parameters)
         {
             parameters.AddWithValue("@content", performanceLevelDTO.ContentKey);
             parameters.AddWithValue("@pLevel", performanceLevelDTO.PLevel);

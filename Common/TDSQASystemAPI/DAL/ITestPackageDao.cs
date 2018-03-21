@@ -32,5 +32,7 @@ namespace TDSQASystemAPI.DAL
         /// <param name="criteria"></param>
         /// <returns></returns>
         List<T> Find(object criteria);
+
+        List<T> FindByExample(T criteria);
     }
 }
