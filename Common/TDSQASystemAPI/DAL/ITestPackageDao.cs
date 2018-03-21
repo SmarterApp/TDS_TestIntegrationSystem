@@ -23,6 +23,12 @@ namespace TDSQASystemAPI.DAL
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="recordToSave"></param>
+        bool Exists(T recordToCheck);
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
         List<T> Find(object criteria);

@@ -51,7 +51,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateItems(TestPackage.TestPackage testPackage)
         {
-            var allSegments = from a in testPackage.Assessment
+            var allSegments = from a in testPackage.Test
                               from s in a.Segments
                               select s;
 
@@ -59,9 +59,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             List<ItemDTO> allItems = new List<ItemDTO>();
             foreach (var segment in allSegments)
             {
-                if (segment.Item is AssessmentSegmentSegmentForms)
+                if (segment.Item is TestSegmentSegmentForms)
                 {
-                    foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                    foreach (var form in (segment.Item as TestSegmentSegmentForms).SegmentForm)
                     {
                         var items = from ig in form.ItemGroup
                                     from item in ig.Item
@@ -85,7 +85,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 }
                 else
                 {
-                    var pool = segment.Item as AssessmentSegmentPool;
+                    var pool = segment.Item as TestSegmentPool;
                     var items = from ig in pool.ItemGroup
                                 from item in ig.Item
                                 select new ItemDTO
@@ -112,7 +112,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateStimuli(TestPackage.TestPackage testPackage)
         {
-            var allSegments = from a in testPackage.Assessment
+            var allSegments = from a in testPackage.Test
                               from s in a.Segments
                               select s;
 
@@ -120,9 +120,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             List<StimulusDTO> allStimuli = new List<StimulusDTO>();
             foreach (var segment in allSegments)
             {
-                if (segment.Item is AssessmentSegmentSegmentForms)
+                if (segment.Item is TestSegmentSegmentForms)
                 {
-                    foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                    foreach (var form in (segment.Item as TestSegmentSegmentForms).SegmentForm)
                     {
                         var stimuli = from ig in form.ItemGroup
                                       where ig.Stimulus != null
@@ -144,7 +144,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 }
                 else
                 {
-                    var pool = segment.Item as AssessmentSegmentPool;
+                    var pool = segment.Item as TestSegmentPool;
                     var stimuli = from ig in pool.ItemGroup
                                   where ig.Stimulus != null
                                   select new StimulusDTO

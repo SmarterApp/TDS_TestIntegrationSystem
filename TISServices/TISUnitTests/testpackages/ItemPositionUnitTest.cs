@@ -29,13 +29,13 @@ namespace TISUnitTests.testpackages
             var firstItemGroup = BuildItemGroup(5);
             var secondItemGroup = BuildItemGroup(2);
 
-            var segment = new AssessmentSegment
+            var segment = new TestSegment
             {
                 id = "SBAC-IRP-Perf-MATH-11",
                 position = 1,
                 algorithmType = "adaptive2",
                 algorithmImplementation = "FAIRWAY ROUNDROBIN",
-                Item = new AssessmentSegmentPool
+                Item = new TestSegmentPool
                 {
                     ItemGroup = new ItemGroup[] { firstItemGroup, secondItemGroup }
                 }
@@ -52,7 +52,7 @@ namespace TISUnitTests.testpackages
 
             var allItemGroups = new ItemGroup[] { firstItemGroup, secondItemGroup };
 
-            var form = new AssessmentSegmentSegmentFormsSegmentForm
+            var form = new TestSegmentSegmentFormsSegmentForm
             {
                 cohort = "Cohort",
                 id = "form_id",

@@ -33,7 +33,7 @@ namespace TISUnitTests.testpackages
 
             // The Segment's Item can be either a AssessmentSegmentPool or AssessmentSegmentSegmentForms 
             // In this case, the Item is an AssessmentSegmentPool.
-            var pool = testPackage.Assessment[0].Segments[0].Item as AssessmentSegmentPool;
+            var pool = testPackage.Test[0].Segments[0].Item as TestSegmentPool;
             Assert.AreEqual(3, pool.ItemGroup[0].Item[0].BlueprintReferences.Length);
             Assert.IsNotNull(pool.ItemGroup[0].Item[0].ItemGroup);
             Assert.IsNotNull(pool.ItemGroup[0].Item[0].TestPackage);
@@ -41,7 +41,7 @@ namespace TISUnitTests.testpackages
             // Verify the Assessments are configured properly:
             // 1.  Make sure they've been assigned to the correct TestPackage parent
             // 2.  Make sure each segment has been assigned the correct Assessment parent
-            foreach (var assessment in testPackage.Assessment)
+            foreach (var assessment in testPackage.Test)
             {
                 Assert.IsNotNull(assessment.TestPackage);
 
@@ -52,7 +52,7 @@ namespace TISUnitTests.testpackages
             }
 
             // Verify forms and/or pools are configured properly
-            var allSegments = from a in testPackage.Assessment
+            var allSegments = from a in testPackage.Test
                               from s in a.Segments
                               select s;
 
@@ -60,9 +60,9 @@ namespace TISUnitTests.testpackages
             {
                 // Verify the forms are built properly for fixed-form assessments.  The pool (for adaptive assessments) 
                 // has already been verified above
-                if (segment.Item is AssessmentSegmentSegmentForms)
+                if (segment.Item is TestSegmentSegmentForms)
                 {
-                    foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                    foreach (var form in (segment.Item as TestSegmentSegmentForms).SegmentForm)
                     {
                         Assert.IsNotNull(form.AssessmentSegment);
                         foreach (var itemGroup in form.ItemGroup)
@@ -83,11 +83,11 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldBuildATestPackageFromXmlWithAssessmentKeys()
         {
-            var catAssessment = testPackage.Assessment[0];
+            var catAssessment = testPackage.Test[0];
             Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", catAssessment.Key);
             Assert.AreEqual("(SBAC_PT)SBAC-IRP-CAT-MATH-11-2017-2018", catAssessment.Segments[0].Key);
 
-            var perfAssessment = testPackage.Assessment[1];
+            var perfAssessment = testPackage.Test[1];
             Assert.AreEqual("(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018", perfAssessment.Key);
             Assert.AreEqual("(SBAC_PT)SBAC-IRP-Perf-MATH-11-2017-2018", perfAssessment.Segments[0].Key);
         }
@@ -97,7 +97,7 @@ namespace TISUnitTests.testpackages
         {
             testPackage = TestPackageAssembler.FromXml(new XmlTextReader(SCORING_RULES_XML_FILE));
 
-            var assessmentSegmentForm = testPackage.Assessment[0].Segments[0].Item as AssessmentSegmentSegmentForms;
+            var assessmentSegmentForm = testPackage.Test[0].Segments[0].Item as TestSegmentSegmentForms;
             var dimension = assessmentSegmentForm.SegmentForm[0]
                 .ItemGroup[0]
                 .Item[0]
@@ -109,7 +109,7 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldGetTheCorrectPresentationLabelWhenTheLabelIsNull()
         {
-            var assessmentSegmentPool = testPackage.Assessment[0].Segments[0].Item as AssessmentSegmentPool;
+            var assessmentSegmentPool = testPackage.Test[0].Segments[0].Item as TestSegmentPool;
             var presentation = assessmentSegmentPool.ItemGroup[0]
                 .Item[0]
                 .Presentations[0];
@@ -119,12 +119,12 @@ namespace TISUnitTests.testpackages
         [TestMethod]
         public void ShouldBuildCorrectItemGroupKeys()
         {
-            var firstAssessmentPool = testPackage.Assessment[0].Segments[0].Item as AssessmentSegmentPool;
+            var firstAssessmentPool = testPackage.Test[0].Segments[0].Item as TestSegmentPool;
             var itemGroup = firstAssessmentPool.ItemGroup[0];
 
             Assert.AreEqual("I-187-1899", itemGroup.Key);
 
-            var secondAssessmentForm = testPackage.Assessment[1].Segments[0].Item as AssessmentSegmentSegmentForms;
+            var secondAssessmentForm = testPackage.Test[1].Segments[0].Item as TestSegmentSegmentForms;
             var formItemGroup = secondAssessmentForm.SegmentForm[0].ItemGroup[0];
 
             Assert.AreEqual("G-187-3688-0", formItemGroup.Key);
@@ -135,7 +135,7 @@ namespace TISUnitTests.testpackages
         {
             testPackage = TestPackageAssembler.FromXml(new XmlTextReader(SEGMENT_BLUEPRINT_XML_FILE));
 
-            var segmentBlueprints = testPackage.Assessment[0].Segments[0].SegmentBlueprint;
+            var segmentBlueprints = testPackage.Test[0].Segments[0].SegmentBlueprint;
             Assert.AreEqual(1, segmentBlueprints[0].ItemSelection.Length);
             Assert.AreEqual(1, segmentBlueprints[1].ItemSelection.Length);
             Assert.IsNull(segmentBlueprints[2].ItemSelection);

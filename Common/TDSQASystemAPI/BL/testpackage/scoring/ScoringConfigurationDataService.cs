@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TDSQASystemAPI.DAL;
+using TDSQASystemAPI.DAL.itembank.daos;
 using TDSQASystemAPI.DAL.itembank.dtos;
+using TDSQASystemAPI.DAL.scoring.daos;
 using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.BL.testpackage.scoring
@@ -17,8 +19,6 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         private readonly ITestPackageDao<FeatureComputationLocationDTO> featureComputationLocationDAO;
         private readonly ITestPackageDao<ComputationRuleParameterDTO> computationRuleParameterDAO;
         private readonly ITestPackageDao<ComputationRuleParameterValueDTO> computationRuleParameterValueDAO;
-        private readonly ITestPackageDao<ConversionTableDescDTO> conversionTableDescDAO;
-        private readonly ITestPackageDao<ConversionTableDTO> conversionTableDAO;
         private readonly ITestPackageDao<PerformanceLevelDTO> performanceLevelDAO;
 
         public ScoringConfigurationDataService(
@@ -28,8 +28,6 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
             ITestPackageDao<FeatureComputationLocationDTO> featureComputationLocationDAO,
             ITestPackageDao<ComputationRuleParameterDTO> computationRuleParameterDAO,
             ITestPackageDao<ComputationRuleParameterValueDTO> computationRuleParameterValueDAO,
-            ITestPackageDao<ConversionTableDescDTO> conversionTableDescDAO,
-            ITestPackageDao<ConversionTableDTO> conversionTableDAO,
             ITestPackageDao<PerformanceLevelDTO> performanceLevelDAO)
         {
             this.testDAO = testDAO;
@@ -38,35 +36,57 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
             this.featureComputationLocationDAO = featureComputationLocationDAO;
             this.computationRuleParameterDAO = computationRuleParameterDAO;
             this.computationRuleParameterValueDAO = computationRuleParameterValueDAO;
-            this.conversionTableDescDAO = conversionTableDescDAO;
-            this.conversionTableDAO = conversionTableDAO;
             this.performanceLevelDAO = performanceLevelDAO;
+        }
+
+        private static string TestKey(TestPackage.TestPackage testPackage)
+        {
+            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("package"));
+            if (packageBlueprint != null)
+            {
+                return packageBlueprint.id;
+            } else
+            {
+                return null;
+            }
         }
 
         public void CreateTest(TestPackage.TestPackage testPackage)
         {
-            var testDTO = new List<TestDTO>();
-            testPackage.Assessment.ForEach(assessment => testDTO.Add(
-                new TestDTO(){
-                    ClientName = testPackage.publisher,
-                    TestId = assessment.id,
-                    Subject = testPackage.subject
-                }));
-            testDAO.Insert(testDTO);
+            var testKey = TestKey(testPackage);
+            var testDTO = new TestDTO()
+            {
+                ClientName = testPackage.publisher,
+                TestId = testKey,
+                Subject = testPackage.subject
+            };
+            //if (!testDAO.Exists(testPackage.publisher, testKey, testPackage.subject))
+            if (!testDAO.Exists(testDTO))
+                {
+                testDAO.Insert(testDTO);
+            }              
         }
 
         public void CreateGrade(TestPackage.TestPackage testPackage)
         {
+            var testKey = TestKey(testPackage);
             var testGradeDTO = new List<TestGradeDTO>();
-            testPackage.Assessment.ForEach(assessment =>
-                assessment.Grades.ForEach(grade =>
-                {
-                    testGradeDTO.Add(new TestGradeDTO()
+            testPackage.Test.ForEach(assessment =>
+                assessment.Grades.ForEach(grade => {
+                    var newTestGrade = new TestGradeDTO()
                     {
                         ClientName = testPackage.publisher,
-                        TestId = assessment.id,
-                        ReportingGrade = grade.label
-                    });
+                        TestId = testKey,
+                        ReportingGrade = grade.value
+                    };
+
+                    if (!testGradeDAO.Exists(newTestGrade))
+                    {
+                        if (!testGradeDTO.Contains(newTestGrade))
+                        {
+                            testGradeDTO.Add(newTestGrade);
+                        }
+                    }
                 }));
             testGradeDAO.Insert(testGradeDTO);
         }
@@ -74,67 +94,85 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         public void CreateScoreFeature(TestPackage.TestPackage testPackage)
         {
             var testScoreFeatureDTO = new List<TestScoreFeatureDTO>();
-            var assessment = testPackage.Assessment.SelectMany(a => a.Segments.SelectMany(s => s.SegmentBlueprint.Select(b => new { a.id, b.idRef }))).ToDictionary(t=>t.idRef, t=>t.id);
-            testPackage.Blueprint.ForEach(
-                blueprint => blueprint.Scoring.Rules.ForEach(
-                    rule => {
-                        var measureOf = "";
-                        // testPackage.
-                        testScoreFeatureDTO.Add(new TestScoreFeatureDTO()
-                        {
-                            TestScoreFeatureKey = rule.Id,
-                            ClientName = testPackage.publisher,
-                            TestId = testPackage.id
-                            MeasureOf = measureOf, // CASE WHEN TestKey = cr.bpElementID THEN 'Overall'
-                                                   // WHEN tbp.bpElementID IS NOT NULL THEN tbp.bpElementName
-                                                   // ELSE cr.bpElementID
-                                                   // END
-                            MeasureLabel = rule.name, // comes from rule label
-                            IsScaled = rule.name.ToLower().Contains("scale"),  // comes from rule label
-                            ComputationRule = rule.name,
-                            ComputationOrder = rule.computationOrder
-                        });
-                    }));
-            testScoreFeatureDAO.Insert(testScoreFeatureDTO);
-        }
-
-        public void CreateFeatureComputationLocations(TestPackage.TestPackage testPackage)
-        {
-            var ruleId = Guid.NewGuid();
             var featureComputationLocationDTO = new List<FeatureComputationLocationDTO>();
-            testPackage.Blueprint.ForEach(
-                blueprint => blueprint.Scoring.Rules.ForEach(rule =>                    
-                    featureComputationLocationDTO.Add(new FeatureComputationLocationDTO()
-                    {
-                        TestScoreFeatureKey = ruleId,  // TODO: missing field
-                        Location = "TIS"
-                    })
-                 )
-            );
-
-            featureComputationLocationDAO.Insert(featureComputationLocationDTO);
+            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("package"));
+            if (packageBlueprint != null)
+            {
+                var testKey = packageBlueprint.id;            
+                testPackage.Blueprint.ForEach(blueprint => {
+                    if (blueprint.Scoring != null) {
+                        blueprint.Scoring.Rules.ForEach(rule =>
+                        {
+                            var measureOf = blueprint.id;
+                            if (blueprint.type.Equals("package"))
+                            {
+                                measureOf = "Overall";
+                            }
+                            var ruleLabel = rule.name;  // may need to add rule label to test package
+                            var newTestScoreFeatureDTO = new TestScoreFeatureDTO()
+                            {
+                                TestScoreFeatureKey = rule.Id,
+                                ClientName = testPackage.publisher,
+                                TestId = testKey,
+                                MeasureOf = measureOf,
+                                MeasureLabel = ruleLabel,
+                                IsScaled = ruleLabel.ToLower().Contains("scale"),
+                                ComputationRule = rule.name,
+                                ComputationOrder = rule.computationOrder
+                            };
+                            if (!testScoreFeatureDAO.Exists(newTestScoreFeatureDTO))
+                            {                             
+                                testScoreFeatureDTO.Add(newTestScoreFeatureDTO);
+                                featureComputationLocationDTO.Add(new FeatureComputationLocationDTO() { TestScoreFeatureKey = rule.Id, Location = "TIS" });
+                            }
+                        });
+                    };
+                });
+                testScoreFeatureDAO.Insert(testScoreFeatureDTO);
+                featureComputationLocationDAO.Insert(featureComputationLocationDTO);
+            }
         }
 
         public void CreateComputationRuleParameters(TestPackage.TestPackage testPackage)
         {
-            var parameterID = Guid.NewGuid();
-            var parameterPosition = 1;
             var computationRuleParameterDTO = new List<ComputationRuleParameterDTO>();
             testPackage.Blueprint.ForEach(
-                blueprint => blueprint.Scoring.Rules.ForEach(rule =>
-                    computationRuleParameterDTO.Add(new ComputationRuleParameterDTO()
-                    {
-                        ComputationRuleParameterKey = parameterID,
-                        ComputationRule = rule.name,
-                        ParameterName = rule.Parameter[0].name,
-                        ParameterPosition = parameterPosition,
-                        // IndexType = CASE WHEN lcrp.PropName = 'indextype' THEN lcrp.PropValue ELSE '' END
-                        IndexType = rule.Parameter[0].Property[0].value,
-                        Type = rule.Parameter[0].type
-                    })
-                )
-            );
-
+                blueprint => {
+                    if (blueprint.Scoring != null) {
+                        blueprint.Scoring.Rules.ForEach(rule =>
+                        {
+                            if (rule.Parameter != null)
+                            {
+                                rule.Parameter.ForEach(parameter =>
+                                {
+                                    var indexType = "";
+                                    if (parameter.Property != null)
+                                    {
+                                        parameter.Property.ForEach(property =>
+                                        {
+                                            if (property.name.Equals("indextype"))
+                                            {
+                                                indexType = property.value;
+                                            }
+                                        });
+                                    }
+                                    var newComputationRuleParameterDTO = new ComputationRuleParameterDTO()
+                                    {
+                                        ComputationRuleParameterKey = parameter.Id,
+                                        ComputationRule = rule.name,
+                                        ParameterName = parameter.name,
+                                        ParameterPosition = parameter.position,
+                                        IndexType = indexType,
+                                        Type = parameter.type
+                                    };
+                                    if (!computationRuleParameterDAO.Exists(newComputationRuleParameterDTO))
+                                    {
+                                        computationRuleParameterDTO.Add(newComputationRuleParameterDTO);
+                                    }
+                                });
+                            }
+                        });
+            };                });
             computationRuleParameterDAO.Insert(computationRuleParameterDTO);
         }
 
@@ -165,60 +203,37 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
             computationRuleParameterValueDAO.Insert(computationRuleParameterValueDTO);
         }
 
-        public void CreateConversionTableDesc(TestPackage.TestPackage testPackage)
-        {
-            var conversionTableDescDTO = new List<ConversionTableDescDTO>();
-            testPackage.Assessment.ForEach(assessment =>
-                assessment.Grades.ForEach(grade =>
-                {
-                    conversionTableDescDTO.Add(new ConversionTableDescDTO()
-                    {
-                        ClientName = testPackage.publisher,
-                        TestId = assessment.id,
-                        ReportingGrade = grade.label
-                    });
-
-                }));
-
-            conversionTableDescDAO.Insert(conversionTableDescDTO);
-        }
-
-        public void CreateConversionTables(TestPackage.TestPackage testPackage)
-        {
-            var conversionTableDTO = new List<ConversionTableDTO>();
-            testPackage.Assessment.ForEach(assessment =>
-                assessment.Grades.ForEach(grade =>
-                {
-                    conversionTableDTO.Add(new ConversionTableDTO()
-                    {
-                        ClientName = testPackage.publisher,
-                        TestId = assessment.id,
-                        ReportingGrade = grade.label
-                    });
-
-                }));
-
-            conversionTableDAO.Insert(conversionTableDTO);
-        }
-
         public void CreatePerformanceLevels(TestPackage.TestPackage testPackage)
         {
             var performanceLevelDTO = new List<PerformanceLevelDTO>();
-            testPackage.Assessment.ForEach(assessment =>
-                assessment.Grades.ForEach(grade =>
+            var testKey = TestKey(testPackage);
+            if (testKey != null) {
+                var testPackageKey = string.Format("({0}){1}-{2}", testPackage.publisher, testKey, testPackage.academicYear);
+                testPackage.Blueprint.ForEach(blueprint =>
                 {
-                    performanceLevelDTO.Add(new PerformanceLevelDTO()
+                    if ((blueprint.Scoring != null) && (blueprint.Scoring.PerformanceLevels != null))
                     {
-                        PLevel = 0,
-                        ThetaLo = 0,
-                        ThetaHi = 0,
-                        ScaledLo = 0,
-                        ScaledHi = 0,
-                    });
+                        blueprint.Scoring.PerformanceLevels.ForEach(performanceLevel =>
+                        {
+                            var newPerformanceLevelDTO = new PerformanceLevelDTO()
+                            {
+                                ContentKey = testPackageKey,
+                                PLevel = performanceLevel.pLevel,
+                                ThetaLo = 0,
+                                ThetaHi = 0,
+                                ScaledLo = performanceLevel.scaledLo,
+                                ScaledHi = performanceLevel.scaledHi,
+                            };
+                            if (!performanceLevelDAO.Exists(newPerformanceLevelDTO))
+                            {
+                                performanceLevelDTO.Add(newPerformanceLevelDTO);
+                            }
+                        });
+                    }
+                });
 
-                }));
-
-            performanceLevelDAO.Insert(performanceLevelDTO);
+                performanceLevelDAO.Insert(performanceLevelDTO);
+            }
         }
     }
 }

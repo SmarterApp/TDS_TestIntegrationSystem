@@ -66,6 +66,8 @@ namespace TDSQASystemAPI.DAL
 
         protected internal string SelectSql { get; set; }
 
+        protected internal string ExistsSql { get; set; }
+
         /// <summary>
         /// The type of the table-valued parameter used to pass the <code>IList<typeparamref name="T"/></code>.
         /// </summary>
@@ -116,6 +118,33 @@ namespace TDSQASystemAPI.DAL
                     command.ExecuteNonQuery();
                 }
             }
+        }
+
+        /// <summary>
+        /// Insert a record into the database (which is specified by the connection string)
+        /// </summary>
+        /// <param name="recordToSave">The <code>typeparamref name="T"</code> of record to persist.</param>
+        public virtual bool Exists(T recordToCheck)
+        {
+            var exists = false;
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
+            {
+                using (var command = new SqlCommand(ExistsSql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+
+                    ExistsAddParameter(recordToCheck, command.Parameters);
+
+                    connection.Open();
+                    var count = int.Parse(command.ExecuteScalar().ToString());
+                    exists = count > 0;
+                }
+            }
+            return exists;
+        }
+
+        virtual protected void ExistsAddParameter(T record, SqlParameterCollection parameters)
+        {
         }
 
         /// <summary>

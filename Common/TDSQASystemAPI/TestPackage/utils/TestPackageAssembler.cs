@@ -31,11 +31,11 @@ namespace TDSQASystemAPI.TestPackage.utils
             // WIRE UP ASSESSMENTS
             // 1.  Set the assesment's parent test package property
             // 2.  Build up the Assessment-wide Tools
-            testPackage.Assessment.ForEach(a => 
+            testPackage.Test.ForEach(a => 
             {
                 a.TestPackage = testPackage;
 
-                var assessmentElement = testPackageXDocument.Root.Elements("Assessment")
+                var assessmentElement = testPackageXDocument.Root.Elements("Test")
                     .Where(el => el.Attribute("id").Value.Equals(a.id))
                     .First();
 
@@ -44,10 +44,10 @@ namespace TDSQASystemAPI.TestPackage.utils
 
             // WIRE UP SEGMENTS
             // 1. Set the segment's parent Assessment property
-            testPackage.Assessment = testPackage.Assessment.SelectMany(a => a.Segments, (a, s) => s.Assessment = a)
+            testPackage.Test = testPackage.Test.SelectMany(a => a.Segments, (a, s) => s.Assessment = a)
                 .ToArray();
 
-            var allSegments = from a in testPackage.Assessment
+            var allSegments = from a in testPackage.Test
                               from s in a.Segments
                               select s;
 
@@ -56,9 +56,9 @@ namespace TDSQASystemAPI.TestPackage.utils
             // AssessmentSegment's Item property.
             foreach (var segment in allSegments)
             {
-                if (segment.Item is AssessmentSegmentSegmentForms)
+                if (segment.Item is TestSegmentSegmentForms)
                 {
-                    foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                    foreach (var form in (segment.Item as TestSegmentSegmentForms).SegmentForm)
                     { 
                         form.AssessmentSegment = segment;
                         form.ItemGroup.ForEach(ig => AssembleItemGroup(ig, testPackage, segment, form));
@@ -66,7 +66,7 @@ namespace TDSQASystemAPI.TestPackage.utils
                 }
                 else
                 {
-                    var pool = segment.Item as AssessmentSegmentPool;
+                    var pool = segment.Item as TestSegmentPool;
                     pool.ItemGroup.ForEach(ig => AssembleItemGroup(ig, testPackage, segment));
                 }
 
@@ -91,9 +91,9 @@ namespace TDSQASystemAPI.TestPackage.utils
         /// <param name="form">The <code>AssessmentSegmentSegmentFormsSegmentForm</code> to which the item is associated.
         /// Will be null for items associated to adaptive assessments; adaptive assessments do not have forms.</param>
         private static void AssembleItemGroup(ItemGroup itemGroup, 
-            TestPackage testPackage, 
-            AssessmentSegment segment, 
-            AssessmentSegmentSegmentFormsSegmentForm form = null)
+            TestPackage testPackage,
+            TestSegment segment, 
+            TestSegmentSegmentFormsSegmentForm form = null)
         {
             itemGroup.AssessmentSegment = segment;
             foreach (var item in itemGroup.Item)

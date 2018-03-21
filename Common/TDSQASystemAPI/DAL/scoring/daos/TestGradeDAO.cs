@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.DAL.scoring.daos
@@ -19,11 +22,14 @@ namespace TDSQASystemAPI.DAL.scoring.daos
                 "   ClientName, \n" +
                 "   TestId, \n" +
                 "   ReportingGrade \n";
+            ExistsSql = "SELECT count(*) FROM dbo.TestGrades t WHERE t.ClientName = @clientName AND t.TestID = @testID AND t.reportingGrade = @reportingGrade";
         }
 
-        public override void Insert(IList<TestGradeDTO> recordsToSave)
+        override protected void ExistsAddParameter(TestGradeDTO testGradeDTO, SqlParameterCollection parameters)
         {
-            base.Insert(recordsToSave);
+            parameters.AddWithValue("@clientName", testGradeDTO.ClientName);
+            parameters.AddWithValue("@testID", testGradeDTO.TestId);
+            parameters.AddWithValue("@reportingGrade", testGradeDTO.ReportingGrade);
         }
     }
 }

@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace TDSQASystemAPI.TestPackage
 {
-    public partial class BlueprintElementScoringRule
+    partial class BlueprintElementScoringRuleParameter
     {
-
         /// <summary>
-        /// The unique identifier for this <code>BlueprintElementScoringRule</code>.
+        /// The unique identifier for this <code>BlueprintElementScoringRuleParameter</code>.
         /// </summary>    
-        public Guid Id = Guid.NewGuid();       
+        public Guid Id = Guid.NewGuid();
     }
 }
