@@ -48,5 +48,65 @@ namespace TISUnitTests.testpackages
             Assert.IsTrue(flattenedBlueprintDictionary.ContainsKey("level-0"));
             Assert.IsTrue(flattenedBlueprintDictionary.ContainsKey("level-2.5"));
         }
+
+        [TestMethod]
+        public void ShouldIdentifyTestPackageAsCombined()
+        {
+            var testPackage = new TestPackage
+            {
+                publisher = "SBAC_PT",
+                academicYear = "2017-2018",
+                Blueprint = new BlueprintElement[]
+                {
+                    new BlueprintElement
+                    {
+                        id = "ICA-UNIT-TEST-GRADE-11-COMBINED",
+                        type = "combined"
+                    }
+                }
+            };
+
+            Assert.IsTrue(testPackage.IsCombined());
+        }
+
+        [TestMethod]
+        public void shouldNotIdentifyTestPackageAsCombined()
+        {
+            var testPackage = new TestPackage
+            {
+                publisher = "SBAC_PT",
+                academicYear = "2017-2018",
+                Blueprint = new BlueprintElement[]
+                {
+                    new BlueprintElement
+                    {
+                        id = "ICA-UNIT-TEST-GRADE-11-FIXED",
+                        type = "foo"
+                    }
+                }
+            };
+
+            Assert.IsFalse(testPackage.IsCombined());
+        }
+
+        [TestMethod]
+        public void ShouldGetCombinationTestPackageKeyForCombinedTestPackage()
+        {
+            var testPackage = new TestPackage
+            {
+                publisher = "SBAC_PT",
+                academicYear = "2017-2018",
+                Blueprint = new BlueprintElement[]
+                {
+                    new BlueprintElement
+                    {
+                        id = "ICA-UNIT-TEST-GRADE-11-COMBINED",
+                        type = "combined"
+                    }
+                }
+            };
+
+            Assert.AreEqual("(SBAC_PT)ICA-UNIT-TEST-GRADE-11-COMBINED-2017-2018", testPackage.GetCombinationTestPackageKey());
+        }
     }
 }

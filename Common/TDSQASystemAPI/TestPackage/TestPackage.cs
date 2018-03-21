@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -6,6 +7,32 @@ namespace TDSQASystemAPI.TestPackage
 {
     public partial class TestPackage
     {
+        /// <summary>
+        /// Get the combined test package identifier for this <code>TestPackage</code>.
+        /// </summary>
+        public string GetCombinationTestPackageKey()
+        {
+            var combinedBlueprint = Blueprint.FirstOrDefault(bpe => 
+                bpe.type.Equals("combined", StringComparison.InvariantCultureIgnoreCase));
+
+            return combinedBlueprint == null 
+                ? string.Empty
+                : string.Format("({0}){1}-{2}", publisher, combinedBlueprint.id, academicYear);
+        }
+
+        /// <summary>
+        /// Determine if this <code>TestPackage</code> represents a "combined" test package.
+        /// </summary>
+        /// <remarks>
+        /// A "combined" test package contains multiple assessments that are intended to be scored as a single unit.
+        /// </remarks>
+        /// <returns>True if the <code>TestPackage</code> is a "combined" test package; otherwise false.</returns>
+        public bool IsCombined()
+        {
+            return GetAllTestPackageBlueprintElements().Any(bpe => 
+                bpe.Value.type.Equals("combined", StringComparison.InvariantCultureIgnoreCase));
+        }
+
         /// <summary>
         /// Get a collection of all <code>ItemGroupItem</code>s from this <code>TestPackage</code>, regardless of their source (e.g. an item pool
         /// vs. a form).  This collection of <code>ItemGroupStimulus</code> objects comes from every <code>AssessmentSegment</code> in the
