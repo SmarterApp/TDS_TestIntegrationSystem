@@ -10,6 +10,7 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
 {
     public class CombinationTestMapService : ICombinationTestMapService
     {
+        private readonly ITestPackageDao<CombinationTestFormMapDTO> combinationTestFormMapDao;
         private readonly ITestPackageDao<CombinationTestMapDTO> combinationTestMapDao;
 
         public CombinationTestMapService()
@@ -17,14 +18,33 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
             combinationTestMapDao = new CombinationTestMapDAO();
         }
 
-        public CombinationTestMapService(ITestPackageDao<CombinationTestMapDTO> combinationTestMapDao)
+        public CombinationTestMapService(ITestPackageDao<CombinationTestMapDTO> combinationTestMapDao,
+                                         ITestPackageDao<CombinationTestFormMapDTO> combinationTestFormMapDao)
         {
             this.combinationTestMapDao = combinationTestMapDao;
+            this.combinationTestFormMapDao = combinationTestFormMapDao;
         }
 
         public void CreateCombinationTestFormMap(TestPackage.TestPackage testPackage, IList<TestFormDTO> testForms)
         {
-            throw new NotImplementedException();
+            // CombinationTestMap records only have to be created for "combined" test packages.
+            if (!testPackage.IsCombined())
+            {
+                return;
+            }
+
+            var combinationTestFormMapDtos = from assessment in testPackage.Assessment
+                                             from segment in assessment.Segments
+                                             join form in testForms
+                                                on segment.Key equals form.SegmentKey
+                                             select new CombinationTestFormMapDTO
+                                             {
+                                                 ComponentSegmentName = segment.Key,
+                                                 CombinationFormKey = form.TestFormKey,
+                                                 ComponentFormKey = form.TestFormKey
+                                             };
+
+            combinationTestFormMapDao.Insert(combinationTestFormMapDtos.ToList());
         }
 
         public void CreateCombinationTestMap(TestPackage.TestPackage testPackage)
