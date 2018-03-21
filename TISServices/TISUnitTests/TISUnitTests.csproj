@@ -123,6 +123,7 @@
     <Compile Include="daos\itembank\TestCohortDAOIntegrationTest.cs" />
     <Compile Include="daos\itembank\TestFormDAOIntegrationTest.cs" />
     <Compile Include="daos\itembank\TestFormItemDAOIntegrationTest.cs" />
+    <Compile Include="daos\osstis\CombinationTestMapDAOIntegrationTest.cs" />
     <Compile Include="daos\osstis\TestNameLookupDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\ComputationRuleParameterDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\ComputationRuleParameterValueDAOIntegrationTest.cs" />
