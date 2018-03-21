@@ -28,3 +28,17 @@ CREATE TYPE dbo.CombinationTestMapTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.CombinationTestMapTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'CombinationTestFormMapTable')
+BEGIN
+	DROP TYPE dbo.CombinationTestFormMapTable;
+END
+GO
+CREATE TYPE dbo.CombinationTestFormMapTable AS TABLE
+(
+	ComponentSegmentName	varchar(255) NOT NULL,
+	ComponentFormKey		varchar(100) NOT NULL,
+	CombinationFormKey		varchar(100) NOT NULL
+)
+GO
+GRANT CONTROL ON TYPE::dbo.CombinationTestFormMapTable TO public
+GO

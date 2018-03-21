@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TDSQASystemAPI.DAL;
+using TDSQASystemAPI.DAL.itembank.dtos;
 using TDSQASystemAPI.DAL.osstis.daos;
 using TDSQASystemAPI.DAL.osstis.dtos;
 
@@ -20,7 +22,7 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
             this.combinationTestMapDao = combinationTestMapDao;
         }
 
-        public void CreateCombinationTestFormMap(TestPackage.TestPackage testPackage)
+        public void CreateCombinationTestFormMap(TestPackage.TestPackage testPackage, IList<TestFormDTO> testForms)
         {
             throw new NotImplementedException();
         }
