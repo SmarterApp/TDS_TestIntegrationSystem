@@ -164,6 +164,8 @@
     <Compile Include="BL\testpackage\administration\ItembankConfigurationDataService.cs" />
     <Compile Include="BL\testpackage\osstis\CombinationTestMapService.cs" />
     <Compile Include="BL\testpackage\osstis\ICombinationTestMapService.cs" />
+    <Compile Include="BL\testpackage\osstis\IQcProjectMetadataService.cs" />
+    <Compile Include="BL\testpackage\osstis\QcProjectMetadataService.cs" />
     <Compile Include="BL\XmlRepository.cs" />
     <Compile Include="Config\AdministrationInfo.cs" />
     <Compile Include="Config\IProjectMetaDataLoader.cs" />
@@ -359,7 +361,7 @@
     <Compile Include="TestPackage\ToolsTool.cs" />
     <Compile Include="TestPackage\utils\BlueprintElementTypes.cs" />
     <Compile Include="TestPackage\utils\ItemSelectionDefaults.cs" />
-    <Compile Include="TestPackage\utils\QcProjectMetadataStatuses.cs" />
+    <Compile Include="TestPackage\utils\QcProjectMetadataDefaults.cs" />
     <Compile Include="TestPackage\utils\SelectionAlgorithmTypes.cs" />
     <Compile Include="TestPackage\utils\SetOfAdminItemDefaults.cs" />
     <Compile Include="TestPackage\utils\TestPackageMapper.cs" />

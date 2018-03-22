@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.BL.testpackage.osstis
 {
+    /// <summary>
+    /// An interface for interacting with Combination Test Map and Combination Test Form Map data.
+    /// </summary>
     public interface ICombinationTestMapService
     {
         /// <summary>

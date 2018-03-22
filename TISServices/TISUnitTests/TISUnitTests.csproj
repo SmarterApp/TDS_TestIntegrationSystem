@@ -140,6 +140,7 @@
     <Compile Include="services\ItembankAdministrationDataServiceUnitTest.cs" />
     <Compile Include="services\ItembankConfigurationDataQueryServiceUnitTest.cs" />
     <Compile Include="services\ItembankConfigurationDataServiceUnitTest.cs" />
+    <Compile Include="services\QcProjectMetadataServiceUnitTest.cs" />
     <Compile Include="testpackages\ItemGroupItemBlueprintReferenceUnitTest.cs" />
     <Compile Include="testpackages\ItemPositionUnitTest.cs" />
     <Compile Include="testpackages\TeacherHandScoringUnitTest.cs" />

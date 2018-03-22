@@ -9,7 +9,7 @@
         public string GroupName { get; set; }
         public string VarName { get; set; }
         public long IntValue { get; set; }
-        public decimal FloatValue { get; set; }
+        public decimal? FloatValue { get; set; }
         public string TextValue { get; set; }
         public string Comment { get; set; }
     }
