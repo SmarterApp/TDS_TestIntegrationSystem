@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TDSQASystemAPI.DAL;
-using TDSQASystemAPI.DAL.itembank.daos;
 using TDSQASystemAPI.DAL.itembank.dtos;
-using TDSQASystemAPI.DAL.scoring.daos;
 using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.BL.testpackage.scoring
@@ -39,7 +34,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
             this.performanceLevelDAO = performanceLevelDAO;
         }
 
-        private static string TestKey(TestPackage.TestPackage testPackage)
+        public static string TestKey(TestPackage.TestPackage testPackage)
         {
             var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("package"));
             if (packageBlueprint != null)
@@ -71,6 +66,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         {
             var testKey = TestKey(testPackage);
             var testGradeDTO = new List<TestGradeDTO>();
+            
             testPackage.Test.ForEach(assessment =>
                 assessment.Grades.ForEach(grade => {
                     var newTestGrade = new TestGradeDTO()
@@ -100,33 +96,31 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
             {
                 var testKey = packageBlueprint.id;            
                 testPackage.Blueprint.ForEach(blueprint => {
-                    if (blueprint.Scoring != null) {
-                        blueprint.Scoring.Rules.ForEach(rule =>
+                    blueprint.Scoring?.Rules.ForEach(rule =>
+                    {
+                        var measureOf = blueprint.id;
+                        if (blueprint.type.Equals("package"))
                         {
-                            var measureOf = blueprint.id;
-                            if (blueprint.type.Equals("package"))
-                            {
-                                measureOf = "Overall";
-                            }
-                            var ruleLabel = rule.name;  // may need to add rule label to test package
+                            measureOf = "Overall";
+                        }
+                        var ruleLabel = rule.name;  // may need to add rule label to test package
                             var newTestScoreFeatureDTO = new TestScoreFeatureDTO()
-                            {
-                                TestScoreFeatureKey = rule.Id,
-                                ClientName = testPackage.publisher,
-                                TestId = testKey,
-                                MeasureOf = measureOf,
-                                MeasureLabel = ruleLabel,
-                                IsScaled = ruleLabel.ToLower().Contains("scale"),
-                                ComputationRule = rule.name,
-                                ComputationOrder = rule.computationOrder
-                            };
-                            if (!testScoreFeatureDAO.Exists(newTestScoreFeatureDTO))
-                            {                             
-                                testScoreFeatureDTO.Add(newTestScoreFeatureDTO);
-                                featureComputationLocationDTO.Add(new FeatureComputationLocationDTO() { TestScoreFeatureKey = rule.Id, Location = "TIS" });
-                            }
-                        });
-                    };
+                        {
+                            TestScoreFeatureKey = rule.Id,
+                            ClientName = testPackage.publisher,
+                            TestId = testKey,
+                            MeasureOf = measureOf,
+                            MeasureLabel = ruleLabel,
+                            IsScaled = ruleLabel.ToLower().Contains("scale"),
+                            ComputationRule = rule.name,
+                            ComputationOrder = rule.computationOrder
+                        };
+                        if (!testScoreFeatureDAO.Exists(newTestScoreFeatureDTO))
+                        {
+                            testScoreFeatureDTO.Add(newTestScoreFeatureDTO);
+                            featureComputationLocationDTO.Add(new FeatureComputationLocationDTO() { TestScoreFeatureKey = rule.Id, Location = "TIS" });
+                        }
+                    });                    
                 });
                 testScoreFeatureDAO.Insert(testScoreFeatureDTO);
                 featureComputationLocationDAO.Insert(featureComputationLocationDTO);
@@ -136,49 +130,42 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         public void CreateComputationRuleParameters(TestPackage.TestPackage testPackage)
         {
             var computationRuleParameterDTO = new List<ComputationRuleParameterDTO>();
-            testPackage.Blueprint.ForEach(
-                blueprint =>
+            testPackage.Blueprint.ForEach(blueprint =>
                 {
-                    if (blueprint.Scoring != null)
+                    blueprint.Scoring?.Rules?.ForEach(rule =>
                     {
-                        blueprint.Scoring.Rules.ForEach(rule =>
+                        rule.Parameter?.ForEach(parameter =>
                         {
-                            if (rule.Parameter != null)
-                            {
-                                rule.Parameter.ForEach(parameter =>
-                                {
-                                    var indexType = "";
-                                    if (parameter.Property != null)
-                                    {
-                                        parameter.Property.ForEach(property =>
-                                        {
-                                            if (property.name.Equals("indextype"))
-                                            {
-                                                indexType = property.value;
-                                            }
-                                        });
-                                    }
-                                    var newComputationRuleParameterDTO = new ComputationRuleParameterDTO()
-                                    {
-                                        ComputationRuleParameterKey = parameter.Id,
-                                        ComputationRule = rule.name,
-                                        ParameterName = parameter.name,
-                                        ParameterPosition = parameter.position,
-                                        IndexType = indexType,
-                                        Type = parameter.type
-                                    };
-                                    if (!computationRuleParameterDAO.Exists(newComputationRuleParameterDTO))
-                                    {
-                                        if (!computationRuleParameterDTO.Contains(newComputationRuleParameterDTO))
-                                        {
-                                            computationRuleParameterDTO.Add(newComputationRuleParameterDTO);
-                                        }
+                            var indexType = "";
 
+                            parameter.Property?.ForEach(property =>
+                                {
+                                    if (property.name.Equals("indextype"))
+                                    {
+                                        indexType = property.value;
                                     }
                                 });
+
+                            var newComputationRuleParameterDTO = new ComputationRuleParameterDTO()
+                            {
+                                ComputationRuleParameterKey = parameter.Id,
+                                ComputationRule = rule.name,
+                                ParameterName = parameter.name,
+                                ParameterPosition = parameter.position,
+                                IndexType = indexType,
+                                Type = parameter.type
+                            };
+                            if (!computationRuleParameterDAO.Exists(newComputationRuleParameterDTO))
+                            {
+                                if (!computationRuleParameterDTO.Contains(newComputationRuleParameterDTO))
+                                {
+                                    computationRuleParameterDTO.Add(newComputationRuleParameterDTO);
+                                }
+
                             }
                         });
-                    };
+
+                    });
                 });
             computationRuleParameterDAO.Insert(computationRuleParameterDTO);
         }
@@ -192,61 +179,55 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
                 var testKey = packageBlueprint.id;
                 testPackage.Blueprint.ForEach(blueprint =>
                 {
-                    if (blueprint.Scoring != null)
+                    blueprint.Scoring?.Rules.ForEach(rule =>
                     {
-                        blueprint.Scoring.Rules.ForEach(rule =>
+                        var measureOf = blueprint.id;
+                        if (blueprint.type.Equals("package"))
                         {
-                            var measureOf = blueprint.id;
-                            if (blueprint.type.Equals("package"))
-                            {
-                                measureOf = "Overall";
-                            }
-                            var ruleLabel = rule.name;  // may need to add rule label to test package
+                            measureOf = "Overall";
+                        }
+                        var ruleLabel = rule.name;  // may need to add rule label to test package
 
-                            if (rule.Parameter != null)
+                        rule.Parameter?.ForEach(parameter =>
+                        {
+                            var computaionRuleParameterDTO = new ComputationRuleParameterDTO()
                             {
-                                rule.Parameter.ForEach(parameter =>
+                                ComputationRule = rule.name,
+                                ParameterName = parameter.name,
+                                ParameterPosition = parameter.position
+                            };
+                            var dbParameter = computationRuleParameterDAO.FindByExample(computaionRuleParameterDTO).FirstOrDefault();
+                            var testScoreFeature = new TestScoreFeatureDTO()
+                            {
+                                ClientName = testPackage.publisher,
+                                TestId = testKey,
+                                ComputationRule = rule.name,
+                                MeasureOf = measureOf,
+                                MeasureLabel = ruleLabel
+                            };
+                            var dbRule = testScoreFeatureDAO.FindByExample(testScoreFeature).FirstOrDefault();
+                            if ((dbParameter != null) && (dbRule != null))
+                            {
+                                var computationRuleParameterKey = dbParameter.ComputationRuleParameterKey;
+                                var testScoreFeatureKey = dbRule.TestScoreFeatureKey;
+
+                                parameter.Value.ForEach(value =>
                                 {
-                                    var computaionRuleParameterDTO = new ComputationRuleParameterDTO()
+                                    var newComputationRuleParameterValueDTO = new ComputationRuleParameterValueDTO()
                                     {
-                                        ComputationRule = rule.name,
-                                        ParameterName = parameter.name,
-                                        ParameterPosition = parameter.position
+                                        TestScoreFeatureKey = testScoreFeatureKey,
+                                        ComputationRuleParameterKey = computationRuleParameterKey,
+                                        Index = value.index ?? "",
+                                        Value = value.value
                                     };
-                                    var dbParameter = computationRuleParameterDAO.FindByExample(computaionRuleParameterDTO).FirstOrDefault();
-                                    var testScoreFeature = new TestScoreFeatureDTO()
+                                    if (!computationRuleParameterValueDAO.Exists(newComputationRuleParameterValueDTO))
                                     {
-                                        ClientName = testPackage.publisher,
-                                        TestId = testKey,
-                                        ComputationRule = rule.name,
-                                        MeasureOf = measureOf,
-                                        MeasureLabel = ruleLabel
-                                    };
-                                    var dbRule = testScoreFeatureDAO.FindByExample(testScoreFeature).FirstOrDefault();
-                                    if ((dbParameter != null) && (dbRule != null))
-                                    {
-                                        var computationRuleParameterKey = dbParameter.ComputationRuleParameterKey;
-                                        var testScoreFeatureKey = dbRule.TestScoreFeatureKey;
-
-                                        parameter.Value.ForEach(value =>
-                                        {
-                                            var newComputationRuleParameterValueDTO = new ComputationRuleParameterValueDTO()
-                                            {
-                                                TestScoreFeatureKey = testScoreFeatureKey,
-                                                ComputationRuleParameterKey = computationRuleParameterKey,
-                                                Index = value.index ?? "",
-                                                Value = value.value
-                                            };
-                                            if (!computationRuleParameterValueDAO.Exists(newComputationRuleParameterValueDTO))
-                                            {
-                                                computationRuleParameterValueDTO.Add(newComputationRuleParameterValueDTO);
-                                            }
-                                        });
+                                        computationRuleParameterValueDTO.Add(newComputationRuleParameterValueDTO);
                                     }
                                 });
                             }
                         });
-                    }
+                    });
                 });
             }
             computationRuleParameterValueDAO.Insert(computationRuleParameterValueDTO);
