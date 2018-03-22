@@ -69,10 +69,15 @@
     <Content Include="SQL\TestScoringConfigs\2_Views.sql" />
     <Content Include="SQL\TestScoringConfigs\3_Configuration.sql" />
     <Content Include="SQL\TestScoringConfigs\4_create_tvp_types_for_testscoringconfigs_database.sql" />
-    <Content Include="SQL\TISDB\2_Configuration.sql" />
     <Content Include="SQL\TISDB\1_Create_Objects.sql" />
+    <Content Include="SQL\TISDB\2_Configuration_IAB Tests.sql" />
+    <Content Include="SQL\TISDB\2_Configuration_ICA_OP Tests.sql" />
     <Content Include="SQL\TISDB\3_ScoringDaemonConfiguration.sql" />
+    <Content Include="SQL\TISDB\4_IRP_DataLoad.sql" />
     <Content Include="SQL\TISDB\4_oss_tis_create_tvp_types_for_oss_tis_database.sql" />
+    <Content Include="SQL\TISDB\5_Update_ICA_Attributes_Typo.sql" />
+    <Content Include="SQL\TISDB\6_Update_StoredProcedures_Remove_OppId.sql" />
+    <Content Include="SQL\TISDB\7_oss_tis_add_new_project_and_metadata.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\AIR.Configuration\AIR.Configuration.csproj">

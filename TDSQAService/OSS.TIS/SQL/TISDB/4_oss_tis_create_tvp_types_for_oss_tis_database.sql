@@ -42,3 +42,21 @@ CREATE TYPE dbo.CombinationTestFormMapTable AS TABLE
 GO
 GRANT CONTROL ON TYPE::dbo.CombinationTestFormMapTable TO public
 GO
+IF EXISTS(SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'QcProjectMetadataTable')
+BEGIN
+	DROP TYPE dbo.QcProjectMetadataTable;
+END
+GO
+CREATE TYPE dbo.QcProjectMetadataTable AS TABLE
+(
+	ProjectId		int NOT NULL,
+	GroupName		varchar(50) NOT NULL,
+	VarName			varchar(128) NOT NULL,
+	IntValue		bigint,
+	FloatValue		money,
+	TextValue		varchar(250),
+	Comment			varchar(250)
+)
+GO
+GRANT CONTROL ON TYPE::dbo.QcProjectMetadataTable TO public
+GO

@@ -271,9 +271,12 @@
     <Compile Include="DAL\ITestPackageDao.cs" />
     <Compile Include="DAL\osstis\daos\CombinationTestFormMapDAO.cs" />
     <Compile Include="DAL\osstis\daos\CombinationTestMapDAO.cs" />
+    <Compile Include="DAL\osstis\daos\ProjectDAO.cs" />
+    <Compile Include="DAL\osstis\daos\QcProjectMetadataDAO.cs" />
     <Compile Include="DAL\osstis\daos\TestNameLookupDAO.cs" />
     <Compile Include="DAL\osstis\dtos\CombinationTestFormMapDTO.cs" />
     <Compile Include="DAL\osstis\dtos\CombinationTestMapDTO.cs" />
+    <Compile Include="DAL\osstis\dtos\ProjectDTO.cs" />
     <Compile Include="DAL\osstis\dtos\QcProjectMetadataDTO.cs" />
     <Compile Include="DAL\osstis\dtos\TestNameLookupDTO.cs" />
     <Compile Include="DAL\Sandlot.cs" />
@@ -356,6 +359,7 @@
     <Compile Include="TestPackage\ToolsTool.cs" />
     <Compile Include="TestPackage\utils\BlueprintElementTypes.cs" />
     <Compile Include="TestPackage\utils\ItemSelectionDefaults.cs" />
+    <Compile Include="TestPackage\utils\QcProjectMetadataStatuses.cs" />
     <Compile Include="TestPackage\utils\SelectionAlgorithmTypes.cs" />
     <Compile Include="TestPackage\utils\SetOfAdminItemDefaults.cs" />
     <Compile Include="TestPackage\utils\TestPackageMapper.cs" />

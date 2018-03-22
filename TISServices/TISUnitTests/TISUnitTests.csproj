@@ -125,6 +125,8 @@
     <Compile Include="daos\itembank\TestFormItemDAOIntegrationTest.cs" />
     <Compile Include="daos\osstis\CombinationTestFormMapDAOIntegrationTest.cs" />
     <Compile Include="daos\osstis\CombinationTestMapDAOIntegrationTest.cs" />
+    <Compile Include="daos\osstis\ProjectDAOIntegrationTest.cs" />
+    <Compile Include="daos\osstis\QcProjectMetadataDAOIntegrationTest.cs" />
     <Compile Include="daos\osstis\TestNameLookupDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\ComputationRuleParameterDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\ComputationRuleParameterValueDAOIntegrationTest.cs" />
