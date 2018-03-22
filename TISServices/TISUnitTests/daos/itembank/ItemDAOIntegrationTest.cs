@@ -17,10 +17,10 @@ namespace TISUnitTests.daos.itembank
             "   _efk_ItemBank AS ItemBankKey, \n" +
             "   _efk_Item AS ItemKey, \n" +
             "   ItemType, \n" +
+            "   ScorePoint, \n" +
             "   FilePath, \n" +
             "   [FileName], \n" +
             "   DateLastUpdated, \n" +
-            "   ItemId, \n" +
             "   _Key AS [Key], \n" +
             "   loadconfig AS TestVersion \n" +
             "FROM \n" +
@@ -38,11 +38,11 @@ namespace TISUnitTests.daos.itembank
                     ItemBankKey = 999L,
                     ItemKey = 999L,
                     ItemType = "unit-test-item-type",
+                    ScorePoints = 42,
                     FilePath = "unit-test-path",
                     FileName = "unit-test-name",
                     DateLastUpdated = DateTime.Now,
                     Key = "999-999",
-                    ItemId = "unit-test-id",
                     TestVersion = 42L
                 }
             };

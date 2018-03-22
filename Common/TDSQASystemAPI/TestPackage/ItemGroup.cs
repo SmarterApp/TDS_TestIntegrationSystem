@@ -12,7 +12,7 @@ namespace TDSQASystemAPI.TestPackage
         /// The <code>AssessmentSegment</code> that owns this <code>ItemGroup</code>.
         /// </summary>
         [XmlIgnore]
-        public AssessmentSegment AssessmentSegment { get; set; }
+        public TestSegment AssessmentSegment { get; set; }
 
         /// <summary>
         /// Get the "key"/unique identifier of this <code>ItemGroup</code>.

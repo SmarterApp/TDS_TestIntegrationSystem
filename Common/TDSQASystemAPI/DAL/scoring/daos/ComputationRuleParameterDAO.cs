@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.DAL.scoring.daos
@@ -22,11 +23,30 @@ namespace TDSQASystemAPI.DAL.scoring.daos
                 "   ParameterPosition, \n" +
                 "   IndexType, \n" +
                 "   [Type] \n";
+            ExistsSql = "SELECT count(*) FROM dbo.ComputationRuleParameters t WHERE " +
+                "t.ComputationRule = @ComputationRule AND " +
+                "t.ParameterName = @ParameterName AND " +
+                "t.ParameterPosition = @ParameterPosition";
+            FindByExampleSql = 
+                "SELECT " + 
+                "   _Key AS ComputationRuleParameterKey, " +
+                "   ComputationRule, " +
+                "   ParameterName, " +
+                "   ParameterPosition, " +
+                "   IndexType, " +
+                "   [Type] " +
+                "FROM dbo.ComputationRuleParameters t " + 
+                "WHERE " +
+                "   t.ComputationRule = @ComputationRule AND " +
+                "   t.ParameterName = @ParameterName AND " +
+                "   t.ParameterPosition = @ParameterPosition";
         }
 
-        public override void Insert(IList<ComputationRuleParameterDTO> recordsToSave)
+        override protected void AddNaturalKeys(ComputationRuleParameterDTO computationRuleParameterDTO, SqlParameterCollection parameters)
         {
-            base.Insert(recordsToSave);
+            parameters.AddWithValue("@ComputationRule", computationRuleParameterDTO.ComputationRule);
+            parameters.AddWithValue("@ParameterName", computationRuleParameterDTO.ParameterName);
+            parameters.AddWithValue("@ParameterPosition", computationRuleParameterDTO.ParameterPosition);
         }
     }
 }

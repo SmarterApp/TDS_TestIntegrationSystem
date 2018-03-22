@@ -14,15 +14,14 @@ namespace TDSQASystemAPI.DAL.itembank.daos
             TvpType = "StimulusTable";
             InsertSql =
                 "INSERT \n" +
-                "   dbo.tblStimulus (_efk_ItemBank, _efk_ITSKey, ClientID, FilePath, FileName, DateLastUpdated, _Key, LoadConfig) \n" +
+                "   dbo.tblStimulus (_efk_ItemBank, _efk_ITSKey, FilePath, FileName, DateLastUpdated, _Key, LoadConfig) \n" +
                 "SELECT \n" +
                 "   ItemBankKey, \n" +
                 "   ItsKey, \n" +
-                "   ClientId, \n" +
                 "   FilePath, \n" +
                 "   [FileName], \n" +
                 "   DateLastUpdated, \n" +
-                "   PassageKey, \n" +
+                "   StimulusKey, \n" +
                 "   TestVersion \n";
         }
 

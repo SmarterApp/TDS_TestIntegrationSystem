@@ -27,7 +27,7 @@ namespace TDSQASystemAPI.TestPackage
         /// </remarks>
         /// </summary>
         [XmlIgnore]
-        public AssessmentSegmentSegmentFormsSegmentForm SegmentForm { get; set; }
+        public TestSegmentSegmentFormsSegmentForm SegmentForm { get; set; }
 
         /// <summary>
         /// The <code>ItemGroup</code> that owns this <code>ItemGroupItem</code>.

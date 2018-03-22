@@ -6,13 +6,13 @@ namespace TDSQASystemAPI.TestPackage
     /// A partial class to augment the <code>AssessmentSegment</code> with additional 
     /// data.
     /// </summary>
-    public partial class AssessmentSegment
+    public partial class TestSegment
     {
         /// <summary>
         /// The <code>Assessment</code> that owns this <code>AssessmentSegment</code>.
         /// </summary>
         [XmlIgnore]
-        public Assessment Assessment { get; set; }
+        public Test Assessment { get; set; }
 
         /// <summary>
         /// The unique identifier for this <code>AssessmentSegment</code>.

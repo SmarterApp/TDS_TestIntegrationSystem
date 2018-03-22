@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.DAL.scoring.daos
@@ -24,11 +27,29 @@ namespace TDSQASystemAPI.DAL.scoring.daos
                 "   IsScaled, \n" +
                 "   ComputationRule, \n" +
                 "   ComputationOrder \n";
+
+            ExistsSql = "SELECT count(*) FROM dbo.TestScoreFeature t WHERE " +
+                "t.ClientName = @clientName AND t.TestID = @testID AND t.computationRule = @computationRule AND t.measureOf = @measureOf";
+            FindByExampleSql =
+                "SELECT \n" +
+                "   _Key as TestScoreFeatureKey, \n" +
+                "   ClientName, \n" +
+                "   TestId, \n" +
+                "   MeasureOf, \n" +
+                "   MeasureLabel, \n" +
+                "   IsScaled, \n" +
+                "   ComputationRule, \n" +
+                "   ComputationOrder \n" +
+                "FROM dbo.TestScoreFeature t WHERE " +
+                "t.ClientName = @clientName AND t.TestID = @testID AND t.computationRule = @computationRule AND t.measureOf = @measureOf";
         }
 
-        public override void Insert(IList<TestScoreFeatureDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
+        override protected void AddNaturalKeys(TestScoreFeatureDTO testScoreFeature, SqlParameterCollection parameters) 
+        { 
+            parameters.AddWithValue("@clientName", testScoreFeature.ClientName);
+            parameters.AddWithValue("@testID", testScoreFeature.TestId);
+            parameters.AddWithValue("@computationRule", testScoreFeature.ComputationRule);
+            parameters.AddWithValue("@measureOf", testScoreFeature.MeasureOf);
         }
     }
 }

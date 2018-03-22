@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.DAL.scoring.daos
@@ -20,11 +21,15 @@ namespace TDSQASystemAPI.DAL.scoring.daos
                 "   ComputationRuleParameterKey, \n" +
                 "   [Index], \n" +
                 "   [Value] \n";
+            ExistsSql = "SELECT count(*) FROM dbo.ComputationRuleParameterValue t WHERE " +
+                "t._fk_TestScoreFeature = @TestScoreFeatureKey AND " +
+                "t._fk_Parameter = @ComputationRuleParameterKey";
         }
 
-        public override void Insert(IList<ComputationRuleParameterValueDTO> recordsToSave)
+        override protected void AddNaturalKeys(ComputationRuleParameterValueDTO computationRuleParameterValueDTO, SqlParameterCollection parameters)
         {
-            base.Insert(recordsToSave);
+            parameters.AddWithValue("@TestScoreFeatureKey", computationRuleParameterValueDTO.TestScoreFeatureKey);
+            parameters.AddWithValue("@ComputationRuleParameterKey", computationRuleParameterValueDTO.ComputationRuleParameterKey);
         }
     }
 }

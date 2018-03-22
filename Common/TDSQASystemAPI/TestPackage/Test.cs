@@ -6,7 +6,7 @@ namespace TDSQASystemAPI.TestPackage
     /// A partial class to augment the <code>Assessment</code> with additional 
     /// data.
     /// </summary>
-    public partial class Assessment
+    public partial class Test
     {
         /// <summary>
         /// The <code>TestPackage</code> that owns this <code>Assessment</code>.

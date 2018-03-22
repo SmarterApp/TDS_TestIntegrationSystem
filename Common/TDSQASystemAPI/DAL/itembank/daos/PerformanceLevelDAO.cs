@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
@@ -22,11 +25,13 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   ThetaHi, \n" +
                 "   ScaledLo, \n" +
                 "   ScaledHi \n";
+            ExistsSql = "SELECT count(*) FROM dbo.PerformanceLevels t WHERE t._fk_content = @content AND t.PLevel = @pLevel";
         }
 
-        public override void Insert(IList<PerformanceLevelDTO> recordsToSave)
+        override protected void AddNaturalKeys(PerformanceLevelDTO performanceLevelDTO, SqlParameterCollection parameters)
         {
-            base.Insert(recordsToSave);
+            parameters.AddWithValue("@content", performanceLevelDTO.ContentKey);
+            parameters.AddWithValue("@pLevel", performanceLevelDTO.PLevel);
         }
     }
 }
