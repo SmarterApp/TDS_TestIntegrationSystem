@@ -19,10 +19,5 @@ namespace TDSQASystemAPI.DAL.osstis.daos
                 "   InstanceName, \n" +
                 "   TestName \n";
         }
-
-        public override void Insert(IList<TestNameLookupDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

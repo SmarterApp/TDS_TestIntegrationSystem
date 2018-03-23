@@ -19,10 +19,5 @@ namespace TDSQASystemAPI.DAL.scoring.daos
                 "   TestScoreFeatureKey, \n" +
                 "   [Location] \n";
         }
-
-        public override void Insert(IList<FeatureComputationLocationDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }
