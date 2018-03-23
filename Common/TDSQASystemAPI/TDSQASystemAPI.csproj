@@ -166,6 +166,7 @@
     <Compile Include="BL\testpackage\osstis\ICombinationTestMapService.cs" />
     <Compile Include="BL\testpackage\osstis\IQcProjectMetadataService.cs" />
     <Compile Include="BL\testpackage\osstis\QcProjectMetadataService.cs" />
+    <Compile Include="BL\testpackage\scoring\ScoringConfigurationDataService.cs" />
     <Compile Include="BL\XmlRepository.cs" />
     <Compile Include="Config\AdministrationInfo.cs" />
     <Compile Include="Config\IProjectMetaDataLoader.cs" />
@@ -345,6 +346,9 @@
     <Compile Include="TestMerge\TestMerge.cs" />
     <Compile Include="TestMerge\TestMergeConfiguration.cs" />
     <Compile Include="TestPackage\BlueprintElement.cs" />
+    <Compile Include="TestPackage\BlueprintElementScoringRule.cs" />
+    <Compile Include="TestPackage\BlueprintElementScoringRuleParameter.cs" />
+    <Compile Include="TestPackage\Grade.cs" />
     <Compile Include="TestPackage\MeasurementParameter.cs" />
     <Compile Include="TestPackage\DefaultToolConfiguration.cs" />
     <Compile Include="TestPackage\ItemGroup.cs" />
@@ -452,9 +456,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BL\testpackage\scoring\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\TDS\Common\AIR.Common\AIR.Common.csproj">
       <Project>{e11c4060-59b5-401d-bf72-1f52156e64db}</Project>

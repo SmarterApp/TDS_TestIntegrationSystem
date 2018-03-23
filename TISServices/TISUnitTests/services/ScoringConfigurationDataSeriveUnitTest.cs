@@ -32,7 +32,7 @@ namespace TISUnitTests.services
         [TestInitialize]
         public void Setup()
         {
-            testPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            testPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
             testKey = ScoringConfigurationDataService.TestKey(testPackage);
 
             scoringConfigurationDataService =

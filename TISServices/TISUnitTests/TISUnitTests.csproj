@@ -141,6 +141,8 @@
     <Compile Include="services\ItembankConfigurationDataQueryServiceUnitTest.cs" />
     <Compile Include="services\ItembankConfigurationDataServiceUnitTest.cs" />
     <Compile Include="services\QcProjectMetadataServiceUnitTest.cs" />
+    <Compile Include="services\ScoringConfigDriver.cs" />
+    <Compile Include="services\ScoringConfigurationDataSeriveUnitTest.cs" />
     <Compile Include="testpackages\ItemGroupItemBlueprintReferenceUnitTest.cs" />
     <Compile Include="testpackages\ItemPositionUnitTest.cs" />
     <Compile Include="testpackages\TeacherHandScoringUnitTest.cs" />
@@ -175,6 +177,7 @@
   <ItemGroup>
     <Content Include="AppReadme\Compare-NET-Objects-Help.txt" />
     <Content Include="resources\scoring-package.xml" />
+    <Content Include="resources\test-packages\new-xsd\%28SBAC_PT%29SBAC-IRP-MATH-11-COMBINED-Summer-2015-2016-NEW.xml" />
     <Content Include="resources\test-packages\new-xsd\scoring-rules.xml" />
     <Content Include="resources\test-packages\new-xsd\segment-blueprint-element.xml" />
     <Content Include="resources\test-packages\new-xsd\test-specification-sample-1.xml" />

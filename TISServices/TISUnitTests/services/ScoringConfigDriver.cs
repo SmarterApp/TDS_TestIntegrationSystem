@@ -17,7 +17,7 @@ namespace TISUnitTests.services
         
         public static void Main(string[] args)
         {
-            var loadedTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+            var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
 
             var service = new ScoringConfigurationDataService(new TestDAO(), new TestGradeDAO(), new TestScoreFeatureDAO(), new FeatureComputationLocationDAO(),
                 new ComputationRuleParameterDAO(), new ComputationRuleParameterValueDAO(), new PerformanceLevelDAO());
