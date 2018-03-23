@@ -9,9 +9,15 @@ namespace TDSQASystemAPI.BL.testpackage.administration
     public interface IItembankConfigurationDataService
     {
         /// <summary>
+        /// Create a new client from the publisher information included in the <code>TestPackage</code>.
+        /// </summary>
+        /// <param name="testPackage">The <code>TestPackage</code> being loaded.</param>
+        void CreateClient(TestPackage.TestPackage testPackage);
+
+        /// <summary>
         /// Create a collection of item properties for each item included in the teset package.
         /// </summary>
-        /// <param name="testPackage"></param>
+        /// <param name="testPackage">The <code>TestPackage</code> being loaded.</param>
         void CreateItemProperties(TestPackage.TestPackage testPackage);
 
         /// <summary>

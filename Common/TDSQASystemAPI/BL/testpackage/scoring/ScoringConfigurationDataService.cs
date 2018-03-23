@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using TDSQASystemAPI.DAL;
+using TDSQASystemAPI.DAL.itembank.daos;
 using TDSQASystemAPI.DAL.itembank.dtos;
+using TDSQASystemAPI.DAL.scoring.daos;
 using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.BL.testpackage.scoring
@@ -15,6 +17,17 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         private readonly ITestPackageDao<ComputationRuleParameterDTO> computationRuleParameterDAO;
         private readonly ITestPackageDao<ComputationRuleParameterValueDTO> computationRuleParameterValueDAO;
         private readonly ITestPackageDao<PerformanceLevelDTO> performanceLevelDAO;
+
+        public ScoringConfigurationDataService()
+        {
+            testDAO = new TestDAO();
+            testGradeDAO = new TestGradeDAO();
+            testScoreFeatureDAO = new TestScoreFeatureDAO();
+            featureComputationLocationDAO = new FeatureComputationLocationDAO();
+            computationRuleParameterDAO = new ComputationRuleParameterDAO();
+            computationRuleParameterValueDAO = new ComputationRuleParameterValueDAO();
+            performanceLevelDAO = new PerformanceLevelDAO();
+        }
 
         public ScoringConfigurationDataService(
             ITestPackageDao<TestDTO> testDAO,

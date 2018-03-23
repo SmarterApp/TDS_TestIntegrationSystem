@@ -69,6 +69,11 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.itemPropertyDao = itemPropertyDao;
         }
 
+        public void CreateClient(TestPackage.TestPackage testPackage)
+        {
+            throw new NotImplementedException();
+        }
+
         public void CreateItemProperties(TestPackage.TestPackage testPackage)
         {
             var allTestPackageItems = testPackage.GetAllItems();
