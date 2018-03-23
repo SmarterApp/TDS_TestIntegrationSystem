@@ -21,10 +21,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   StartDate, \n" +
                 "   EndDate \n";
         }
-
-        public override void Insert(IList<TimeWindowDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

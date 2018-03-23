@@ -23,10 +23,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   StartDate, \n" +
                 "   EndDate \n";
         }
-
-        public override void Insert(IList<TestWindowDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

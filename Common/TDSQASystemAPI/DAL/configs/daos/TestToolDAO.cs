@@ -35,10 +35,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   Context, \n" +
                 "   ContextType \n";
         }
-
-        public override void Insert(IList<TestToolDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

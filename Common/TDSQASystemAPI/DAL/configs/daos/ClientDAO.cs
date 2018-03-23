@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   Internationalize, \n" +
                 "   DefaultLanguage \n";
         }
-
-        public override void Insert(IList<ClientDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

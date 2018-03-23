@@ -25,10 +25,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   SortOrder, \n" +
                 "   RelationshipType \n";
         }
-
-        public override void Insert(IList<TesteeRelationshipAttributeDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

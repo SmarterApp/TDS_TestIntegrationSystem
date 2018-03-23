@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   [Language], \n" +
                 "   LanguageCode \n";
         }
-
-        public override void Insert(IList<LanguageDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

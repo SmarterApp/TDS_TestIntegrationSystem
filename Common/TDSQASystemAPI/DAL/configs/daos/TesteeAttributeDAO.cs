@@ -25,10 +25,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
             "   AtLogin, \n" +
             "   SortOrder \n";
         }
-
-        public override void Insert(IList<TesteeAttributeDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

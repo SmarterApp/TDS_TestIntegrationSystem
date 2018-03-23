@@ -21,10 +21,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   Priority, \n" +
                 "   TestId \n";
         }
-
-        public override void Insert(IList<FieldTestPriorityDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

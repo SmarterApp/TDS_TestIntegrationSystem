@@ -27,10 +27,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   Label, \n" +
                 "   ModeKey \n";
         }
-
-        public override void Insert(IList<SegmentPropertiesDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

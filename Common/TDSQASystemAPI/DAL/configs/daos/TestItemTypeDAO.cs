@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   TestId, \n" +
                 "   ItemType \n";
         }
-
-        public override void Insert(IList<TestItemTypeDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

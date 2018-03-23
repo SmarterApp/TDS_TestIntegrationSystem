@@ -304,6 +304,7 @@
     <Compile Include="DAL\TestOpportunity.cs" />
     <Compile Include="DAL\TestPackageDaoBase.cs" />
     <Compile Include="DAL\TISScoreMergerDAL.cs" />
+    <Compile Include="DAL\UpdateConfigsDB.cs" />
     <Compile Include="DAL\utils\ReflectionObjectPopulator.cs" />
     <Compile Include="DAL\XmlRepository.cs" />
     <Compile Include="Data\QASystemConfigSettings.cs" />

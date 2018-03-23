@@ -43,10 +43,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   TideSelectable, \n" +
                 "   TideSelectableBySubject \n";
         }
-
-        public override void Insert(IList<TestToolTypeDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

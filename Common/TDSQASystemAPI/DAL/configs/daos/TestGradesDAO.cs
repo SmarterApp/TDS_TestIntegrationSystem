@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   TestId, \n" +
                 "   Grade \n";
         }
-
-        public override void Insert(IList<TestGradeDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }
