@@ -71,23 +71,30 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateItemProperties(TestPackage.TestPackage testPackage)
         {
+<<<<<<< HEAD
             var allTestPackageItems = testPackage.GetAllItems();
-            var allGrades = (from a in testPackage.Test
+            var allGrades = (from a in testPackage.Assessment
                              from g in a.Grades
                              select g)
                 .GroupBy(g => g.value)
                 .Select(g => g.Key);
+=======
+            var allSegments = from a in testPackage.Test
+                              from s in a.Segments
+                              select s;
+>>>>>>> feature/map-scoring
 
             var allItemProperties = new List<ItemPropertyDTO>();
             foreach (var item in allTestPackageItems)
             {
+<<<<<<< HEAD
                 // Build --ITEMTYPE-- property
                 allItemProperties.Add(new ItemPropertyDTO()
                 {
                     ItemKey = item.Key,
                     PropertyName = ITEM_TYPE_PROP_NAME,
                     PropertyValue = item.type,
-                    SegmentKey = item.TestSegment.Key
+                    SegmentKey = item.AssessmentSegment.Key
                 });
 
                 // Build language item property for each presentation included in the item.
@@ -96,8 +103,56 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     ItemKey = item.Key,
                     PropertyName = LANGUAGE_PROP_NAME,
                     PropertyValue = language.code,
-                    SegmentKey = item.TestSegment.Key
+                    SegmentKey = item.AssessmentSegment.Key
                 }));
+=======
+                if (segment.Item is TestSegmentSegmentForms)
+                {
+                    foreach (var form in (segment.Item as TestSegmentSegmentForms).SegmentForm)
+                    {
+                        var items = from ig in form.ItemGroup
+                                    from item in ig.Item
+                                    select new ItemDTO
+                                    {
+                                        ItemBankKey = testPackage.bankKey,
+                                        ItemKey = long.Parse(item.id),
+                                        ScorePoints = item.ItemScoreDimension.scorePoints,
+                                        DateLastUpdated = DateTime.Now,
+                                        FileName = string.Format(ITEM_FILE_NAME_PATTERN, testPackage.bankKey, item.id),
+                                        FilePath = string.Format(ITEM_FILE_PATH_PATTERN, testPackage.bankKey, item.id),
+                                        ItemType = item.type,
+                                        Key = string.Format("{0}-{1}", testPackage.bankKey, item.id),
+                                        TestVersion = (long)testPackage.version
+                                    };
+                        if (items.Any())
+                        {
+                            allItems.AddRange(items);
+                        }
+                    }
+                }
+                else
+                {
+                    var pool = segment.Item as TestSegmentPool;
+                    var items = from ig in pool.ItemGroup
+                                from item in ig.Item
+                                select new ItemDTO
+                                {
+                                    ItemBankKey = testPackage.bankKey,
+                                    ItemKey = long.Parse(item.id),
+                                    ScorePoints = item.ItemScoreDimension.scorePoints,
+                                    DateLastUpdated = DateTime.Now,
+                                    FileName = string.Format(ITEM_FILE_NAME_PATTERN, testPackage.bankKey, item.id),
+                                    FilePath = string.Format(ITEM_FILE_PATH_PATTERN, testPackage.bankKey, item.id),
+                                    ItemType = item.type,
+                                    Key = string.Format("{0}-{1}", testPackage.bankKey, item.id),
+                                    TestVersion = (long)testPackage.version
+                                };
+                    if (items.Any())
+                    {
+                        allItems.AddRange(items);
+                    }
+                }
+>>>>>>> feature/map-scoring
 
                 // Build grade item property for each grade included in the test package.
                 allGrades.ForEach(grade =>
@@ -106,7 +161,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         ItemKey = item.Key,
                         PropertyName = GRADE_PROP_NAME,
                         PropertyValue = grade,
-                        SegmentKey = item.TestSegment.Key
+                        SegmentKey = item.AssessmentSegment.Key
                     }));
             }
 
@@ -137,6 +192,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateStimuli(TestPackage.TestPackage testPackage)
         {
+<<<<<<< HEAD
             var allStimuli = testPackage.GetAllStimuli();
 
             // Map all stimuli to StimulusDTOs for persistences
@@ -151,6 +207,59 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                      DateLastUpdated = DateTime.Now,
                                      StimulusKey = s.Key
                                  };
+=======
+            var allSegments = from a in testPackage.Test
+                              from s in a.Segments
+                              select s;
+
+            // Collect all the stimuli, regardless of their source (i.e. either a form or an item pool).
+            List<StimulusDTO> allStimuli = new List<StimulusDTO>();
+            foreach (var segment in allSegments)
+            {
+                if (segment.Item is TestSegmentSegmentForms)
+                {
+                    foreach (var form in (segment.Item as TestSegmentSegmentForms).SegmentForm)
+                    {
+                        var stimuli = from ig in form.ItemGroup
+                                      where ig.Stimulus != null
+                                      select new StimulusDTO
+                                      {
+                                          ItemBankKey = testPackage.bankKey,
+                                          ItsKey = long.Parse(ig.Stimulus.id),
+                                          TestVersion = (long)testPackage.version,
+                                          FileName = string.Format(STIMULUS_FILE_NAME_PATTERN, testPackage.bankKey, ig.Stimulus.id),
+                                          FilePath = string.Format(STIMULUS_FILE_PATH_PATTERN, testPackage.bankKey, ig.Stimulus.id),
+                                          DateLastUpdated = DateTime.Now,
+                                          StimulusKey = string.Format("{0}-{1}", testPackage.bankKey, ig.Stimulus.id)
+                                      };
+                        if (stimuli.Any())
+                        { 
+                            allStimuli.AddRange(stimuli);
+                        }
+                    }
+                }
+                else
+                {
+                    var pool = segment.Item as TestSegmentPool;
+                    var stimuli = from ig in pool.ItemGroup
+                                  where ig.Stimulus != null
+                                  select new StimulusDTO
+                                  {
+                                      ItemBankKey = testPackage.bankKey,
+                                      ItsKey = long.Parse(ig.Stimulus.id),
+                                      TestVersion = (long)testPackage.version,
+                                      FileName = string.Format(STIMULUS_FILE_NAME_PATTERN, testPackage.bankKey, ig.Stimulus.id),
+                                      FilePath = string.Format(STIMULUS_FILE_PATH_PATTERN, testPackage.bankKey, ig.Stimulus.id),
+                                      DateLastUpdated = DateTime.Now,
+                                      StimulusKey = string.Format("{0}-{1}", testPackage.bankKey, ig.Stimulus.id)
+                                  };
+                    if (stimuli.Any())
+                    {
+                        allStimuli.AddRange(stimuli);
+                    }
+                }
+            }
+>>>>>>> feature/map-scoring
 
             stimuliDAO.Insert(allStimuliDtos.ToList());
         }
@@ -230,7 +339,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                   {
                                       ItemKey = item.Key,
                                       StimulusKey = stimulus.Key,
-                                      SegmentKey = stimulus.TestSegment.Key
+                                      SegmentKey = stimulus.AssessmentSegment.Key
                                   };
 
             setOfItemStimuliDao.Insert(itemStimuliDtos.ToList());
@@ -253,7 +362,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                              select new SetOfItemStrandDTO
                              {
                                  ItemKey = item.Key,
-                                 SegmentKey = item.TestSegment.Key,
+                                 SegmentKey = item.AssessmentSegment.Key,
                                  StrandKey = strandMap[bpRef.idRef].Key,
                                  TestVersion = (long)testPackage.version
                              };
@@ -363,7 +472,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                        {
                                                            ContentLevel = string.Format("{0}-{1}", item.TestPackage.publisher, strand.Key),
                                                            ItemKey = item.Key,
-                                                           SegmentKey = item.TestSegment.Key
+                                                           SegmentKey = item.AssessmentSegment.Key
                                                        };
 
                         allAaItemClDtosForItem.AddRange(contentLevelAaItemClDtos);
@@ -378,7 +487,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                          {
                                                              ContentLevel = bp.idRef,
                                                              ItemKey = item.Key,
-                                                             SegmentKey = item.TestSegment.Key
+                                                             SegmentKey = item.AssessmentSegment.Key
                                                          };
 
                         allAaItemClDtosForItem.AddRange(strandAffinityAaItemClDtos);

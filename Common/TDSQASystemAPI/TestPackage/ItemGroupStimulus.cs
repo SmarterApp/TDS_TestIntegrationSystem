@@ -15,7 +15,7 @@ namespace TDSQASystemAPI.TestPackage
         public TestPackage TestPackage { get; set; }
 
         [XmlIgnore]
-        public AssessmentSegment AssessmentSegment { get; set; }
+        public TestSegment TestSegment { get; set; }
 
         [XmlIgnore]
         public ItemGroup ItemGroup { get; set; }

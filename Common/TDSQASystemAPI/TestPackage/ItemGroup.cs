@@ -9,10 +9,10 @@ namespace TDSQASystemAPI.TestPackage
     public partial class ItemGroup
     {
         /// <summary>
-        /// The <code>AssessmentSegment</code> that owns this <code>ItemGroup</code>.
+        /// The <code>TestSegment</code> that owns this <code>ItemGroup</code>.
         /// </summary>
         [XmlIgnore]
-        public AssessmentSegment AssessmentSegment { get; set; }
+        public TestSegment TestSegment { get; set; }
 
         /// <summary>
         /// Get the "key"/unique identifier of this <code>ItemGroup</code>.
@@ -28,20 +28,20 @@ namespace TDSQASystemAPI.TestPackage
             get
             {
                 return Item.Length > 1
-                    ? string.Format("G-{0}-{1}-{2}", AssessmentSegment.Assessment.TestPackage.bankKey, id, GetGroupSuffix())
-                    : string.Format("I-{0}-{1}", AssessmentSegment.Assessment.TestPackage.bankKey, id);
+                    ? string.Format("G-{0}-{1}-{2}", TestSegment.Test.TestPackage.bankKey, id, GetGroupSuffix())
+                    : string.Format("I-{0}-{1}", TestSegment.Test.TestPackage.bankKey, id);
             }
         }
 
         /// <summary>
         /// Get the correct item group key suffix, based on whether the assessment has multiple segments.
         /// </summary>
-        /// <returns>if the Assessment is segmented, the position of the segment this <code>ItemGroup</code> belongs to; 
-        /// otherwise "0" (indicating the Assessment is not segmented).</returns>
+        /// <returns>if the Test is segmented, the position of the segment this <code>ItemGroup</code> belongs to; 
+        /// otherwise "0" (indicating the Test is not segmented).</returns>
         private string GetGroupSuffix()
         {
-            return AssessmentSegment.Assessment.IsSegmented()
-                ? AssessmentSegment.position.ToString()
+            return TestSegment.Test.IsSegmented()
+                ? TestSegment.position.ToString()
                 : "0";
         }
     }

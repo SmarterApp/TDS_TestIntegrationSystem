@@ -33,7 +33,7 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
                 return;
             }
 
-            var combinationTestFormMapDtos = from assessment in testPackage.Assessment
+            var combinationTestFormMapDtos = from assessment in testPackage.Test
                                              from segment in assessment.Segments
                                              join form in testForms
                                                 on segment.Key equals form.SegmentKey
@@ -55,7 +55,7 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
                 return;
             }
 
-            var combinationTestMapDtos = from assessment in testPackage.Assessment
+            var combinationTestMapDtos = from assessment in testPackage.Test
                                          from segment in assessment.Segments
                                          select new CombinationTestMapDTO
                                          {

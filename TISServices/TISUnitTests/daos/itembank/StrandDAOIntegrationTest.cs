@@ -15,13 +15,16 @@ namespace TISUnitTests.daos.itembank
         private readonly ITestPackageDao<StrandDTO> testPackageDao = new StrandDAO();
         private readonly string sql =
             "SELECT \n" +
+            "   'unit-test-key' AS [Key], \n" +
             "   _fk_subject AS SubjectKey, \n" +
             "   [Name], \n" +
             "   _fk_parent AS ParentId, \n" +
             "   _key AS BlueprintElementId, \n" +
             "   _fk_client AS ClientKey, \n" +
             "   TreeLevel, \n" +
-            "   loadconfig AS TestVersion \n" +
+            "   loadconfig AS TestVersion, \n" +
+            "   CAST(1 AS bit) AS IsLeaftarget, \n" +
+            "   'unit-test-type' AS [Type]" +
             "FROM \n" +
             "   tblStrand \n" +
             "WHERE \n" +
@@ -54,13 +57,16 @@ namespace TISUnitTests.daos.itembank
             {
                 new StrandDTO
                 {
+                    Key = "unit-test-key",
                     SubjectKey = seedDataSubject.SubjectKey,
                     Name = "unit-test-name",
                     ParentId = "unit-test-parent-id",
                     BlueprintElementId = "unit-test-strand-key",
                     ClientKey = SBAC_PT_CLIENT_ID,
                     TreeLevel = 42,
-                    TestVersion = 99L
+                    TestVersion = 99L,
+                    IsLeafTarget = true,
+                    Type = "unit-test-type"
                 }
             };
 

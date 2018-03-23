@@ -141,7 +141,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                              ScorePoints = dimension.scorePoints,
                                              Weight = dimension.weight,
                                              ItemScoreDimensionKey = Guid.NewGuid(),
-                                             SegmentKey = item.AssessmentSegment.Key,
+                                             SegmentKey = item.TestSegment.Key,
                                              ItemKey = item.Key,
                                              MeasurementModel = measurementModelMap[dimension.measurementModel]
                                          };
@@ -181,7 +181,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                    select new AdminStimulusDTO
                                    {
                                        StimulusKey = stimulus.Key,
-                                       SegmentKey = stimulus.AssessmentSegment.Key,
+                                       SegmentKey = stimulus.TestSegment.Key,
                                        NumItemsRequired = stimulus.ItemGroup.maxResponses.Equals("ALL", StringComparison.InvariantCultureIgnoreCase)
                                            ? -1
                                            : int.Parse(stimulus.ItemGroup.maxResponses),
@@ -199,8 +199,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public void CreateAdminStrands(TestPackage.TestPackage testPackge, IDictionary<string, StrandDTO> strandMap)
         {
             var segmentAdminStrandDtos =
-                from assessment in testPackge.Assessment
-                from segment in assessment.Segments
+                from test in testPackge.Test
+                from segment in test.Segments
                 from segBp in segment.SegmentBlueprint
                 where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strandMap[segBp.idRef].Type)
                 let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
@@ -223,8 +223,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     Scalar = itemSelectionProperties.ContainsKey("scalar")
                         ? itemSelectionProperties["scalar"]?.ToNullableDouble()
                         : null,
-                    LoadMin = assessment.IsSegmented() ? segBp.minExamItems as int? : null,
-                    LoadMax = assessment.IsSegmented() ? segBp.maxExamItems as int? : null,
+                    LoadMin = test.IsSegmented() ? segBp.minExamItems as int? : null,
+                    LoadMax = test.IsSegmented() ? segBp.maxExamItems as int? : null,
                     IsStrictMax = bool.Parse(itemSelectionProperties.GetOrDefault("isstrictmax", "false")),
                     BlueprintWeight = float.Parse(itemSelectionProperties.GetOrDefault("bpweight", "0")),
                     TestVersion = (long)testPackge.version,
@@ -252,7 +252,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                  select blueprint;
 
             var affinityGroupDtos =
-                from assessment in testPackage.Assessment
+                from assessment in testPackage.Test
                 from segment in assessment.Segments
                 from segmentBp in segment.SegmentBlueprint
                 join affinityGroupBp in affinityGroupBlueprintElements
@@ -296,7 +296,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                             on itemBp.idRef equals affinityGroupBp.Key
                                         select new AffinityGroupItemDTO
                                         {
-                                            SegmentKey = item.AssessmentSegment.Key,
+                                            SegmentKey = item.TestSegment.Key,
                                             ItemKey = item.Key,
                                             GroupId = itemBp.idRef
                                         };
@@ -340,7 +340,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     select new SetOfAdminItemDTO
                     {
                         ItemKey = item.Key,
-                        SegmentKey = item.AssessmentSegment.Key,
+                        SegmentKey = item.TestSegment.Key,
                         GroupId = item.ItemGroup.Key,
                         GroupKey = string.Format("{0}_{1}", item.ItemGroup.Key, SetOfAdminItemDefaults.BLOCK_ID),
                         ItemPosition = item.Position,
@@ -359,7 +359,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         IrtA = irtA.Any() ? irtA.First() : SetOfAdminItemDefaults.IRT_A,
                         IrtC = irtC.Any() ? irtC.First() : SetOfAdminItemDefaults.IRT_C,
                         IrtModel = item.ItemScoreDimension.measurementModel,
-                        ClString = item.AssessmentSegment.algorithmType.ToLower().Contains("adaptive")
+                        ClString = item.TestSegment.algorithmType.ToLower().Contains("adaptive")
                             ? CreateClString(item.BlueprintReferences, strandMap)
                             : null,
                         BVector = bVector
@@ -372,10 +372,10 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         {
             var setOfAdminSubjectsList = new List<SetOfAdminSubjectDTO>();
 
-            foreach (var assessment in testPackage.Assessment)
+            foreach (var test in testPackage.Test)
             {
                 var segmentAdminSubjectDtos = 
-                    from segment in assessment.Segments
+                    from segment in test.Segments
                     let segBp = segment.SegmentBlueprint.First(b => b.idRef.Equals(segment.id))
                     let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
                     select new SetOfAdminSubjectDTO
@@ -400,7 +400,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         CSet1Size = int.Parse(itemSelectionProperties.GetOrDefault("cset1size", ItemSelectionDefaults.CSET1_SIZE.ToString())),
                         CSet2Random = int.Parse(itemSelectionProperties.GetOrDefault("cset2random", ItemSelectionDefaults.CSET2_RANDOM.ToString())),
                         CSet2InitialRandom = int.Parse(itemSelectionProperties.GetOrDefault("cset2initialrandom", ItemSelectionDefaults.CSET2_INITIAL_RANDOM.ToString())),
-                        VirtualTest = assessment.Key,
+                        VirtualTest = test.Key,
                         TestPosition = segment.position,
                         IsSegmented = false,
                         ComputeAbilityEstimates = bool.Parse(itemSelectionProperties.GetOrDefault("computeabilityestimates", ItemSelectionDefaults.COMPUTE_ABILITY_ESTIMATES.ToString())),
@@ -425,12 +425,12 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 setOfAdminSubjectsList.AddRange(segmentAdminSubjectDtos);
 
                 // If this is a multi-segment assessment, create the "virtual" parent assessment.
-                if (assessment.IsSegmented())
+                if (test.IsSegmented())
                 {
                     // Many of the properties in the "virtual" row will contain sums of its segments. For example, if seg1 has
                     // a "minitems" value of 3, and "maxitems" value of 4, and seg2 has a "minitems" value of 1 and a "maxitems" value of 1,
                     // the "virtual" row will contain minitems = 4 and maxitems = 5
-                    var itemCounts = (from s in assessment.Segments
+                    var itemCounts = (from s in test.Segments
                                      from segBp in s.SegmentBlueprint
                                      where segBp.idRef.Equals(s.id)
                                      group segBp by 1 into g
@@ -444,10 +444,10 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
                     var virtualTestDto = new SetOfAdminSubjectDTO
                     {
-                        SegmentKey = assessment.Key,
+                        SegmentKey = test.Key,
                         TestAdminKey = testPackage.publisher,
                         SubjectKey = testPackage.GetSubjectKey(),
-                        TestId = assessment.id,
+                        TestId = test.id,
                         StartAbility = ItemSelectionDefaults.START_ABILITY,
                         StartInfo = ItemSelectionDefaults.START_INFO,
                         MinItems = itemCounts.MinItemCount,
@@ -493,15 +493,15 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateTestFormItems(TestPackage.TestPackage testPackage, IList<TestFormDTO> testForms)
         {
-            var fixedFormSegments = from assessment in testPackage.Assessment
-                                    from segment in assessment.Segments
+            var fixedFormSegments = from test in testPackage.Test
+                                    from segment in test.Segments
                                     where segment.algorithmType.ToLower().Trim().Equals(SelectionAlgorithmTypes.FIXED_FORM)
                                     select segment;
 
             var fixedFormItems = new List<ItemGroupItem>();
             foreach (var segment in fixedFormSegments)
             {
-                foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                foreach (var form in (segment.Item as TestSegmentSegmentForms).SegmentForm)
                 {
                     var items = from ig in form.ItemGroup
                                 from item in ig.Item
@@ -518,7 +518,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                select new TestFormItemDTO
                                {
                                    FormPosition = item.Position,
-                                   SegmentKey = item.SegmentForm.AssessmentSegment.Key,
+                                   SegmentKey = item.SegmentForm.TestSegment.Key,
                                    IsActive = true,
                                    ItemKey = item.Key,
                                    TestFormKey = testForm.TestFormKey,
@@ -531,8 +531,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public List<TestFormDTO> CreateTestForms(TestPackage.TestPackage testPackage)
         {
             var testForms = new List<TestFormDTO>();
-            var fixedFormSegments = from assessment in testPackage.Assessment
-                                    from segment in assessment.Segments
+            var fixedFormSegments = from test in testPackage.Test
+                                    from segment in test.Segments
                                     where segment.algorithmType.ToLower().Trim().Equals(SelectionAlgorithmTypes.FIXED_FORM)
                                     select segment;
 

@@ -17,7 +17,7 @@ namespace TISUnitTests.daos.itembank
             "   _efk_ItemBank AS ItemBankKey, \n" +
             "   _efk_Item AS ItemKey, \n" +
             "   ItemType, \n" +
-            "   ScorePoint, \n" +
+            "   ScorePoint AS ScorePoints, \n" +
             "   FilePath, \n" +
             "   [FileName], \n" +
             "   DateLastUpdated, \n" +

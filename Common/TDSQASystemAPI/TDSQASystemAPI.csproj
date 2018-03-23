@@ -344,9 +344,6 @@
     <Compile Include="TestMerge\RelatedTestOpportunity.cs" />
     <Compile Include="TestMerge\TestMerge.cs" />
     <Compile Include="TestMerge\TestMergeConfiguration.cs" />
-    <Compile Include="TestPackage\Assessment.cs" />
-    <Compile Include="TestPackage\AssessmentSegment.cs" />
-    <Compile Include="TestPackage\AssessmentSegmentSegmentFormsSegmentForm.cs" />
     <Compile Include="TestPackage\BlueprintElement.cs" />
     <Compile Include="TestPackage\MeasurementParameter.cs" />
     <Compile Include="TestPackage\DefaultToolConfiguration.cs" />
@@ -356,8 +353,11 @@
     <Compile Include="TestPackage\ItemGroupItemTeacherHandScoring.cs" />
     <Compile Include="TestPackage\ItemGroupStimulus.cs" />
     <Compile Include="TestPackage\PresentationsPresentation.cs" />
+    <Compile Include="TestPackage\Test.cs" />
     <Compile Include="TestPackage\TestPackage.cs" />
     <Compile Include="TestPackage\TestPackageXsd.cs" />
+    <Compile Include="TestPackage\TestSegment.cs" />
+    <Compile Include="TestPackage\TestSegmentSegmentFormsSegmentForm.cs" />
     <Compile Include="TestPackage\ToolsTool.cs" />
     <Compile Include="TestPackage\utils\BlueprintElementTypes.cs" />
     <Compile Include="TestPackage\utils\ItemSelectionDefaults.cs" />

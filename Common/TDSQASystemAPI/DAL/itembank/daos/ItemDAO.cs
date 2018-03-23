@@ -28,7 +28,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   ItemBankKey, \n" +
                 "   ItemKey, \n" +
                 "   ItemType, \n" +
-                "   ScorePoint, \n" +
+                "   ScorePoints, \n" +
                 "   FilePath, \n" +
                 "   [FileName], \n" +
                 "   DateLastUpdated, \n" +

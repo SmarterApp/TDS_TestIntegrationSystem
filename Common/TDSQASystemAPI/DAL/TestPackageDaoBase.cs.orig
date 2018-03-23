@@ -70,14 +70,14 @@ namespace TDSQASystemAPI.DAL
         /// </summary>
         protected internal string SelectSql { get; set; }
 
+        protected internal string ExistsSql { get; set; }
+
+        protected internal string FindByExampleSql { get; set; }
+
         /// <summary>
         /// The SQL responsible for updating a collection of existing records in the database.
         /// </summary>
         protected internal string UpdateSql { get; set; }
-
-        protected internal string ExistsSql { get; set; }
-
-        protected internal string FindByExampleSql { get; set; }
 
         /// <summary>
         /// The type of the table-valued parameter used to pass the <code>IList<typeparamref name="T"/></code>.
@@ -99,14 +99,10 @@ namespace TDSQASystemAPI.DAL
             {
                 using (var command = new SqlCommand(InsertSql, connection))
                 {
-                    var tableParam = new SqlParameter(DEFAULT_TVP_VARIABLE_NAME, SqlDbType.Structured)
-                    {
-                        TypeName = TvpType,
-                        Value = recordsToSave.ToDataTable()
-                    };
-
                     command.CommandType = CommandType.Text;
-                    command.Parameters.Add(tableParam);
+                    var tableParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordsToSave.ToDataTable());
+                    tableParam.SqlDbType = SqlDbType.Structured;
+                    tableParam.TypeName = TvpType;
 
                     connection.Open();
                     command.ExecuteNonQuery();
@@ -115,6 +111,17 @@ namespace TDSQASystemAPI.DAL
         }
 
         /// <summary>
+<<<<<<< HEAD
+        /// Update an existing record int he database (which is specified by the connection string)
+        /// </summary>
+        /// <remarks>
+        /// Unlike the other methods in this class, the <code>Update()</code> method expects the entire UPDATE SQL statement 
+        /// </remarks>
+        /// <param name="recordToUpdate">The <code>T</code> record to update.</param>
+        public virtual void Update(T recordToUpdate)
+        {
+            throw new NotImplementedException();
+=======
         /// Insert a record into the database (which is specified by the connection string)
         /// </summary>
         /// <param name="recordToSave">The <code>typeparamref name="T"</code> of record to persist.</param>
@@ -125,8 +132,7 @@ namespace TDSQASystemAPI.DAL
                 using (var command = new SqlCommand(InsertSql, connection))
                 {
                     command.CommandType = CommandType.Text;
-
-                    var testeeAttributeParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordToSave);
+                    var testeeAttributeParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordToSave.ToDataTable());
                     testeeAttributeParam.SqlDbType = SqlDbType.Structured;
                     testeeAttributeParam.TypeName = TvpType;
 
@@ -197,6 +203,7 @@ namespace TDSQASystemAPI.DAL
 
         virtual protected void FindByExampleAddParameter(T record, SqlParameterCollection parameters)
         {
+>>>>>>> feature/map-scoring
         }
 
         /// <summary>
@@ -226,18 +233,6 @@ namespace TDSQASystemAPI.DAL
             }
 
             return results;
-        }
-
-        /// <summary>
-        /// Update an existing record int he database (which is specified by the connection string)
-        /// </summary>
-        /// <remarks>
-        /// Unlike the other methods in this class, the <code>Update()</code> method expects the entire UPDATE SQL statement 
-        /// </remarks>
-        /// <param name="recordToUpdate">The <code>T</code> record to update.</param>
-        public virtual void Update(T recordToUpdate)
-        {
-            throw new NotImplementedException();
         }
     }
 }

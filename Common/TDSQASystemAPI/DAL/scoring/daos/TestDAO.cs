@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.scoring.dtos;
 
 namespace TDSQASystemAPI.DAL.scoring.daos
@@ -19,11 +22,14 @@ namespace TDSQASystemAPI.DAL.scoring.daos
                 "   ClientName, \n" +
                 "   TestId, \n" +
                 "   [Subject] \n";
+            ExistsSql = "SELECT count(*) FROM dbo.Test t WHERE t.clientname = @clientName AND t.testID = @testID AND t._efk_Subject = @subject";
         }
 
-        public override void Insert(IList<TestDTO> recordsToSave)
+        override protected void AddNaturalKeys(TestDTO testDTO, SqlParameterCollection parameters)
         {
-            base.Insert(recordsToSave);
-        }
+            parameters.AddWithValue("@clientName", testDTO.ClientName);
+            parameters.AddWithValue("@testID", testDTO.TestId);
+            parameters.AddWithValue("@subject", testDTO.Subject);
+        }    
     }
 }

@@ -42,7 +42,7 @@
       <BlueprintElement id="SBAC-IRP-Perf-MATH-11" type="assessment"/>
     </BlueprintElement>
   </Blueprint>
-  <Assessment id="SBAC-IRP-Perf-MATH-11" label="IRP Perf Grade 11 Math">
+  <Test id="SBAC-IRP-Perf-MATH-11" label="IRP Perf Grade 11 Math">
     <Grades>
       <Grade value="11"/>
     </Grades>
@@ -91,5 +91,5 @@
         </Options>
       </Tool>
     </Tools>
-  </Assessment>
+  </Test>
 </TestPackage>

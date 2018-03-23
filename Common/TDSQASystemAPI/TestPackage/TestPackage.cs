@@ -35,13 +35,13 @@ namespace TDSQASystemAPI.TestPackage
 
         /// <summary>
         /// Get a collection of all <code>ItemGroupItem</code>s from this <code>TestPackage</code>, regardless of their source (e.g. an item pool
-        /// vs. a form).  This collection of <code>ItemGroupStimulus</code> objects comes from every <code>AssessmentSegment</code> in the
+        /// vs. a form).  This collection of <code>ItemGroupStimulus</code> objects comes from every <code>TestSegment</code> in the
         /// <code>TestPackage</code>.
         /// </summary>
-        /// <returns>A collection of all <code>ItemGroupItem</code>s from every <code>AssessmentSegment</code> in this <code>TestPackage</code>.</returns>
+        /// <returns>A collection of all <code>ItemGroupItem</code>s from every <code>TestSegment</code> in this <code>TestPackage</code>.</returns>
         public IReadOnlyCollection<ItemGroupItem> GetAllItems()
         {
-            var allSegments = from a in Assessment
+            var allSegments = from a in Test
                               from s in a.Segments
                               select s;
 
@@ -49,9 +49,9 @@ namespace TDSQASystemAPI.TestPackage
             List<ItemGroupItem> allItems = new List<ItemGroupItem>();
             foreach (var segment in allSegments)
             {
-                if (segment.Item is AssessmentSegmentSegmentForms)
+                if (segment.Item is TestSegmentSegmentForms)
                 {
-                    foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                    foreach (var form in (segment.Item as TestSegmentSegmentForms).SegmentForm)
                     {
                         var items = from ig in form.ItemGroup
                                     from item in ig.Item
@@ -64,7 +64,7 @@ namespace TDSQASystemAPI.TestPackage
                 }
                 else
                 {
-                    var pool = segment.Item as AssessmentSegmentPool;
+                    var pool = segment.Item as TestSegmentPool;
                     var items = from ig in pool.ItemGroup
                                 from item in ig.Item
                                 select item;
@@ -79,13 +79,13 @@ namespace TDSQASystemAPI.TestPackage
         }
 
         /// Get a collection of all <code>ItemGroupStimulus</code>s from this <code>TestPackage</code>, regardless of their source (e.g. an item pool
-        /// vs. a form).  This collection of <code>ItemGroupStimulus</code> objects comes from every <code>AssessmentSegment</code> in the
+        /// vs. a form).  This collection of <code>ItemGroupStimulus</code> objects comes from every <code>TestSegment</code> in the
         /// <code>TestPackage</code>.
         /// </summary>
-        /// <returns>A collection of all <code>ItemGroupItem</code>s from every <code>AssessmentSegment</code> in this <code>TestPackage</code>.</returns>
+        /// <returns>A collection of all <code>ItemGroupItem</code>s from every <code>TestSegment</code> in this <code>TestPackage</code>.</returns>
         public IReadOnlyCollection<ItemGroupStimulus> GetAllStimuli()
         {
-            var allSegments = from a in Assessment
+            var allSegments = from a in Test
                               from s in a.Segments
                               select s;
 
@@ -93,9 +93,9 @@ namespace TDSQASystemAPI.TestPackage
             List<ItemGroupStimulus> allStimuli = new List<ItemGroupStimulus>();
             foreach (var segment in allSegments)
             {
-                if (segment.Item is AssessmentSegmentSegmentForms)
+                if (segment.Item is TestSegmentSegmentForms)
                 {
-                    foreach (var form in (segment.Item as AssessmentSegmentSegmentForms).SegmentForm)
+                    foreach (var form in (segment.Item as TestSegmentSegmentForms).SegmentForm)
                     {
                         var stimuli = from ig in form.ItemGroup
                                       where ig.Stimulus != null
@@ -108,7 +108,7 @@ namespace TDSQASystemAPI.TestPackage
                 }
                 else
                 {
-                    var pool = segment.Item as AssessmentSegmentPool;
+                    var pool = segment.Item as TestSegmentPool;
                     var stimuli = from ig in pool.ItemGroup
                                   where ig.Stimulus != null
                                   select ig.Stimulus;

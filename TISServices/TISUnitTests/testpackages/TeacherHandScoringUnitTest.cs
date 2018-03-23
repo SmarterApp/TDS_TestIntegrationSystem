@@ -19,7 +19,7 @@ namespace TISUnitTests.testpackages
             Assert.AreEqual("SBAC_PT", thssTestPackage.publisher);
             Assert.AreEqual("ELA", thssTestPackage.subject);
 
-            var forms = thssTestPackage.Assessment[0].Segments[0].Item as AssessmentSegmentSegmentForms;
+            var forms = thssTestPackage.Test[0].Segments[0].Item as TestSegmentSegmentForms;
             var handScoring = forms.SegmentForm[0]
                 .ItemGroup[0]
                 .Item[0]
@@ -34,7 +34,7 @@ namespace TISUnitTests.testpackages
         {
             var thssTestPackage = TestPackageMapper.FromXml(new XmlTextReader(THSS_TEST_PACKAGE_XML));
 
-            var forms = thssTestPackage.Assessment[0].Segments[0].Item as AssessmentSegmentSegmentForms;
+            var forms = thssTestPackage.Test[0].Segments[0].Item as TestSegmentSegmentForms;
             var rubricList = forms.SegmentForm[0]
                 .ItemGroup[0]
                 .Item[0]

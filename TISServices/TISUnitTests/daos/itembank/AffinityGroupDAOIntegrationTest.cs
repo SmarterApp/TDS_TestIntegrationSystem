@@ -24,7 +24,7 @@ namespace TISUnitTests.daos.itembank
             "   GroupId, \n" +
             "   MinItems, \n" +
             "   MaxItems, \n" +
-            "   [Weight], \n" +
+            "   [Weight] AS BlueprintWeight, \n" +
             "   IsStrictMax, \n" +
             "   loadconfig AS TestVersion, \n" +
             "   updateconfig AS UpdatedTestVersion, \n" +

@@ -6,12 +6,12 @@
     public sealed class SelectionAlgorithmTypes
     {
         /// <summary>
-        /// The descriptor for an assessment that serves items using the adaptive2 algorithm
+        /// The descriptor for a test that serves items using the adaptive2 algorithm
         /// </summary>
         public const string ADAPTIVE = "adaptive2";
 
         /// <summary>
-        /// The descriptor for an assessment that serves items using the fixed-form algorithm
+        /// The descriptor for a test that serves items using the fixed-form algorithm
         /// </summary>
         public const string FIXED_FORM = "fixedform";
 
