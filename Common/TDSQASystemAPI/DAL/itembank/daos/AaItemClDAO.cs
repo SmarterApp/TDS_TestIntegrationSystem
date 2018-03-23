@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   ItemKey, \n" +
                 "   ContentLevel \n";
         }
-
-        public override void Insert(IList<AaItemClDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

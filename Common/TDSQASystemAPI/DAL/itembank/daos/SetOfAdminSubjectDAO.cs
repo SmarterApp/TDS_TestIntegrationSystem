@@ -101,10 +101,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   TerminationFlagsAnd, \n" +
                 "   BlueprintMetricFunction \n";
         }
-
-        public override void Insert(IList<SetOfAdminSubjectDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

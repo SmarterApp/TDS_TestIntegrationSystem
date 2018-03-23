@@ -21,10 +21,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   SegmentKey, \n" +
                 "   TestVersion \n";
         }
-
-        public override void Insert(IList<SetOfItemStrandDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

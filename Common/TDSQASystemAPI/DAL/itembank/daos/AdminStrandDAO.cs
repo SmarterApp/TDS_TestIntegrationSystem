@@ -53,10 +53,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   PrecisionTargetNotMetWeight, \n" +
                 "   AbilityWeight \n";
         }
-
-        public override void Insert(IList<AdminStrandDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

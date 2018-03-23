@@ -23,10 +23,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   TestFormKey, \n" +
                 "   IsActive \n";
         }
-
-        public override void Insert(IList<TestFormItemDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

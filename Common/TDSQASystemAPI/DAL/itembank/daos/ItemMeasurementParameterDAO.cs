@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   MeasurementParameterKey, \n" +
                 "   ParmValue \n";
         }
-
-        public override void Insert(IList<ItemMeasurementParameterDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

@@ -55,10 +55,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   ClString, \n" +
                 "   UpdatedTestVersion \n";
         }
-
-        public override void Insert(IList<SetOfAdminItemDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

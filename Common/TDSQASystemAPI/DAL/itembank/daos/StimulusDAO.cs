@@ -24,10 +24,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   StimulusKey, \n" +
                 "   TestVersion \n";
         }
-
-        public override void Insert(IList<StimulusDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

@@ -25,10 +25,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   MeasurementModel, \n" +
                 "   RecodeRule \n";
         }
-
-        public override void Insert(IList<ItemScoreDimensionDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

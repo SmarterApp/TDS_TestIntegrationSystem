@@ -35,10 +35,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   [Key], \n" +
                 "   TestVersion \n";
         }
-
-        public override void Insert(IList<ItemDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

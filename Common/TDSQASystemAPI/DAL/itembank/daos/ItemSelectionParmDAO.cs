@@ -22,10 +22,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   PropertyValue, \n" +
                 "   PropertyLabel \n";
         }
-
-        public override void Insert(IList<ItemSelectionParmDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }
