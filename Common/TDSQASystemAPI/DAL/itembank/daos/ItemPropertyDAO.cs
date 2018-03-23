@@ -22,10 +22,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   SegmentKey, \n" +
                 "   IsActive \n";
         }
-
-        public override void Insert(IList<ItemPropertyDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

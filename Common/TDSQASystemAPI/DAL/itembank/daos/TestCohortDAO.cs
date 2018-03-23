@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   Cohort, \n" +
                 "   ItemRatio \n";
         }
-
-        public override void Insert(IList<TestCohortDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

@@ -93,6 +93,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DataAccess\Libraries\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.11.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\TISServices\TISServices\packages\MySql.Data.6.9.11\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\TISServices\TISServices\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -153,6 +156,17 @@
     <Compile Include="BL\LockingTestCollection.cs" />
     <Compile Include="BL\Sandlot.cs" />
     <Compile Include="BL\TestOpportunity.cs" />
+    <Compile Include="BL\testpackage\administration\IItembankAdministrationDataService.cs" />
+    <Compile Include="BL\testpackage\administration\IItembankConfigurationDataQueryService.cs" />
+    <Compile Include="BL\testpackage\administration\IItembankConfigurationDataService.cs" />
+    <Compile Include="BL\testpackage\administration\ItembankAdministrationDataService.cs" />
+    <Compile Include="BL\testpackage\administration\ItembankConfigurationDataQueryService.cs" />
+    <Compile Include="BL\testpackage\administration\ItembankConfigurationDataService.cs" />
+    <Compile Include="BL\testpackage\osstis\CombinationTestMapService.cs" />
+    <Compile Include="BL\testpackage\osstis\ICombinationTestMapService.cs" />
+    <Compile Include="BL\testpackage\osstis\IQcProjectMetadataService.cs" />
+    <Compile Include="BL\testpackage\osstis\QcProjectMetadataService.cs" />
+    <Compile Include="BL\testpackage\scoring\ScoringConfigurationDataService.cs" />
     <Compile Include="BL\XmlRepository.cs" />
     <Compile Include="Config\AdministrationInfo.cs" />
     <Compile Include="Config\IProjectMetaDataLoader.cs" />
@@ -214,6 +228,7 @@
     <Compile Include="DAL\itembank\daos\AdminStrandDAO.cs" />
     <Compile Include="DAL\itembank\daos\AffinityGroupDAO.cs" />
     <Compile Include="DAL\itembank\daos\AffinityGroupItemDAO.cs" />
+    <Compile Include="DAL\itembank\daos\ClientDAO.cs" />
     <Compile Include="DAL\itembank\daos\ItemDAO.cs" />
     <Compile Include="DAL\itembank\daos\ItemMeasurementParameterDAO.cs" />
     <Compile Include="DAL\itembank\daos\ItemPropertyDAO.cs" />
@@ -237,6 +252,7 @@
     <Compile Include="DAL\itembank\dtos\AdminStrandDTO.cs" />
     <Compile Include="DAL\itembank\dtos\AffinityGroupDTO.cs" />
     <Compile Include="DAL\itembank\dtos\AffinityGroupItemDTO.cs" />
+    <Compile Include="DAL\itembank\dtos\ClientDTO.cs" />
     <Compile Include="DAL\itembank\dtos\ItemDTO.cs" />
     <Compile Include="DAL\itembank\dtos\ItemMeasurementParameterDTO.cs" />
     <Compile Include="DAL\itembank\dtos\ItemPropertyDTO.cs" />
@@ -256,7 +272,15 @@
     <Compile Include="DAL\itembank\dtos\TestFormDTO.cs" />
     <Compile Include="DAL\itembank\dtos\TestFormItemDTO.cs" />
     <Compile Include="DAL\ITestPackageDao.cs" />
+    <Compile Include="DAL\osstis\daos\CombinationTestFormMapDAO.cs" />
+    <Compile Include="DAL\osstis\daos\CombinationTestMapDAO.cs" />
+    <Compile Include="DAL\osstis\daos\ProjectDAO.cs" />
+    <Compile Include="DAL\osstis\daos\QcProjectMetadataDAO.cs" />
     <Compile Include="DAL\osstis\daos\TestNameLookupDAO.cs" />
+    <Compile Include="DAL\osstis\dtos\CombinationTestFormMapDTO.cs" />
+    <Compile Include="DAL\osstis\dtos\CombinationTestMapDTO.cs" />
+    <Compile Include="DAL\osstis\dtos\ProjectDTO.cs" />
+    <Compile Include="DAL\osstis\dtos\QcProjectMetadataDTO.cs" />
     <Compile Include="DAL\osstis\dtos\TestNameLookupDTO.cs" />
     <Compile Include="DAL\Sandlot.cs" />
     <Compile Include="DAL\scoring\daos\ComputationRuleParameterDAO.cs" />
@@ -280,6 +304,8 @@
     <Compile Include="DAL\TestOpportunity.cs" />
     <Compile Include="DAL\TestPackageDaoBase.cs" />
     <Compile Include="DAL\TISScoreMergerDAL.cs" />
+    <Compile Include="DAL\UpdateConfigsDB.cs" />
+    <Compile Include="DAL\utils\ReflectionObjectPopulator.cs" />
     <Compile Include="DAL\XmlRepository.cs" />
     <Compile Include="Data\QASystemConfigSettings.cs" />
     <Compile Include="Acknowledgement\IAcknowledgementTargetFactory.cs" />
@@ -320,19 +346,31 @@
     <Compile Include="TestMerge\RelatedTestOpportunity.cs" />
     <Compile Include="TestMerge\TestMerge.cs" />
     <Compile Include="TestMerge\TestMergeConfiguration.cs" />
-    <Compile Include="TestPackage\Assessment.cs" />
-    <Compile Include="TestPackage\AssessmentSegment.cs" />
-    <Compile Include="TestPackage\AssessmentSegmentSegmentFormsSegmentForm.cs" />
+    <Compile Include="TestPackage\BlueprintElement.cs" />
+    <Compile Include="TestPackage\BlueprintElementScoringRule.cs" />
+    <Compile Include="TestPackage\BlueprintElementScoringRuleParameter.cs" />
+    <Compile Include="TestPackage\Grade.cs" />
+    <Compile Include="TestPackage\MeasurementParameter.cs" />
     <Compile Include="TestPackage\DefaultToolConfiguration.cs" />
     <Compile Include="TestPackage\ItemGroup.cs" />
     <Compile Include="TestPackage\ItemGroupItem.cs" />
+    <Compile Include="TestPackage\ItemGroupItemBlueprintReference.cs" />
     <Compile Include="TestPackage\ItemGroupItemTeacherHandScoring.cs" />
     <Compile Include="TestPackage\ItemGroupStimulus.cs" />
     <Compile Include="TestPackage\PresentationsPresentation.cs" />
+    <Compile Include="TestPackage\Test.cs" />
+    <Compile Include="TestPackage\TestPackage.cs" />
     <Compile Include="TestPackage\TestPackageXsd.cs" />
+    <Compile Include="TestPackage\TestSegment.cs" />
+    <Compile Include="TestPackage\TestSegmentSegmentFormsSegmentForm.cs" />
     <Compile Include="TestPackage\ToolsTool.cs" />
-    <Compile Include="TestPackage\utils\TestPackageAssembler.cs" />
-    <Compile Include="TestPackage\utils\ToolFactory.cs" />
+    <Compile Include="TestPackage\utils\BlueprintElementTypes.cs" />
+    <Compile Include="TestPackage\utils\ItemSelectionDefaults.cs" />
+    <Compile Include="TestPackage\utils\QcProjectMetadataDefaults.cs" />
+    <Compile Include="TestPackage\utils\SelectionAlgorithmTypes.cs" />
+    <Compile Include="TestPackage\utils\SetOfAdminItemDefaults.cs" />
+    <Compile Include="TestPackage\utils\TestPackageMapper.cs" />
+    <Compile Include="TestPackage\utils\ToolMapper.cs" />
     <Compile Include="TestResults\Comment.cs" />
     <Compile Include="TestResults\ErasureResponse.cs" />
     <Compile Include="TestResults\GenericVariable.cs" />

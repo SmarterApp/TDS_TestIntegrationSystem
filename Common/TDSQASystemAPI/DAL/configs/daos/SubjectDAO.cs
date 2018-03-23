@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   [Subject], \n" +
                 "   ClientName \n";
         }
-
-        public override void Insert(IList<SubjectDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

@@ -18,27 +18,22 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "       _efk_ItemBank, " +
                 "       _efk_Item, " +
                 "       ItemType, " +
+                "       ScorePoint," +
                 "       FilePath, " +
                 "       FileName, " +
                 "       DateLastUpdated, " +
-                "       ItemID, " +
                 "       _Key, " +
                 "       LoadConfig) \n" +
                 "SELECT \n" +
                 "   ItemBankKey, \n" +
                 "   ItemKey, \n" +
                 "   ItemType, \n" +
+                "   ScorePoints, \n" +
                 "   FilePath, \n" +
                 "   [FileName], \n" +
                 "   DateLastUpdated, \n" +
-                "   ItemId, \n" +
                 "   [Key], \n" +
                 "   TestVersion \n";
-        }
-
-        public override void Insert(IList<ItemDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
         }
     }
 }

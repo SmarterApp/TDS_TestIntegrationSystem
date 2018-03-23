@@ -22,10 +22,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   SegmentKey, \n" +
                 "   EnrolledSubject \n";
         }
-
-        public override void Insert(IList<SetOfTestGradeDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

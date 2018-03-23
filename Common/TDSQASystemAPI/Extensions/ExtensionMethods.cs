@@ -105,5 +105,67 @@ namespace TDSQASystemAPI.Extensions
 
             return dataTable;
         }
+
+        /// <summary>
+        /// Get a value <code>V</code> for the specified key <code>K</code>.  If there is no value for the specified
+        /// key, return a default value instead.
+        /// </summary>
+        /// <remarks>
+        /// This code emulates the Java <code>GetOrDefault()</code> method on a <code>Map</code>.  It's also a convenient
+        /// way to "inline" the <code>Dictionary#TryParse</code> and have it return some value in the event the key we're
+        /// looking for doesn't exist.
+        /// </remarks>
+        /// <example>
+        /// // Getting a value for the specified key:
+        /// var dictionary = new Dictionary<string, string>
+        /// {
+        ///     { "firstKey", "foo" },
+        ///     { "secondKey", "bar" }
+        /// };
+        ///
+        /// var result = dictionary.GetOrDefault("firstKey", "default"); // result == "foo"
+        /// 
+        /// // Getting a default value when searching for a key that does not exist:
+        /// var dictionary = new Dictionary<string, string>
+        /// {
+        ///     { "firstKey", "foo" },
+        ///     { "secondKey", "bar" }
+        /// };
+        ///
+        /// var result = dictionary.GetOrDefault("i-do-not-exist", "default"); // result == "default"
+        /// </example>
+        /// <typeparam name="K">The type of this dictionary's key.</typeparam>
+        /// <typeparam name="V">The type of this dictionary's value.</typeparam>
+        /// <param name="dictionary">The <code>Dictionary</code> that is being extended.</param>
+        /// <param name="key">The key to search for.</param>
+        /// <param name="defaultValue">The default value that should be returned in the event that a value cannot be
+        /// found for the specified key.</param>
+        /// <returns>The value <code>V</code> for the specified key <code>K</code>; otherwise the default value.</returns>
+        public static V GetOrDefault<K, V>(this Dictionary<K, V> dictionary, K key, V defaultValue)
+        {
+            return dictionary.TryGetValue(key, out V value)
+                ? value
+                : defaultValue;
+        }
+
+        /// <summary>
+        /// Convert a <code>string</code> to a nullable <code>int</code>.
+        /// </summary>
+        /// <param name="s">The <code>string</code> to convert</param>
+        /// <returns>A nullable <code>int</code></returns>
+        public static int? ToNullableInt(this string s)
+        {
+            return int.TryParse(s, out int i) ? i as int? : null;
+        }
+
+        /// <summary>
+        /// Convert a <code>string</code> to a nullable <code>double</code>.
+        /// </summary>
+        /// <param name="s">The <code>string</code> to convert</param>
+        /// <returns>A nullable <code>double</code></returns>
+        public static double? ToNullableDouble(this string s)
+        {
+            return double.TryParse(s, out double d) ? d as double? : null;
+        }
     }
 }

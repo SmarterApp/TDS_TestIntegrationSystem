@@ -13,5 +13,17 @@ namespace TDSQASystemAPI.TestPackage
         /// </summary>
         [XmlIgnore]
         public TestPackage TestPackage { get; set; }
+
+        [XmlIgnore]
+        public TestSegment TestSegment { get; set; }
+
+        [XmlIgnore]
+        public ItemGroup ItemGroup { get; set; }
+
+        /// <summary>
+        /// Return the identifier/"key" of this <code>ItemGroupStimulus</code>
+        /// </summary>
+        [XmlIgnore]
+        public string Key { get { return string.Format("{0}-{1}", TestPackage.bankKey, id); } }
     }
 }

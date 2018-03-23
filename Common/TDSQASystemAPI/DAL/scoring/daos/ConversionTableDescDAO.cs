@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.scoring.daos
                 "   TableName, \n" +
                 "   ClientName \n";
         }
-
-        public override void Insert(IList<ConversionTableDescDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

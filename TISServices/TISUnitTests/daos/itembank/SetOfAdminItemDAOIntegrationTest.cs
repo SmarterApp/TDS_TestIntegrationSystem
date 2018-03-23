@@ -112,7 +112,7 @@ namespace TISUnitTests.daos.itembank
             FileName = "unit-test-name",
             DateLastUpdated = DateTime.Now,
             Key = ITEM_KEY,
-            ItemId = "unit-test-id",
+            ScorePoints = 13,
             TestVersion = 42L
         };
 
@@ -149,9 +149,9 @@ namespace TISUnitTests.daos.itembank
                     IsRequired = true,
                     GroupKey = "unit-test-group-key",
                     StrandName = "unit-test-strand-name",
-                    IrtA = 2D,
+                    IrtA = 2F,
                     IrtB = "unit-test-irt-b",
-                    IrtC = 4D,
+                    IrtC = 4F,
                     IrtModel = "unit-test-irt-model",
                     ClString = "unit-test-cl-string",
                     UpdatedTestVersion = 100L,

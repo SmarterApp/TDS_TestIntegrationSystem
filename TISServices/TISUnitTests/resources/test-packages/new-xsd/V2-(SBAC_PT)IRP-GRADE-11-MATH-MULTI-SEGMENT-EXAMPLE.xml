@@ -1,0 +1,1041 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestPackage publisher="SBAC_PT" publishDate="2015-08-19T18:13:51.0" subject="MATH" type="summative" version="8185" bankKey="187" academicYear="2017-2018">
+  <Blueprint>
+    <BlueprintElement id="SBAC-IRP-MULIT-SEG-MATH-11" type="combined">
+      <Scoring>
+        <PerformanceLevels>
+          <PerformanceLevel pLevel="1" scaledLo="2.280000000000000e+003" scaledHi="2.543000000000000e+003"/>
+          <PerformanceLevel pLevel="2" scaledLo="2.543000000000000e+003" scaledHi="2.628000000000000e+003"/>
+          <PerformanceLevel pLevel="3" scaledLo="2.628000000000000e+003" scaledHi="2.718000000000000e+003"/>
+          <PerformanceLevel pLevel="4" scaledLo="2.718000000000000e+003" scaledHi="2.862000000000000e+003"/>
+        </PerformanceLevels>
+        <Rules>
+          <Rule name="RawScore" computationOrder="110"/>
+          <Rule name="SBACCATTheta" computationOrder="20">
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="LOT" type="double" position="1">
+              <Value value="-2.9564"/>
+            </Parameter>
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="HOT" type="double" position="2">
+              <Value value="4.3804"/>
+            </Parameter>
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="seLimit" type="double" position="3">
+              <Value value="2.5"/>
+            </Parameter>
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="averageA" type="double" position="4">
+              <Value value="0.53"/>
+            </Parameter>
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="averageB" type="double" position="5">
+              <Value value="2.71"/>
+            </Parameter>
+          </Rule>
+          <Rule name="SBACAttemptedness" computationOrder="10">
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="testPart" type="int" position="1">
+              <Property name="indextype" value="string"/>
+              <Value index="SBAC-IRP-CAT-MATH-11" value="1"/>
+            </Parameter>
+          </Rule>
+        </Rules>
+      </Scoring>
+      <BlueprintElement id="SBAC-IRP-CAT-MATH-11" type="assessment"/>
+    </BlueprintElement>
+    <BlueprintElement id="G11Math_Claim1_MC/MS" type="affinitygroup"/>
+    <BlueprintElement id="G11Math_Claim2/4" type="affinitygroup"/>
+    <BlueprintElement id="G11Math_DOK2" type="affinitygroup"/>
+    <BlueprintElement id="SOCK2" type="sock">
+      <Scoring>
+        <Rules>
+          <Rule name="ScaleScore" computationOrder="71"/>
+          <Rule name="SBACCATMultiStrandTheta" computationOrder="20">
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="LOT" type="double" position="1">
+              <Value value="-2.9564"/>
+            </Parameter>
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="HOT" type="double" position="2">
+              <Value value="4.3804"/>
+            </Parameter>
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="seLimit" type="double" position="3">
+              <Value value="2.5"/>
+            </Parameter>
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="strands" type="string" position="4">
+              <Value value="2" index="1"/>
+              <Value value="4" index="2"/>
+            </Parameter>
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="averageA" type="double" position="5">
+              <Value value="0.53"/>
+            </Parameter>
+            <Parameter id="686D3098-28B0-40A0-AC92-EB71DD389125" name="averageB" type="double" position="6">
+              <Value value="2.71"/>
+            </Parameter>
+          </Rule>
+        </Rules>
+      </Scoring>
+    </BlueprintElement>
+    <BlueprintElement id="1" type="strand">
+      <BlueprintElement id="1|A-REI" type="contentlevel">
+        <BlueprintElement id="1|A-REI|H" type="contentlevel">
+          <BlueprintElement id="1|A-REI|H|m" type="contentlevel">
+            <BlueprintElement id="1|A-REI|H|m|A-REI.2" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+        <BlueprintElement id="1|A-REI|I" type="contentlevel">
+          <BlueprintElement id="1|A-REI|I|m" type="contentlevel">
+            <BlueprintElement id="1|A-REI|I|m|A-REI.4b" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+      <BlueprintElement id="1|A-SSE" type="contentlevel">
+        <BlueprintElement id="1|A-SSE|D" type="contentlevel" >
+          <BlueprintElement id="1|A-SSE|D|m" type="contentlevel">
+            <BlueprintElement id="1|A-SSE|D|m|A-SSE.2" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+        <BlueprintElement id="1|A-SSE|E" type="contentlevel">
+          <BlueprintElement id="1|A-SSE|E|m" type="contentlevel">
+            <BlueprintElement id="1|A-SSE|E|m|A-SSE.3b" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+      <BlueprintElement id="1|F-IF" type="contentlevel">
+        <BlueprintElement id="1|F-IF|K" type="contentlevel">
+          <BlueprintElement id="1|F-IF|K|m" type="contentlevel">
+            <BlueprintElement id="1|F-IF|K|m|F-IF.1" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+        <BlueprintElement id="1|F-IF|M" type="contentlevel">
+          <BlueprintElement id="1|F-IF|M|m" type="contentlevel">
+            <BlueprintElement id="1|F-IF|M|m|F-IF.7a" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+      <BlueprintElement id="1|G-SRT" type="contentlevel">
+        <BlueprintElement id="1|G-SRT|P" type="contentlevel">
+          <BlueprintElement id="1|G-SRT|P|m" type="contentlevel">
+            <BlueprintElement id="1|G-SRT|P|m|G-SRT.8" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+      <BlueprintElement id="1|N-Q" type="contentlevel">
+        <BlueprintElement id="1|N-Q|C" type="contentlevel">
+          <BlueprintElement id="1|N-Q|C|m" type="contentlevel">
+            <BlueprintElement id="1|N-Q|C|m|N-Q.1" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+      <BlueprintElement id="1|N-RN" type="contentlevel">
+        <BlueprintElement id="1|N-RN|A" type="contentlevel">
+          <BlueprintElement id="1|N-RN|A|a/s" type="contentlevel">
+            <BlueprintElement id="1|N-RN|A|a/s|N-RN.2" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+    </BlueprintElement>
+    <BlueprintElement id="2" type="strand">
+      <BlueprintElement id="2|A-CED" type="contentlevel">
+        <BlueprintElement id="2|A-CED|A" type="contentlevel"/>
+      </BlueprintElement>
+      <BlueprintElement id="2|F-IF" type="contentlevel">
+        <BlueprintElement id="2|F-IF|A" type="contentlevel"/>
+      </BlueprintElement>
+      <BlueprintElement id="2|G-SRT" type="contentlevel">
+        <BlueprintElement id="2|G-SRT|D" type="contentlevel">
+          <BlueprintElement id="2|G-SRT|D|NA" type="contentlevel">
+            <BlueprintElement id="2|G-SRT|D|NA|NA" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+      <BlueprintElement id="2|S-CP" type="contentlevel">
+        <BlueprintElement id="2|S-CP|A" type="contentlevel"/>
+      </BlueprintElement>
+    </BlueprintElement>
+    <BlueprintElement id="3" type="strand">
+      <Scoring>
+        <Rules>
+          <Rule name="RawScore" computationOrder="142"/>
+        </Rules>
+      </Scoring>
+      <BlueprintElement id="3|A-REI" type="contentlevel">
+        <BlueprintElement id="3|A-REI|D" type="contentlevel">
+          <BlueprintElement id="3|A-REI|D|NA" type="contentlevel">
+            <BlueprintElement id="3|A-REI|D|NA|NA" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+        <BlueprintElement id="3|A-REI|G" type="contentlevel">
+          <BlueprintElement id="3|A-REI|G|NA" type="contentlevel">
+            <BlueprintElement id="3|A-REI|G|NA|NA" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+      <BlueprintElement id="3|F-IF" type="contentlevel">
+        <BlueprintElement id="3|F-IF|B" type="contentlevel"/>
+      </BlueprintElement>
+      <BlueprintElement id="3|G-SRT" type="contentlevel">
+        <BlueprintElement id="3|G-SRT|A" type="contentlevel">
+          <BlueprintElement id="3|G-SRT|A|NA" type="contentlevel">
+            <BlueprintElement id="3|G-SRT|A|NA|NA" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+      <BlueprintElement id="3|N-RN" type="contentlevel">
+        <BlueprintElement id="3|N-RN|E" type="contentlevel">
+          <BlueprintElement id="3|N-RN|E|NA" type="contentlevel">
+            <BlueprintElement id="3|N-RN|E|NA|NA" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+    </BlueprintElement>
+    <BlueprintElement id="4" type="strand">
+      <BlueprintElement id="4|G-MG" type="contentlevel">
+        <BlueprintElement id="4|G-MG|A" type="contentlevel">
+          <BlueprintElement id="4|G-MG|A|NA" type="contentlevel">
+            <BlueprintElement id="4|G-MG|A|NA|NA" type="contentlevel"/>
+          </BlueprintElement>
+        </BlueprintElement>
+      </BlueprintElement>
+      <BlueprintElement id="4|S-ID" type="contentlevel">
+        <BlueprintElement id="4|S-ID|A" type="contentlevel"/>
+      </BlueprintElement>
+    </BlueprintElement>
+  </Blueprint>
+  <Test id="SBAC-IRP-CAT-MATH-11" label="IRP CAT Grade 11 Math">
+    <Grades>
+      <Grade value="11"/>
+    </Grades>
+    <Segments>
+      <Segment id="SBAC-IRP-CAT-MATH-11-S1" algorithmType="adaptive" algorithmImplementation="AIR ADAPTIVE">
+        <SegmentBlueprint>
+          <SegmentBlueprintElement idRef="SBAC-IRP-CAT-MATH-11-S1" minExamItems="8" maxExamItems="8">
+            <ItemSelection>
+              <Property name="bpweight" value="1"/>
+              <Property name="startability" value="0.506053"/>
+              <Property name="startinfo" value="0.2" />
+              <Property name="cset1size" value="5"/>
+              <Property name="cset1order" value="ABILITY" />
+              <Property name="cset2random" value="3" />
+              <Property name="cset2initialrandom" value="18" />
+              <Property name="abilityoffset" value="0" />
+              <Property name="itemweight" value="1" />
+              <Property name="slope" value="79.3" />
+              <Property name="intercept" value="2514.9" />
+              <Property name="precisiontarget" value="1"  />
+              <Property name="adaptivecut" value="0" />
+              <Property name="toocloseses" value="0" />
+              <Property name="abilityweight" value="1"  />
+              <Property name="computeabilityestimates" value="false"/>
+              <Property name="rcabilityweight" value="0" />
+              <Property name="precisionTargetMetWeight" value="1" />
+              <Property name="precisionTargetNotMetWeight" value="1" />
+              <Property name="terminationOverallInfo" value="false" />
+              <Property name="terminationRCInfo" value="false" />
+              <Property name="terminationMinCount" value="true" />
+              <Property name="terminationTooClose" value="false" />
+              <Property name="terminationFlagsAnd" value="false" />
+              <Property name="offGradeMinItemsAdministered" value="30" />
+              <Property name="proficientPLevel" value="3" />
+              <Property name="offGradeProbAffectProficiency" value="0.01" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1" minExamItems="4" maxExamItems="4" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+              <Property name="adaptivecut" value="-31.7137" />
+              <Property name="startability" value="-31.7137" />
+              <Property name="startinfo" value="0" />
+              <Property name="scalar" value="5" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="2" minExamItems="0" maxExamItems="2" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true"  />
+              <Property name="bpweight" value="1"  />
+              <Property name="adaptivecut" value="-31.7137"  />
+              <Property name="startability" value="-31.7137"  />
+              <Property name="startinfo" value="0"  />
+              <Property name="scalar" value="5"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3" minExamItems="2" maxExamItems="2" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true"  />
+              <Property name="bpweight" value="1"  />
+              <Property name="adaptivecut" value="-31.7137"  />
+              <Property name="startability" value="-31.7137"  />
+              <Property name="startinfo" value="0"  />
+              <Property name="scalar" value="5"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="4" minExamItems="0" maxExamItems="2" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+              <Property name="adaptivecut" value="-31.7137" />
+              <Property name="startability" value="-31.7137" />
+              <Property name="startinfo" value="0" />
+              <Property name="scalar" value="5" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-REI" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-SSE" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|F-IF" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|G-SRT" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|N-Q" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|N-RN" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="2|G-SRT" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false" />
+              <Property name="bpweight" value="0" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="2|S-CP" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|A-REI" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|G-SRT" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false" />
+              <Property name="bpweight" value="0" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|N-RN" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="true" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="4|G-MG" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false" />
+              <Property name="bpweight" value="1" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-REI|H" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false" />
+              <Property name="bpweight" value="0" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-REI|I" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false" />
+              <Property name="bpweight" value="0" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-SSE|D" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-SSE|E" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|F-IF|K" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|F-IF|M" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|G-SRT|P" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|N-Q|C" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|N-RN|A" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="2|G-SRT|D" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="0"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="2|S-CP|A" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|A-REI|D" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|A-REI|G" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|G-SRT|A" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="0"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|N-RN|E" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="4|G-MG|A" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-REI|H|m" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="0"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-REI|I|m" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="0"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-SSE|D|m" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-SSE|E|m" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|F-IF|K|m" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|F-IF|M|m" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|G-SRT|P|m" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|N-Q|C|m" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|N-RN|A|a/s" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="2|G-SRT|D|NA" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false" />
+              <Property name="bpweight" value="0"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|A-REI|D|NA" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|A-REI|G|NA" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|G-SRT|A|NA" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="0"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|N-RN|E|NA" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="4|G-MG|A|NA" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-REI|H|m|A-REI.2" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="0"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-REI|I|m|A-REI.4b" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-SSE|D|m|A-SSE.2" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|A-SSE|E|m|A-SSE.3b" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|F-IF|K|m|F-IF.1" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|F-IF|M|m|F-IF.7a" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|G-SRT|P|m|G-SRT.8" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|N-Q|C|m|N-Q.1" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="1|N-RN|A|a/s|N-RN.2" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="2|G-SRT|D|NA|NA" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="0"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|A-REI|D|NA|NA" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|A-REI|G|NA|NA" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|G-SRT|A|NA|NA" minExamItems="0" maxExamItems="0" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="0"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="3|N-RN|E|NA|NA" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="4|G-MG|A|NA|NA" minExamItems="0" maxExamItems="1" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="G11Math_Claim1_MC/MS" minExamItems="2" maxExamItems="2" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"  />
+              <Property name="bpweight" value="1"  />
+              <Property name="startinfo" value="0"  />
+              <Property name="precisiontarget" value="1"/>
+              <Property name="precisiontargetmetweight" value="0"/>
+              <Property name="precisiontargetnotmetweight" value="0"/>
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="G11Math_Claim2/4" minExamItems="2" maxExamItems="2" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"/>
+              <Property name="bpweight" value="1"/>
+              <Property name="startinfo" value="0"/>
+              <Property name="precisiontarget" value="1"/>
+              <Property name="precisiontargetmetweight" value="0"/>
+              <Property name="precisiontargetnotmetweight" value="0"/>
+            </ItemSelection>
+          </SegmentBlueprintElement>
+          <SegmentBlueprintElement idRef="G11Math_DOK2" minExamItems="2" maxExamItems="8" >
+            <ItemSelection>
+              <Property name="isstrictmax" value="false"/>
+              <Property name="bpweight" value="1" />
+              <Property name="startinfo" value="0" />
+              <Property name="precisiontarget" value="1" />
+              <Property name="precisiontargetmetweight" value="0" />
+              <Property name="precisiontargetnotmetweight" value="0" />
+            </ItemSelection>
+          </SegmentBlueprintElement>
+        </SegmentBlueprint>
+        <Pool>
+          <ItemGroup id="1899">
+            <Item id="1899" type="EQ" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11=S1"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="1|N-RN|A|a/s|N-RN.2"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.000000000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b" value="1.000000000000000e-015"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1915">
+            <Item id="1915" type="MI" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="1|A-SSE|D|m|A-SSE.2"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.000000000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b" value="1.000000000000000e-015"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1916">
+            <Item id="1916" type="EQ" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="1|A-SSE|E|m|A-SSE.3b"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.017200000000000e-001"/>
+                <ItemScoreParameter measurementParameter="b" value="2.545770000000000e+000"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1926">
+            <Item id="1926" type="MS" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_Claim1_MC/MS"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="1|A-REI|H|m|A-REI.2"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="3.377900000000000e-001"/>
+                <ItemScoreParameter measurementParameter="b" value="4.648680000000000e+000"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1927">
+            <Item id="1927" type="TI" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_Claim2/4"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="2|S-CP|A"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRTGPC" scorePoints="3" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.000000000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b0" value="1.000000000000000e-015"/>
+                <ItemScoreParameter measurementParameter="b1" value="1.000000000000000e-015"/>
+                <ItemScoreParameter measurementParameter="b2" value="1.000000000000000e-015"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1929">
+            <Item id="1929" type="EQ" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="1|A-REI|I|m|A-REI.4b"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="5.988900000000000e-001"/>
+                <ItemScoreParameter measurementParameter="b" value="-1.689660000000000e+000"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1930">
+            <Item id="1930" type="EQ" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="1|G-SRT|P|m|G-SRT.8"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.000000000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b" value="1.000000000000000e-015"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1936">
+            <Item id="1936" type="MI" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="1|G-SRT|P|m|G-SRT.8"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.000000000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b" value="-2.856000000000000e-002"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1948">
+            <Item id="1948" type="GI" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="1|F-IF|K|m|F-IF.1"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRTGPC" scorePoints="2" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.000000000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b0" value="1.000000000000000e-015"/>
+                <ItemScoreParameter measurementParameter="b1" value="1.000000000000000e-015"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1956">
+            <Item id="1956" type="MC" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_Claim1_MC/MS"/>
+                <BlueprintReference idRef="1|N-Q|C|m|N-Q.1"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.000000000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b" value="1.000000000000000e-015"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1969">
+            <Item id="1969" type="GI" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="1|F-IF|M|m|F-IF.7a"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.000000000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b" value="1.000000000000000e-015"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1997">
+            <Item id="1997" type="MI" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_Claim2/4"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="2|G-SRT|D|NA|NA"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="8.318500000000000e-001"/>
+                <ItemScoreParameter measurementParameter="b" value="7.261500000000000e-001"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1998">
+            <Item id="1998" type="MC" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="3|A-REI|G|NA|NA"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="7.411800000000000e-001"/>
+                <ItemScoreParameter measurementParameter="b" value="1.238580000000000e+000"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="1999">
+            <Item id="1999" type="EQ" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="3|A-REI|D|NA|NA"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.140980000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b" value="2.103470000000000e+000"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="2005">
+            <Item id="2005" type="MC" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="3|N-RN|E|NA|NA"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="1.473450000000000e+000"/>
+                <ItemScoreParameter measurementParameter="b" value="-6.760500000000000e-001"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="2006">
+            <Item id="2006" type="MS" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_Claim2/4"/>
+                <BlueprintReference idRef="4"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="8.444500000000000e-001"/>
+                <ItemScoreParameter measurementParameter="b" value="3.013630000000000e+000"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="2029">
+            <Item id="2029" type="GI" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="3|G-SRT|A|NA|NA"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="5.327900000000000e-001"/>
+                <ItemScoreParameter measurementParameter="b" value="6.780300000000000e-001"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+          <ItemGroup id="2032">
+            <Item id="2032" type="EQ" >
+              <Presentations>
+                <Presentation code="ENU"/>
+              </Presentations>
+              <BlueprintReferences>
+                <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S1"/>
+                <BlueprintReference idRef="G11Math_Claim2/4"/>
+                <BlueprintReference idRef="G11Math_DOK2"/>
+                <BlueprintReference idRef="4|G-MG|A|NA|NA"/>
+              </BlueprintReferences>
+              <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                <ItemScoreParameter measurementParameter="a" value="7.263700000000000e-001"/>
+                <ItemScoreParameter measurementParameter="b" value="-1.497860000000000e+000"/>
+                <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000"/>
+              </ItemScoreDimension>
+            </Item>
+          </ItemGroup>
+        </Pool>
+      </Segment>
+      <Segment id="SBAC-IRP-CAT-MATH-11-S2" position="2" algorithmType="adaptive" algorithmImplementation="AIR ADAPTIVE">
+        <SegmentBlueprint>
+          <SegmentBlueprintElement idRef="SBAC-IRP-CAT-MATH-11-S2" minExamItems="7" maxExamItems="7">
+            <ItemSelection>
+              <Property name="slope" value="79.3"/>
+              <Property name="intercept" value="2514.9"/>
+            </ItemSelection>
+          </SegmentBlueprintElement>
+        </SegmentBlueprint>
+        <SegmentForms>
+          <SegmentForm id="IRP::MathG11::Perf::SP15" cohort="Default">
+            <Presentations>
+              <Presentation code="ENU"/>
+            </Presentations>
+            <ItemGroup id="3688">
+              <Stimulus id="3688" />
+              <Item id="1434" type="GI">
+                <Presentations>
+                  <Presentation code="ENU"/>
+                </Presentations>
+                <BlueprintReferences>
+                  <BlueprintReference idRef="SBAC-IRP-CAT-MATH-11-S2"/>
+                  <BlueprintReference idRef="2|F-IF|A"/>
+                </BlueprintReferences>
+                <ItemScoreDimension measurementModel="IRT3PLn" scorePoints="1" weight="1.000000000000000e+000">
+                  <ItemScoreParameter measurementParameter="a" value="6.389300000000000e-001" />
+                  <ItemScoreParameter measurementParameter="b" value="3.027330000000000e+000" />
+                  <ItemScoreParameter measurementParameter="c" value="0.000000000000000e+000" />
+                </ItemScoreDimension>
+              </Item>
+              <Item id="1432" type="ER">
+                <Presentations>
+                  <Presentation code="ENU"/>
+                </Presentations>
+                <BlueprintReferences>
+                  <BlueprintReference idRef="SBAC-CAT-Perf-MATH-11-S2"/>
+                  <BlueprintReference idRef="3|F-IF|B"/>
+                </BlueprintReferences>
+                <ItemScoreDimension measurementModel="IRTGPC" scorePoints="2" weight="1.000000000000000e+000">
+                  <ItemScoreParameter measurementParameter="a" value="7.479900000000000e-001" />
+                  <ItemScoreParameter measurementParameter="b0" value="-4.015500000000000e-001" />
+                  <ItemScoreParameter measurementParameter="b1" value="7.623700000000000e-001" />
+                </ItemScoreDimension>
+              </Item>
+            </ItemGroup>
+          </SegmentForm>
+        </SegmentForms>
+      </Segment>
+    </Segments>
+    <Tools>
+      <Tool name="Calculator" studentPackageFieldName="TDSAcc-Calculator" allowChange="1">
+        <Options>
+          <Option code="TDS_Calc0" sortOrder="0">
+            <Dependencies>
+              <!-- If the Presentation is set to braille, disable the calculator options -->
+              <Dependency ifToolType="Language" ifToolCode="ENU-Braille" enabled="false"/>
+            </Dependencies>
+          </Option>
+          <Option code="TDS_CalcSciInv&amp;TDS_CalcGraphingInv&amp;TDS_CalcRegress" sortOrder="1">
+            <Dependencies>
+              <!-- If the Presentation is set to braille, disable the calculator options -->
+              <Dependency ifToolType="Language" ifToolCode="ENU-Braille" enabled="false"/>
+            </Dependencies>
+          </Option>
+        </Options>
+      </Tool>
+      <Tool name="Expandable Passages" studentPackageFieldName="TDSAcc-ExpandablePassages">
+        <Options>
+          <Option code="TDS_ExpandablePassages0" sortOrder="0">
+          </Option>
+          <Option code="TDS_ExpandablePassages1" sortOrder="1">
+          </Option>
+        </Options>
+      </Tool>
+    </Tools>
+  </Test>
+</TestPackage>

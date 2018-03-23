@@ -5,7 +5,7 @@
     <BlueprintElement id="SBAC-Perf-ELA-11" type="assessment"/>
     <BlueprintElement id="SBAC_PT-ELA-Undesignated" type="strand"/>
   </Blueprint>
-  <Assessment id="SBAC-Perf-ELA-11" label="G11 ELA Performance Task">
+  <Test id="SBAC-Perf-ELA-11" label="G11 ELA Performance Task">
     <Grades>
       <Grade value="11"/>
     </Grades>
@@ -195,6 +195,6 @@
         </Options>
       </Tool>
     </Tools>
-  </Assessment>
+  </Test>
 </TestPackage>
 

@@ -54,6 +54,9 @@
     <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\TISServices\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.11.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\TISServices\packages\MySql.Data.6.9.11\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\TISServices\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -120,6 +123,10 @@
     <Compile Include="daos\itembank\TestCohortDAOIntegrationTest.cs" />
     <Compile Include="daos\itembank\TestFormDAOIntegrationTest.cs" />
     <Compile Include="daos\itembank\TestFormItemDAOIntegrationTest.cs" />
+    <Compile Include="daos\osstis\CombinationTestFormMapDAOIntegrationTest.cs" />
+    <Compile Include="daos\osstis\CombinationTestMapDAOIntegrationTest.cs" />
+    <Compile Include="daos\osstis\ProjectDAOIntegrationTest.cs" />
+    <Compile Include="daos\osstis\QcProjectMetadataDAOIntegrationTest.cs" />
     <Compile Include="daos\osstis\TestNameLookupDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\ComputationRuleParameterDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\ComputationRuleParameterValueDAOIntegrationTest.cs" />
@@ -129,11 +136,21 @@
     <Compile Include="daos\scoring\TestDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\TestGradeDAOIntegrationTest.cs" />
     <Compile Include="daos\scoring\TestScoreFeatureDAOIntegrationTest.cs" />
+    <Compile Include="services\CombinationTestMapServiceUnitTest.cs" />
+    <Compile Include="services\ItembankAdministrationDataServiceUnitTest.cs" />
+    <Compile Include="services\ItembankConfigurationDataQueryServiceUnitTest.cs" />
+    <Compile Include="services\ItembankConfigurationDataServiceUnitTest.cs" />
+    <Compile Include="services\QcProjectMetadataServiceUnitTest.cs" />
+    <Compile Include="services\ScoringConfigDriver.cs" />
+    <Compile Include="services\ScoringConfigurationDataSeriveUnitTest.cs" />
+    <Compile Include="testpackages\ItemGroupItemBlueprintReferenceUnitTest.cs" />
     <Compile Include="testpackages\ItemPositionUnitTest.cs" />
     <Compile Include="testpackages\TeacherHandScoringUnitTest.cs" />
-    <Compile Include="testpackages\TestPackageAssemblerUnitTest.cs" />
+    <Compile Include="testpackages\TestPackagemapperUnitTest.cs" />
+    <Compile Include="testpackages\TestPackageMethodUnitTest.cs" />
     <Compile Include="testpackages\ToolDefaultsUnitTest.cs" />
     <Compile Include="utils\ReflectionObjectPopulator.cs" />
+    <Compile Include="utils\StrandBuilder.cs" />
     <Compile Include="utils\TestPackageDaoIntegrationTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="extensions\ExtensionMethodUnitTests.cs" />
@@ -160,10 +177,15 @@
   <ItemGroup>
     <Content Include="AppReadme\Compare-NET-Objects-Help.txt" />
     <Content Include="resources\scoring-package.xml" />
+    <Content Include="resources\test-packages\new-xsd\%28SBAC_PT%29SBAC-IRP-MATH-11-COMBINED-Summer-2015-2016-NEW.xml" />
     <Content Include="resources\test-packages\new-xsd\scoring-rules.xml" />
     <Content Include="resources\test-packages\new-xsd\segment-blueprint-element.xml" />
     <Content Include="resources\test-packages\new-xsd\test-specification-sample-1.xml" />
     <Content Include="resources\test-packages\new-xsd\thss-test-specification-sample-1.xml" />
+    <Content Include="resources\test-packages\new-xsd\V2-%28SBAC_PT%29IRP-GRADE-11-MATH-EXAMPLE.xml" />
+    <Content Include="resources\test-packages\new-xsd\V2-%28SBAC_PT%29IRP-GRADE-11-MATH-MULTI-SEGMENT-EXAMPLE.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29IRP-Perf-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-ELA-11-Summer-2015-2016-UNIT-TEST.xml" />
     <Content Include="resources\test-packages\tds\administration\%28SBAC_PT%29SBAC-IRP-CAT-MATH-3-Summer-2015-2016-UNIT-TEST.xml" />

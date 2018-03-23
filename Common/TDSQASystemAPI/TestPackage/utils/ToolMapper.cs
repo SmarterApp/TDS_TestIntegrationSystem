@@ -9,7 +9,7 @@ namespace TDSQASystemAPI.TestPackage.utils
     /// <summary>
     /// A class for building a fully hydrated <code>ToolsTool</code> object from an XML fragment.
     /// </summary>
-    public class ToolFactory
+    public class ToolMapper
     {
         /// <summary>
         /// Define a map of the "universal" tools with their default configuration settings.
@@ -72,7 +72,7 @@ namespace TDSQASystemAPI.TestPackage.utils
         /// </summary>
         /// <param name="tool">The <code>ToolsTool</code> from the test package XML.</param>
         /// <returns>A new <code>ToolsTool</code> instance with the </returns>
-        public static ToolsTool GetInstance(XElement toolElement)
+        public static ToolsTool FromXml(XElement toolElement)
         {
             defaultToolMap.TryGetValue((toolElement.Attribute("name")?.Value ?? string.Empty), out DefaultToolConfiguration defaultTool);
 

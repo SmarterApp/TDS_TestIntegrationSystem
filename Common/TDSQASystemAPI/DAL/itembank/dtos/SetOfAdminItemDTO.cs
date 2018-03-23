@@ -18,9 +18,9 @@
         public bool IsRequired { get; set; }
         public string GroupKey { get; set; }
         public string StrandName { get; set; }
-        public double IrtA { get; set; } // maps to irt_a in tblSetOfAdminItems
+        public float IrtA { get; set; } // maps to irt_a in tblSetOfAdminItems
         public string IrtB { get; set; } // maps to irt_b in tblSetOfAdminItems
-        public double IrtC { get; set; } // maps to irt_c in tblSetOfAdminItems
+        public float IrtC { get; set; } // maps to irt_c in tblSetOfAdminItems
         public string IrtModel { get; set; } // maps to irt_model in tblSetOfAdminItems
         public string ClString { get; set; }
         public long UpdatedTestVersion { get; set; } // maps to updateconfig in tblSetOfAdminItems

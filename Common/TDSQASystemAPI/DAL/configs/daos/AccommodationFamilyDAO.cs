@@ -21,10 +21,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   Family, \n" +
                 "   Label \n";
         }
-
-        public override void Insert(IList<AccommodationFamilyDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

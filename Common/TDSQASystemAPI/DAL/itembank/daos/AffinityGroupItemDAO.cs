@@ -20,10 +20,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   GroupId, \n" +
                 "   ItemKey \n";
         }
-
-        public override void Insert(IList<AffinityGroupItemDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

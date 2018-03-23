@@ -26,10 +26,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   EligibilityType, \n" +
                 "   MatchType \n";
         }
-
-        public override void Insert(IList<TestEligibilityDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

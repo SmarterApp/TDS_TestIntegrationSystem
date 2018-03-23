@@ -24,10 +24,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   ToolValue, \n" +
                 "   ItemIn \n";
         }
-
-        public override void Insert(IList<TestItemConstraintDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

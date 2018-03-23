@@ -28,10 +28,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   TideId, \n" +
                 "   GradeText \n";
         }
-
-        public override void Insert(IList<TestPropertiesDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

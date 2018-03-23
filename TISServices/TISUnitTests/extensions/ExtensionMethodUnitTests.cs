@@ -45,6 +45,34 @@ namespace TISUnitTests.extensions
 
             Assert.AreEqual(4, result.Rows.Count);
         }
+
+        [TestMethod]
+        public void ShouldGetValueFromDictionaryForKey()
+        {
+            var dictionary = new Dictionary<string, string>
+            {
+                { "firstKey", "foo" },
+                { "secondKey", "bar" }
+            };
+
+            var result = dictionary.GetOrDefault("firstKey", "default");
+
+            Assert.AreEqual("foo", result);
+        }
+
+        [TestMethod]
+        public void ShouldGetDefaultValueWhenKeyDoesNotExist()
+        {
+            var dictionary = new Dictionary<string, string>
+            {
+                { "firstKey", "foo" },
+                { "secondKey", "bar" }
+            };
+
+            var firstValue = dictionary.GetOrDefault("i-do-not-exist", "default");
+
+            Assert.AreEqual("default", firstValue);
+        }
     }
 
     /// <summary>

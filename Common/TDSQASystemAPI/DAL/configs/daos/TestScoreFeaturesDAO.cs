@@ -22,10 +22,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   MeasureLabel, \n" +
                 "   UseForAbility \n";
         }
-
-        public override void Insert(IList<TestScoreFeatureDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

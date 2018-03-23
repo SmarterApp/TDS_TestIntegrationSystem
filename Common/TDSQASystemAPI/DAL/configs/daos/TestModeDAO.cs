@@ -24,10 +24,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   IsSegmented, \n" +
                 "   SessionType \n";
         }
-
-        public override void Insert(IList<TestModeDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

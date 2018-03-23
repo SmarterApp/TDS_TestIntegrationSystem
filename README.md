@@ -68,6 +68,10 @@ TIS requires Visual Studio 2012 to build. The Deployment steps are as follows -
 * `<root>\TDSQAService\OSS.TIS\SQL\TISDB\2_Configuration_ICA_OP Tests.sql`
 * `<root>\TDSQAService\OSS.TIS\SQL\TISDB\3_ScoringDaemonConfiguration.sql`   (** this script will require a couple of variables to be set prior to running)
 * `<root>\TDSQAService\OSS.TIS\SQL\TISDB\4_oss_tis_create_tvp_types_for_oss_tis_database.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TISDB\5_Update_ICA_Attributes_Typo.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TISDB\6_Update_StoredProcedures_Remove_OppId.sql`
+* `<root>\TDSQAService\OSS.TIS\SQL\TISDB\7_oss_tis_add_new_project_and_metadata.sql`
+
 4) Deploy the `[Db server].OSS_TestScoringConfigs` database objects by running the following scripts in order:
 
 * `<root>\TDSQAService\OSS.TIS\SQL\TestScoringConfigs\1_Tables.sql`

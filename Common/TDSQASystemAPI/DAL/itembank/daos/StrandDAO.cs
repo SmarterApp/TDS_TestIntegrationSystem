@@ -24,10 +24,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   TreeLevel, \n" +
                 "   TestVersion \n";
         }
-
-        public override void Insert(IList<StrandDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

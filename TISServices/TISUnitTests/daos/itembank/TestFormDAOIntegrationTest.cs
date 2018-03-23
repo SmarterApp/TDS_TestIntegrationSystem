@@ -84,21 +84,12 @@ namespace TISUnitTests.daos.itembank
             BlueprintMetricFunction = "unit-test-bp-func"
         };
 
-        /// <summary>
-        /// Create seed data to satisfy foreign key constraints
-        /// </summary>
-        [TestInitialize]
-        public override void Setup()
-        {
-            base.Setup();
-
-            new TestAdminDAO().Insert(new List<TestAdminDTO> { seedDataTestAdmin });
-            new SetOfAdminSubjectDAO().Insert(new List<SetOfAdminSubjectDTO> { seedDataSetOfAdminSubject });
-        }
-
         [TestMethod]
         public void ShouldSaveATestFormRecord()
         {
+            new TestAdminDAO().Insert(new List<TestAdminDTO> { seedDataTestAdmin });
+            new SetOfAdminSubjectDAO().Insert(new List<SetOfAdminSubjectDTO> { seedDataSetOfAdminSubject });
+
             var formList = new List<TestFormDTO>
             {
                 new TestFormDTO
@@ -120,6 +111,57 @@ namespace TISUnitTests.daos.itembank
 
             Assert.AreEqual(1, insertedRecords.Count);
             CompareResults(formList[0], insertedRecords[0]);
+        }
+
+        [TestMethod]
+        public void ShouldGetTestFormDtosForAMultiSegmentedAssessment()
+        {
+            // Assessment with two segments.  Each segment has two forms.
+            var assessmentKey = "(SBAC_PT)SBAC-Perf-ELA-11-Fall-2017-2018";
+
+            var result = testPackageDao.Find(assessmentKey);
+
+            Assert.AreEqual(4, result.Count);
+
+            var firstForm = result[0];
+            Assert.AreEqual("(SBAC_PT)SBAC-Perf-S1-ELA-11-Fall-2017-2018", firstForm.SegmentKey);
+            Assert.AreEqual(1033L, firstForm.ITSBankKey);
+            Assert.AreEqual(1033L, firstForm.ITSKey);
+            Assert.AreEqual("187-1033", firstForm.TestFormKey);
+            Assert.AreEqual("PracTest::ELAG11::Perf::S1::FA17::ENU", firstForm.FormId);
+            Assert.AreEqual("ENU", firstForm.Language);
+            Assert.AreEqual(12516L, firstForm.TestVersion);
+            Assert.AreEqual("Default", firstForm.Cohort);
+
+            var secondForm = result[1];
+            Assert.AreEqual("(SBAC_PT)SBAC-Perf-S1-ELA-11-Fall-2017-2018", secondForm.SegmentKey);
+            Assert.AreEqual(1034L, secondForm.ITSBankKey);
+            Assert.AreEqual(1034L, secondForm.ITSKey);
+            Assert.AreEqual("187-1034", secondForm.TestFormKey);
+            Assert.AreEqual("PracTest::ELAG11::Perf::S1::FA17::BRL", secondForm.FormId);
+            Assert.AreEqual("ENU-Braille", secondForm.Language);
+            Assert.AreEqual(12516L, secondForm.TestVersion);
+            Assert.AreEqual("Default", secondForm.Cohort);
+
+            var thirdForm = result[2];
+            Assert.AreEqual("(SBAC_PT)SBAC-Perf-S2-ELA-11-Fall-2017-2018", thirdForm.SegmentKey);
+            Assert.AreEqual(1035L, thirdForm.ITSBankKey);
+            Assert.AreEqual(1035L, thirdForm.ITSKey);
+            Assert.AreEqual("187-1035", thirdForm.TestFormKey);
+            Assert.AreEqual("PracTest::ELAG11::Perf::S2::FA17::ENU", thirdForm.FormId);
+            Assert.AreEqual("ENU", thirdForm.Language);
+            Assert.AreEqual(12516L, thirdForm.TestVersion);
+            Assert.AreEqual("Default", thirdForm.Cohort);
+
+            var fourthForm = result[3];
+            Assert.AreEqual("(SBAC_PT)SBAC-Perf-S2-ELA-11-Fall-2017-2018", fourthForm.SegmentKey);
+            Assert.AreEqual(1036L, fourthForm.ITSBankKey);
+            Assert.AreEqual(1036L, fourthForm.ITSKey);
+            Assert.AreEqual("187-1036", fourthForm.TestFormKey);
+            Assert.AreEqual("PracTest::ELAG11::Perf::S2::FA17::BRL", fourthForm.FormId);
+            Assert.AreEqual("ENU-Braille", fourthForm.Language);
+            Assert.AreEqual(12516L, fourthForm.TestVersion);
+            Assert.AreEqual("Default", fourthForm.Cohort);
         }
     }
 }

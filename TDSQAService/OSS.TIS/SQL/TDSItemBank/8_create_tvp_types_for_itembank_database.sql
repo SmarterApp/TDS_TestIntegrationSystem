@@ -23,13 +23,16 @@ END
 GO
 CREATE TYPE dbo.StrandTable AS TABLE
 (
+	[Key]				varchar(max),
 	SubjectKey			varchar(150) NOT NULL,
 	[Name]				varchar(150) NOT NULL,
 	ParentId			varchar(150) NOT NULL,
 	BlueprintElementId	varchar(150) NOT NULL,
 	ClientKey			bigint,
 	TreeLevel			int,
-	TestVersion			bigint
+	TestVersion			bigint,
+	[Type]				varchar(max),
+	IsLeafTarget		bit
 )
 GO
 GRANT CONTROL ON TYPE::dbo.StrandTable TO public
@@ -43,11 +46,10 @@ CREATE TYPE dbo.StimulusTable AS TABLE
 (
 	ItemBankKey			bigint NOT NULL,
 	ItsKey				bigint NOT NULL,
-	ClientId			varchar(100),
 	FilePath			varchar(50),
 	[FileName]			varchar(50),
 	DateLastUpdated		datetime,
-	PassageKey			varchar(150),
+	StimulusKey			varchar(150),
 	TestVersion			bigint
 )
 GO
@@ -63,10 +65,10 @@ CREATE TYPE dbo.ItemTable AS TABLE
 	ItemBankKey			bigint NOT NULL,
 	ItemKey				bigint NOT NULL,
 	ItemType			varchar(50),
+	ScorePoints			int,
 	FilePath			varchar(50),
 	[FileName]			varchar(50),
 	DateLastUpdated		datetime,
-	ItemId				varchar(80),
 	[Key]				varchar(150) NOT NULL,
 	TestVersion			bigint
 )

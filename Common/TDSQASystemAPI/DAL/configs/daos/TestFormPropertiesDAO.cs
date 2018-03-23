@@ -25,10 +25,5 @@ namespace TDSQASystemAPI.DAL.configs.daos
                 "   EndDate, \n" +
                 "   TestKey \n";
         }
-
-        public override void Insert(IList<TestFormPropertiesDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

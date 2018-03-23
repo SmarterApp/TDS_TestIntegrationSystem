@@ -23,10 +23,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   TestVersion, \n" +
                 "   GroupId \n";
         }
-
-        public override void Insert(IList<AdminStimulusDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using TDSQASystemAPI.DAL.utils;
 using TDSQASystemAPI.Extensions;
 
 namespace TDSQASystemAPI.DAL
@@ -18,8 +20,11 @@ namespace TDSQASystemAPI.DAL
     /// <typeparam name="T">The type that should be persisted.</typeparam>
     public class TestPackageDaoBase<T> : ITestPackageDao<T>
     {
-        private string insertSql = "";
         private const string DEFAULT_TVP_VARIABLE_NAME = "@tvpData";
+        private const string DEFAULT_CRITERIA_VARIABLE_NAME = "@criteria";
+
+        private string insertSql = string.Empty;
+        private readonly ReflectionObjectPopulator<T> reflectionObjectPopulator = new ReflectionObjectPopulator<T>();
 
         /// <summary>
         /// The SQL responsible for inserting the collection of records into the database.
@@ -61,6 +66,20 @@ namespace TDSQASystemAPI.DAL
         }
 
         /// <summary>
+        /// The SQL responsible for fetching a collection of records from the database.
+        /// </summary>
+        protected internal string SelectSql { get; set; }
+
+        /// <summary>
+        /// The SQL responsible for updating a collection of existing records in the database.
+        /// </summary>
+        protected internal string UpdateSql { get; set; }
+
+        protected internal string ExistsSql { get; set; }
+
+        protected internal string FindByExampleSql { get; set; }
+
+        /// <summary>
         /// The type of the table-valued parameter used to pass the <code>IList<typeparamref name="T"/></code>.
         /// </summary>
         protected internal string TvpType { get; set; }
@@ -80,8 +99,34 @@ namespace TDSQASystemAPI.DAL
             {
                 using (var command = new SqlCommand(InsertSql, connection))
                 {
+                    var tableParam = new SqlParameter(DEFAULT_TVP_VARIABLE_NAME, SqlDbType.Structured)
+                    {
+                        TypeName = TvpType,
+                        Value = recordsToSave.ToDataTable()
+                    };
+
                     command.CommandType = CommandType.Text;
-                    var testeeAttributeParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordsToSave.ToDataTable());
+                    command.Parameters.Add(tableParam);
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Insert a record into the database (which is specified by the connection string)
+        /// </summary>
+        /// <param name="recordToSave">The <code>typeparamref name="T"</code> of record to persist.</param>
+        public virtual void Insert(T recordToSave)
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
+            {
+                using (var command = new SqlCommand(InsertSql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+
+                    var testeeAttributeParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordToSave);
                     testeeAttributeParam.SqlDbType = SqlDbType.Structured;
                     testeeAttributeParam.TypeName = TvpType;
 
@@ -89,6 +134,110 @@ namespace TDSQASystemAPI.DAL
                     command.ExecuteNonQuery();
                 }
             }
+        }
+
+        /// <summary>
+        /// Insert a record into the database (which is specified by the connection string)
+        /// </summary>
+        /// <param name="recordToSave">The <code>typeparamref name="T"</code> of record to persist.</param>
+        public virtual bool Exists(T recordToCheck)
+        {
+            if (string.IsNullOrEmpty(ExistsSql))
+            {
+                throw new System.InvalidOperationException("Exists SQL is not defined");
+            }
+            var exists = false;
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
+            {
+                using (var command = new SqlCommand(ExistsSql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+
+                    AddNaturalKeys(recordToCheck, command.Parameters);
+
+                    connection.Open();
+                    var count = int.Parse(command.ExecuteScalar().ToString());
+                    exists = count > 0;
+                }
+            }
+            return exists;
+        }
+
+        virtual protected void AddNaturalKeys(T record, SqlParameterCollection parameters)
+        {
+        }
+
+
+        /// <summary>
+        /// Insert a record into the database (which is specified by the connection string)
+        /// </summary>
+        /// <param name="recordToSave">The <code>typeparamref name="T"</code> of record to persist.</param>
+        public virtual List<T> FindByExample(T recordToCheck)
+        {
+            if (string.IsNullOrEmpty(FindByExampleSql))
+            {
+                throw new System.InvalidOperationException("FindByExample SQL is not defined");
+            }
+
+            var results = new List<T>();
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
+            {
+                using (var command = new SqlCommand(FindByExampleSql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+
+                    AddNaturalKeys(recordToCheck, command.Parameters);
+
+                    connection.Open();
+                    results = reflectionObjectPopulator.GetListFromDataReader(command.ExecuteReader());
+                }
+            }
+            return results;
+        }
+
+        virtual protected void FindByExampleAddParameter(T record, SqlParameterCollection parameters)
+        {
+        }
+
+        /// <summary>
+        /// Get a collection of records from the database.
+        /// </summary>
+        /// <remarks>
+        /// The SQL columns must match the object's property names exactly.  Any database columns that do not match
+        /// the property name exactly must be aliased.
+        /// </remarks>
+        /// <param name="sql">The SQL to execute against the database.</param>
+        /// <param name="criteria">The value to look for</param>
+        /// <returns>A <code>List<typeparamref name="T"/></code> built from the records contained in the <code>IDataReader</code>.</returns>
+        public virtual List<T> Find(object criteria)
+        {
+            var results = new List<T>();
+
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
+            {
+                using (var command = new SqlCommand(SelectSql, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.Parameters.AddWithValue(DEFAULT_CRITERIA_VARIABLE_NAME, criteria);
+
+                    connection.Open();
+                    results = reflectionObjectPopulator.GetListFromDataReader(command.ExecuteReader());
+                }
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Update an existing record int he database (which is specified by the connection string)
+        /// </summary>
+        /// <remarks>
+        /// Unlike the other methods in this class, the <code>Update()</code> method expects the entire UPDATE SQL statement 
+        /// </remarks>
+        /// <param name="recordToUpdate">The <code>T</code> record to update.</param>
+        public virtual void Update(T recordToUpdate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

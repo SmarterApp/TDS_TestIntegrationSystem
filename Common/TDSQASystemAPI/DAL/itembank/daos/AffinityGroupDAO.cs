@@ -45,10 +45,5 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   PrecisionTargetMetWeight, \n" +
                 "   PrecisionTargetNotMetWeight \n";
         }
-
-        public override void Insert(IList<AffinityGroupDTO> recordsToSave)
-        {
-            base.Insert(recordsToSave);
-        }
     }
 }

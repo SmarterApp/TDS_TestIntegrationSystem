@@ -6,7 +6,11 @@
     public class AffinityGroupItemDTO
     {
         public string SegmentKey { get; set; } // maps to _fk_adminsubject in AffinityGroupItem
-        public string GroupId { get; set; }
+
+        /// <summary>
+        /// The identifier of the <code>AffinityGroup</code> to which this item belongs.
+        /// </summary>
+        public string GroupId { get; set; } 
         public string ItemKey { get; set; }
     }
 }
