@@ -13,13 +13,11 @@ namespace TISUnitTests.services
 {
     class ScoringConfigDriver
     {
-        private const string TEST_PACKAGE_XML_FILE1 = @"..\..\resources\test-packages\new-xsd\(SBAC_PT)SBAC-IRP-MATH-11-COMBINED-Summer-2015-2016-NEW.xml";
-        private const string TEST_PACKAGE_XML_FILE2 = @"..\..\resources\test-packages\new-xsd\V2-(SBAC_PT)IRP-GRADE-11-MATH-EXAMPLE.xml";
+        private const string TEST_PACKAGE_XML_FILE = @"..\..\resources\test-packages\new-xsd\(SBAC_PT)SBAC-IRP-MATH-11-COMBINED-Summer-2015-2016-NEW.xml";
         
-
         public static void Main(string[] args)
         {
-            var loadedTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE1));
+            var loadedTestPackage = TestPackageAssembler.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
 
             var service = new ScoringConfigurationDataService(new TestDAO(), new TestGradeDAO(), new TestScoreFeatureDAO(), new FeatureComputationLocationDAO(),
                 new ComputationRuleParameterDAO(), new ComputationRuleParameterValueDAO(), new PerformanceLevelDAO());
