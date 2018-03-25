@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using TDSQASystemAPI.BL.testpackage.administration;
 using TDSQASystemAPI.DAL;
@@ -253,6 +254,29 @@ namespace TISUnitTests.services
             mockItemDao.Verify(dao => dao.Find(It.IsAny<object>()));
             mockItemDao.Verify(dao => dao.Insert(It.Is<IList<ItemDTO>>(items =>
                 items.Count == 19)));
+        }
+
+        [TestMethod]
+        public void Item_SouldNotCreateAnyItemsIfTheyAllExistInTheDatabase()
+        {
+            var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            // Simulate all the items in this test package already existing in the database
+            var itemsThatAlreadyExist = from item in loadedTestPackage.GetAllItems()
+                                        select new ItemDTO
+                                        {
+                                            Key = item.Key
+                                        };
+
+            mockItemDao.Setup(dao => dao.Find(It.IsAny<object>()))
+                .Returns(itemsThatAlreadyExist.ToList());
+            mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()))
+                .Verifiable();
+
+            var existingItems = itembankConfigurationDataService.CreateItems(loadedTestPackage);
+
+            mockItemDao.Verify(dao => dao.Find(It.IsAny<object>()));
+            mockItemDao.Verify(dao => dao.Insert(It.IsAny<IList<ItemDTO>>()), Times.Never);
         }
 
         [TestMethod]
