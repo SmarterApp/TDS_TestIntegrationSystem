@@ -24,7 +24,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// Create a new collection of Items for each item included in the test package.
         /// </summary>
         /// <param name="testPackage">The <code>TestPackage.TestPackage</code> containing the items.</param>
-        void CreateItems(TestPackage.TestPackage testPackage);
+        /// <returns>A collection of <code>ItemDTO</code>s representing items that already exist in the database.</returns>
+        List<ItemDTO> CreateItems(TestPackage.TestPackage testPackage);
 
         /// <summary>
         /// Create a new collection of Stimuli for each stimulus included in the test package.

@@ -226,12 +226,33 @@ namespace TISUnitTests.services
         {
             var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
 
-            mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()));
+            mockItemDao.Setup(dao => dao.Find(It.IsAny<object>()))
+                .Returns(new List<ItemDTO>());
+            mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()))
+                .Verifiable();
 
-            itembankConfigurationDataService.CreateItems(loadedTestPackage);
+            var existingItems = itembankConfigurationDataService.CreateItems(loadedTestPackage);
 
-            mockItemDao.Verify(dao => dao.Insert(It.Is<List<ItemDTO>>(items => 
+            mockItemDao.Verify(dao => dao.Find(It.IsAny<object>()));
+            mockItemDao.Verify(dao => dao.Insert(It.Is<IList<ItemDTO>>(items => 
                 items.Count == 20)));
+        }
+
+        [TestMethod]
+        public void Item_SouldCreateACollectionOfItemsThatAreNotAlreadyInTheDatabase()
+        {
+            var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            mockItemDao.Setup(dao => dao.Find(It.IsAny<object>()))
+                .Returns(new List<ItemDTO> { new ItemDTO { Key = "187-1434" } });
+            mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()))
+                .Verifiable();
+
+            var existingItems = itembankConfigurationDataService.CreateItems(loadedTestPackage);
+
+            mockItemDao.Verify(dao => dao.Find(It.IsAny<object>()));
+            mockItemDao.Verify(dao => dao.Insert(It.Is<IList<ItemDTO>>(items =>
+                items.Count == 19)));
         }
 
         [TestMethod]

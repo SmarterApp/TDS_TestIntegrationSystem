@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using TDSQASystemAPI.BL.testpackage.administration;
 using TDSQASystemAPI.BL.testpackage.osstis;
@@ -57,8 +53,7 @@ namespace TDSQASystemAPI.BL.testpackage
 
             itembankConfigurationDataService.CreateStimuli(testPackage);
 
-            // TODO:  get the items that weren't created because they already exist
-            itembankConfigurationDataService.CreateItems(testPackage);
+            var existingItems = itembankConfigurationDataService.CreateItems(testPackage);
 
             itembankConfigurationDataService.LinkItemToStrands(testPackage, itemStrands);
 
@@ -118,6 +113,7 @@ namespace TDSQASystemAPI.BL.testpackage
 
             qcProjectMetadataService.CreateQcProjectMetadata(testPackage);
 
+            // TODO:  If there are any existing items, add them to the response as a warning-level
             return new LoadTestPackageResponse();
         }
     }

@@ -129,7 +129,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             itemPropertyDao.Insert(allItemProperties);
         }
             
-        public void CreateItems(TestPackage.TestPackage testPackage)
+        public List<ItemDTO> CreateItems(TestPackage.TestPackage testPackage)
         {
             var allItems = testPackage.GetAllItems();
 
@@ -148,7 +148,16 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                   TestVersion = (long)testPackage.version
                               };
 
-            itemDAO.Insert(allItemDtos.ToList());
+            // Exclude items that already exist...
+            var existingItems = itemDAO.Find(allItemDtos);
+            var itemsToInsert = allItemDtos.Where(all => existingItems.All(exists => !exists.Key.Equals(all.Key)));
+
+            // ... and insert the remaining items (if there are any)
+            if (itemsToInsert.Any()) { 
+                itemDAO.Insert(itemsToInsert.ToList());
+            }
+
+            return existingItems;
         }
 
         public void CreateStimuli(TestPackage.TestPackage testPackage)
