@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using TDSQASystemAPI.TestPackage;
 
 namespace TISUnitTests.testpackages
@@ -70,7 +71,7 @@ namespace TISUnitTests.testpackages
         }
 
         [TestMethod]
-        public void shouldNotIdentifyTestPackageAsCombined()
+        public void ShouldNotIdentifyTestPackageAsCombined()
         {
             var testPackage = new TestPackage
             {
@@ -90,7 +91,7 @@ namespace TISUnitTests.testpackages
         }
 
         [TestMethod]
-        public void ShouldGetCombinationTestPackageKeyForCombinedTestPackage()
+        public void ShouldGetATestPackageKeyForCombinedTestPackage()
         {
             var testPackage = new TestPackage
             {
@@ -106,7 +107,48 @@ namespace TISUnitTests.testpackages
                 }
             };
 
-            Assert.AreEqual("(SBAC_PT)ICA-UNIT-TEST-GRADE-11-COMBINED-2017-2018", testPackage.GetCombinationTestPackageKey());
+            Assert.AreEqual("(SBAC_PT)ICA-UNIT-TEST-GRADE-11-COMBINED-2017-2018", testPackage.GetTestPackageKey());
+        }
+
+        [TestMethod]
+        public void ShouldGetATestPackageKeyForAnAssessmentTestPackage()
+        {
+            var testPackage = new TestPackage
+            {
+                publisher = "SBAC_PT",
+                academicYear = "2017-2018",
+                Blueprint = new BlueprintElement[]
+                {
+                    new BlueprintElement
+                    {
+                        id = "ICA-UNIT-TEST-GRADE-11-COMBINED",
+                        type = "assessment"
+                    }
+                }
+            };
+
+            Assert.AreEqual("(SBAC_PT)ICA-UNIT-TEST-GRADE-11-COMBINED-2017-2018", testPackage.GetTestPackageKey());
+        }
+
+        [TestMethod]
+        public void ShouldThrowExceptionWhenATestPackageKeyCannotBeCreated()
+        {
+            var testPackage = new TestPackage
+            {
+                publisher = "SBAC_PT",
+                academicYear = "2017-2018",
+                Blueprint = new BlueprintElement[]
+                {
+                    new BlueprintElement
+                    {
+                        id = "ICA-UNIT-TEST-GRADE-11-COMBINED",
+                        type = "foo"
+                    }
+                }
+            };
+
+            var exception = Assert.ThrowsException<InvalidOperationException>(() =>testPackage.GetTestPackageKey());
+            Assert.AreEqual("Could find a test package key/identifier for this test package.", exception.Message);
         }
     }
 }

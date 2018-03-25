@@ -18,6 +18,14 @@ namespace TDSQASystemAPI.DAL.osstis.daos
                 "SELECT \n" +
                 "   InstanceName, \n" +
                 "   TestName \n";
+            SelectSql =
+                "SELECT \n" +
+                "   InstanceName, \n" +
+                "   TestName \n" +
+                "FROM \n" +
+                "   TestNameLookup \n" +
+                "WHERE \n" +
+                "   TestName = @criteria";
         }
     }
 }

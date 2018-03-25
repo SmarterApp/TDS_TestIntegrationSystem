@@ -62,7 +62,7 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
                                              ComponentSegmentName = segment.Key,
                                              ComponentTestName = assessment.Key,
                                              CombinationSegmentName = segment.Key,
-                                             CombinationTestName = testPackage.GetCombinationTestPackageKey()
+                                             CombinationTestName = testPackage.GetTestPackageKey()
                                          };
 
             combinationTestMapDao.Insert(combinationTestMapDtos.ToList());

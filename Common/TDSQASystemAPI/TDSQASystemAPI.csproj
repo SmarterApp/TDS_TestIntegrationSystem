@@ -167,7 +167,9 @@
     <Compile Include="BL\testpackage\osstis\CombinationTestMapService.cs" />
     <Compile Include="BL\testpackage\osstis\ICombinationTestMapService.cs" />
     <Compile Include="BL\testpackage\osstis\IQcProjectMetadataService.cs" />
+    <Compile Include="BL\testpackage\osstis\ITestNameLookupService.cs" />
     <Compile Include="BL\testpackage\osstis\QcProjectMetadataService.cs" />
+    <Compile Include="BL\testpackage\osstis\TestNameLookupService.cs" />
     <Compile Include="BL\testpackage\scoring\ScoringConfigurationDataService.cs" />
     <Compile Include="BL\testpackage\TestPackageLoaderService.cs" />
     <Compile Include="BL\XmlRepository.cs" />

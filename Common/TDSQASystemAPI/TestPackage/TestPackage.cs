@@ -8,16 +8,20 @@ namespace TDSQASystemAPI.TestPackage
     public partial class TestPackage
     {
         /// <summary>
-        /// Get the combined test package identifier for this <code>TestPackage</code>.
+        /// Get the test package identifier for this <code>TestPackage</code>.
         /// </summary>
-        public string GetCombinationTestPackageKey()
+        public string GetTestPackageKey()
         {
-            var combinedBlueprint = Blueprint.FirstOrDefault(bpe => 
-                bpe.type.Equals("combined", StringComparison.InvariantCultureIgnoreCase));
+            BlueprintElement blueprint = IsCombined()
+                ? Blueprint.FirstOrDefault(bpe => bpe.type.Equals("combined", StringComparison.InvariantCultureIgnoreCase))
+                : Blueprint.FirstOrDefault(bpe => bpe.type.Equals("assessment", StringComparison.InvariantCultureIgnoreCase));
 
-            return combinedBlueprint == null 
-                ? string.Empty
-                : string.Format("({0}){1}-{2}", publisher, combinedBlueprint.id, academicYear);
+            if (blueprint == null)
+            {
+                throw new InvalidOperationException("Could find a test package key/identifier for this test package.");
+            }
+
+            return string.Format("({0}){1}-{2}", publisher, blueprint.id, academicYear);
         }
 
         /// <summary>
