@@ -72,7 +72,6 @@ namespace TDSQASystemAPI.BL.testpackage
 
             itembankAdministrationDataService.CreateSetOfAdminItems(testPackage, itemStrands);
 
-            // TODO:  correct typo in method name
             itembankAdministrationDataService.CreateItemMeasurementParameters(testPackage);
 
             itembankAdministrationDataService.CreateAdminStimuli(testPackage);
