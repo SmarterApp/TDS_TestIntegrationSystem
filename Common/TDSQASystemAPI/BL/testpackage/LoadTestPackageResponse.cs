@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TDSQASystemAPI.BL.testpackage
 {
-    class LoadTestPackageResponse
+    public class LoadTestPackageResponse
     {
     }
 }

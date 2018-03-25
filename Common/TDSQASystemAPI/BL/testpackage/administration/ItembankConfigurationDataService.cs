@@ -21,6 +21,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private const string GRADE_PROP_NAME = "Grade";
 
         private readonly IItembankConfigurationDataQueryService itembankConfigurationDataQueryService;
+        private readonly ITestPackageDao<ClientDTO> clientDao;
         private readonly ITestPackageDao<SubjectDTO> subjectDao;
         private readonly ITestPackageDao<StrandDTO> strandDAO;
         private readonly ITestPackageDao<ItemDTO> itemDAO;
@@ -38,6 +39,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public ItembankConfigurationDataService()
         {
             itembankConfigurationDataQueryService = new ItembankConfigurationDataQueryService();
+            clientDao = new ClientDAO();
             subjectDao = new SubjectDAO();
             strandDAO = new StrandDAO();
             itemDAO = new ItemDAO();
@@ -49,6 +51,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         }
 
         public ItembankConfigurationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
+                                                ITestPackageDao<ClientDTO> clientDao,
                                                 ITestPackageDao<SubjectDTO> subjectDao,
                                                 ITestPackageDao<StrandDTO> strandDAO,
                                                 ITestPackageDao<ItemDTO> itemDAO,
@@ -59,6 +62,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                 ITestPackageDao<ItemPropertyDTO> itemPropertyDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
+            this.clientDao = clientDao;
             this.subjectDao = subjectDao;
             this.strandDAO = strandDAO;
             this.itemDAO = itemDAO;
@@ -71,7 +75,14 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateClient(TestPackage.TestPackage testPackage)
         {
-            throw new NotImplementedException();
+            // If the client record already exists, there's nothing to do.
+            var existingClient = itembankConfigurationDataQueryService.FindClientByName(testPackage.publisher);
+            if (existingClient != null)
+            {
+                return;
+            }
+
+            clientDao.Insert(new ClientDTO { Name = testPackage.publisher });
         }
 
         public void CreateItemProperties(TestPackage.TestPackage testPackage)

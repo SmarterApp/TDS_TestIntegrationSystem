@@ -41,6 +41,7 @@ namespace TISUnitTests.services
         {
             itembankConfigurationDataService =
                 new ItembankConfigurationDataService(mockItembankConfigurationQueryService.Object, 
+                    mockClientDao.Object,
                     mockSubjectDao.Object,
                     mockStrandDao.Object,
                     mockItemDao.Object,
@@ -231,7 +232,6 @@ namespace TISUnitTests.services
 
             mockItemDao.Verify(dao => dao.Insert(It.Is<List<ItemDTO>>(items => 
                 items.Count == 20)));
-
         }
 
         [TestMethod]
@@ -288,6 +288,45 @@ namespace TISUnitTests.services
                     && result.FindAll(r => r.ItemKey.Equals("187-2029")).Count == 3
                     && result.Find(r => r.PropertyName.Equals("language", StringComparison.InvariantCultureIgnoreCase)).PropertyValue.Equals("ENU")
                 )));
+        }
+
+        [TestMethod]
+        public void Client_ShouldCreateANewClient()
+        {
+            var testPackage = new TestPackage
+            {
+                publisher = "UNIT-TEST"
+            };
+
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
+                .Returns(null as ClientDTO);
+            mockClientDao.Setup(dao => dao.Insert(It.IsAny<ClientDTO>()))
+                .Verifiable();
+
+            itembankConfigurationDataService.CreateClient(testPackage);
+
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher));
+            mockClientDao.Verify(dao => dao.Insert(It.Is<ClientDTO>(result => 
+                result.Name.Equals(testPackage.publisher))));
+        }
+
+        [TestMethod]
+        public void Client_ShouldNotCreateAClientIfItAlreadyExists()
+        {
+            var testPackage = new TestPackage
+            {
+                publisher = "UNIT-TEST"
+            };
+
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
+                .Returns(new ClientDTO { ClientKey = 42L, Name = testPackage.publisher });
+            mockClientDao.Setup(dao => dao.Insert(It.IsAny<ClientDTO>()))
+                .Verifiable();
+
+            itembankConfigurationDataService.CreateClient(testPackage);
+
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindClientByName(testPackage.publisher));
+            mockClientDao.Verify(dao => dao.Insert(It.IsAny<ClientDTO>()), Times.Never);
         }
     }
 }

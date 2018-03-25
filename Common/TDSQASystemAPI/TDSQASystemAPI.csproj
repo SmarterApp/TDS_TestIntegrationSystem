@@ -162,11 +162,14 @@
     <Compile Include="BL\testpackage\administration\ItembankAdministrationDataService.cs" />
     <Compile Include="BL\testpackage\administration\ItembankConfigurationDataQueryService.cs" />
     <Compile Include="BL\testpackage\administration\ItembankConfigurationDataService.cs" />
+    <Compile Include="BL\testpackage\ITestPackageLoaderService.cs" />
+    <Compile Include="BL\testpackage\LoadTestPackageResponse.cs" />
     <Compile Include="BL\testpackage\osstis\CombinationTestMapService.cs" />
     <Compile Include="BL\testpackage\osstis\ICombinationTestMapService.cs" />
     <Compile Include="BL\testpackage\osstis\IQcProjectMetadataService.cs" />
     <Compile Include="BL\testpackage\osstis\QcProjectMetadataService.cs" />
     <Compile Include="BL\testpackage\scoring\ScoringConfigurationDataService.cs" />
+    <Compile Include="BL\testpackage\TestPackageLoaderService.cs" />
     <Compile Include="BL\XmlRepository.cs" />
     <Compile Include="Config\AdministrationInfo.cs" />
     <Compile Include="Config\IProjectMetaDataLoader.cs" />
