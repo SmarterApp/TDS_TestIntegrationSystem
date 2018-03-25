@@ -49,6 +49,8 @@ namespace TDSQASystemAPI.BL.testpackage
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE CONFIGURATION DATA
             //-----------------------------------------------------------------
+            itembankConfigurationDataService.CreateClient(testPackage);
+
             itembankConfigurationDataService.CreateSubject(testPackage);
 
             var itemStrands = itembankConfigurationDataService.CreateStrands(testPackage);
