@@ -129,7 +129,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.affinityGroupItemDao = affinityGroupItemDao;
         }
 
-        public void CeateItemMeasurementParameters(TestPackage.TestPackage testPackage)
+        public void CreateItemMeasurementParameters(TestPackage.TestPackage testPackage)
         {
             var allItems = testPackage.GetAllItems();
             var itemScoreDimensionDtos = from item in allItems

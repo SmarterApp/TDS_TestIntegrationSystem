@@ -224,7 +224,7 @@ namespace TISUnitTests.services
             mockItemMeasurementParameterDao.Setup(dao => dao.Insert(It.IsAny<List<ItemMeasurementParameterDTO>>()))
                 .Verifiable();
 
-            itembankAdministrationDataService.CeateItemMeasurementParameters(testPackage);
+            itembankAdministrationDataService.CreateItemMeasurementParameters(testPackage);
 
             mockItemScoreDimensionDao.Verify(dao => dao.Insert(It.Is<List<ItemScoreDimensionDTO>>(result => 
                 EvaluateShouldCreateAnItemMeasurementParameterCollection_ItemScoreDimensions(result))));
