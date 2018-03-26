@@ -15,7 +15,7 @@ namespace TISUnitTests.daos.itembank
         private const string TEST_ADMIN_KEY = "unit-test-admin-key";
         private const string SEGMENT_KEY = "unit-test-segment-key";
 
-        private readonly Guid ITEM_SCORE_DIMENSION_KEY = new Guid();
+        //private readonly Guid ITEM_SCORE_DIMENSION_KEY = new Guid();
         private readonly ITestPackageDao<ItemScoreDimensionDTO> testPackageDao = new ItemScoreDimensionDAO();
         private readonly string sql =
             "SELECT \n" +
@@ -106,7 +106,7 @@ namespace TISUnitTests.daos.itembank
             {
                 new ItemScoreDimensionDTO
                 {
-                    ItemScoreDimensionKey = ITEM_SCORE_DIMENSION_KEY,
+                    ItemScoreDimensionKey = Guid.NewGuid(),
                     ItemKey = "unit-test-item-key",
                     SegmentKey = SEGMENT_KEY,
                     Dimension = "unit-test-dimension",
@@ -119,7 +119,7 @@ namespace TISUnitTests.daos.itembank
 
             testPackageDao.Insert(isdList);
 
-            var insertedRecords = GetInsertedRecords(string.Format(sql, ITEM_SCORE_DIMENSION_KEY), DatabaseConnectionStringNames.ITEMBANK);
+            var insertedRecords = GetInsertedRecords(string.Format(sql, isdList[0].ItemScoreDimensionKey), DatabaseConnectionStringNames.ITEMBANK);
 
             Assert.AreEqual(1, insertedRecords.Count);
             CompareResults(isdList[0], insertedRecords[0]);
