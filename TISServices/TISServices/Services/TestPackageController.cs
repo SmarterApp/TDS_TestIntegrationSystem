@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using TDSQASystemAPI.BL.testpackage;
 using TDSQASystemAPI.Utilities;
@@ -60,11 +61,11 @@ namespace TISServices.Services
 
                 if (validationErrors.Any())
                 {
-                    var responseContent = new ObjectContent<List<ValidationError>>(validationErrors.ToList(), new JsonMediaTypeFormatter());
-                    return Request.CreateResponse(HttpStatusCode.Created, responseContent);
+                    //var responseContent = new ObjectContent<List<ValidationError>>(validationErrors.ToList(), new JsonMediaTypeFormatter());
+                    return Request.CreateResponse(HttpStatusCode.Created, validationErrors, new JsonMediaTypeFormatter(), "application/json");
                 }
 
-                return new HttpResponseMessage(HttpStatusCode.Created);
+                return Request.CreateResponse(HttpStatusCode.Created);
             } catch (Exception e)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
