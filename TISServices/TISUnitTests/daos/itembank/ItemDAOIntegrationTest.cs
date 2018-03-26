@@ -125,7 +125,7 @@ namespace TISUnitTests.daos.itembank
             var invalidArg = "I am not a list of itemDTOs";
 
             var exception = Assert.ThrowsException<ArgumentException>(() => testPackageDao.Find(invalidArg));
-            Assert.AreEqual("This method expects a criteria type of IList<ItemDTO>; criteria passed in is System.String", exception.Message);
+            Assert.AreEqual("This method expects a criteria type of IEnumerable<ItemDTO>; criteria passed in is System.String", exception.Message);
         }
     }
 }

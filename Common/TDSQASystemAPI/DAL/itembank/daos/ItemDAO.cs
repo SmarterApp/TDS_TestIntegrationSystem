@@ -85,13 +85,13 @@ namespace TDSQASystemAPI.DAL.itembank.daos
         /// <returns>A collection of <code>ItemDTO</code>s that already exist in <code>OSS_Itembank..tblItem</code></returns>
         public override List<ItemDTO> Find(object criteria)
         {
-            if (!(criteria is IList<ItemDTO>))
+            if (!(criteria is IEnumerable<ItemDTO>))
             {
-                throw new ArgumentException(string.Format("This method expects a criteria type of IList<ItemDTO>; criteria passed in is {0}", criteria.GetType()));
+                throw new ArgumentException(string.Format("This method expects a criteria type of IEnumerable<ItemDTO>; criteria passed in is {0}", criteria.GetType()));
             }
 
             var results = new List<ItemDTO>();
-            var itemKeys = from item in criteria as List<ItemDTO>
+            var itemKeys = from item in criteria as IEnumerable<ItemDTO>
                            select string.Format("'{0}'", item.Key);
 
             using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))

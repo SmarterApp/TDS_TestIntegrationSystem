@@ -13,7 +13,7 @@ BEGIN
 	/***********************************************************************************************************************
 	  File: 7_create_procedure_spDeleteAssessment.sql
 
-	  Desc: Delete an assessment from the TIS databases.
+	  Desc: Delete all assessments from the TIS databases for a given test package key.
 
 	  Example Usage:
 		EXEC OSS_Itembank.dbo.spDeleteAssessment @testPackageKey = '(SBAC_PT)SBAC-IRP-MATH-7-COMBINED-Summer-2015-2016';
