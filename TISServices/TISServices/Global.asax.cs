@@ -37,12 +37,18 @@ namespace TISServices
             );
 
             GlobalConfiguration.Configuration.Routes.MapHttpRoute(
+                name: "TestPackageApi",
+                routeTemplate: "api/{controller}/{testPackageKey}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            GlobalConfiguration.Configuration.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            TISServices.Utilities.TISServicesLogger.Log("Application started");
+            //TISServices.Utilities.TISServicesLogger.Log("Application started");
         }
 
         protected void Session_Start(object sender, EventArgs e)
