@@ -48,7 +48,7 @@ namespace TISServices
                 defaults: new { id = RouteParameter.Optional }
             );
 
-            //TISServices.Utilities.TISServicesLogger.Log("Application started");
+            TISServices.Utilities.TISServicesLogger.Log("Application started");
         }
 
         protected void Session_Start(object sender, EventArgs e)
