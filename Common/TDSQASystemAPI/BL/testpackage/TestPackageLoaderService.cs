@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using TDSQASystemAPI.BL.testpackage.administration;
 using TDSQASystemAPI.BL.testpackage.osstis;
 using TDSQASystemAPI.BL.testpackage.scoring;
 using TDSQASystemAPI.TestPackage.utils;
+using TDSQASystemAPI.Utilities;
 
 namespace TDSQASystemAPI.BL.testpackage
 {
@@ -38,9 +40,10 @@ namespace TDSQASystemAPI.BL.testpackage
             this.scoringConfigurationDataService = scoringConfigurationDataService;
         }
 
-        public LoadTestPackageResponse LoadTestPackage(Stream testPackageXmlStream)
+        public IList<ValidationError> LoadTestPackage(Stream testPackageXmlStream)
         {
             var testPackage = TestPackageMapper.FromXml(new XmlTextReader(testPackageXmlStream));
+            var validationErrors = new List<ValidationError>();
 
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE CONFIGURATION DATA
@@ -112,8 +115,13 @@ namespace TDSQASystemAPI.BL.testpackage
 
             qcProjectMetadataService.CreateQcProjectMetadata(testPackage);
 
-            // TODO:  If there are any existing items, add them to the response as a warning-level
-            return new LoadTestPackageResponse();
+            if (existingItems.Any())
+            {
+                validationErrors.Add(new ValidationError(ValidationErrorCodes.EXISTING_ITEMS_NOT_LOADED, 
+                    ValidationErrorSeverityLevels.WARN, 
+                    string.Format("the following items in this test package were not loaded because they already exist in TIS: \n{0}", string.Join("\n", existingItems.Select(ei => ei.ItemKey).ToArray()))));
+            }
+            return validationErrors;
         }
     }
 }

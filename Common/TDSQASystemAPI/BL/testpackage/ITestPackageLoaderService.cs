@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TDSQASystemAPI.Utilities;
 
 namespace TDSQASystemAPI.BL.testpackage
 {
     public interface ITestPackageLoaderService
     {
-        LoadTestPackageResponse LoadTestPackage(Stream testPackageXmlStream);
+        IList<ValidationError> LoadTestPackage(Stream testPackageXmlStream);
     }
 }

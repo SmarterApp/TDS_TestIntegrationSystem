@@ -163,7 +163,6 @@
     <Compile Include="BL\testpackage\administration\ItembankConfigurationDataQueryService.cs" />
     <Compile Include="BL\testpackage\administration\ItembankConfigurationDataService.cs" />
     <Compile Include="BL\testpackage\ITestPackageLoaderService.cs" />
-    <Compile Include="BL\testpackage\LoadTestPackageResponse.cs" />
     <Compile Include="BL\testpackage\osstis\CombinationTestMapService.cs" />
     <Compile Include="BL\testpackage\osstis\ICombinationTestMapService.cs" />
     <Compile Include="BL\testpackage\osstis\IQcProjectMetadataService.cs" />
@@ -398,6 +397,9 @@
     <Compile Include="TestResults\XMLAdapterOSS.cs" />
     <Compile Include="TestResults\XmlSerializer.cs" />
     <Compile Include="TestResults\XmlSerializerOSS.cs" />
+    <Compile Include="Utilities\ValidationError.cs" />
+    <Compile Include="Utilities\ValidationErrorCodes.cs" />
+    <Compile Include="Utilities\ValidationErrorSeverityLevels.cs" />
     <Compile Include="Utilities\XmlWriterDynamicOutputDecorator.cs" />
     <Compile Include="TIS\TestOpportunityItemScore.cs" />
     <Compile Include="TIS\TISScoreMerger.cs" />
