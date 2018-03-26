@@ -94,15 +94,9 @@ namespace TDSQASystemAPI.BL.testpackage
 
             scoringConfigurationDataService.CreateScoreFeature(testPackage);
 
-            // TODO:  find equivalent of spLoad_ScoringComputationLocation
-
             scoringConfigurationDataService.CreateComputationRuleParameters(testPackage);
 
             scoringConfigurationDataService.CreateComputationRuleParameterValue(testPackage);
-
-            // TODO:  find equivalent of spLoad_ScoringConversionTableDesc
-
-            // TODO:  find equivalent of spLoad_ScoringConversionTables
 
             scoringConfigurationDataService.CreatePerformanceLevels(testPackage);
 
