@@ -50,7 +50,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
         {
             using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbConnectionStringName].ConnectionString))
             {
-                using (var command = new SqlCommand(InsertSql, connection))
+                using (var command = new SqlCommand(UpdateSql, connection))
                 {
                     command.CommandType = CommandType.Text;
                     var versionParam = command.Parameters.AddWithValue("@updateConfig", recordToUpdate.TestVersion);

@@ -129,26 +129,30 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.affinityGroupItemDao = affinityGroupItemDao;
         }
 
-        public void CeateItemMeasurementParameters(TestPackage.TestPackage testPackage)
+        public void CreateItemMeasurementParameters(TestPackage.TestPackage testPackage)
         {
             var allItems = testPackage.GetAllItems();
-            var itemScoreDimensionDtos = from item in allItems
-                                         let dimension = item.ItemScoreDimension
-                                         select new ItemScoreDimensionDTO
-                                         {
-                                             Dimension = dimension.dimension ?? string.Empty,
-                                             RecodeRule = string.Empty,
-                                             ScorePoints = dimension.scorePoints,
-                                             Weight = dimension.weight,
-                                             ItemScoreDimensionKey = Guid.NewGuid(),
-                                             SegmentKey = item.TestSegment.Key,
-                                             ItemKey = item.Key,
-                                             MeasurementModel = measurementModelMap[dimension.measurementModel]
-                                         };
+            var scoreDimensions = new List<ItemScoreDimensionDTO>();
+            foreach (var item in allItems)
+            {
+                var dimension = item.ItemScoreDimension;
+                scoreDimensions.Add(new ItemScoreDimensionDTO
+                    {
+                        Dimension = dimension.dimension ?? string.Empty,
+                        RecodeRule = string.Empty,
+                        ScorePoints = dimension.scorePoints,
+                        Weight = dimension.weight,
+                        ItemScoreDimensionKey = Guid.NewGuid(),
+                        SegmentKey = item.TestSegment.Key,
+                        ItemKey = item.Key,
 
-            itemScoreDimensionDao.Insert(itemScoreDimensionDtos.ToList());
+                        MeasurementModel = measurementModelMap[dimension.measurementModel]
+                    });
+            }
 
-            var scoreDimensionMap = (from dimensionDto in itemScoreDimensionDtos
+            itemScoreDimensionDao.Insert(scoreDimensions);
+
+            var scoreDimensionMap = from dimensionDto in scoreDimensions
                                     join item in allItems
                                         on dimensionDto.ItemKey equals item.Key
                                     select new
@@ -156,7 +160,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                         ItemKey = item.Key,
                                         DimensionKey = dimensionDto.ItemScoreDimensionKey,
                                         MeasurementModelKey = dimensionDto.MeasurementModel
-                                    });
+                                    };
+
 
             var itemMeasurementParameters = from item in allItems
                                             from param in item.ItemScoreDimension.ItemScoreParameter

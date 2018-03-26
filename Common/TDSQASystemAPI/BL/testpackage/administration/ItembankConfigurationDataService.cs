@@ -21,6 +21,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private const string GRADE_PROP_NAME = "Grade";
 
         private readonly IItembankConfigurationDataQueryService itembankConfigurationDataQueryService;
+        private readonly ITestPackageDao<ClientDTO> clientDao;
         private readonly ITestPackageDao<SubjectDTO> subjectDao;
         private readonly ITestPackageDao<StrandDTO> strandDAO;
         private readonly ITestPackageDao<ItemDTO> itemDAO;
@@ -38,6 +39,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public ItembankConfigurationDataService()
         {
             itembankConfigurationDataQueryService = new ItembankConfigurationDataQueryService();
+            clientDao = new ClientDAO();
             subjectDao = new SubjectDAO();
             strandDAO = new StrandDAO();
             itemDAO = new ItemDAO();
@@ -49,6 +51,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         }
 
         public ItembankConfigurationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
+                                                ITestPackageDao<ClientDTO> clientDao,
                                                 ITestPackageDao<SubjectDTO> subjectDao,
                                                 ITestPackageDao<StrandDTO> strandDAO,
                                                 ITestPackageDao<ItemDTO> itemDAO,
@@ -59,6 +62,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                 ITestPackageDao<ItemPropertyDTO> itemPropertyDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
+            this.clientDao = clientDao;
             this.subjectDao = subjectDao;
             this.strandDAO = strandDAO;
             this.itemDAO = itemDAO;
@@ -67,6 +71,18 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.setOfItemStrandDao = setOfItemStrandDao;
             this.setOfItemStimuliDao = setOfItemStimuliDao;
             this.itemPropertyDao = itemPropertyDao;
+        }
+
+        public void CreateClient(TestPackage.TestPackage testPackage)
+        {
+            // If the client record already exists, there's nothing to do.
+            var existingClient = itembankConfigurationDataQueryService.FindClientByName(testPackage.publisher);
+            if (existingClient != null)
+            {
+                return;
+            }
+
+            clientDao.Insert(new ClientDTO { Name = testPackage.publisher });
         }
 
         public void CreateItemProperties(TestPackage.TestPackage testPackage)
@@ -113,7 +129,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             itemPropertyDao.Insert(allItemProperties);
         }
             
-        public void CreateItems(TestPackage.TestPackage testPackage)
+        public List<ItemDTO> CreateItems(TestPackage.TestPackage testPackage)
         {
             var allItems = testPackage.GetAllItems();
 
@@ -132,7 +148,16 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                   TestVersion = (long)testPackage.version
                               };
 
-            itemDAO.Insert(allItemDtos.ToList());
+            // Exclude items that already exist...
+            var existingItems = itemDAO.Find(allItemDtos);
+            var itemsToInsert = allItemDtos.Where(all => existingItems.All(exists => !exists.Key.Equals(all.Key)));
+
+            // ... and insert the remaining items (if there are any)
+            if (itemsToInsert.Any()) { 
+                itemDAO.Insert(itemsToInsert.ToList());
+            }
+
+            return existingItems;
         }
 
         public void CreateStimuli(TestPackage.TestPackage testPackage)

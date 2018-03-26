@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="controllers\AssessmentControllerIntegrationTest.cs" />
     <Compile Include="controllers\AssessmentsControllerUnitTest.cs" />
+    <Compile Include="controllers\TestPackageControllerUnitTest.cs" />
     <Compile Include="daos\configs\AccommodationFamilyDAOIntegrationTest.cs" />
     <Compile Include="daos\configs\ClientDAOIntegrationTest.cs" />
     <Compile Include="daos\configs\FieldTestPriorityDAOIntegrationTest.cs" />
@@ -143,6 +144,9 @@
     <Compile Include="services\QcProjectMetadataServiceUnitTest.cs" />
     <Compile Include="services\ScoringConfigDriver.cs" />
     <Compile Include="services\ScoringConfigurationDataSeriveUnitTest.cs" />
+    <Compile Include="services\TestNameLookupServiceUnitTest.cs" />
+    <Compile Include="services\TestPackageLoaderServiceIntegrationTest.cs" />
+    <Compile Include="services\TestPackageLoaderServiceUnitTest.cs" />
     <Compile Include="testpackages\ItemGroupItemBlueprintReferenceUnitTest.cs" />
     <Compile Include="testpackages\ItemPositionUnitTest.cs" />
     <Compile Include="testpackages\TeacherHandScoringUnitTest.cs" />

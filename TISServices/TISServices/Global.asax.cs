@@ -37,6 +37,12 @@ namespace TISServices
             );
 
             GlobalConfiguration.Configuration.Routes.MapHttpRoute(
+                name: "TestPackageApi",
+                routeTemplate: "api/{controller}/{testPackageKey}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            GlobalConfiguration.Configuration.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }

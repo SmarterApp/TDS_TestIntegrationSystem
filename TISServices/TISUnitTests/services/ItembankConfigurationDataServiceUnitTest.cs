@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using TDSQASystemAPI.BL.testpackage.administration;
 using TDSQASystemAPI.DAL;
@@ -41,6 +42,7 @@ namespace TISUnitTests.services
         {
             itembankConfigurationDataService =
                 new ItembankConfigurationDataService(mockItembankConfigurationQueryService.Object, 
+                    mockClientDao.Object,
                     mockSubjectDao.Object,
                     mockStrandDao.Object,
                     mockItemDao.Object,
@@ -225,13 +227,56 @@ namespace TISUnitTests.services
         {
             var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
 
-            mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()));
+            mockItemDao.Setup(dao => dao.Find(It.IsAny<object>()))
+                .Returns(new List<ItemDTO>());
+            mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()))
+                .Verifiable();
 
-            itembankConfigurationDataService.CreateItems(loadedTestPackage);
+            var existingItems = itembankConfigurationDataService.CreateItems(loadedTestPackage);
 
-            mockItemDao.Verify(dao => dao.Insert(It.Is<List<ItemDTO>>(items => 
+            mockItemDao.Verify(dao => dao.Find(It.IsAny<object>()));
+            mockItemDao.Verify(dao => dao.Insert(It.Is<IList<ItemDTO>>(items => 
                 items.Count == 20)));
+        }
 
+        [TestMethod]
+        public void Item_SouldCreateACollectionOfItemsThatAreNotAlreadyInTheDatabase()
+        {
+            var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            mockItemDao.Setup(dao => dao.Find(It.IsAny<object>()))
+                .Returns(new List<ItemDTO> { new ItemDTO { Key = "187-1434" } });
+            mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()))
+                .Verifiable();
+
+            var existingItems = itembankConfigurationDataService.CreateItems(loadedTestPackage);
+
+            mockItemDao.Verify(dao => dao.Find(It.IsAny<object>()));
+            mockItemDao.Verify(dao => dao.Insert(It.Is<IList<ItemDTO>>(items =>
+                items.Count == 19)));
+        }
+
+        [TestMethod]
+        public void Item_SouldNotCreateAnyItemsIfTheyAllExistInTheDatabase()
+        {
+            var loadedTestPackage = TestPackageMapper.FromXml(new XmlTextReader(TEST_PACKAGE_XML_FILE));
+
+            // Simulate all the items in this test package already existing in the database
+            var itemsThatAlreadyExist = from item in loadedTestPackage.GetAllItems()
+                                        select new ItemDTO
+                                        {
+                                            Key = item.Key
+                                        };
+
+            mockItemDao.Setup(dao => dao.Find(It.IsAny<object>()))
+                .Returns(itemsThatAlreadyExist.ToList());
+            mockItemDao.Setup(dao => dao.Insert(It.IsAny<List<ItemDTO>>()))
+                .Verifiable();
+
+            var existingItems = itembankConfigurationDataService.CreateItems(loadedTestPackage);
+
+            mockItemDao.Verify(dao => dao.Find(It.IsAny<object>()));
+            mockItemDao.Verify(dao => dao.Insert(It.IsAny<IList<ItemDTO>>()), Times.Never);
         }
 
         [TestMethod]
@@ -288,6 +333,45 @@ namespace TISUnitTests.services
                     && result.FindAll(r => r.ItemKey.Equals("187-2029")).Count == 3
                     && result.Find(r => r.PropertyName.Equals("language", StringComparison.InvariantCultureIgnoreCase)).PropertyValue.Equals("ENU")
                 )));
+        }
+
+        [TestMethod]
+        public void Client_ShouldCreateANewClient()
+        {
+            var testPackage = new TestPackage
+            {
+                publisher = "UNIT-TEST"
+            };
+
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
+                .Returns(null as ClientDTO);
+            mockClientDao.Setup(dao => dao.Insert(It.IsAny<ClientDTO>()))
+                .Verifiable();
+
+            itembankConfigurationDataService.CreateClient(testPackage);
+
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher));
+            mockClientDao.Verify(dao => dao.Insert(It.Is<ClientDTO>(result => 
+                result.Name.Equals(testPackage.publisher))));
+        }
+
+        [TestMethod]
+        public void Client_ShouldNotCreateAClientIfItAlreadyExists()
+        {
+            var testPackage = new TestPackage
+            {
+                publisher = "UNIT-TEST"
+            };
+
+            mockItembankConfigurationQueryService.Setup(svc => svc.FindClientByName(testPackage.publisher))
+                .Returns(new ClientDTO { ClientKey = 42L, Name = testPackage.publisher });
+            mockClientDao.Setup(dao => dao.Insert(It.IsAny<ClientDTO>()))
+                .Verifiable();
+
+            itembankConfigurationDataService.CreateClient(testPackage);
+
+            mockItembankConfigurationQueryService.Verify(svc => svc.FindClientByName(testPackage.publisher));
+            mockClientDao.Verify(dao => dao.Insert(It.IsAny<ClientDTO>()), Times.Never);
         }
     }
 }

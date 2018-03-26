@@ -106,6 +106,7 @@
     <Compile Include="Authorization\Tenancy.cs" />
     <Compile Include="Authorization\TokenInfo.cs" />
     <Compile Include="Services\AssessmentsController.cs" />
+    <Compile Include="Services\TestPackageController.cs" />
     <Compile Include="Utilities\Statistics.cs" />
     <Compile Include="Utilities\TISServicesLogger.cs" />
     <Compile Include="Default.aspx.cs">

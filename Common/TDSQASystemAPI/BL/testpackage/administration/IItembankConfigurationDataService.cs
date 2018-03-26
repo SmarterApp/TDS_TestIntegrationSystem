@@ -9,16 +9,23 @@ namespace TDSQASystemAPI.BL.testpackage.administration
     public interface IItembankConfigurationDataService
     {
         /// <summary>
+        /// Create a new client from the publisher information included in the <code>TestPackage</code>.
+        /// </summary>
+        /// <param name="testPackage">The <code>TestPackage</code> being loaded.</param>
+        void CreateClient(TestPackage.TestPackage testPackage);
+
+        /// <summary>
         /// Create a collection of item properties for each item included in the teset package.
         /// </summary>
-        /// <param name="testPackage"></param>
+        /// <param name="testPackage">The <code>TestPackage</code> being loaded.</param>
         void CreateItemProperties(TestPackage.TestPackage testPackage);
 
         /// <summary>
         /// Create a new collection of Items for each item included in the test package.
         /// </summary>
         /// <param name="testPackage">The <code>TestPackage.TestPackage</code> containing the items.</param>
-        void CreateItems(TestPackage.TestPackage testPackage);
+        /// <returns>A collection of <code>ItemDTO</code>s representing items that already exist in the database.</returns>
+        List<ItemDTO> CreateItems(TestPackage.TestPackage testPackage);
 
         /// <summary>
         /// Create a new collection of Stimuli for each stimulus included in the test package.

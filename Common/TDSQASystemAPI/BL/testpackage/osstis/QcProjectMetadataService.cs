@@ -40,7 +40,7 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
             }
 
             var project = projectList.First();
-            var combinedTestName = testPackage.GetCombinationTestPackageKey();
+            var combinedTestName = testPackage.GetTestPackageKey();
 
             var qcProjectMetadataDtos = from status in QcProjectMetadataDefaults.Statuses
                                         select new QcProjectMetadataDTO
