@@ -377,18 +377,18 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 
                 foreach (var bp in bluePrintElements)
                 {
-                        var strandAffinityAaItemClDtos = from testPkgBp in allTestPackageBlueprintElements
-                                                         where testPkgBp.Key.Equals(bp.idRef)
-                                                             && (testPkgBp.Value.IsClaimOrTarget()
-                                                                 || testPkgBp.Value.type.Equals(BlueprintElementTypes.AFFINITY_GROUP, StringComparison.InvariantCultureIgnoreCase))
-                                                         select new AaItemClDTO
-                                                         {
-                                                             ContentLevel = bp.idRef,
-                                                             ItemKey = item.Key,
-                                                             SegmentKey = item.TestSegment.Key
-                                                         };
+                        var aaItemClDtos = from testPkgBp in allTestPackageBlueprintElements
+                                            where testPkgBp.Key.Equals(bp.idRef)
+                                                && (testPkgBp.Value.IsClaimOrTarget()
+                                                    || testPkgBp.Value.type.Equals(BlueprintElementTypes.AFFINITY_GROUP, StringComparison.InvariantCultureIgnoreCase))
+                                            select new AaItemClDTO
+                                            {
+                                                ContentLevel = testPkgBp.Value.IsClaimOrTarget() ? string.Format("{0}-{1}", item.TestPackage.publisher, bp.idRef) : bp.idRef,
+                                                ItemKey = item.Key,
+                                                SegmentKey = item.TestSegment.Key
+                                            };
 
-                        allAaItemClDtosForItem.AddRange(strandAffinityAaItemClDtos);
+                        allAaItemClDtosForItem.AddRange(aaItemClDtos);
                     
                 }
 
