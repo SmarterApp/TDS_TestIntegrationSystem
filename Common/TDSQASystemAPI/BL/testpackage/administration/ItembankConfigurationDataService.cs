@@ -368,7 +368,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                             IReadOnlyCollection<ItemGroupItem> items, 
                                             IDictionary<string, StrandDTO> strandMap)
         {
-            var allAaItemClDtos = new List<AaItemClDTO>();
+            var allAaItemClDtos = new HashSet<AaItemClDTO>();
             foreach (var item in items)
             {
                 var allAaItemClDtosForItem = new List<AaItemClDTO>();
@@ -377,24 +377,6 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 
                 foreach (var bp in bluePrintElements)
                 {
-                    if (bp.idRef.Contains("|"))
-                    {
-                        var contentLevelAaItemClDtos = from strand in strandMap
-                                                       join lvl in bp.GetContentLevels()
-                                                           on strand.Key equals lvl
-                                                       where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Value.Type)
-                                                           || strand.Value.Type.Equals(BlueprintElementTypes.AFFINITY_GROUP, StringComparison.InvariantCultureIgnoreCase)
-                                                       select new AaItemClDTO
-                                                       {
-                                                           ContentLevel = string.Format("{0}-{1}", item.TestPackage.publisher, strand.Key),
-                                                           ItemKey = item.Key,
-                                                           SegmentKey = item.TestSegment.Key
-                                                       };
-
-                        allAaItemClDtosForItem.AddRange(contentLevelAaItemClDtos);
-                    }
-                    else
-                    {
                         var strandAffinityAaItemClDtos = from testPkgBp in allTestPackageBlueprintElements
                                                          where testPkgBp.Key.Equals(bp.idRef)
                                                              && (testPkgBp.Value.IsClaimOrTarget()
@@ -407,16 +389,16 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                          };
 
                         allAaItemClDtosForItem.AddRange(strandAffinityAaItemClDtos);
-                    }
+                    
                 }
 
                 if (allAaItemClDtosForItem.Any())
                 {
-                    allAaItemClDtos.AddRange(allAaItemClDtosForItem);
+                    allAaItemClDtosForItem.ForEach(aaItem => allAaItemClDtos.Add(aaItem));
                 }
             }
 
-            aaItemClDao.Insert(allAaItemClDtos);
+            aaItemClDao.Insert(allAaItemClDtos.ToList());
         }
     }
 }
