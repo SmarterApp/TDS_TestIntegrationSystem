@@ -208,6 +208,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 from segment in test.Segments
                 from segBp in segment.SegmentBlueprint
                 where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strandMap[segBp.idRef].Type)
+                where segBp.ItemSelection != null
                 let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
                 select new AdminStrandDTO
                 {
