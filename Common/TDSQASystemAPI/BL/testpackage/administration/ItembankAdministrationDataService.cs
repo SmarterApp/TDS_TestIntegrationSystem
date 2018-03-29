@@ -206,10 +206,11 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             var segmentAdminStrandDtos =
                 from test in testPackge.Test
                 from segment in test.Segments
-                from segBp in segment.SegmentBlueprint
-                where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strandMap[segBp.idRef].Type)
-                where segBp.ItemSelection != null
-                let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
+                from segBp in segment.SegmentBlueprint                
+                where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strandMap[segBp.idRef].Type)             
+                let itemSelectionProperties = (segBp.ItemSelection != null) ? 
+                    segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim()) : 
+                    new Dictionary<string, string>()
                 select new AdminStrandDTO
                 {
                     AdminStrandKey = string.Format("{0}-{1}", segment.Key, strandMap[segBp.idRef].Key),
@@ -231,8 +232,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         : null,
                     LoadMin = test.IsSegmented() ? segBp.minExamItems as int? : null,
                     LoadMax = test.IsSegmented() ? segBp.maxExamItems as int? : null,
-                    IsStrictMax = bool.Parse(itemSelectionProperties.GetOrDefault("isstrictmax", "false")),
-                    BlueprintWeight = float.Parse(itemSelectionProperties.GetOrDefault("bpweight", "0")),
+                    IsStrictMax = BlueprintElementTypes.CLAIM.Equals(strandMap[segBp.idRef].Type) ? false : bool.Parse(itemSelectionProperties.GetOrDefault("isstrictmax", "false")),
                     TestVersion = (long)testPackge.version,
                     PrecisionTarget = itemSelectionProperties.ContainsKey("precisiontarget")
                         ? itemSelectionProperties["precisiontarget"]?.ToNullableDouble()
