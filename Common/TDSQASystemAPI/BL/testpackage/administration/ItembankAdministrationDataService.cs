@@ -236,6 +236,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     LoadMin = test.IsSegmented() ? segBp.minExamItems as int? : null,
                     LoadMax = test.IsSegmented() ? segBp.maxExamItems as int? : null,
                     IsStrictMax = BlueprintElementTypes.CLAIM.Equals(strandMap[segBp.idRef].Type) ? false : bool.Parse(itemSelectionProperties.GetOrDefault("isstrictmax", "false")),
+                    BlueprintWeight = float.Parse(itemSelectionProperties.GetOrDefault("bpweight", "1")),
                     TestVersion = (long)testPackge.version,
                     PrecisionTarget = itemSelectionProperties.ContainsKey("precisiontarget")
                         ? itemSelectionProperties["precisiontarget"]?.ToNullableDouble()
@@ -583,7 +584,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 ClientKey = existingTestAdmin?.ClientKey ?? client.ClientKey,
                 SchoolYear = existingTestAdmin?.SchoolYear ?? testPackage.academicYear,
                 Description = existingTestAdmin?.Description ?? string.Format("{0} {1} {2} Administration", client.Name, existingTestAdmin?.Season ?? string.Empty, testPackage.academicYear),
-                TestVersion = (long)testPackage.version // whether inserting or updating, we want the version to reflect the testpackage being loaded
+                TestVersion = (long)testPackage.version, // whether inserting or updating, we want the version to reflect the testpackage being loaded
+                Season = existingTestAdmin?.Season ?? ""
             };
 
             if (existingTestAdmin == null)

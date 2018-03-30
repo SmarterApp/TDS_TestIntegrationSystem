@@ -88,11 +88,6 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public void CreateItemProperties(TestPackage.TestPackage testPackage)
         {
             var allTestPackageItems = testPackage.GetAllItems();
-            var allGrades = (from a in testPackage.Test
-                             from g in a.Grades
-                             select g)
-                .GroupBy(g => g.value)
-                .Select(g => g.Key);
 
             var allItemProperties = new List<ItemPropertyDTO>();
             foreach (var item in allTestPackageItems)
@@ -103,7 +98,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     ItemKey = item.Key,
                     PropertyName = ITEM_TYPE_PROP_NAME,
                     PropertyValue = item.type,
-                    SegmentKey = item.TestSegment.Key
+                    SegmentKey = item.TestSegment.Key,
+                    IsActive = true
                 });
 
                 // Build language item property for each presentation included in the item.
@@ -112,18 +108,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     ItemKey = item.Key,
                     PropertyName = LANGUAGE_PROP_NAME,
                     PropertyValue = language.code,
-                    SegmentKey = item.TestSegment.Key
+                    SegmentKey = item.TestSegment.Key,
+                    IsActive = true
                 }));
-
-                // Build grade item property for each grade included in the test package.
-                allGrades.ForEach(grade =>
-                    allItemProperties.Add(new ItemPropertyDTO()
-                    {
-                        ItemKey = item.Key,
-                        PropertyName = GRADE_PROP_NAME,
-                        PropertyValue = grade,
-                        SegmentKey = item.TestSegment.Key
-                    }));
             }
 
             itemPropertyDao.Insert(allItemProperties);

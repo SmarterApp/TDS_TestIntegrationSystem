@@ -21,6 +21,7 @@ namespace TISUnitTests.services
 
         private Mock<ITestPackageDao<TestAdminDTO>> mockTestAdminDao = new Mock<ITestPackageDao<TestAdminDTO>>();
         private Mock<ITestPackageDao<SetOfAdminSubjectDTO>> mockSetOfAdminSubjectDao = new Mock<ITestPackageDao<SetOfAdminSubjectDTO>>();
+        private Mock<ITestPackageDao<SetOfTestGradeDTO>> mockSetOfTestGradeDao = new Mock<ITestPackageDao<SetOfTestGradeDTO>>();
         private Mock<ITestPackageDao<AdminStrandDTO>> mockAdminStrandDao = new Mock<ITestPackageDao<AdminStrandDTO>>();
         private Mock<ITestPackageDao<SetOfAdminItemDTO>> mockSetOfAdminItemDao = new Mock<ITestPackageDao<SetOfAdminItemDTO>>();
         private Mock<ITestPackageDao<ItemScoreDimensionDTO>> mockItemScoreDimensionDao = new Mock<ITestPackageDao<ItemScoreDimensionDTO>>();
@@ -40,8 +41,9 @@ namespace TISUnitTests.services
         {
             itembankAdministrationDataService =
                 new ItembankAdministrationDataService(mockItembankConfigurationDataQueryService.Object,
-                    mockTestAdminDao.Object,
+                    mockTestAdminDao.Object,                    
                     mockSetOfAdminSubjectDao.Object,
+                    mockSetOfTestGradeDao.Object,
                     mockAdminStrandDao.Object,
                     mockSetOfAdminItemDao.Object,
                     mockItemScoreDimensionDao.Object,

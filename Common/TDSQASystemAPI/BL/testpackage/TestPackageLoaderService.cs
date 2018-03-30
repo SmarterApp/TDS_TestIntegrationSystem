@@ -17,6 +17,7 @@ namespace TDSQASystemAPI.BL.testpackage
         private readonly ICombinationTestMapService combinationTestMapService;
         private readonly IQcProjectMetadataService qcProjectMetadataService;
         private readonly ScoringConfigurationDataService scoringConfigurationDataService;
+        private readonly UpdateConfigsDB updateConfigsDB;
 
         public TestPackageLoaderService()
         {
@@ -25,26 +26,28 @@ namespace TDSQASystemAPI.BL.testpackage
             combinationTestMapService = new CombinationTestMapService();
             qcProjectMetadataService = new QcProjectMetadataService();
             scoringConfigurationDataService = new ScoringConfigurationDataService();
+            updateConfigsDB = new UpdateConfigsDB();
         }
 
         public TestPackageLoaderService(IItembankAdministrationDataService itembankAdministrationDataService, 
                                         IItembankConfigurationDataService itembankConfigurationDataService, 
                                         ICombinationTestMapService combinationTestMapService, 
-                                        IQcProjectMetadataService qcProjectMetadataService, 
+                                        IQcProjectMetadataService qcProjectMetadataService,
+                                        UpdateConfigsDB updateConfigsDB,
                                         ScoringConfigurationDataService scoringConfigurationDataService)
         {
             this.itembankAdministrationDataService = itembankAdministrationDataService;
             this.itembankConfigurationDataService = itembankConfigurationDataService;
             this.combinationTestMapService = combinationTestMapService;
             this.qcProjectMetadataService = qcProjectMetadataService;
-            this.scoringConfigurationDataService = scoringConfigurationDataService;
+            this.updateConfigsDB = updateConfigsDB;
+            this.scoringConfigurationDataService = scoringConfigurationDataService;           
         }
 
         public IList<ValidationError> LoadTestPackage(Stream testPackageXmlStream)
         {
             var testPackage = TestPackageMapper.FromXml(new XmlTextReader(testPackageXmlStream));
             var validationErrors = new List<ValidationError>();
-            var updateConfigsDB = new UpdateConfigsDB();
 
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE CONFIGURATION DATA
