@@ -44,6 +44,7 @@ namespace TDSQASystemAPI.BL.testpackage
         {
             var testPackage = TestPackageMapper.FromXml(new XmlTextReader(testPackageXmlStream));
             var validationErrors = new List<ValidationError>();
+            var updateConfigsDB = new UpdateConfigsDB();
 
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE CONFIGURATION DATA
@@ -69,8 +70,10 @@ namespace TDSQASystemAPI.BL.testpackage
             //-----------------------------------------------------------------
             itembankAdministrationDataService.SaveTestAdministration(testPackage);
 
+            updateConfigsDB.LoadMeasurementParameters();
             itembankAdministrationDataService.CreateSetOfAdminSubjects(testPackage);
 
+            itembankAdministrationDataService.CreateSetOfTestGrades(testPackage);
             itembankAdministrationDataService.CreateAdminStrands(testPackage, itemStrands);
 
             itembankAdministrationDataService.CreateSetOfAdminItems(testPackage, itemStrands);

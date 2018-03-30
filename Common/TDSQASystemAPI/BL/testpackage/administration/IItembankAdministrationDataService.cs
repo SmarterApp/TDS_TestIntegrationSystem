@@ -25,6 +25,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// <param name="testPackage">The <code>TestPackage</code> being loaded.</param>
         void CreateSetOfAdminSubjects(TestPackage.TestPackage testPackage);
 
+        void CreateSetOfTestGrades(TestPackage.TestPackage testPackage);
+
         /// <summary>
         /// Create a collection of <code>AdminStrandDTO</code> records, which associate an <code>Assessment</code>
         /// to a <code>Strand</code>.

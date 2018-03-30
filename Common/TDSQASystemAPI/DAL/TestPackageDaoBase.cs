@@ -126,7 +126,7 @@ namespace TDSQASystemAPI.DAL
                 {
                     command.CommandType = CommandType.Text;
 
-                    var testeeAttributeParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordToSave);
+                    var testeeAttributeParam = command.Parameters.AddWithValue(DEFAULT_TVP_VARIABLE_NAME, recordToSave.ToDataTable());
                     testeeAttributeParam.SqlDbType = SqlDbType.Structured;
                     testeeAttributeParam.TypeName = TvpType;
 

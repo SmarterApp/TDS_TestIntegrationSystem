@@ -413,7 +413,7 @@ CREATE TYPE dbo.AffinityGroupTable AS TABLE
 	IsStrictMax					bit NOT NULL,
 	TestVersion					bigint,
 	UpdatedTestVersion			bigint,
-	AbilityWeight				float NOT NULL,
+	AbilityWeight				float,
 	PrecisionTarget				float,
 	StartAbility				float,
 	StartInfo					float,

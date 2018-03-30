@@ -86,9 +86,10 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public ItembankAdministrationDataService()
         {
-            setOfAdminSubjectDao = new SetOfAdminSubjectDAO();
             testAdminDao = new TestAdminDAO();
             adminStrandDao = new AdminStrandDAO();
+            setOfAdminSubjectDao = new SetOfAdminSubjectDAO();
+            setOfTestGradeDao = new SetOfTestGradeDAO();
             setOfAdminItemDao = new SetOfAdminItemDAO();
             itemScoreDimensionDao = new ItemScoreDimensionDAO();
             itemMeasurementParameterDao = new ItemMeasurementParameterDAO();
@@ -105,6 +106,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public ItembankAdministrationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
                                                  ITestPackageDao<TestAdminDTO> testAdminDao,
                                                  ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao,
+                                                 ITestPackageDao<SetOfTestGradeDTO> setOfTestGradeDao,
                                                  ITestPackageDao<AdminStrandDTO> adminStrandDao,
                                                  ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao,
                                                  ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao,
@@ -117,6 +119,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.testAdminDao = testAdminDao;
+            this.setOfTestGradeDao = setOfTestGradeDao;
             this.setOfAdminSubjectDao = setOfAdminSubjectDao;
             this.adminStrandDao = adminStrandDao;
             this.setOfAdminItemDao = setOfAdminItemDao;
@@ -495,6 +498,20 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             }
 
             setOfAdminSubjectDao.Insert(setOfAdminSubjectsList);
+        }
+
+        public void CreateSetOfTestGrades(TestPackage.TestPackage testPackage)
+        {
+            var grades = from test in testPackage.Test
+                         from grade in test.Grades
+                         select new SetOfTestGradeDTO()
+                         {
+                             TestId = test.id,
+                             Grade = grade.value,
+                             SegmentKey = test.Key
+                         };
+
+            this.setOfTestGradeDao.Insert(grades.ToList());
         }
 
         public void CreateTestFormItems(TestPackage.TestPackage testPackage, IList<TestFormDTO> testForms)
