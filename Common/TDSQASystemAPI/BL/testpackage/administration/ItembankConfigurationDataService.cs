@@ -30,6 +30,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly ITestPackageDao<SetOfItemStrandDTO> setOfItemStrandDao;
         private readonly ITestPackageDao<SetOfItemStimuliDTO> setOfItemStimuliDao;
         private readonly ITestPackageDao<ItemPropertyDTO> itemPropertyDao;
+        private readonly ITestPackageDao<ItemSelectionParmDTO> itemSelectionParmDao;
 
         /// <summary>
         /// Default constructor to create new <code>ITestPackageDao<SubjectDTO></code> and
@@ -48,6 +49,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             setOfItemStrandDao = new SetOfItemStrandDAO();
             setOfItemStimuliDao = new SetOfItemStimuliDAO();
             itemPropertyDao = new ItemPropertyDAO();
+            itemSelectionParmDao = new ItemSelectionParmDAO();
         }
 
         public ItembankConfigurationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
@@ -59,7 +61,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                 ITestPackageDao<AaItemClDTO> aaItemClDao,
                                                 ITestPackageDao<SetOfItemStrandDTO> setOfItemStrandDao,
                                                 ITestPackageDao<SetOfItemStimuliDTO> setOfItemStimuliDao,
-                                                ITestPackageDao<ItemPropertyDTO> itemPropertyDao)
+                                                ITestPackageDao<ItemPropertyDTO> itemPropertyDao,
+                                                ITestPackageDao<ItemSelectionParmDTO> itemSelectionParmDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.clientDao = clientDao;
@@ -71,6 +74,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.setOfItemStrandDao = setOfItemStrandDao;
             this.setOfItemStimuliDao = setOfItemStimuliDao;
             this.itemPropertyDao = itemPropertyDao;
+            this.itemSelectionParmDao = itemSelectionParmDao;
         }
 
         public void CreateClient(TestPackage.TestPackage testPackage)
@@ -114,8 +118,36 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             }
 
             itemPropertyDao.Insert(allItemProperties);
-        }
             
+        }
+
+        public void CreateItemSelectionParm(TestPackage.TestPackage testPackage)
+        {
+            var allTestPackageBlueprintElements = testPackage.GetAllTestPackageBlueprintElements();
+
+            var itemSelectionParms = new List<ItemSelectionParmDTO>();
+            testPackage.Test.ForEach(test => test.Segments.Where(segment => segment.algorithmType.ToLower().StartsWith("adaptive")).
+                ForEach(segment => segment.SegmentBlueprint.ForEach(sb => sb.ItemSelection.ForEach(property =>
+                {
+                    if (sb.idRef.Equals(segment.id))
+                    {
+                        if (!ItemSelectionDefaults.ALGORITHM_PROPERITES.Contains(property.name.ToLower()))
+                        {
+                            itemSelectionParms.Add(new ItemSelectionParmDTO()
+                            {
+                                BlueprintElementId = sb.idRef,
+                                PropertyName = property.name,
+                                PropertyValue = property.value,
+                                SegmentKey = test.Key
+                            });
+                        }
+                    }
+                }
+            ))));
+
+            itemSelectionParmDao.Insert(itemSelectionParms);
+        }
+
         public List<ItemDTO> CreateItems(TestPackage.TestPackage testPackage)
         {
             var allItems = testPackage.GetAllItems();

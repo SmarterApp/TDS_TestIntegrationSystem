@@ -20,6 +20,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         /// <param name="testPackage">The <code>TestPackage</code> being loaded.</param>
         void CreateItemProperties(TestPackage.TestPackage testPackage);
 
+        void CreateItemSelectionParm(TestPackage.TestPackage testPackage);
+        
         /// <summary>
         /// Create a new collection of Items for each item included in the test package.
         /// </summary>

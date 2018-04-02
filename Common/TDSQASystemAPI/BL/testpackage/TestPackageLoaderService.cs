@@ -75,6 +75,7 @@ namespace TDSQASystemAPI.BL.testpackage
 
             updateConfigsDB.LoadMeasurementParameters();
             itembankAdministrationDataService.CreateSetOfAdminSubjects(testPackage);
+            itembankConfigurationDataService.CreateItemSelectionParm(testPackage);
 
             itembankAdministrationDataService.CreateSetOfTestGrades(testPackage);
             itembankAdministrationDataService.CreateAdminStrands(testPackage, itemStrands);
