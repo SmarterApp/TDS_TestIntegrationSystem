@@ -33,5 +33,18 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 }
             }
         }
+        public void LoadMeasurementParameters()
+        {
+            using (var connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DatabaseConnectionStringNames.ITEMBANK].ConnectionString))
+            {
+                using (var command = new SqlCommand("Load_MeasurementParameters", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

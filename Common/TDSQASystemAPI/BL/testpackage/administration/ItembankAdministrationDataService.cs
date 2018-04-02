@@ -86,9 +86,10 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public ItembankAdministrationDataService()
         {
-            setOfAdminSubjectDao = new SetOfAdminSubjectDAO();
             testAdminDao = new TestAdminDAO();
             adminStrandDao = new AdminStrandDAO();
+            setOfAdminSubjectDao = new SetOfAdminSubjectDAO();
+            setOfTestGradeDao = new SetOfTestGradeDAO();
             setOfAdminItemDao = new SetOfAdminItemDAO();
             itemScoreDimensionDao = new ItemScoreDimensionDAO();
             itemMeasurementParameterDao = new ItemMeasurementParameterDAO();
@@ -105,6 +106,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public ItembankAdministrationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
                                                  ITestPackageDao<TestAdminDTO> testAdminDao,
                                                  ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao,
+                                                 ITestPackageDao<SetOfTestGradeDTO> setOfTestGradeDao,
                                                  ITestPackageDao<AdminStrandDTO> adminStrandDao,
                                                  ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao,
                                                  ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao,
@@ -117,6 +119,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.testAdminDao = testAdminDao;
+            this.setOfTestGradeDao = setOfTestGradeDao;
             this.setOfAdminSubjectDao = setOfAdminSubjectDao;
             this.adminStrandDao = adminStrandDao;
             this.setOfAdminItemDao = setOfAdminItemDao;
@@ -206,9 +209,11 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             var segmentAdminStrandDtos =
                 from test in testPackge.Test
                 from segment in test.Segments
-                from segBp in segment.SegmentBlueprint
-                where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strandMap[segBp.idRef].Type)
-                let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
+                from segBp in segment.SegmentBlueprint                
+                where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strandMap[segBp.idRef].Type)             
+                let itemSelectionProperties = (segBp.ItemSelection != null) ? 
+                    segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim()) : 
+                    new Dictionary<string, string>()
                 select new AdminStrandDTO
                 {
                     AdminStrandKey = string.Format("{0}-{1}", segment.Key, strandMap[segBp.idRef].Key),
@@ -230,8 +235,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         : null,
                     LoadMin = test.IsSegmented() ? segBp.minExamItems as int? : null,
                     LoadMax = test.IsSegmented() ? segBp.maxExamItems as int? : null,
-                    IsStrictMax = bool.Parse(itemSelectionProperties.GetOrDefault("isstrictmax", "false")),
-                    BlueprintWeight = float.Parse(itemSelectionProperties.GetOrDefault("bpweight", "0")),
+                    IsStrictMax = BlueprintElementTypes.CLAIM.Equals(strandMap[segBp.idRef].Type) ? false : bool.Parse(itemSelectionProperties.GetOrDefault("isstrictmax", "false")),
+                    BlueprintWeight = float.Parse(itemSelectionProperties.GetOrDefault("bpweight", "1")),
                     TestVersion = (long)testPackge.version,
                     PrecisionTarget = itemSelectionProperties.ContainsKey("precisiontarget")
                         ? itemSelectionProperties["precisiontarget"]?.ToNullableDouble()
@@ -496,6 +501,20 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             setOfAdminSubjectDao.Insert(setOfAdminSubjectsList);
         }
 
+        public void CreateSetOfTestGrades(TestPackage.TestPackage testPackage)
+        {
+            var grades = from test in testPackage.Test
+                         from grade in test.Grades
+                         select new SetOfTestGradeDTO()
+                         {
+                             TestId = test.id,
+                             Grade = grade.value,
+                             SegmentKey = test.Key
+                         };
+
+            this.setOfTestGradeDao.Insert(grades.ToList());
+        }
+
         public void CreateTestFormItems(TestPackage.TestPackage testPackage, IList<TestFormDTO> testForms)
         {
             var fixedFormSegments = from test in testPackage.Test
@@ -565,7 +584,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 ClientKey = existingTestAdmin?.ClientKey ?? client.ClientKey,
                 SchoolYear = existingTestAdmin?.SchoolYear ?? testPackage.academicYear,
                 Description = existingTestAdmin?.Description ?? string.Format("{0} {1} {2} Administration", client.Name, existingTestAdmin?.Season ?? string.Empty, testPackage.academicYear),
-                TestVersion = (long)testPackage.version // whether inserting or updating, we want the version to reflect the testpackage being loaded
+                TestVersion = (long)testPackage.version, // whether inserting or updating, we want the version to reflect the testpackage being loaded
+                Season = existingTestAdmin?.Season ?? ""
             };
 
             if (existingTestAdmin == null)

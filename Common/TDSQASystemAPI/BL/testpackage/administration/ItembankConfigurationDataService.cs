@@ -30,6 +30,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly ITestPackageDao<SetOfItemStrandDTO> setOfItemStrandDao;
         private readonly ITestPackageDao<SetOfItemStimuliDTO> setOfItemStimuliDao;
         private readonly ITestPackageDao<ItemPropertyDTO> itemPropertyDao;
+        private readonly ITestPackageDao<ItemSelectionParmDTO> itemSelectionParmDao;
 
         /// <summary>
         /// Default constructor to create new <code>ITestPackageDao<SubjectDTO></code> and
@@ -48,6 +49,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             setOfItemStrandDao = new SetOfItemStrandDAO();
             setOfItemStimuliDao = new SetOfItemStimuliDAO();
             itemPropertyDao = new ItemPropertyDAO();
+            itemSelectionParmDao = new ItemSelectionParmDAO();
         }
 
         public ItembankConfigurationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
@@ -59,7 +61,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                 ITestPackageDao<AaItemClDTO> aaItemClDao,
                                                 ITestPackageDao<SetOfItemStrandDTO> setOfItemStrandDao,
                                                 ITestPackageDao<SetOfItemStimuliDTO> setOfItemStimuliDao,
-                                                ITestPackageDao<ItemPropertyDTO> itemPropertyDao)
+                                                ITestPackageDao<ItemPropertyDTO> itemPropertyDao,
+                                                ITestPackageDao<ItemSelectionParmDTO> itemSelectionParmDao)
         {
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.clientDao = clientDao;
@@ -71,6 +74,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.setOfItemStrandDao = setOfItemStrandDao;
             this.setOfItemStimuliDao = setOfItemStimuliDao;
             this.itemPropertyDao = itemPropertyDao;
+            this.itemSelectionParmDao = itemSelectionParmDao;
         }
 
         public void CreateClient(TestPackage.TestPackage testPackage)
@@ -88,11 +92,6 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public void CreateItemProperties(TestPackage.TestPackage testPackage)
         {
             var allTestPackageItems = testPackage.GetAllItems();
-            var allGrades = (from a in testPackage.Test
-                             from g in a.Grades
-                             select g)
-                .GroupBy(g => g.value)
-                .Select(g => g.Key);
 
             var allItemProperties = new List<ItemPropertyDTO>();
             foreach (var item in allTestPackageItems)
@@ -103,7 +102,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     ItemKey = item.Key,
                     PropertyName = ITEM_TYPE_PROP_NAME,
                     PropertyValue = item.type,
-                    SegmentKey = item.TestSegment.Key
+                    SegmentKey = item.TestSegment.Key,
+                    IsActive = true
                 });
 
                 // Build language item property for each presentation included in the item.
@@ -112,23 +112,42 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     ItemKey = item.Key,
                     PropertyName = LANGUAGE_PROP_NAME,
                     PropertyValue = language.code,
-                    SegmentKey = item.TestSegment.Key
+                    SegmentKey = item.TestSegment.Key,
+                    IsActive = true
                 }));
-
-                // Build grade item property for each grade included in the test package.
-                allGrades.ForEach(grade =>
-                    allItemProperties.Add(new ItemPropertyDTO()
-                    {
-                        ItemKey = item.Key,
-                        PropertyName = GRADE_PROP_NAME,
-                        PropertyValue = grade,
-                        SegmentKey = item.TestSegment.Key
-                    }));
             }
 
             itemPropertyDao.Insert(allItemProperties);
-        }
             
+        }
+
+        public void CreateItemSelectionParm(TestPackage.TestPackage testPackage)
+        {
+            var allTestPackageBlueprintElements = testPackage.GetAllTestPackageBlueprintElements();
+
+            var itemSelectionParms = new List<ItemSelectionParmDTO>();
+            testPackage.Test.ForEach(test => test.Segments.Where(segment => segment.algorithmType.ToLower().StartsWith("adaptive")).
+                ForEach(segment => segment.SegmentBlueprint.ForEach(sb => sb.ItemSelection.ForEach(property =>
+                {
+                    if (sb.idRef.Equals(segment.id))
+                    {
+                        if (!ItemSelectionDefaults.ALGORITHM_PROPERITES.Contains(property.name.ToLower()))
+                        {
+                            itemSelectionParms.Add(new ItemSelectionParmDTO()
+                            {
+                                BlueprintElementId = sb.idRef,
+                                PropertyName = property.name,
+                                PropertyValue = property.value,
+                                SegmentKey = test.Key
+                            });
+                        }
+                    }
+                }
+            ))));
+
+            itemSelectionParmDao.Insert(itemSelectionParms);
+        }
+
         public List<ItemDTO> CreateItems(TestPackage.TestPackage testPackage)
         {
             var allItems = testPackage.GetAllItems();
@@ -368,7 +387,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                             IReadOnlyCollection<ItemGroupItem> items, 
                                             IDictionary<string, StrandDTO> strandMap)
         {
-            var allAaItemClDtos = new List<AaItemClDTO>();
+            var allAaItemClDtos = new HashSet<AaItemClDTO>();
             foreach (var item in items)
             {
                 var allAaItemClDtosForItem = new List<AaItemClDTO>();
@@ -377,46 +396,28 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 
                 foreach (var bp in bluePrintElements)
                 {
-                    if (bp.idRef.Contains("|"))
-                    {
-                        var contentLevelAaItemClDtos = from strand in strandMap
-                                                       join lvl in bp.GetContentLevels()
-                                                           on strand.Key equals lvl
-                                                       where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Value.Type)
-                                                           || strand.Value.Type.Equals(BlueprintElementTypes.AFFINITY_GROUP, StringComparison.InvariantCultureIgnoreCase)
-                                                       select new AaItemClDTO
-                                                       {
-                                                           ContentLevel = string.Format("{0}-{1}", item.TestPackage.publisher, strand.Key),
-                                                           ItemKey = item.Key,
-                                                           SegmentKey = item.TestSegment.Key
-                                                       };
+                        var aaItemClDtos = from testPkgBp in allTestPackageBlueprintElements
+                                            where testPkgBp.Key.Equals(bp.idRef)
+                                                && (testPkgBp.Value.IsClaimOrTarget()
+                                                    || testPkgBp.Value.type.Equals(BlueprintElementTypes.AFFINITY_GROUP, StringComparison.InvariantCultureIgnoreCase))
+                                            select new AaItemClDTO
+                                            {
+                                                ContentLevel = testPkgBp.Value.IsClaimOrTarget() ? string.Format("{0}-{1}", item.TestPackage.publisher, bp.idRef) : bp.idRef,
+                                                ItemKey = item.Key,
+                                                SegmentKey = item.TestSegment.Key
+                                            };
 
-                        allAaItemClDtosForItem.AddRange(contentLevelAaItemClDtos);
-                    }
-                    else
-                    {
-                        var strandAffinityAaItemClDtos = from testPkgBp in allTestPackageBlueprintElements
-                                                         where testPkgBp.Key.Equals(bp.idRef)
-                                                             && (testPkgBp.Value.IsClaimOrTarget()
-                                                                 || testPkgBp.Value.type.Equals(BlueprintElementTypes.AFFINITY_GROUP, StringComparison.InvariantCultureIgnoreCase))
-                                                         select new AaItemClDTO
-                                                         {
-                                                             ContentLevel = bp.idRef,
-                                                             ItemKey = item.Key,
-                                                             SegmentKey = item.TestSegment.Key
-                                                         };
-
-                        allAaItemClDtosForItem.AddRange(strandAffinityAaItemClDtos);
-                    }
+                        allAaItemClDtosForItem.AddRange(aaItemClDtos);
+                    
                 }
 
                 if (allAaItemClDtosForItem.Any())
                 {
-                    allAaItemClDtos.AddRange(allAaItemClDtosForItem);
+                    allAaItemClDtosForItem.ForEach(aaItem => allAaItemClDtos.Add(aaItem));
                 }
             }
 
-            aaItemClDao.Insert(allAaItemClDtos);
+            aaItemClDao.Insert(allAaItemClDtos.ToList());
         }
     }
 }
