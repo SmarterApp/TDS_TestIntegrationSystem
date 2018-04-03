@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
@@ -19,6 +20,14 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   SegmentKey, \n" +
                 "   Cohort, \n" +
                 "   ItemRatio \n";
+            ExistsSql =
+                "SELECT count(*) from dbo.TestCohort " +
+                "WHERE _fk_AdminSubject = @segmentKey";
         }
+
+        override protected void AddNaturalKeys(TestCohortDTO testCohort, SqlParameterCollection parameters)
+        {
+            parameters.AddWithValue("@segmentKey", testCohort.SegmentKey);
+        }    
     }
 }

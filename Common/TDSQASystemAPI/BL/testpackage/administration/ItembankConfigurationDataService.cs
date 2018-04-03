@@ -219,18 +219,17 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                           select bp;
 
             var initialTreeLevel = 1;
-            var initialParentKey = string.Empty;
             var newStrands = new List<StrandDTO>();
 
             BuildStrandsWithHierarchyFromBlueprintElements(blueprintElements,
                 newStrands,
                 existingClient,
-                initialParentKey,
+                null, // initialParentKey
                 subjectKey,
                 (long)testPackage.version,
                 initialTreeLevel);
-
-            strandDAO.Insert(newStrands);
+            
+            strandDAO.Insert(newStrands.Where(strand => BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Type)).ToArray());
 
             return newStrands.ToDictionary(s => s.Name, s => s);
         }
@@ -293,7 +292,11 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                              from bpRef in item.BlueprintReferences
                              join blueprint in allTestPackageBlueprintElements
                                  on bpRef.idRef equals blueprint.Value.id
-                             where blueprint.Value.IsClaimOrTarget()
+                             where blueprint.Value.IsClaimOrTarget() && 
+                                (strandMap[bpRef.idRef].IsLeafTarget ||
+                                // if there is only one claim/target in the item, it is included
+                                item.BlueprintReferences.
+                                Where(br => allTestPackageBlueprintElements[br.idRef].IsClaimOrTarget()).ToArray().Length == 1)
                              select new SetOfItemStrandDTO
                              {
                                  ItemKey = item.Key,
@@ -342,6 +345,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     ? string.Format("{0}-{1}", client.Name, blueprintElement.id)
                     : blueprintElement.id;
 
+
                 // If a blueprint element does not have any "child" blueprint elements, it should be marked as a
                 // "leaf" node.  Otherwise, it should not be marked as a leaf node.  The HasLeafNode property is used
                 // later in the loading process.
@@ -353,7 +357,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     ClientKey = client.ClientKey,
                     TreeLevel = treeLevel,
                     TestVersion = testVersion,
-                    BlueprintElementId = blueprintElement.id,
+                    BlueprintElementId = string.Format("{0}-{1}", client.Name, blueprintElement.id),
                     SubjectKey = subjectKey,
                     Key = key,
                     Type = blueprintElement.type,

@@ -32,6 +32,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "       irt_b, " +
                 "       irt_c, " +
                 "       irt_model, " +
+                "       bVector, " +
                 "       clstring, " +
                 "       updateconfig) \n" +
                 "SELECT \n" +
@@ -52,6 +53,7 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   IrtB, \n" +
                 "   IrtC, \n" +
                 "   IrtModel, \n" +
+                "   BVector, \n" +
                 "   ClString, \n" +
                 "   UpdatedTestVersion \n";
         }

@@ -410,7 +410,6 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         CSet1Size = int.Parse(itemSelectionProperties.GetOrDefault("cset1size", ItemSelectionDefaults.CSET1_SIZE.ToString())),
                         CSet2Random = int.Parse(itemSelectionProperties.GetOrDefault("cset2random", ItemSelectionDefaults.CSET2_RANDOM.ToString())),
                         CSet2InitialRandom = int.Parse(itemSelectionProperties.GetOrDefault("cset2initialrandom", ItemSelectionDefaults.CSET2_INITIAL_RANDOM.ToString())),
-                        VirtualTest = test.Key,
                         TestPosition = segment.position,
                         IsSegmented = false,
                         ComputeAbilityEstimates = bool.Parse(itemSelectionProperties.GetOrDefault("computeabilityestimates", ItemSelectionDefaults.COMPUTE_ABILITY_ESTIMATES.ToString())),
@@ -429,7 +428,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         TerminationTooClose = bool.Parse(itemSelectionProperties.GetOrDefault("terminationtooclose", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
                         TerminationFlagsAnd = bool.Parse(itemSelectionProperties.GetOrDefault("terminationflagsand", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
                         BlueprintMetricFunction = ItemSelectionDefaults.BLUEPRINT_METRIC_FUNCTION,
-                        TestType = testPackage.type
+                        TestType = testPackage.type,
+                        Contract = testPackage.publisher
                     };
 
                 setOfAdminSubjectsList.AddRange(segmentAdminSubjectDtos);
@@ -491,7 +491,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         TerminationTooClose = ItemSelectionDefaults.TERMINATION_FLAGS,
                         TerminationFlagsAnd = ItemSelectionDefaults.TERMINATION_FLAGS,
                         BlueprintMetricFunction = ItemSelectionDefaults.BLUEPRINT_METRIC_FUNCTION,
-                        TestType = testPackage.type
+                        TestType = testPackage.type,
+                        Contract = testPackage.publisher,
+                        VirtualTest = test.Key
                     };
 
                     setOfAdminSubjectsList.Add(virtualTestDto);
@@ -499,8 +501,24 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             }
 
             setOfAdminSubjectDao.Insert(setOfAdminSubjectsList);
-        }
 
+            setOfAdminSubjectsList.Where(adminSubject => adminSubject.SelectionAlgorithm.ToLower().StartsWith("adaptive")).
+                ForEach(adminSubject =>
+                {
+                    var newTestCohort = new TestCohortDTO()
+                    {
+                        SegmentKey = adminSubject.SegmentKey,
+                        Cohort = 1,
+                        ItemRatio = 1.0
+                    };
+                    if (!testCohortDao.Exists(newTestCohort))
+                    {
+                        testCohortDao.Insert(newTestCohort);
+                    }
+                });
+            
+        }
+   
         public void CreateSetOfTestGrades(TestPackage.TestPackage testPackage)
         {
             var grades = from test in testPackage.Test
