@@ -27,6 +27,7 @@ namespace TISUnitTests.services
         private readonly Mock<ITestPackageDao<SetOfItemStrandDTO>> mockSetOfItemStrandDao = new Mock<ITestPackageDao<SetOfItemStrandDTO>>();
         private readonly Mock<ITestPackageDao<SetOfItemStimuliDTO>> mockSetOfItemStimuliDao = new Mock<ITestPackageDao<SetOfItemStimuliDTO>>();
         private readonly Mock<ITestPackageDao<ItemPropertyDTO>> mockItemPropertyDao = new Mock<ITestPackageDao<ItemPropertyDTO>>();
+        private readonly Mock<ITestPackageDao<ItemSelectionParmDTO>> mockItemSelectionParmDao = new Mock<ITestPackageDao<ItemSelectionParmDTO>>();
         private readonly Mock<IItembankConfigurationDataQueryService> mockItembankConfigurationQueryService = new Mock<IItembankConfigurationDataQueryService>();
 
         private IItembankConfigurationDataService itembankConfigurationDataService;
@@ -50,7 +51,8 @@ namespace TISUnitTests.services
                     mockAaItemClDao.Object,
                     mockSetOfItemStrandDao.Object,
                     mockSetOfItemStimuliDao.Object,
-                    mockItemPropertyDao.Object);
+                    mockItemPropertyDao.Object,
+                    mockItemSelectionParmDao.Object);
         }
 
         [TestMethod]

@@ -15,6 +15,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         private readonly IItembankConfigurationDataQueryService itembankConfigurationDataQueryService;
         private readonly ITestPackageDao<TestAdminDTO> testAdminDao;
         private readonly ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao;
+        private readonly ITestPackageDao<SetOfTestGradeDTO> setOfTestGradeDao;
+        private readonly ITestPackageDao<TestCohortDTO> testCohortDao;
         private readonly ITestPackageDao<AdminStrandDTO> adminStrandDao;
         private readonly ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao;
         private readonly ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao;
@@ -90,6 +92,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             adminStrandDao = new AdminStrandDAO();
             setOfAdminSubjectDao = new SetOfAdminSubjectDAO();
             setOfTestGradeDao = new SetOfTestGradeDAO();
+            testCohortDao = new TestCohortDAO();
             setOfAdminItemDao = new SetOfAdminItemDAO();
             itemScoreDimensionDao = new ItemScoreDimensionDAO();
             itemMeasurementParameterDao = new ItemMeasurementParameterDAO();
@@ -107,6 +110,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                  ITestPackageDao<TestAdminDTO> testAdminDao,
                                                  ITestPackageDao<SetOfAdminSubjectDTO> setOfAdminSubjectDao,
                                                  ITestPackageDao<SetOfTestGradeDTO> setOfTestGradeDao,
+                                                 ITestPackageDao<TestCohortDTO> testCohortDao,
                                                  ITestPackageDao<AdminStrandDTO> adminStrandDao,
                                                  ITestPackageDao<SetOfAdminItemDTO> setOfAdminItemDao,
                                                  ITestPackageDao<ItemScoreDimensionDTO> itemScoreDimensionDao,
@@ -120,6 +124,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.itembankConfigurationDataQueryService = itembankConfigurationDataQueryService;
             this.testAdminDao = testAdminDao;
             this.setOfTestGradeDao = setOfTestGradeDao;
+            this.testCohortDao = testCohortDao;
             this.setOfAdminSubjectDao = setOfAdminSubjectDao;
             this.adminStrandDao = adminStrandDao;
             this.setOfAdminItemDao = setOfAdminItemDao;
