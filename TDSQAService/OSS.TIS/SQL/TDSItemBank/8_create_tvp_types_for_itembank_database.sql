@@ -26,7 +26,7 @@ CREATE TYPE dbo.StrandTable AS TABLE
 	[Key]				varchar(max),
 	SubjectKey			varchar(150) NOT NULL,
 	[Name]				varchar(150) NOT NULL,
-	ParentId			varchar(150) NOT NULL,
+	ParentId			varchar(150),
 	BlueprintElementId	varchar(150) NOT NULL,
 	ClientKey			bigint,
 	TreeLevel			int,
