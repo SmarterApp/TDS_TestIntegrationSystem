@@ -196,7 +196,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                      StimulusKey = s.Key
                                  };
 
-            stimuliDAO.Insert(allStimuliDtos.ToList());
+            stimuliDAO.Insert(allStimuliDtos.Where(s => !stimuliDAO.Exists(s)).ToList());
         }
 
         public IDictionary<string, StrandDTO> CreateStrands(TestPackage.TestPackage testPackage)
@@ -229,7 +229,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 (long)testPackage.version,
                 initialTreeLevel);
             
-            strandDAO.Insert(newStrands.Where(strand => BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Type)).ToArray());
+            strandDAO.Insert(newStrands.Where(strand => 
+                (BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Type) && 
+                (!strandDAO.Exists(strand)))).ToArray());
 
             return newStrands.ToDictionary(s => s.Name, s => s);
         }

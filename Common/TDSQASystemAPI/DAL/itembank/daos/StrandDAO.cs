@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
@@ -23,6 +24,15 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   ClientKey, \n" +
                 "   TreeLevel, \n" +
                 "   TestVersion \n";
+
+            ExistsSql = "SELECT count(*) FROM dbo.tblStrand t WHERE t._fk_Subject = @subject AND t._Key = @key AND t._fk_Client = @client";
+        }
+
+        override protected void AddNaturalKeys(StrandDTO strandDTO, SqlParameterCollection parameters)
+        {
+            parameters.AddWithValue("@subject", strandDTO.SubjectKey);
+            parameters.AddWithValue("@key", strandDTO.Key);
+            parameters.AddWithValue("@client", strandDTO.ClientKey);
         }
     }
 }

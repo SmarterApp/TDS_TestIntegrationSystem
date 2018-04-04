@@ -18,6 +18,7 @@ namespace TDSQASystemAPI.BL.testpackage
         private readonly IQcProjectMetadataService qcProjectMetadataService;
         private readonly ScoringConfigurationDataService scoringConfigurationDataService;
         private readonly UpdateConfigsDB updateConfigsDB;
+        private readonly AssessmentService assessmentService;
 
         public TestPackageLoaderService()
         {
@@ -27,6 +28,7 @@ namespace TDSQASystemAPI.BL.testpackage
             qcProjectMetadataService = new QcProjectMetadataService();
             scoringConfigurationDataService = new ScoringConfigurationDataService();
             updateConfigsDB = new UpdateConfigsDB();
+            assessmentService = new AssessmentService();
         }
 
         public TestPackageLoaderService(IItembankAdministrationDataService itembankAdministrationDataService, 
@@ -48,6 +50,7 @@ namespace TDSQASystemAPI.BL.testpackage
         {
             var testPackage = TestPackageMapper.FromXml(new XmlTextReader(testPackageXmlStream));
             var validationErrors = new List<ValidationError>();
+            testPackage.Test.ForEach(test => assessmentService.Delete(test.Key));
 
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE CONFIGURATION DATA

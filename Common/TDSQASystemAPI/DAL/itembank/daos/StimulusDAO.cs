@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
@@ -23,6 +24,14 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   DateLastUpdated, \n" +
                 "   StimulusKey, \n" +
                 "   TestVersion \n";
+
+            ExistsSql = "SELECT count(*) FROM dbo.tblStimulus t WHERE t._efk_ItemBank = @bank AND t._efk_ITSKey = @key";
+        }
+
+        override protected void AddNaturalKeys(StimulusDTO stimulusDTO, SqlParameterCollection parameters)
+        {
+            parameters.AddWithValue("@bank", stimulusDTO.ItemBankKey);
+            parameters.AddWithValue("@key", stimulusDTO.ItsKey);
         }
     }
 }
