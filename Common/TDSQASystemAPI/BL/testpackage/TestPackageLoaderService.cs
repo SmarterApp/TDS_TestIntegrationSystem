@@ -18,7 +18,7 @@ namespace TDSQASystemAPI.BL.testpackage
         private readonly IQcProjectMetadataService qcProjectMetadataService;
         private readonly ScoringConfigurationDataService scoringConfigurationDataService;
         private readonly UpdateConfigsDB updateConfigsDB;
-        private readonly AssessmentService assessmentService;
+        private readonly IAssessmentService assessmentService;
 
         public TestPackageLoaderService()
         {
@@ -36,7 +36,8 @@ namespace TDSQASystemAPI.BL.testpackage
                                         ICombinationTestMapService combinationTestMapService, 
                                         IQcProjectMetadataService qcProjectMetadataService,
                                         UpdateConfigsDB updateConfigsDB,
-                                        ScoringConfigurationDataService scoringConfigurationDataService)
+                                        ScoringConfigurationDataService scoringConfigurationDataService,
+                                        IAssessmentService assessmentService)
         {
             this.itembankAdministrationDataService = itembankAdministrationDataService;
             this.itembankConfigurationDataService = itembankConfigurationDataService;
@@ -44,6 +45,7 @@ namespace TDSQASystemAPI.BL.testpackage
             this.qcProjectMetadataService = qcProjectMetadataService;
             this.updateConfigsDB = updateConfigsDB;
             this.scoringConfigurationDataService = scoringConfigurationDataService;           
+            this.assessmentService = assessmentService;
         }
 
         public IList<ValidationError> LoadTestPackage(Stream testPackageXmlStream)
