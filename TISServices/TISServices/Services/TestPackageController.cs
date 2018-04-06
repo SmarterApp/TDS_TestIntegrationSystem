@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using TDSQASystemAPI.BL.testpackage;
+using TISServices.Utilities;
 
 namespace TISServices.Services
 {
@@ -67,7 +68,8 @@ namespace TISServices.Services
                 return Request.CreateResponse(HttpStatusCode.Created);
             } catch (Exception e)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+                TISServicesLogger.Log(e);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message, e);
             }
         }
     }

@@ -258,6 +258,23 @@ BEGIN
 			@assessmentKeys ak 
 			ON (ak.assessment_key = aaicl._fk_AdminSubject);
 
+		DELETE 
+			setStrands 
+		FROM 
+			dbo.tblSetofItemStrands setStrands 
+		JOIN 
+			@assessmentKeys ak 
+			ON (ak.assessment_key = setStrands._fk_AdminSubject);
+
+		DELETE 
+			setStimuli 
+		FROM 
+			dbo.tblSetofItemStimuli setStimuli 
+		JOIN 
+			@assessmentKeys ak 
+			ON (ak.assessment_key = setStimuli._fk_AdminSubject);
+		
+
 		DELETE
 			agi
 		FROM
