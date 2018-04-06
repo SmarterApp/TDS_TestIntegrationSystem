@@ -48,14 +48,18 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         }
 
         public static string TestKey(TestPackage.TestPackage testPackage)
-        {
+        {            
             var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("package"));
+            if (packageBlueprint == null)
+            {
+                packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("test"));
+            }
             if (packageBlueprint != null)
             {
                 return packageBlueprint.id;
             } else
             {
-                return null;
+                throw new System.InvalidOperationException("Blueprint element with type 'package' or 'test' does not exists");
             }
         }
 
