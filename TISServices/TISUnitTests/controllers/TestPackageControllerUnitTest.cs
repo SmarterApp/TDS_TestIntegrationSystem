@@ -49,7 +49,7 @@ namespace TISUnitTests.controllers
         {
             mockTestPackageLoaderService.Setup(svc => svc.LoadTestPackage(It.IsAny<Stream>()))
                 .Returns(new List<ValidationError> {
-                    new ValidationError(ValidationErrorCodes.EXISTING_ITEMS_NOT_LOADED, ValidationErrorSeverityLevels.WARN, "The following items were not created: \n187-1432\n187-1434")
+                    new ValidationError(ValidationErrorCodes.EXISTING_ITEMS_NOT_LOADED,  "The following items were not created: \n187-1432\n187-1434")
                 });
 
             var loadTestPackageRequest = new HttpRequestMessage(HttpMethod.Post, "http://localhost:44444/api/testpackage");
@@ -73,7 +73,6 @@ namespace TISUnitTests.controllers
                 }
 
                 Assert.AreEqual(1, responseContent.Count);
-                Assert.AreEqual(ValidationErrorSeverityLevels.WARN, responseContent[0].Severity);
                 Assert.AreEqual("The following items were not created: \n187-1432\n187-1434", responseContent[0].Message);
             }
         }

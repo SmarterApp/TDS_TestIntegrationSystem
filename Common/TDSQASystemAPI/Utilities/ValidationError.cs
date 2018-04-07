@@ -1,7 +1,21 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
 namespace TDSQASystemAPI.Utilities
 {
+    public class ValidationResponseError
+    {
+        [JsonProperty("errors")]        
+        public IList<ValidationError> Errors { get; private set; }
+
+        public ValidationResponseError(IList<ValidationError> errors)
+        {
+            Errors = errors ?? throw new ArgumentNullException(nameof(errors));
+        }
+
+    }
+
     /// <summary>
     /// A generic error object, similar in structure to the <code>ValidationError</code> in TDS.
     /// </summary>
@@ -10,34 +24,19 @@ namespace TDSQASystemAPI.Utilities
         /// <summary>
         /// The error code for the error type.
         /// </summary>
+        [JsonProperty("code")]
         public string Code { get; private set; }
-
-        /// <summary>
-        /// Describe the severity of the error.
-        /// </summary>
-        public string Severity { get; private set; }
 
         /// <summary>
         /// The error message with details of the error that occurred.
         /// </summary>
+        [JsonProperty("message")]
         public string Message { get; private set; }
 
-        /// <summary>
-        /// The error message translated into another langauge.
-        /// </summary>
-        /// <remarks>
-        /// Can be <code>null</code>.
-        /// </remarks>
-        public string TranslatedMessage { get; private set; }
-
-        public ValidationError(string code, string severity, string message) : this(code, severity, message, null) { }
-
-        public ValidationError(string code, string severity, string message, string translatedMessage)
+        public ValidationError(string code, string message)
         {
             Code = code ?? throw new ArgumentNullException(nameof(code));
-            Severity = severity ?? throw new ArgumentNullException(nameof(severity));
             Message = message ?? throw new ArgumentNullException(nameof(message));
-            TranslatedMessage = translatedMessage;
         }
     }
 }
