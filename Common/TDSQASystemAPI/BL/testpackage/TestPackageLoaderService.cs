@@ -123,8 +123,7 @@ namespace TDSQASystemAPI.BL.testpackage
 
             if (existingItems.Any())
             {
-                validationErrors.Add(new ValidationError(ValidationErrorCodes.EXISTING_ITEMS_NOT_LOADED, 
-                    ValidationErrorSeverityLevels.WARN, 
+                validationErrors.Add(new ValidationError(ValidationErrorCodes.EXISTING_ITEMS_NOT_LOADED,                     
                     string.Format("the following items in this test package were not loaded because they already exist in TIS: \n{0}", string.Join("\n", existingItems.Select(ei => ei.ItemKey).ToArray()))));
             }
             return validationErrors;

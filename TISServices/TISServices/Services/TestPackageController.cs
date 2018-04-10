@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using TDSQASystemAPI.BL.testpackage;
+using TDSQASystemAPI.Utilities;
 using TISServices.Utilities;
 
 namespace TISServices.Services
@@ -60,7 +61,7 @@ namespace TISServices.Services
                 if (validationErrors.Any())
                 {
                     return Request.CreateResponse(HttpStatusCode.Created, 
-                        validationErrors, 
+                        new ValidationResponseError(validationErrors), 
                         new JsonMediaTypeFormatter(), 
                         "application/json");
                 }

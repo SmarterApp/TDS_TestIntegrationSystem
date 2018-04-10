@@ -8,6 +8,6 @@
         /// <summary>
         /// Indicates some items were not loaded into TIS because they already exist.
         /// </summary>
-        public const string EXISTING_ITEMS_NOT_LOADED = "existingItems";
+        public const string EXISTING_ITEMS_NOT_LOADED = "WARN";
     }
 }
