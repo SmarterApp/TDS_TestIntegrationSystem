@@ -185,7 +185,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                                 ParmValue = param.value
                                             };
 
-            itemMeasurementParameterDao.Insert(itemMeasurementParameters.ToList());
+            itemMeasurementParameterDao.Insert(itemMeasurementParameters.Distinct().ToList());
         }
 
         public void CreateAdminStimuli(TestPackage.TestPackage testPackage)
@@ -206,7 +206,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                        GroupId = stimulus.ItemGroup.Key
                                    };
 
-            setOfAdminStimuliDao.Insert(adminStimuliDtos.ToList());                   
+            setOfAdminStimuliDao.Insert(adminStimuliDtos.Distinct().ToList());                   
         }
 
         public void CreateAdminStrands(TestPackage.TestPackage testPackge, IDictionary<string, StrandDTO> strandMap)
@@ -380,7 +380,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         BVector = bVector
                     };
 
-            setOfAdminItemDao.Insert(setOfAdminItemDtos.ToList());
+            setOfAdminItemDao.Insert(setOfAdminItemDtos.Distinct().ToList());
         }
 
         public void CreateSetOfAdminSubjects(TestPackage.TestPackage testPackage)
@@ -572,7 +572,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                    ITSFormKey = testForm.ITSKey
                                };
 
-            testFormItemDao.Insert(formItemDtos.ToList());
+            testFormItemDao.Insert(formItemDtos.Distinct().ToList());
         }
 
         public List<TestFormDTO> CreateTestForms(TestPackage.TestPackage testPackage)

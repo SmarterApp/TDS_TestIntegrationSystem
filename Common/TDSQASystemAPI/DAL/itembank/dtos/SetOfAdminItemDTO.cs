@@ -25,5 +25,36 @@
         public string ClString { get; set; }
         public long UpdatedTestVersion { get; set; } // maps to updateconfig in tblSetOfAdminItems
         public string BVector { get; set; } // this field is set on line 92 of spLoad_AdminItemMeasurementParms
+
+        public override bool Equals(object obj)
+        {
+            var setOfAdminItemDTO = obj as SetOfAdminItemDTO;
+
+            if (setOfAdminItemDTO == null)
+            {
+                return false;
+            }
+
+            return this.SegmentKey.Equals(setOfAdminItemDTO.SegmentKey) &&
+                this.ItemKey.Equals(setOfAdminItemDTO.ItemKey);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                if (SegmentKey != null)
+                {
+                    hash = hash * 23 + SegmentKey.GetHashCode();
+                }
+                if (ItemKey != null)
+                {
+                    hash = hash * 23 + ItemKey.GetHashCode();
+                }
+                return hash;
+            }
+        }
+
     }
 }

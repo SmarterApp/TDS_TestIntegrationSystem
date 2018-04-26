@@ -38,8 +38,7 @@
                 if (ItemKey != null)
                 {
                     hash = hash * 23 + ItemKey.GetHashCode();
-                }
-                hash = hash * 23 + ContentLevel.GetHashCode();
+                }               
                 if (ContentLevel != null)
                 {
                     hash = hash * 23 + ContentLevel.GetHashCode();

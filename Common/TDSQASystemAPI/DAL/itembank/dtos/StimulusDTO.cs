@@ -18,5 +18,31 @@ namespace TDSQASystemAPI.DAL.itembank.dtos
         public DateTime DateLastUpdated { get; set; } // logic from line 39 of spLoad_Stimuli sets this to "now"
         public string StimulusKey { get; set; } // maps to _key in tblStimulus
         public long TestVersion { get; set; } // maps to loadConfig in tblStimulus
+
+        public override bool Equals(object obj)
+        {
+            var stimulusDTO = obj as StimulusDTO;
+
+            if (stimulusDTO == null)
+            {
+                return false;
+            }
+
+            return this.StimulusKey.Equals(stimulusDTO.StimulusKey);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                if (StimulusKey != null)
+                {
+                    hash = hash * 23 + StimulusKey.GetHashCode();
+                }
+                return hash;
+            }
+        }
+
     }
 }

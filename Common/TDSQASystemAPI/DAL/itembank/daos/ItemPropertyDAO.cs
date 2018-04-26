@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
@@ -21,6 +22,15 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   PropertyValue, \n" +
                 "   SegmentKey, \n" +
                 "   IsActive \n";
+            ExistsSql = "SELECT count(*) FROM dbo.tblItemProps t WHERE t._fk_item = @itemKey AND t.propname = @propname AND t.propvalue = @propvalue AND t._fk_adminsubject = @segmentKey";
+        }
+
+        override protected void AddNaturalKeys(ItemPropertyDTO propertyDTO, SqlParameterCollection parameters)
+        {
+            parameters.AddWithValue("@itemKey", propertyDTO.ItemKey);
+            parameters.AddWithValue("@propname", propertyDTO.PropertyName);
+            parameters.AddWithValue("@propvalue", propertyDTO.PropertyValue);
+            parameters.AddWithValue("@segmentKey", propertyDTO.SegmentKey);
         }
     }
 }
