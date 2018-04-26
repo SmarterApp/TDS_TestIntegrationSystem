@@ -16,5 +16,45 @@
         public string PropertyValue { get; set; } // maps to propvalue in tblItemProps
         public string SegmentKey { get; set; } // maps to _fk_adminsubject in tblItemProps
         public bool IsActive { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var itemPropertyDTO = obj as ItemPropertyDTO;
+
+            if (itemPropertyDTO == null)
+            {
+                return false;
+            }
+
+            return this.SegmentKey.Equals(itemPropertyDTO.SegmentKey) &&
+                this.ItemKey.Equals(itemPropertyDTO.ItemKey) &&
+                this.PropertyName.Equals(itemPropertyDTO.PropertyName) &&
+                this.PropertyValue.Equals(itemPropertyDTO.PropertyValue);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                if (SegmentKey != null)
+                {
+                    hash = hash * 23 + SegmentKey.GetHashCode();
+                }
+                if (ItemKey != null)
+                {
+                    hash = hash * 23 + ItemKey.GetHashCode();
+                }
+                if (PropertyName != null)
+                {
+                    hash = hash * 23 + PropertyName.GetHashCode();
+                }
+                if (PropertyValue != null)
+                {
+                    hash = hash * 23 + PropertyValue.GetHashCode();
+                }
+                return hash;
+            }
+        }
     }
 }

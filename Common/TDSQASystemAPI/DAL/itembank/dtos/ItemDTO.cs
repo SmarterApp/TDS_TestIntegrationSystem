@@ -20,5 +20,31 @@ namespace TDSQASystemAPI.DAL.itembank.dtos
         public DateTime DateLastUpdated { get; set; }
         public string Key { get; set; } // maps to _key in tblItem
         public long TestVersion { get; set; } // maps to loadconfig in tblItem
+
+        public override bool Equals(object obj)
+        {
+            var itemDTO = obj as ItemDTO;
+
+            if (itemDTO == null)
+            {
+                return false;
+            }
+
+            return this.Key.Equals(itemDTO.Key);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                if (Key != null)
+                {
+                    hash = hash * 23 + Key.GetHashCode();
+                }               
+                return hash;
+            }
+        }
+
     }
 }

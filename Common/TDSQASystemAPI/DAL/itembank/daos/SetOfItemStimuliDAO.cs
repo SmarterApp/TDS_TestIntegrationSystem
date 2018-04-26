@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
@@ -20,6 +21,14 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   StimulusKey, \n" +
                 "   SegmentKey, \n" +
                 "   TestVersion \n";
+            ExistsSql = "SELECT count(*) FROM dbo.tblSetOfItemStimuli t WHERE t._fk_item = @itemKey AND t._fk_stimulus = @stimulus AND t._fk_adminsubject = @segmentKey";
         }
-    }
+
+        override protected void AddNaturalKeys(SetOfItemStimuliDTO stimuliDTO, SqlParameterCollection parameters)
+        {
+            parameters.AddWithValue("@itemKey", stimuliDTO.ItemKey);
+            parameters.AddWithValue("@stimulus", stimuliDTO.StimulusKey);
+            parameters.AddWithValue("@segmentKey", stimuliDTO.SegmentKey);
+        }
+    }    
 }

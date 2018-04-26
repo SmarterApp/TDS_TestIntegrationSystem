@@ -52,7 +52,12 @@ namespace TDSQASystemAPI.BL.testpackage
         {
             var testPackage = TestPackageMapper.FromXml(new XmlTextReader(testPackageXmlStream));
             var validationErrors = new List<ValidationError>();
-            testPackage.Test.ForEach(test => assessmentService.Delete(test.Key));
+            testPackage.Test.ForEach(test =>
+            {
+                test.Segments.ForEach(s => assessmentService.Delete(s.Key));
+                assessmentService.Delete(test.Key);
+            });
+            
 
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE CONFIGURATION DATA

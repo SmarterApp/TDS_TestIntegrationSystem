@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
 namespace TDSQASystemAPI.DAL.itembank.daos
@@ -20,6 +21,14 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 "   StrandKey, \n" +
                 "   SegmentKey, \n" +
                 "   TestVersion \n";
+            ExistsSql = "SELECT count(*) FROM dbo.tblSetOfItemStrands t WHERE t._fk_item = @itemKey AND t._fk_strand = @strand AND t._fk_adminsubject = @segmentKey";
+        }
+
+        override protected void AddNaturalKeys(SetOfItemStrandDTO strandDTO, SqlParameterCollection parameters)
+        {
+            parameters.AddWithValue("@itemKey", strandDTO.ItemKey);
+            parameters.AddWithValue("@strand", strandDTO.StrandKey);
+            parameters.AddWithValue("@segmentKey", strandDTO.SegmentKey);
         }
     }
 }

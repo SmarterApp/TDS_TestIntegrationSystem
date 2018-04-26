@@ -16,5 +16,35 @@
         public long TestVersion { get; set; } // maps to loadconfig in tblAdminStimulus
         public long UpdatedTestVersion { get; set; }
         public string GroupId { get; set; }
+        public override bool Equals(object obj)
+        {
+            var adminStimulusDTO = obj as AdminStimulusDTO;
+
+            if (adminStimulusDTO == null)
+            {
+                return false;
+            }
+
+            return this.SegmentKey.Equals(adminStimulusDTO.SegmentKey) &&                
+                this.StimulusKey.Equals(adminStimulusDTO.StimulusKey);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                if (SegmentKey != null)
+                {
+                    hash = hash * 23 + SegmentKey.GetHashCode();
+                }
+                if (StimulusKey != null)
+                {
+                    hash = hash * 23 + StimulusKey.GetHashCode();
+                }
+                return hash;
+            }
+        }
+
     }
 }

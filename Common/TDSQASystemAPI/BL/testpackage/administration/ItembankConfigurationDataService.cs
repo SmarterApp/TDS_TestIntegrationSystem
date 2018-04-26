@@ -93,7 +93,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         {
             var allTestPackageItems = testPackage.GetAllItems();
 
-            var allItemProperties = new List<ItemPropertyDTO>();
+            var allItemProperties = new HashSet<ItemPropertyDTO>();
             foreach (var item in allTestPackageItems)
             {
                 // Build --ITEMTYPE-- property
@@ -117,8 +117,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 }));
             }
 
-            itemPropertyDao.Insert(allItemProperties);
-            
+            itemPropertyDao.Insert(allItemProperties.Where(p => !itemPropertyDao.Exists(p)).ToList());            
         }
 
         public void CreateItemSelectionParm(TestPackage.TestPackage testPackage)
@@ -169,7 +168,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
             // Exclude items that already exist...
             var existingItems = itemDAO.Find(allItemDtos);
-            var itemsToInsert = allItemDtos.Where(all => existingItems.All(exists => !exists.Key.Equals(all.Key)));
+            var itemsToInsert = new HashSet<ItemDTO>();
+            allItemDtos.Where(all => existingItems.All(exists => !exists.Key.Equals(all.Key))).ForEach(item => itemsToInsert.Add(item));
 
             // ... and insert the remaining items (if there are any)
             if (itemsToInsert.Any()) { 
@@ -182,6 +182,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
         public void CreateStimuli(TestPackage.TestPackage testPackage)
         {
             var allStimuli = testPackage.GetAllStimuli();
+
+            var stimuliDTOSet = new HashSet<StimulusDTO>();
 
             // Map all stimuli to StimulusDTOs for persistences
             var allStimuliDtos = from s in allStimuli
@@ -196,7 +198,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                      StimulusKey = s.Key
                                  };
 
-            stimuliDAO.Insert(allStimuliDtos.Where(s => !stimuliDAO.Exists(s)).ToList());
+            allStimuliDtos.ForEach(s => stimuliDTOSet.Add(s));
+
+            stimuliDAO.Insert(stimuliDTOSet.Where(s => !stimuliDAO.Exists(s)).ToList());
         }
 
         public IDictionary<string, StrandDTO> CreateStrands(TestPackage.TestPackage testPackage)
@@ -278,7 +282,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                       SegmentKey = stimulus.TestSegment.Key
                                   };
 
-            setOfItemStimuliDao.Insert(itemStimuliDtos.ToList());
+            setOfItemStimuliDao.Insert(itemStimuliDtos.Distinct().Where(s => !setOfItemStimuliDao.Exists(s)).ToList());
         }
 
         public void LinkItemToStrands(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap)
@@ -306,8 +310,10 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                  StrandKey = strandMap[bpRef.idRef].Key,
                                  TestVersion = (long)testPackage.version
                              };
+            var strandsDtoSet = new HashSet<SetOfItemStrandDTO>();
+            strandDtos.Where(s => !setOfItemStrandDao.Exists(s)).ForEach(dto => strandsDtoSet.Add(dto));
 
-            setOfItemStrandDao.Insert(strandDtos.ToList());
+            setOfItemStrandDao.Insert(strandsDtoSet.ToList());
         }
 
         /// <summary>
@@ -423,7 +429,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 }
             }
 
-            aaItemClDao.Insert(allAaItemClDtos.ToList());
+            aaItemClDao.Insert(allAaItemClDtos.Where(a => !aaItemClDao.Exists(a)).ToList());
         }
     }
 }
