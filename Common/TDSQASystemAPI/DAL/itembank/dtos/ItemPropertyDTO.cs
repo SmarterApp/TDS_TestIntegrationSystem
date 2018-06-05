@@ -14,6 +14,7 @@
         public string ItemKey { get; set; } // maps to _fk_item in tblItemProps
         public string PropertyName { get; set; } // maps to propname in tblItemProps
         public string PropertyValue { get; set; } // maps to propvalue in tblItemProps
+        public string PropertyDescription { get; set; } // maps to PropDescription in tblItemProps
         public string SegmentKey { get; set; } // maps to _fk_adminsubject in tblItemProps
         public bool IsActive { get; set; }
 

@@ -87,12 +87,14 @@ namespace TISUnitTests.testpackages
                     BlueprintReferences = new ItemGroupItemBlueprintReference[0],
                     id = string.Format("itemId_{0}", i),
                     type = "type",
-                    ItemScoreDimension = new ItemGroupItemItemScoreDimension
+                    ItemScoreDimensions = new ItemGroupItemItemScoreDimension[] {
+                        new ItemGroupItemItemScoreDimension
                     {
                         scorePoints = 1,
                         weight = 1,
                         measurementModel = "IRT3PLn",
                         ItemScoreParameter = new ItemGroupItemItemScoreDimensionItemScoreParameter[0]
+                    }
                     }
                 };
 

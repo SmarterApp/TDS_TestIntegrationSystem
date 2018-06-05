@@ -17,6 +17,8 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         private readonly ITestPackageDao<ComputationRuleParameterDTO> computationRuleParameterDAO;
         private readonly ITestPackageDao<ComputationRuleParameterValueDTO> computationRuleParameterValueDAO;
         private readonly ITestPackageDao<PerformanceLevelDTO> performanceLevelDAO;
+        private const string BLUEPRINT_TYPE_TEST = "test";
+        private const string BLUEPRINT_TYPE_PACKAGE = "package";
 
         public ScoringConfigurationDataService()
         {
@@ -49,10 +51,10 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
 
         public static string TestKey(TestPackage.TestPackage testPackage)
         {            
-            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("package"));
+            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals(BLUEPRINT_TYPE_PACKAGE));
             if (packageBlueprint == null)
             {
-                packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("test"));
+                packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals(BLUEPRINT_TYPE_TEST));
             }
             if (packageBlueprint != null)
             {
@@ -108,7 +110,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         {
             var testScoreFeatureDTO = new List<TestScoreFeatureDTO>();
             var featureComputationLocationDTO = new List<FeatureComputationLocationDTO>();
-            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("package"));
+            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals(BLUEPRINT_TYPE_TEST));
             if (packageBlueprint != null)
             {
                 var testKey = packageBlueprint.id;            
@@ -116,7 +118,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
                     blueprint.Scoring?.Rules.ForEach(rule =>
                     {
                         var measureOf = blueprint.id;
-                        if (blueprint.type.Equals("package"))
+                        if (blueprint.type.Equals(BLUEPRINT_TYPE_TEST))
                         {
                             measureOf = "Overall";
                         }
@@ -190,7 +192,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         public void CreateComputationRuleParameterValue(TestPackage.TestPackage testPackage)
         {
             var computationRuleParameterValueDTO = new List<ComputationRuleParameterValueDTO>();
-            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("package"));
+            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals(BLUEPRINT_TYPE_TEST));
             if (packageBlueprint != null)
             {
                 var testKey = packageBlueprint.id;
@@ -199,7 +201,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
                     blueprint.Scoring?.Rules.ForEach(rule =>
                     {
                         var measureOf = blueprint.id;
-                        if (blueprint.type.Equals("package"))
+                        if (blueprint.type.Equals(BLUEPRINT_TYPE_TEST))
                         {
                             measureOf = "Overall";
                         }

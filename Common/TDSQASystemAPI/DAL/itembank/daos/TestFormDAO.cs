@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using MySql.Data.MySqlClient;
 using TDSQASystemAPI.DAL.itembank.dtos;
 
@@ -80,7 +81,6 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                             testForms.Add(new TestFormDTO
                             {
                                 SegmentKey = result.GetString("segmentKey"),
-                                ITSBankKey = result.GetInt64("itsBankKey"),
                                 ITSKey = result.GetInt64("itsKey"),
                                 TestFormKey = result.GetString("key"),
                                 FormId = result.GetString("id"),
@@ -93,7 +93,13 @@ namespace TDSQASystemAPI.DAL.itembank.daos
                 }  
             }
 
-            return testForms;
+            return testForms.Select(form => {
+                var formKey = form.TestFormKey;
+                var i = form.TestFormKey.IndexOf("-");
+                var bankKey = System.Int32.Parse(formKey.Substring(0, i));
+                form.ITSBankKey = bankKey;
+                return form;
+            }).ToList();
         }
     }
 }

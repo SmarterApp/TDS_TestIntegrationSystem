@@ -19,6 +19,7 @@ namespace TDSQASystemAPI.BL.testpackage
         private readonly ScoringConfigurationDataService scoringConfigurationDataService;
         private readonly UpdateConfigsDB updateConfigsDB;
         private readonly IAssessmentService assessmentService;
+        private readonly ITestNameLookupService testNameLookupService;
 
         public TestPackageLoaderService()
         {
@@ -29,6 +30,7 @@ namespace TDSQASystemAPI.BL.testpackage
             scoringConfigurationDataService = new ScoringConfigurationDataService();
             updateConfigsDB = new UpdateConfigsDB();
             assessmentService = new AssessmentService();
+            testNameLookupService = new TestNameLookupService();
         }
 
         public TestPackageLoaderService(IItembankAdministrationDataService itembankAdministrationDataService, 
@@ -37,7 +39,8 @@ namespace TDSQASystemAPI.BL.testpackage
                                         IQcProjectMetadataService qcProjectMetadataService,
                                         UpdateConfigsDB updateConfigsDB,
                                         ScoringConfigurationDataService scoringConfigurationDataService,
-                                        IAssessmentService assessmentService)
+                                        IAssessmentService assessmentService,
+                                        ITestNameLookupService testNameLookupService)
         {
             this.itembankAdministrationDataService = itembankAdministrationDataService;
             this.itembankConfigurationDataService = itembankConfigurationDataService;
@@ -102,6 +105,11 @@ namespace TDSQASystemAPI.BL.testpackage
 
             itembankAdministrationDataService.CreateAffinityGroups(testPackage);
 
+            testPackage.Test.ForEach(test =>
+            {
+                updateConfigsDB.UpdateConfigs(test.Key);
+            });
+
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE SCORING DATA
             //-----------------------------------------------------------------
@@ -120,6 +128,8 @@ namespace TDSQASystemAPI.BL.testpackage
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE METADATA
             //-----------------------------------------------------------------
+            testNameLookupService.CreateTestNameLookup(testPackage);
+
             combinationTestMapService.CreateCombinationTestMap(testPackage);
 
             combinationTestMapService.CreateCombinationTestFormMap(testPackage, testForms);

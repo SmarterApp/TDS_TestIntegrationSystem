@@ -129,6 +129,7 @@ CREATE TYPE dbo.ItemPropertyTable AS TABLE
 	ItemKey			varchar(150) NOT NULL,
 	PropertyName	varchar(50) NOT NULL,
 	PropertyValue	varchar(128) NOT NULL,
+    PropertyDescription	varchar(128) NOT NULL,
 	SegmentKey		varchar(250) NOT NULL,
 	IsActive		bit
 )

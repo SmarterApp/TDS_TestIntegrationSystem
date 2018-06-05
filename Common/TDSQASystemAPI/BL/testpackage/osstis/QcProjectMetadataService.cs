@@ -26,13 +26,7 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
         }
 
         public void CreateQcProjectMetadata(TestPackage.TestPackage testPackage)
-        {
-            // Only "combined" test packages need QC Project Metadata records 
-            if (!testPackage.IsCombined())
-            {
-                return;
-            }
-            
+        {            
             var projectList = projectDao.Find(QcProjectMetadataDefaults.TEST_PACKAGE_XSD_PROJECT_DESCRIPTION);
             if (projectList == null || !projectList.Any())
             {

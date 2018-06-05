@@ -102,7 +102,7 @@ namespace TISUnitTests.testpackages
             var dimension = assessmentSegmentForm.SegmentForm[0]
                 .ItemGroup[0]
                 .Item[0]
-                .ItemScoreDimension.dimension;
+                .ItemScoreDimensions.First().dimension;
 
             Assert.AreEqual("test-dimension", dimension);
         }
