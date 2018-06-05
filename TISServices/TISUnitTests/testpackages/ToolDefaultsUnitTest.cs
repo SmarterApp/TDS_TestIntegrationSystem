@@ -89,7 +89,7 @@ namespace TISUnitTests.testpackages
             var firstOptionDependency = firstOption.Dependencies.First();
             Assert.AreEqual("Language", firstOptionDependency.ifToolType);
             Assert.AreEqual("ENU-Braille", firstOptionDependency.ifToolCode);
-            Assert.IsFalse(firstOptionDependency.enabled);
+           
 
             var secondOption = result.Options.Last();
             Assert.AreEqual("TDS_CalcSciInv&TDS_CalcGraphingInv&TDS_CalcRegress", secondOption.code);
@@ -100,7 +100,6 @@ namespace TISUnitTests.testpackages
             var secondOptionDependency = secondOption.Dependencies.First();
             Assert.AreEqual("Language", secondOptionDependency.ifToolType);
             Assert.AreEqual("ENU-Braille", secondOptionDependency.ifToolCode);
-            Assert.IsFalse(secondOptionDependency.enabled);
         }
 
         [TestMethod]

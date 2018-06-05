@@ -28,19 +28,5 @@ namespace TISUnitTests.testpackages
             Assert.IsNotNull(handScoring.TestPackage);
             Assert.IsNotNull(handScoring.ItemGroupItem);
         }
-
-        [TestMethod]
-        public void ShouldDeserializeAThssPackageAndContainRubricLists()
-        {
-            var thssTestPackage = TestPackageMapper.FromXml(new XmlTextReader(THSS_TEST_PACKAGE_XML));
-
-            var forms = thssTestPackage.Test[0].Segments[0].Item as TestSegmentSegmentForms;
-            var rubricList = forms.SegmentForm[0]
-                .ItemGroup[0]
-                .Item[0]
-                .TeacherHandScoring
-                .rubriclist.OfType<ItemGroupItemTeacherHandScoringRubriclistRubric>();
-            Assert.AreEqual(5, rubricList.Count());
-        }
     }
 }
