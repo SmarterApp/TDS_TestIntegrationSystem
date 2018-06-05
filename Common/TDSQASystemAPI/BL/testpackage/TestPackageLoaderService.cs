@@ -105,6 +105,11 @@ namespace TDSQASystemAPI.BL.testpackage
 
             itembankAdministrationDataService.CreateAffinityGroups(testPackage);
 
+            testPackage.Test.ForEach(test =>
+            {
+                updateConfigsDB.UpdateConfigs(test.Key);
+            });
+
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE SCORING DATA
             //-----------------------------------------------------------------
