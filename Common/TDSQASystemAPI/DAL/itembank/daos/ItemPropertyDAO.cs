@@ -15,11 +15,12 @@ namespace TDSQASystemAPI.DAL.itembank.daos
             TvpType = "ItemPropertyTable";
             InsertSql =
                 "INSERT \n" +
-                "   dbo.tblItemProps (_fk_item, propname, propvalue, _fk_adminsubject, isactive) \n" +
+                "   dbo.tblItemProps (_fk_item, propname, propvalue, propdescription, _fk_adminsubject, isactive) \n" +
                 "SELECT \n" +
                 "   ItemKey, \n" +
                 "   PropertyName, \n" +
                 "   PropertyValue, \n" +
+                "   PropertyDescription, \n" +
                 "   SegmentKey, \n" +
                 "   IsActive \n";
             ExistsSql = "SELECT count(*) FROM dbo.tblItemProps t WHERE t._fk_item = @itemKey AND t.propname = @propname AND t.propvalue = @propvalue AND t._fk_adminsubject = @segmentKey";
