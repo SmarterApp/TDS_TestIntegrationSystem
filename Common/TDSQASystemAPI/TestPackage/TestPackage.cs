@@ -14,7 +14,7 @@ namespace TDSQASystemAPI.TestPackage
         {
             BlueprintElement blueprint = IsCombined()
                 ? Blueprint.FirstOrDefault(bpe => bpe.type.Equals("combined", StringComparison.InvariantCultureIgnoreCase))
-                : Blueprint.FirstOrDefault(bpe => bpe.type.Equals("assessment", StringComparison.InvariantCultureIgnoreCase));
+                : Blueprint.FirstOrDefault(bpe => bpe.type.Equals("test", StringComparison.InvariantCultureIgnoreCase));
 
             if (blueprint == null)
             {

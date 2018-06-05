@@ -108,7 +108,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         {
             var testScoreFeatureDTO = new List<TestScoreFeatureDTO>();
             var featureComputationLocationDTO = new List<FeatureComputationLocationDTO>();
-            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("package"));
+            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("test"));
             if (packageBlueprint != null)
             {
                 var testKey = packageBlueprint.id;            
@@ -116,7 +116,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
                     blueprint.Scoring?.Rules.ForEach(rule =>
                     {
                         var measureOf = blueprint.id;
-                        if (blueprint.type.Equals("package"))
+                        if (blueprint.type.Equals("test"))
                         {
                             measureOf = "Overall";
                         }
@@ -190,7 +190,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
         public void CreateComputationRuleParameterValue(TestPackage.TestPackage testPackage)
         {
             var computationRuleParameterValueDTO = new List<ComputationRuleParameterValueDTO>();
-            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("package"));
+            var packageBlueprint = testPackage.Blueprint.FirstOrDefault(bp => bp.type.ToLower().Equals("test"));
             if (packageBlueprint != null)
             {
                 var testKey = packageBlueprint.id;
@@ -199,7 +199,7 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
                     blueprint.Scoring?.Rules.ForEach(rule =>
                     {
                         var measureOf = blueprint.id;
-                        if (blueprint.type.Equals("package"))
+                        if (blueprint.type.Equals("test"))
                         {
                             measureOf = "Overall";
                         }
