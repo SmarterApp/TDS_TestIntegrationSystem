@@ -102,6 +102,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     ItemKey = item.Key,
                     PropertyName = ITEM_TYPE_PROP_NAME,
                     PropertyValue = item.type,
+                    PropertyDescription = item.type,
                     SegmentKey = item.TestSegment.Key,
                     IsActive = true
                 });
@@ -112,6 +113,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     ItemKey = item.Key,
                     PropertyName = LANGUAGE_PROP_NAME,
                     PropertyValue = language.code,
+                    PropertyDescription = language.label,
                     SegmentKey = item.TestSegment.Key,
                     IsActive = true
                 }));
@@ -157,7 +159,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                               {
                                   ItemBankKey = testPackage.bankKey,
                                   ItemKey = long.Parse(item.id),
-                                  ScorePoints = item.ItemScoreDimension.scorePoints,
+                                  ScorePoints = item.ItemScoreDimensions.First().scorePoints,
                                   DateLastUpdated = DateTime.Now,
                                   FileName = string.Format(ITEM_FILE_NAME_PATTERN, testPackage.bankKey, item.id),
                                   FilePath = string.Format(ITEM_FILE_PATH_PATTERN, testPackage.bankKey, item.id),

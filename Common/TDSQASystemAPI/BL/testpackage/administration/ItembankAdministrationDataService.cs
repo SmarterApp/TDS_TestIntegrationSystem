@@ -143,19 +143,20 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             var scoreDimensions = new List<ItemScoreDimensionDTO>();
             foreach (var item in allItems)
             {
-                var dimension = item.ItemScoreDimension;
+                item.ItemScoreDimensions.ForEach(dimension =>
                 scoreDimensions.Add(new ItemScoreDimensionDTO
-                    {
-                        Dimension = dimension.dimension ?? string.Empty,
-                        RecodeRule = string.Empty,
-                        ScorePoints = dimension.scorePoints,
-                        Weight = dimension.weight,
-                        ItemScoreDimensionKey = Guid.NewGuid(),
-                        SegmentKey = item.TestSegment.Key,
-                        ItemKey = item.Key,
+                {
+                    Dimension = dimension.dimension ?? string.Empty,
+                    RecodeRule = string.Empty,
+                    ScorePoints = dimension.scorePoints,
+                    Weight = dimension.weight,
+                    ItemScoreDimensionKey = Guid.NewGuid(),
+                    SegmentKey = item.TestSegment.Key,
+                    ItemKey = item.Key,
 
-                        MeasurementModel = measurementModelMap[dimension.measurementModel]
-                    });
+                    MeasurementModel = measurementModelMap[dimension.measurementModel]
+                })
+                );
             }
 
             itemScoreDimensionDao.Insert(scoreDimensions);
@@ -172,7 +173,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
 
             var itemMeasurementParameters = from item in allItems
-                                            from param in item.ItemScoreDimension.ItemScoreParameter
+                                            from dimension in item.ItemScoreDimensions
+                                            from param in dimension.ItemScoreParameter
                                             join dimensionDto in scoreDimensionMap
                                                 on item.Key equals dimensionDto.ItemKey
                                             select new ItemMeasurementParameterDTO
@@ -321,16 +323,19 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
         public void CreateSetOfAdminItems(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap)
         {
-            var setOfAdminItemDtos = 
-                from item in testPackage.GetAllItems()
-                    let irtA = (from p in item.ItemScoreDimension.ItemScoreParameter
-                                where p.measurementParameter.ToLower().Trim().Equals("a")
-                                orderby p.value descending
-                                select p.value)
-                    let irtB = (from p in item.ItemScoreDimension.ItemScoreParameter
+            var setOfAdminItemDtos =
+                from item in testPackage.GetAllItems()                 
+                let irtA = (from dimension in item.ItemScoreDimensions
+                            from p in dimension.ItemScoreParameter
+                            where p.measurementParameter.ToLower().Trim().Equals("a")
+                            orderby p.value descending
+                            select p.value)
+                    let irtB = (from dimension in item.ItemScoreDimensions
+                                from p in dimension.ItemScoreParameter
                                 where p.measurementParameter.ToLower().Trim().StartsWith("b")
                                 select p.value).Average()
-                    let irtC = (from p in item.ItemScoreDimension.ItemScoreParameter
+                    let irtC = (from dimension in item.ItemScoreDimensions
+                                from p in dimension.ItemScoreParameter
                                 where p.measurementParameter.ToLower().Trim().Equals("c")
                                 orderby p.value descending
                                 select p.value)
@@ -344,14 +349,14 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     let leafTargetKey = (from bpRef in item.BlueprintReferences
                                          join strand in strandMap
                                              on bpRef.idRef equals strand.Key
-                                         where BlueprintElementTypes.TARGET_TYPES.Contains(strand.Value.Type) 
+                                         where BlueprintElementTypes.TARGET_TYPES.Contains(strand.Value.Type)
                                              && strand.Value.IsLeafTarget
                                          select strand.Value.Key)
                     let bVector = irtB == SetOfAdminItemDefaults.IRT_B
                         ? string.Format("{0:0.000000000000000}", irtB)
-                        : string.Join(";", (from p in item.ItemScoreDimension.ItemScoreParameter
-                            where p.measurementParameter.ToLower().Trim().StartsWith("b")
-                            select string.Format("{0:0.000000000000000}", p.value)).ToArray())
+                        : string.Join(";", (from p in item.ItemScoreDimensions.First().ItemScoreParameter
+                                            where p.measurementParameter.ToLower().Trim().StartsWith("b")
+                                            select string.Format("{0:0.000000000000000}", p.value)).ToArray())
                     select new SetOfAdminItemDTO
                     {
                         ItemKey = item.Key,
@@ -365,21 +370,21 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         IsRequired = item.responseRequired,
                         BlockId = SetOfAdminItemDefaults.BLOCK_ID,
                         TestAdminKey = testPackage.publisher,
-                        StrandKey = leafTargetKey.Any() 
-                            ? leafTargetKey.First() 
+                        StrandKey = leafTargetKey.Any()
+                            ? leafTargetKey.First()
                             : claimName,
                         TestVersion = (long)testPackage.version,
                         UpdatedTestVersion = (long)testPackage.version,
                         StrandName = claimName,
                         IrtA = irtA.Any() ? irtA.First() : SetOfAdminItemDefaults.IRT_A,
                         IrtC = irtC.Any() ? irtC.First() : SetOfAdminItemDefaults.IRT_C,
-                        IrtModel = item.ItemScoreDimension.measurementModel,
+                        IrtModel = item.ItemScoreDimensions.First().measurementModel,
                         ClString = item.TestSegment.algorithmType.ToLower().Contains("adaptive")
                             ? CreateClString(item.BlueprintReferences, strandMap)
                             : null,
                         BVector = bVector
                     };
-
+            
             setOfAdminItemDao.Insert(setOfAdminItemDtos.Distinct().ToList());
         }
 
@@ -585,7 +590,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
             // Query the TDS itembank database, collecting the test forms that were created during the TDS test package
             // load process.
-            fixedFormSegments.ForEach(s => testForms.AddRange(testFormDao.Find(s.Key)));
+            fixedFormSegments.ToList().ForEach(s => testForms.AddRange(testFormDao.Find(s.Key)));
 
             testFormDao.Insert(testForms);
 
