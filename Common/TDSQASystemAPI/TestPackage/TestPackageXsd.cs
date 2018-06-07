@@ -365,6 +365,8 @@ namespace TDSQASystemAPI.TestPackage {
         
         private bool computationOrderFieldSpecified;
         
+        private string measureField;
+        
         private string nameField;
         
         /// <remarks/>
@@ -397,6 +399,17 @@ namespace TDSQASystemAPI.TestPackage {
             }
             set {
                 this.computationOrderFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        public string measure {
+            get {
+                return this.measureField;
+            }
+            set {
+                this.measureField = value;
             }
         }
         
@@ -1094,6 +1107,8 @@ namespace TDSQASystemAPI.TestPackage {
         
         private PresentationsPresentation[] presentationsField;
         
+        private ItemGroupItemPoolProperty[] poolPropertiesField;
+        
         private ItemGroupItemItemScoreDimension[] itemScoreDimensionsField;
         
         private ItemGroupItemTeacherHandScoring teacherHandScoringField;
@@ -1142,6 +1157,17 @@ namespace TDSQASystemAPI.TestPackage {
             }
             set {
                 this.presentationsField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayItemAttribute("PoolProperty", IsNullable=false)]
+        public ItemGroupItemPoolProperty[] PoolProperties {
+            get {
+                return this.poolPropertiesField;
+            }
+            set {
+                this.poolPropertiesField = value;
             }
         }
         
@@ -1314,6 +1340,41 @@ namespace TDSQASystemAPI.TestPackage {
             }
             set {
                 this.labelField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.6.1055.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
+    public partial class ItemGroupItemPoolProperty {
+        
+        private string nameField;
+        
+        private string valueField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        public string name {
+            get {
+                return this.nameField;
+            }
+            set {
+                this.nameField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType="token")]
+        public string value {
+            get {
+                return this.valueField;
+            }
+            set {
+                this.valueField = value;
             }
         }
     }
