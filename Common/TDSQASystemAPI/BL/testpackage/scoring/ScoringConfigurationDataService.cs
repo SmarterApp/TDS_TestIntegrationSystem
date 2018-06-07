@@ -122,15 +122,15 @@ namespace TDSQASystemAPI.BL.testpackage.scoring
                         {
                             measureOf = "Overall";
                         }
-                        var ruleLabel = rule.name;  // may need to add rule label to test package
-                            var newTestScoreFeatureDTO = new TestScoreFeatureDTO()
+                        var measureLabel = (rule.measure != null) ? rule.measure : rule.name;  // may need to add rule label to test package
+                        var newTestScoreFeatureDTO = new TestScoreFeatureDTO()
                         {
                             TestScoreFeatureKey = rule.Id,
                             ClientName = testPackage.publisher,
                             TestId = testKey,
                             MeasureOf = measureOf,
-                            MeasureLabel = ruleLabel,
-                            IsScaled = ruleLabel.ToLower().Contains("scale"),
+                            MeasureLabel = measureLabel,
+                            IsScaled = measureLabel.ToLower().Contains("scale"),
                             ComputationRule = rule.name,
                             ComputationOrder = rule.computationOrder
                         };
