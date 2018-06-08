@@ -8,7 +8,7 @@ GO
 CREATE TYPE dbo.TestNameLookupTable AS TABLE
 (
 	InstanceName	varchar(50) NOT NULL,
-	TestName		varchar(50) NOT NULL
+	TestName		varchar(250) NOT NULL
 )
 GO
 GRANT CONTROL ON TYPE::dbo.TestNameLookupTable TO public
