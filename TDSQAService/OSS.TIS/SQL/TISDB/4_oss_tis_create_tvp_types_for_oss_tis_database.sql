@@ -22,8 +22,8 @@ CREATE TYPE dbo.CombinationTestMapTable AS TABLE
 (
 	ComponentTestName		varchar(255) NOT NULL,
 	ComponentSegmentName	varchar(255) NOT NULL,
-	CombinationTestName		varchar(50) NOT NULL,
-	CombinationSegmentName	varchar(50) NOT NULL
+	CombinationTestName		varchar(255) NOT NULL,
+	CombinationSegmentName	varchar(255) NOT NULL
 )
 GO
 GRANT CONTROL ON TYPE::dbo.CombinationTestMapTable TO public

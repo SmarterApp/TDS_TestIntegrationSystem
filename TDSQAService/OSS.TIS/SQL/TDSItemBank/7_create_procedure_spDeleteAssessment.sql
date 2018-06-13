@@ -449,7 +449,7 @@ BEGIN
 		DELETE FROM 
 			OSS_TIS.dbo.CombinationTestMap 
 		WHERE 
-			CombinationTestName = @testPackageKey;
+			ComponentSegmentName = @testPackageKey;
 
 		DELETE FROM 
 			OSS_TIS.dbo.TestNameLookUp 
