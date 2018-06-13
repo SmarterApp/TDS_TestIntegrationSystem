@@ -60,7 +60,8 @@ namespace TDSQASystemAPI.BL.testpackage
                 test.Segments.ForEach(s => assessmentService.Delete(s.Key));
                 assessmentService.Delete(test.Key);
             });
-            
+            assessmentService.Delete(testPackage.GetTestPackageKey());
+           
 
             //-----------------------------------------------------------------
             // LOAD TEST PACKAGE CONFIGURATION DATA

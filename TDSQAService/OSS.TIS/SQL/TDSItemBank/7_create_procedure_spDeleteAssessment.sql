@@ -444,7 +444,7 @@ BEGIN
 			OSS_TIS.dbo.CombinationTestMap ctm 
 			ON (ctfm.ComponentSegmentName = ctm.ComponentSegmentName)
 		WHERE
-			ctm.CombinationTestName = @testPackageKey;
+			ctm.ComponentSegmentName = @testPackageKey;
 		 
 		DELETE FROM 
 			OSS_TIS.dbo.CombinationTestMap 
@@ -463,6 +463,14 @@ BEGIN
 		JOIN
 			@assessmentKeys ak
 			ON (pmd.VarName LIKE '%' + ak.assessment_key + '%');
+
+		DELETE
+			pmd
+		FROM
+			OSS_TIS.dbo.QC_ProjectMetaData pmd
+		where 
+			pmd.VarName LIKE '%' +  @testPackageKey + '%';
+
 
 		 COMMIT TRANSACTION;
 	END TRY
