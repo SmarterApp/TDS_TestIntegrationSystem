@@ -16,6 +16,7 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
         public CombinationTestMapService()
         {
             combinationTestMapDao = new CombinationTestMapDAO();
+            combinationTestFormMapDao = new CombinationTestFormMapDAO();
         }
 
         public CombinationTestMapService(ITestPackageDao<CombinationTestMapDTO> combinationTestMapDao,

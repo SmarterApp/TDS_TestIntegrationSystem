@@ -13,7 +13,7 @@ namespace TDSQASystemAPI.TestPackage
         public string GetTestPackageKey()
         {
             BlueprintElement blueprint = IsCombined()
-                ? Blueprint.FirstOrDefault(bpe => bpe.type.Equals("combined", StringComparison.InvariantCultureIgnoreCase))
+                ? Blueprint.FirstOrDefault(bpe => bpe.type.Equals("package", StringComparison.InvariantCultureIgnoreCase))
                 : Blueprint.FirstOrDefault(bpe => bpe.type.Equals("test", StringComparison.InvariantCultureIgnoreCase));
 
             if (blueprint == null)
@@ -34,7 +34,7 @@ namespace TDSQASystemAPI.TestPackage
         public bool IsCombined()
         {
             return GetAllTestPackageBlueprintElements().Any(bpe => 
-                bpe.Value.type.Equals("combined", StringComparison.InvariantCultureIgnoreCase));
+                bpe.Value.type.Equals("package", StringComparison.InvariantCultureIgnoreCase));
         }
 
         /// <summary>
