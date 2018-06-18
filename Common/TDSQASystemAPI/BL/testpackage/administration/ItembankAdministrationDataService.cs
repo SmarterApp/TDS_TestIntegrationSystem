@@ -566,7 +566,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             }
 
             var formItemDtos = from item in fixedFormItems
-                               let testForm = testForms.First(f => f.FormId.Equals(item.SegmentForm.id))
+                               from presentation in item.SegmentForm.Presentations
+                               let id = GetFormIdForLanguage(item.SegmentForm.id, presentation.code)
+                               let testForm = testForms.First(f => f.FormId.Equals(id))
                                select new TestFormItemDTO
                                {
                                    FormPosition = item.Position,
@@ -580,6 +582,44 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             testFormItemDao.Insert(formItemDtos.Distinct().ToList());
         }
 
+        private static int FormHashCode(string s)
+        {            
+            int h = 0;
+            if (s.Length > 0)
+            {
+                char[] val = s.ToArray();
+
+                for (int i = 0; i < s.Length; i++)
+                {
+                    h = 31 * h + val[i];
+                }
+            }
+            return h;
+        }
+
+        private static int GetFormKey(string formId)
+        {
+            return Math.Abs(FormHashCode(formId));
+        }
+
+        private static string GetFormIdForLanguage(string formId, string languageCode)
+        {
+            switch (languageCode)
+            {
+                case "ESN":
+                    return string.Format("{0}::{1}", formId, "SPA");
+                case "ENU-Braille":
+                    return string.Format("{0}::{1}", formId, "BRL");
+                default:
+                    return string.Format("{0}::{1}", formId, languageCode);
+            }
+        }
+
+        private static string GetBankFormKey(int bankKey, int formKey)
+        {
+            return string.Format("{0}-{1}", bankKey, formKey);
+        }
+
         public List<TestFormDTO> CreateTestForms(TestPackage.TestPackage testPackage)
         {
             var testForms = new List<TestFormDTO>();
@@ -588,9 +628,25 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                     where segment.algorithmType.ToLower().Trim().Equals(SelectionAlgorithmTypes.FIXED_FORM)
                                     select segment;
 
-            // Query the TDS itembank database, collecting the test forms that were created during the TDS test package
-            // load process.
-            fixedFormSegments.ToList().ForEach(s => testForms.AddRange(testFormDao.Find(s.Key)));
+            fixedFormSegments.ToList().ForEach(s => {
+                (s.Item as TestSegmentSegmentForms).SegmentForm.ForEach(f => {
+                    f.Presentations.ForEach(p => {
+                        var formId = GetFormIdForLanguage(f.id, p.code);
+                        var formKey = GetFormKey(formId);
+                        testForms.Add(new TestFormDTO()
+                        {
+                            SegmentKey = s.Key,
+                            Cohort = f.cohort,
+                            Language = p.code,
+                            TestFormKey = GetBankFormKey(testPackage.bankKey, formKey),
+                            FormId = formId,
+                            ITSBankKey = testPackage.bankKey,
+                            ITSKey = formKey,
+                            TestVersion = (long)testPackage.version
+                        });
+                    });
+                });
+            });            
 
             testFormDao.Insert(testForms);
 
