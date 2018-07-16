@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{76507F38-0310-4B92-83C3-740F9282708A}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TISUnitTests</RootNamespace>
     <AssemblyName>TISUnitTests</AssemblyName>
@@ -37,6 +37,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TISUnitTests.services.ScoringConfigDriver</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -184,9 +187,12 @@
     <Content Include="resources\test-packages\new-xsd\%28SBAC_PT%29SBAC-IRP-MATH-11-COMBINED-Summer-2015-2016-NEW.xml" />
     <Content Include="resources\test-packages\new-xsd\scoring-rules.xml" />
     <Content Include="resources\test-packages\new-xsd\segment-blueprint-element.xml" />
+    <Content Include="resources\test-packages\new-xsd\test-spec-3.xml" />
     <Content Include="resources\test-packages\new-xsd\test-specification-sample-1.xml" />
     <Content Include="resources\test-packages\new-xsd\thss-test-specification-sample-1.xml" />
-    <Content Include="resources\test-packages\new-xsd\V2-%28SBAC_PT%29IRP-GRADE-11-MATH-EXAMPLE.xml" />
+    <Content Include="resources\test-packages\new-xsd\V2-%28SBAC_PT%29IRP-GRADE-11-MATH-EXAMPLE.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="resources\test-packages\new-xsd\V2-%28SBAC_PT%29IRP-GRADE-11-MATH-MULTI-SEGMENT-EXAMPLE.xml">
       <SubType>Designer</SubType>
     </Content>

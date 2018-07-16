@@ -158,10 +158,10 @@ namespace TDSQASystemAPI.TestResults
 		{
 			get
 			{
-                if ((presentedScore >= 0.0) && (presentedScore <= ScorePoints))
-                    return presentedScore;
-                else return -1.0;
-                // return presentedScore;
+                //if ((presentedScore >= 0.0) && (presentedScore <= ScorePoints))
+                //    return presentedScore;
+                //else return -1.0;
+                return presentedScore;
 			}
 
             set

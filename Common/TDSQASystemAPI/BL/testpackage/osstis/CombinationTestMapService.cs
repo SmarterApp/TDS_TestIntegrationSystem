@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TDSQASystemAPI.BL.testpackage.administration;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.itembank.dtos;
 using TDSQASystemAPI.DAL.osstis.daos;
@@ -62,7 +63,7 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
                                          {
                                              ComponentSegmentName = segment.Key,
                                              ComponentTestName = assessment.Key,
-                                             CombinationSegmentName = segment.Key,
+                                             CombinationSegmentName = ItembankAdministrationDataService.CombinedKey(testPackage, segment.id),
                                              CombinationTestName = testPackage.GetTestPackageKey()
                                          };
 

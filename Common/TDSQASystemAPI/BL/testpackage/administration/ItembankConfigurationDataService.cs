@@ -50,6 +50,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             setOfItemStimuliDao = new SetOfItemStimuliDAO();
             itemPropertyDao = new ItemPropertyDAO();
             itemSelectionParmDao = new ItemSelectionParmDAO();
+
         }
 
         public ItembankConfigurationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
@@ -271,20 +272,36 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             subjectDao.Insert(new List<SubjectDTO> { newSubjectDto });
         }
 
+        public SetOfItemStimuliDTO LinkItemsToStimuli(string itemKey, string stimulusKey, string segmentKey)
+        {
+            return new SetOfItemStimuliDTO
+            {
+                ItemKey = itemKey,
+                StimulusKey = stimulusKey,
+                SegmentKey = segmentKey
+            };
+        }
+
         public void LinkItemsToStimuli(TestPackage.TestPackage testPackage)
         {
+            var itemStimuliDtosList = new List<SetOfItemStimuliDTO>();
+
             var allTestPackageStimuli = testPackage.GetAllStimuli();
 
             var itemStimuliDtos = from stimulus in allTestPackageStimuli
                                   from item in stimulus.ItemGroup.Item
-                                  select new SetOfItemStimuliDTO
-                                  {
-                                      ItemKey = item.Key,
-                                      StimulusKey = stimulus.Key,
-                                      SegmentKey = stimulus.TestSegment.Key
-                                  };
+                                  select LinkItemsToStimuli(item.Key, stimulus.Key, stimulus.TestSegment.Key);
+            itemStimuliDtosList.AddRange(itemStimuliDtos);
+            if (testPackage.IsCombined())
+            {
+                var combinedItemStimuliDtos = from stimulus in allTestPackageStimuli
+                                              from item in stimulus.ItemGroup.Item
+                                              select LinkItemsToStimuli(item.Key, stimulus.Key, ItembankAdministrationDataService.CombinedKey(testPackage, stimulus.TestSegment.id));
+                itemStimuliDtosList.AddRange(combinedItemStimuliDtos);
+            }
 
-            setOfItemStimuliDao.Insert(itemStimuliDtos.Distinct().Where(s => !setOfItemStimuliDao.Exists(s)).ToList());
+
+            setOfItemStimuliDao.Insert(itemStimuliDtosList.Distinct().Where(s => !setOfItemStimuliDao.Exists(s)).ToList());
         }
 
         public void LinkItemToStrands(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap)

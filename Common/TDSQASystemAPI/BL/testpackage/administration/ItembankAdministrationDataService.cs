@@ -101,9 +101,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             testFormItemDao = new TestFormItemDAO();
             affinityGroupDao = new AffinityGroupDAO();
             affinityGroupItemDao = new AffinityGroupItemDAO();
-            itembankConfigurationDataQueryService = 
+            itembankConfigurationDataQueryService =
                 new ItembankConfigurationDataQueryService(new SubjectDAO(), new ClientDAO(), testAdminDao);
-            
+
         }
 
         public ItembankAdministrationDataService(IItembankConfigurationDataQueryService itembankConfigurationDataQueryService,
@@ -136,6 +136,38 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             this.affinityGroupDao = affinityGroupDao;
             this.affinityGroupItemDao = affinityGroupItemDao;
         }
+        public static string COMBINED_SUFFIX = "-COMBINED";
+
+        public static string Key(TestPackage.TestPackage testPackage, string id)
+        {
+            return string.Format("({0}){1}-{2}", testPackage.publisher, id, testPackage.academicYear);
+        }
+
+        public static string CombinedId(string id)
+        {
+            return id + COMBINED_SUFFIX;
+        }
+
+        public static string CombinedKey(TestPackage.TestPackage testPackage, string id)
+        {
+            return Key(testPackage, CombinedId(id));
+        }
+
+        private ItemScoreDimensionDTO CreateItemScoreDimensionDTO(string segmentKey, string itemKey, ItemGroupItemItemScoreDimension dimension)
+        {
+            return new ItemScoreDimensionDTO
+            {
+                Dimension = dimension.dimension ?? string.Empty,
+                RecodeRule = string.Empty,
+                ScorePoints = dimension.scorePoints,
+                Weight = dimension.weight,
+                ItemScoreDimensionKey = Guid.NewGuid(),
+                SegmentKey = segmentKey,
+                ItemKey = itemKey,
+
+                MeasurementModel = measurementModelMap[dimension.measurementModel]
+            };
+        }
 
         public void CreateItemMeasurementParameters(TestPackage.TestPackage testPackage)
         {
@@ -144,19 +176,14 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             foreach (var item in allItems)
             {
                 item.ItemScoreDimensions.ForEach(dimension =>
-                scoreDimensions.Add(new ItemScoreDimensionDTO
                 {
-                    Dimension = dimension.dimension ?? string.Empty,
-                    RecodeRule = string.Empty,
-                    ScorePoints = dimension.scorePoints,
-                    Weight = dimension.weight,
-                    ItemScoreDimensionKey = Guid.NewGuid(),
-                    SegmentKey = item.TestSegment.Key,
-                    ItemKey = item.Key,
-
-                    MeasurementModel = measurementModelMap[dimension.measurementModel]
-                })
-                );
+                    if (item.TestPackage.IsCombined())
+                    {
+                        
+                        scoreDimensions.Add(CreateItemScoreDimensionDTO(CombinedKey(item.TestPackage, item.TestSegment.id), item.Key, dimension));
+                    }
+                    scoreDimensions.Add(CreateItemScoreDimensionDTO(item.TestSegment.Key, item.Key, dimension));
+                });
             }
 
             itemScoreDimensionDao.Insert(scoreDimensions);
@@ -190,25 +217,38 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             itemMeasurementParameterDao.Insert(itemMeasurementParameters.Distinct().ToList());
         }
 
+        private AdminStimulusDTO CreateAdminStimuli(TestPackage.TestPackage testPackage, string segmentKey, ItemGroupStimulus stimulus)
+        {
+            return new AdminStimulusDTO
+            {
+                StimulusKey = stimulus.Key,
+                SegmentKey = segmentKey,
+                NumItemsRequired = stimulus.ItemGroup.maxResponses.Equals("ALL", StringComparison.InvariantCultureIgnoreCase)
+                                          ? -1
+                                          : int.Parse(stimulus.ItemGroup.maxResponses),
+                MaxItems = stimulus.ItemGroup.maxItems.Equals("ALL", StringComparison.InvariantCultureIgnoreCase)
+                                          ? -1
+                                          : int.Parse(stimulus.ItemGroup.maxItems),
+                TestVersion = (long)testPackage.version,
+                UpdatedTestVersion = (long)testPackage.version,
+                GroupId = stimulus.ItemGroup.Key
+            };
+        }
+
         public void CreateAdminStimuli(TestPackage.TestPackage testPackage)
         {
+            var admimStimuliDtosList = new List<AdminStimulusDTO>();
             var adminStimuliDtos = from stimulus in testPackage.GetAllStimuli()
-                                   select new AdminStimulusDTO
-                                   {
-                                       StimulusKey = stimulus.Key,
-                                       SegmentKey = stimulus.TestSegment.Key,
-                                       NumItemsRequired = stimulus.ItemGroup.maxResponses.Equals("ALL", StringComparison.InvariantCultureIgnoreCase)
-                                           ? -1
-                                           : int.Parse(stimulus.ItemGroup.maxResponses),
-                                       MaxItems = stimulus.ItemGroup.maxItems.Equals("ALL", StringComparison.InvariantCultureIgnoreCase)
-                                           ? -1
-                                           : int.Parse(stimulus.ItemGroup.maxItems),
-                                       TestVersion = (long)testPackage.version,
-                                       UpdatedTestVersion = (long)testPackage.version,
-                                       GroupId = stimulus.ItemGroup.Key
-                                   };
+                select CreateAdminStimuli(testPackage, stimulus.TestSegment.Key, stimulus);
+            admimStimuliDtosList.AddRange(adminStimuliDtos);
+            if (testPackage.IsCombined())
+            {
+                var combinedAdminStimuliDtos = from stimulus in testPackage.GetAllStimuli()
+                    select CreateAdminStimuli(testPackage, CombinedKey(testPackage, stimulus.TestSegment.id), stimulus);
+                admimStimuliDtosList.AddRange(combinedAdminStimuliDtos);
+            }
 
-            setOfAdminStimuliDao.Insert(adminStimuliDtos.Distinct().ToList());                   
+            setOfAdminStimuliDao.Insert(admimStimuliDtosList.Distinct().ToList());
         }
 
         public void CreateAdminStrands(TestPackage.TestPackage testPackge, IDictionary<string, StrandDTO> strandMap)
@@ -216,10 +256,10 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             var segmentAdminStrandDtos =
                 from test in testPackge.Test
                 from segment in test.Segments
-                from segBp in segment.SegmentBlueprint                
-                where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strandMap[segBp.idRef].Type)             
-                let itemSelectionProperties = (segBp.ItemSelection != null) ? 
-                    segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim()) : 
+                from segBp in segment.SegmentBlueprint
+                where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strandMap[segBp.idRef].Type)
+                let itemSelectionProperties = (segBp.ItemSelection != null) ?
+                    segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim()) :
                     new Dictionary<string, string>()
                 select new AdminStrandDTO
                 {
@@ -228,8 +268,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     StrandKey = strandMap[segBp.idRef].Key,
                     MinItems = segBp.minExamItems,
                     MaxItems = segBp.maxExamItems,
-                    AdaptiveCut = itemSelectionProperties.ContainsKey("adaptivecut") 
-                        ? itemSelectionProperties["adaptivecut"]?.ToNullableDouble() 
+                    AdaptiveCut = itemSelectionProperties.ContainsKey("adaptivecut")
+                        ? itemSelectionProperties["adaptivecut"]?.ToNullableDouble()
                         : null,
                     StartAbility = itemSelectionProperties.ContainsKey("startability")
                         ? itemSelectionProperties["startability"]?.ToNullableDouble()
@@ -302,7 +342,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                         ? itemSelectionProperties["precisiontargetnotmetweight"]?.ToNullableDouble()
                         : null,
                     TestVersion = (long)testPackage.version,
-                    UpdatedTestVersion = (long)testPackage.version 
+                    UpdatedTestVersion = (long)testPackage.version
                 };
 
             affinityGroupDao.Insert(affinityGroupDtos.ToList());
@@ -321,72 +361,219 @@ namespace TDSQASystemAPI.BL.testpackage.administration
             affinityGroupItemDao.Insert(affinityGroupItemDtos.ToList());
         }
 
+        private SetOfAdminItemDTO CreateSetOfAdminItems(TestPackage.TestPackage testPackage, ItemGroupItem item, string segmentKey, IDictionary<string, StrandDTO> strandMap) {
+            var irtA = (from dimension in item.ItemScoreDimensions
+                        from p in dimension.ItemScoreParameter
+                        where p.measurementParameter.ToLower().Trim().Equals("a")
+                        orderby p.value descending
+                        select p.value);
+            var irtB = (from dimension in item.ItemScoreDimensions
+                        from p in dimension.ItemScoreParameter
+                        where p.measurementParameter.ToLower().Trim().StartsWith("b")
+                        select p.value).Average();
+            var irtC = (from dimension in item.ItemScoreDimensions
+                        from p in dimension.ItemScoreParameter
+                        where p.measurementParameter.ToLower().Trim().Equals("c")
+                        orderby p.value descending
+                        select p.value);
+            var claimName = (from bpRef in item.BlueprintReferences
+                             join strand in strandMap
+                                 on bpRef.idRef equals strand.Key
+                             where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Value.Type)
+                             select BlueprintElementTypes.CLAIM_TYPES.Contains(strand.Value.Type)
+                                 ? strand.Value.Key
+                                 : strand.Value.Key.Substring(0, strand.Value.Key.IndexOf('|'))).First();
+            var leafTargetKey = (from bpRef in item.BlueprintReferences
+                                 join strand in strandMap
+                                     on bpRef.idRef equals strand.Key
+                                 where BlueprintElementTypes.TARGET_TYPES.Contains(strand.Value.Type)
+                                     && strand.Value.IsLeafTarget
+                                 select strand.Value.Key);
+            var bVector = irtB == SetOfAdminItemDefaults.IRT_B
+                ? string.Format("{0:0.000000000000000}", irtB)
+                : string.Join(";", (from p in item.ItemScoreDimensions.First().ItemScoreParameter
+                                    where p.measurementParameter.ToLower().Trim().StartsWith("b")
+                                    select string.Format("{0:0.000000000000000}", p.value)).ToArray());
+
+            return new SetOfAdminItemDTO
+            {
+                ItemKey = item.Key,
+                SegmentKey = segmentKey,
+                GroupId = item.ItemGroup.Key,
+                GroupKey = string.Format("{0}_{1}", item.ItemGroup.Key, SetOfAdminItemDefaults.BLOCK_ID),
+                ItemPosition = item.Position,
+                IsFieldTest = item.fieldTest,
+                IsActive = true,
+                IrtB = irtB.ToString("0.000000000000000"),
+                IsRequired = item.responseRequired,
+                BlockId = SetOfAdminItemDefaults.BLOCK_ID,
+                TestAdminKey = testPackage.publisher,
+                StrandKey = leafTargetKey.Any()
+                           ? leafTargetKey.First()
+                           : claimName,
+                TestVersion = (long)testPackage.version,
+                UpdatedTestVersion = (long)testPackage.version,
+                StrandName = claimName,
+                IrtA = irtA.Any() ? irtA.First() : SetOfAdminItemDefaults.IRT_A,
+                IrtC = irtC.Any() ? irtC.First() : SetOfAdminItemDefaults.IRT_C,
+                IrtModel = item.ItemScoreDimensions.First().measurementModel,
+                ClString = item.TestSegment.algorithmType.ToLower().Contains("adaptive")
+                           ? CreateClString(item.BlueprintReferences, strandMap)
+                           : null,
+                BVector = bVector
+            };
+        }
+
         public void CreateSetOfAdminItems(TestPackage.TestPackage testPackage, IDictionary<string, StrandDTO> strandMap)
         {
-            var setOfAdminItemDtos =
-                from item in testPackage.GetAllItems()                 
-                let irtA = (from dimension in item.ItemScoreDimensions
-                            from p in dimension.ItemScoreParameter
-                            where p.measurementParameter.ToLower().Trim().Equals("a")
-                            orderby p.value descending
-                            select p.value)
-                    let irtB = (from dimension in item.ItemScoreDimensions
-                                from p in dimension.ItemScoreParameter
-                                where p.measurementParameter.ToLower().Trim().StartsWith("b")
-                                select p.value).Average()
-                    let irtC = (from dimension in item.ItemScoreDimensions
-                                from p in dimension.ItemScoreParameter
-                                where p.measurementParameter.ToLower().Trim().Equals("c")
-                                orderby p.value descending
-                                select p.value)
-                    let claimName = (from bpRef in item.BlueprintReferences
-                                     join strand in strandMap
-                                         on bpRef.idRef equals strand.Key
-                                     where BlueprintElementTypes.CLAIM_AND_TARGET_TYPES.Contains(strand.Value.Type)
-                                     select BlueprintElementTypes.CLAIM_TYPES.Contains(strand.Value.Type)
-                                         ? strand.Value.Key
-                                         : strand.Value.Key.Substring(0, strand.Value.Key.IndexOf('|'))).First()
-                    let leafTargetKey = (from bpRef in item.BlueprintReferences
-                                         join strand in strandMap
-                                             on bpRef.idRef equals strand.Key
-                                         where BlueprintElementTypes.TARGET_TYPES.Contains(strand.Value.Type)
-                                             && strand.Value.IsLeafTarget
-                                         select strand.Value.Key)
-                    let bVector = irtB == SetOfAdminItemDefaults.IRT_B
-                        ? string.Format("{0:0.000000000000000}", irtB)
-                        : string.Join(";", (from p in item.ItemScoreDimensions.First().ItemScoreParameter
-                                            where p.measurementParameter.ToLower().Trim().StartsWith("b")
-                                            select string.Format("{0:0.000000000000000}", p.value)).ToArray())
-                    select new SetOfAdminItemDTO
-                    {
-                        ItemKey = item.Key,
-                        SegmentKey = item.TestSegment.Key,
-                        GroupId = item.ItemGroup.Key,
-                        GroupKey = string.Format("{0}_{1}", item.ItemGroup.Key, SetOfAdminItemDefaults.BLOCK_ID),
-                        ItemPosition = item.Position,
-                        IsFieldTest = item.fieldTest,
-                        IsActive = true,
-                        IrtB = irtB.ToString("0.000000000000000"),
-                        IsRequired = item.responseRequired,
-                        BlockId = SetOfAdminItemDefaults.BLOCK_ID,
-                        TestAdminKey = testPackage.publisher,
-                        StrandKey = leafTargetKey.Any()
-                            ? leafTargetKey.First()
-                            : claimName,
-                        TestVersion = (long)testPackage.version,
-                        UpdatedTestVersion = (long)testPackage.version,
-                        StrandName = claimName,
-                        IrtA = irtA.Any() ? irtA.First() : SetOfAdminItemDefaults.IRT_A,
-                        IrtC = irtC.Any() ? irtC.First() : SetOfAdminItemDefaults.IRT_C,
-                        IrtModel = item.ItemScoreDimensions.First().measurementModel,
-                        ClString = item.TestSegment.algorithmType.ToLower().Contains("adaptive")
-                            ? CreateClString(item.BlueprintReferences, strandMap)
-                            : null,
-                        BVector = bVector
-                    };
-            
-            setOfAdminItemDao.Insert(setOfAdminItemDtos.Distinct().ToList());
+            var setOfAdminItemDtosList = new List<SetOfAdminItemDTO>();
+
+            var setOfAdminItemDtos = from item in testPackage.GetAllItems()
+                                     select CreateSetOfAdminItems(testPackage, item, item.TestSegment.Key, strandMap);
+            setOfAdminItemDtosList.AddRange(setOfAdminItemDtos);
+
+            if (testPackage.IsCombined())
+            {
+                var combinedSetOfAdminItemDtos = 
+                    from item in testPackage.GetAllItems()
+                    let segmentId = CombinedId(item.TestSegment.id)
+                    let segmentKey = Key(testPackage, segmentId)
+                    select CreateSetOfAdminItems(testPackage, item, segmentKey, strandMap);
+                setOfAdminItemDtosList.AddRange(combinedSetOfAdminItemDtos);
+
+            }
+
+            setOfAdminItemDao.Insert(setOfAdminItemDtosList.Distinct().ToList());
         }
+
+        private SetOfAdminSubjectDTO CreateSetOfAdminSubjects(string segmentKey, string testId, int segmentPosition, string algorithmType, TestPackage.TestPackage testPackage, TestPackage.TestSegmentSegmentBlueprintElement segBp, Dictionary<string, string> itemSelectionProperties, string virtualTest)
+        {
+           return new SetOfAdminSubjectDTO
+            {
+                SegmentKey = segmentKey,
+                TestAdminKey = testPackage.publisher,
+                SubjectKey = testPackage.GetSubjectKey(),
+                TestId = testId,
+                StartAbility = double.Parse(itemSelectionProperties.GetOrDefault("startability", ItemSelectionDefaults.START_ABILITY.ToString())),
+                StartInfo = double.Parse(itemSelectionProperties.GetOrDefault("startinfo", ItemSelectionDefaults.START_INFO.ToString())),
+                MinItems = segBp.maxExamItems,
+                MaxItems = segBp.maxExamItems,
+                Slope = double.Parse(itemSelectionProperties.GetOrDefault("slope", ItemSelectionDefaults.SLOPE.ToString())),
+                Intercept = double.Parse(itemSelectionProperties.GetOrDefault("intercept", ItemSelectionDefaults.INTERCEPT.ToString())),
+                FieldTestStartPosition = itemSelectionProperties.ContainsKey("ftstartpos") ? itemSelectionProperties["ftstartpos"]?.ToNullableInt() : null,
+                FieldTestEndPosition = itemSelectionProperties.ContainsKey("ftendpos") ? itemSelectionProperties["ftendpos"]?.ToNullableInt() : null,
+                FieldTestMinItems = segBp.minFieldTestItems,
+                FieldTestMaxItems = segBp.maxFieldTestItems,
+                SelectionAlgorithm = SelectionAlgorithmTypes.GetSelectionAlgorithm(algorithmType),
+                BlueprintWeight = double.Parse(itemSelectionProperties.GetOrDefault("bpweight", ItemSelectionDefaults.BLUEPRINT_WEIGHT.ToString())),
+                AbilityWeight = double.Parse(itemSelectionProperties.GetOrDefault("abilityweight", ItemSelectionDefaults.ABILITY_WEIGHT.ToString())),
+                CSet1Size = int.Parse(itemSelectionProperties.GetOrDefault("cset1size", ItemSelectionDefaults.CSET1_SIZE.ToString())),
+                CSet2Random = int.Parse(itemSelectionProperties.GetOrDefault("cset2random", ItemSelectionDefaults.CSET2_RANDOM.ToString())),
+                CSet2InitialRandom = int.Parse(itemSelectionProperties.GetOrDefault("cset2initialrandom", ItemSelectionDefaults.CSET2_INITIAL_RANDOM.ToString())),
+                TestPosition = segmentPosition,
+                IsSegmented = false,
+                ComputeAbilityEstimates = bool.Parse(itemSelectionProperties.GetOrDefault("computeabilityestimates", ItemSelectionDefaults.COMPUTE_ABILITY_ESTIMATES.ToString())),
+                TestVersion = (long)testPackage.version,
+                ItemWeight = double.Parse(itemSelectionProperties.GetOrDefault("itemweight", ItemSelectionDefaults.ITEM_WEIGHT.ToString())),
+                AbilityOffset = double.Parse(itemSelectionProperties.GetOrDefault("abilityoffset", ItemSelectionDefaults.ABILITY_OFFSET.ToString())),
+                CSet1Order = itemSelectionProperties.GetOrDefault("cset1order", ItemSelectionDefaults.CSET1_ORDER),
+                RcAbilityWeight = double.Parse(itemSelectionProperties.GetOrDefault("rcabilityweight", ItemSelectionDefaults.RC_ABILITY_WEIGHT.ToString())),
+                PrecisionTarget = itemSelectionProperties.ContainsKey("precisiontarget") ? itemSelectionProperties["precisiontarget"]?.ToNullableDouble() : null,
+                PrecisionTargetMetWeight = double.Parse(itemSelectionProperties.GetOrDefault("precisiontargetmetweight", ItemSelectionDefaults.PRECISION_TARGET_MET_WEIGHT.ToString())),
+                PrecisionTargetNotMetWeight = double.Parse(itemSelectionProperties.GetOrDefault("precisiontargetnotmetweight", ItemSelectionDefaults.PRECISION_TARGET_NOT_MET_WEIGHT.ToString())),
+                AdaptiveCut = itemSelectionProperties.ContainsKey("adaptivecut") ? itemSelectionProperties["adaptivecut"]?.ToNullableDouble() : null,
+                TooCloseSEs = itemSelectionProperties.ContainsKey("toocloseses") ? itemSelectionProperties["toocloseses"]?.ToNullableDouble() : null,
+                TerminationOverallInfo = bool.Parse(itemSelectionProperties.GetOrDefault("terminationoverallinfo", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
+                TerminationMinCount = bool.Parse(itemSelectionProperties.GetOrDefault("terminationmincount", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
+                TerminationTooClose = bool.Parse(itemSelectionProperties.GetOrDefault("terminationtooclose", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
+                TerminationFlagsAnd = bool.Parse(itemSelectionProperties.GetOrDefault("terminationflagsand", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
+                BlueprintMetricFunction = ItemSelectionDefaults.BLUEPRINT_METRIC_FUNCTION,
+                TestType = testPackage.type,
+                Contract = testPackage.publisher,
+                VirtualTest = virtualTest
+           };
+        }
+
+        private List<SetOfAdminSubjectDTO> CreateSetOfAdminSubjects(TestPackage.Test test)
+        {
+            var testPackage = test.TestPackage;
+
+            var setOfAdminSubjectsList = new List<SetOfAdminSubjectDTO>();
+            var segmentAdminSubjectDtos =
+                from segment in test.Segments
+                let segBp = segment.SegmentBlueprint.First(b => b.idRef.Equals(segment.id))
+                let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
+                select CreateSetOfAdminSubjects(segment.Key, segment.id, segment.position, segment.algorithmType, testPackage, segBp, itemSelectionProperties, null);
+            
+            setOfAdminSubjectsList.AddRange(segmentAdminSubjectDtos);
+
+            // If this is a multi-segment assessment, create the "virtual" parent assessment.
+            if (test.IsSegmented())
+            {
+                // Many of the properties in the "virtual" row will contain sums of its segments. For example, if seg1 has
+                // a "minitems" value of 3, and "maxitems" value of 4, and seg2 has a "minitems" value of 1 and a "maxitems" value of 1,
+                // the "virtual" row will contain minitems = 4 and maxitems = 5
+                var itemCounts = (from s in test.Segments
+                                  from segBp in s.SegmentBlueprint
+                                  where segBp.idRef.Equals(s.id)
+                                  group segBp by 1 into g
+                                  select new
+                                  {
+                                      MinItemCount = g.Sum(x => x.minExamItems),
+                                      MaxItemCount = g.Sum(x => x.maxExamItems),
+                                      MinFieldTestItemCount = g.Sum(x => x.minFieldTestItems),
+                                      MaxFieldTestItemCount = g.Sum(x => x.maxFieldTestItems)
+                                  }).First();
+
+                var virtualTestDto = new SetOfAdminSubjectDTO
+                {
+                    SegmentKey = test.Key,
+                    TestAdminKey = testPackage.publisher,
+                    SubjectKey = testPackage.GetSubjectKey(),
+                    TestId = test.id,
+                    StartAbility = ItemSelectionDefaults.START_ABILITY,
+                    StartInfo = ItemSelectionDefaults.START_INFO,
+                    MinItems = itemCounts.MinItemCount,
+                    MaxItems = itemCounts.MaxItemCount,
+                    Slope = ItemSelectionDefaults.SLOPE,
+                    Intercept = ItemSelectionDefaults.INTERCEPT,
+                    FieldTestStartPosition = null,
+                    FieldTestEndPosition = null,
+                    FieldTestMinItems = itemCounts.MinFieldTestItemCount,
+                    FieldTestMaxItems = itemCounts.MaxFieldTestItemCount,
+                    SelectionAlgorithm = SelectionAlgorithmTypes.VIRTUAL,
+                    BlueprintWeight = ItemSelectionDefaults.BLUEPRINT_WEIGHT,
+                    AbilityWeight = ItemSelectionDefaults.ABILITY_WEIGHT,
+                    CSet1Size = ItemSelectionDefaults.CSET1_SIZE,
+                    CSet2Random = ItemSelectionDefaults.CSET2_RANDOM,
+                    CSet2InitialRandom = ItemSelectionDefaults.CSET2_INITIAL_RANDOM,
+                    IsSegmented = true,
+                    ComputeAbilityEstimates = ItemSelectionDefaults.COMPUTE_ABILITY_ESTIMATES,
+                    TestVersion = (long)testPackage.version,
+                    ItemWeight = ItemSelectionDefaults.ITEM_WEIGHT,
+                    AbilityOffset = ItemSelectionDefaults.ABILITY_OFFSET,
+                    CSet1Order = ItemSelectionDefaults.CSET1_ORDER,
+                    RcAbilityWeight = ItemSelectionDefaults.RC_ABILITY_WEIGHT,
+                    PrecisionTarget = null,
+                    PrecisionTargetMetWeight = ItemSelectionDefaults.PRECISION_TARGET_MET_WEIGHT,
+                    PrecisionTargetNotMetWeight = ItemSelectionDefaults.PRECISION_TARGET_NOT_MET_WEIGHT,
+                    AdaptiveCut = null,
+                    TooCloseSEs = null,
+                    TerminationOverallInfo = ItemSelectionDefaults.TERMINATION_FLAGS,
+                    TerminationMinCount = ItemSelectionDefaults.TERMINATION_FLAGS,
+                    TerminationTooClose = ItemSelectionDefaults.TERMINATION_FLAGS,
+                    TerminationFlagsAnd = ItemSelectionDefaults.TERMINATION_FLAGS,
+                    BlueprintMetricFunction = ItemSelectionDefaults.BLUEPRINT_METRIC_FUNCTION,
+                    TestType = testPackage.type,
+                    Contract = testPackage.publisher,
+                    VirtualTest = test.Key
+                };
+
+                setOfAdminSubjectsList.Add(virtualTestDto);
+            }
+            return setOfAdminSubjectsList;
+        }
+
 
         public void CreateSetOfAdminSubjects(TestPackage.TestPackage testPackage)
         {
@@ -394,122 +581,91 @@ namespace TDSQASystemAPI.BL.testpackage.administration
 
             foreach (var test in testPackage.Test)
             {
-                var segmentAdminSubjectDtos = 
+                var newSetOfAdminSubjectsList = CreateSetOfAdminSubjects(test);
+                setOfAdminSubjectsList.AddRange(newSetOfAdminSubjectsList);                
+            }
+
+            if (testPackage.IsCombined())
+            {
+                var combinedId = testPackage.Blueprint.First(bp => bp.type.Equals("package")).id;
+                var combinedKey = Key(testPackage, combinedId); // string.Format("({0}){1}-{2}", testPackage.publisher, combinedId, testPackage.academicYear);
+                var testPosition = 1;
+                foreach (var test in testPackage.Test)
+                {
+                    var segmentAdminSubjectDtos =
                     from segment in test.Segments
                     let segBp = segment.SegmentBlueprint.First(b => b.idRef.Equals(segment.id))
                     let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
-                    select new SetOfAdminSubjectDTO
-                    {
-                        SegmentKey = segment.Key,
-                        TestAdminKey = testPackage.publisher,
-                        SubjectKey = testPackage.GetSubjectKey(),
-                        TestId = segment.id,
-                        StartAbility = double.Parse(itemSelectionProperties.GetOrDefault("startability", ItemSelectionDefaults.START_ABILITY.ToString())),
-                        StartInfo = double.Parse(itemSelectionProperties.GetOrDefault("startinfo", ItemSelectionDefaults.START_INFO.ToString())),
-                        MinItems = segBp.maxExamItems,
-                        MaxItems = segBp.maxExamItems,
-                        Slope = double.Parse(itemSelectionProperties.GetOrDefault("slope", ItemSelectionDefaults.SLOPE.ToString())),
-                        Intercept = double.Parse(itemSelectionProperties.GetOrDefault("intercept", ItemSelectionDefaults.INTERCEPT.ToString())),
-                        FieldTestStartPosition = itemSelectionProperties.ContainsKey("ftstartpos") ? itemSelectionProperties["ftstartpos"]?.ToNullableInt() : null,
-                        FieldTestEndPosition = itemSelectionProperties.ContainsKey("ftendpos") ? itemSelectionProperties["ftendpos"]?.ToNullableInt() : null,
-                        FieldTestMinItems = segBp.minFieldTestItems,
-                        FieldTestMaxItems = segBp.maxFieldTestItems,
-                        SelectionAlgorithm = SelectionAlgorithmTypes.GetSelectionAlgorithm(segment.algorithmType),
-                        BlueprintWeight = double.Parse(itemSelectionProperties.GetOrDefault("bpweight", ItemSelectionDefaults.BLUEPRINT_WEIGHT.ToString())),
-                        AbilityWeight = double.Parse(itemSelectionProperties.GetOrDefault("abilityweight", ItemSelectionDefaults.ABILITY_WEIGHT.ToString())),
-                        CSet1Size = int.Parse(itemSelectionProperties.GetOrDefault("cset1size", ItemSelectionDefaults.CSET1_SIZE.ToString())),
-                        CSet2Random = int.Parse(itemSelectionProperties.GetOrDefault("cset2random", ItemSelectionDefaults.CSET2_RANDOM.ToString())),
-                        CSet2InitialRandom = int.Parse(itemSelectionProperties.GetOrDefault("cset2initialrandom", ItemSelectionDefaults.CSET2_INITIAL_RANDOM.ToString())),
-                        TestPosition = segment.position,
-                        IsSegmented = false,
-                        ComputeAbilityEstimates = bool.Parse(itemSelectionProperties.GetOrDefault("computeabilityestimates", ItemSelectionDefaults.COMPUTE_ABILITY_ESTIMATES.ToString())),
-                        TestVersion = (long)testPackage.version,
-                        ItemWeight = double.Parse(itemSelectionProperties.GetOrDefault("itemweight", ItemSelectionDefaults.ITEM_WEIGHT.ToString())),
-                        AbilityOffset = double.Parse(itemSelectionProperties.GetOrDefault("abilityoffset", ItemSelectionDefaults.ABILITY_OFFSET.ToString())),
-                        CSet1Order = itemSelectionProperties.GetOrDefault("cset1order", ItemSelectionDefaults.CSET1_ORDER),
-                        RcAbilityWeight = double.Parse(itemSelectionProperties.GetOrDefault("rcabilityweight", ItemSelectionDefaults.RC_ABILITY_WEIGHT.ToString())),
-                        PrecisionTarget = itemSelectionProperties.ContainsKey("precisiontarget") ? itemSelectionProperties["precisiontarget"]?.ToNullableDouble() : null,
-                        PrecisionTargetMetWeight = double.Parse(itemSelectionProperties.GetOrDefault("precisiontargetmetweight", ItemSelectionDefaults.PRECISION_TARGET_MET_WEIGHT.ToString())),
-                        PrecisionTargetNotMetWeight = double.Parse(itemSelectionProperties.GetOrDefault("precisiontargetnotmetweight", ItemSelectionDefaults.PRECISION_TARGET_NOT_MET_WEIGHT.ToString())),
-                        AdaptiveCut = itemSelectionProperties.ContainsKey("adaptivecut") ? itemSelectionProperties["adaptivecut"]?.ToNullableDouble() : null,
-                        TooCloseSEs = itemSelectionProperties.ContainsKey("toocloseses") ? itemSelectionProperties["toocloseses"]?.ToNullableDouble() : null,
-                        TerminationOverallInfo = bool.Parse(itemSelectionProperties.GetOrDefault("terminationoverallinfo", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
-                        TerminationMinCount = bool.Parse(itemSelectionProperties.GetOrDefault("terminationmincount", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
-                        TerminationTooClose = bool.Parse(itemSelectionProperties.GetOrDefault("terminationtooclose", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
-                        TerminationFlagsAnd = bool.Parse(itemSelectionProperties.GetOrDefault("terminationflagsand", ItemSelectionDefaults.TERMINATION_FLAGS.ToString())),
-                        BlueprintMetricFunction = ItemSelectionDefaults.BLUEPRINT_METRIC_FUNCTION,
-                        TestType = testPackage.type,
-                        Contract = testPackage.publisher
-                    };
+                    let segmentId = CombinedId(segment.id)
+                    let segmentKey = Key(testPackage, segmentId)
+                    select CreateSetOfAdminSubjects(segmentKey, segmentId, testPosition, segment.algorithmType, testPackage, segBp, itemSelectionProperties, combinedKey);
 
-                setOfAdminSubjectsList.AddRange(segmentAdminSubjectDtos);
-
-                // If this is a multi-segment assessment, create the "virtual" parent assessment.
-                if (test.IsSegmented())
-                {
-                    // Many of the properties in the "virtual" row will contain sums of its segments. For example, if seg1 has
-                    // a "minitems" value of 3, and "maxitems" value of 4, and seg2 has a "minitems" value of 1 and a "maxitems" value of 1,
-                    // the "virtual" row will contain minitems = 4 and maxitems = 5
-                    var itemCounts = (from s in test.Segments
-                                     from segBp in s.SegmentBlueprint
-                                     where segBp.idRef.Equals(s.id)
-                                     group segBp by 1 into g
-                                     select new
-                                     {
-                                         MinItemCount = g.Sum(x => x.minExamItems),
-                                         MaxItemCount = g.Sum(x => x.maxExamItems),
-                                         MinFieldTestItemCount = g.Sum(x => x.minFieldTestItems),
-                                         MaxFieldTestItemCount = g.Sum(x => x.maxFieldTestItems)
-                                     }).First();
-
-                    var virtualTestDto = new SetOfAdminSubjectDTO
-                    {
-                        SegmentKey = test.Key,
-                        TestAdminKey = testPackage.publisher,
-                        SubjectKey = testPackage.GetSubjectKey(),
-                        TestId = test.id,
-                        StartAbility = ItemSelectionDefaults.START_ABILITY,
-                        StartInfo = ItemSelectionDefaults.START_INFO,
-                        MinItems = itemCounts.MinItemCount,
-                        MaxItems = itemCounts.MaxItemCount,
-                        Slope = ItemSelectionDefaults.SLOPE,
-                        Intercept = ItemSelectionDefaults.INTERCEPT,
-                        FieldTestStartPosition = null,
-                        FieldTestEndPosition = null,
-                        FieldTestMinItems = itemCounts.MinFieldTestItemCount,
-                        FieldTestMaxItems = itemCounts.MaxFieldTestItemCount,
-                        SelectionAlgorithm = SelectionAlgorithmTypes.VIRTUAL,
-                        BlueprintWeight = ItemSelectionDefaults.BLUEPRINT_WEIGHT,
-                        AbilityWeight = ItemSelectionDefaults.ABILITY_WEIGHT,
-                        CSet1Size = ItemSelectionDefaults.CSET1_SIZE,
-                        CSet2Random = ItemSelectionDefaults.CSET2_RANDOM,
-                        CSet2InitialRandom = ItemSelectionDefaults.CSET2_INITIAL_RANDOM,
-                        IsSegmented = true,
-                        ComputeAbilityEstimates = ItemSelectionDefaults.COMPUTE_ABILITY_ESTIMATES,
-                        TestVersion = (long)testPackage.version,
-                        ItemWeight = ItemSelectionDefaults.ITEM_WEIGHT,
-                        AbilityOffset = ItemSelectionDefaults.ABILITY_OFFSET,
-                        CSet1Order = ItemSelectionDefaults.CSET1_ORDER,
-                        RcAbilityWeight = ItemSelectionDefaults.RC_ABILITY_WEIGHT,
-                        PrecisionTarget = null,
-                        PrecisionTargetMetWeight = ItemSelectionDefaults.PRECISION_TARGET_MET_WEIGHT,
-                        PrecisionTargetNotMetWeight = ItemSelectionDefaults.PRECISION_TARGET_NOT_MET_WEIGHT,
-                        AdaptiveCut = null,
-                        TooCloseSEs = null,
-                        TerminationOverallInfo = ItemSelectionDefaults.TERMINATION_FLAGS,
-                        TerminationMinCount = ItemSelectionDefaults.TERMINATION_FLAGS,
-                        TerminationTooClose = ItemSelectionDefaults.TERMINATION_FLAGS,
-                        TerminationFlagsAnd = ItemSelectionDefaults.TERMINATION_FLAGS,
-                        BlueprintMetricFunction = ItemSelectionDefaults.BLUEPRINT_METRIC_FUNCTION,
-                        TestType = testPackage.type,
-                        Contract = testPackage.publisher,
-                        VirtualTest = test.Key
-                    };
-
-                    setOfAdminSubjectsList.Add(virtualTestDto);
+                    testPosition += 1;
+                    
+                    setOfAdminSubjectsList.AddRange(segmentAdminSubjectDtos);
                 }
-            }
+                // Many of the properties in the "virtual" row will contain sums of its segments. For example, if seg1 has
+                // a "minitems" value of 3, and "maxitems" value of 4, and seg2 has a "minitems" value of 1 and a "maxitems" value of 1,
+                // the "virtual" row will contain minitems = 4 and maxitems = 5                
+                var itemCounts = (
+                        from test in testPackage.Test
+                        from s in test.Segments
+                                  from segBp in s.SegmentBlueprint
+                                  where segBp.idRef.Equals(s.id)
+                                  group segBp by 1 into g
+                                  select new
+                                  {
+                                      MinItemCount = g.Sum(x => x.minExamItems),
+                                      MaxItemCount = g.Sum(x => x.maxExamItems),
+                                      MinFieldTestItemCount = g.Sum(x => x.minFieldTestItems),
+                                      MaxFieldTestItemCount = g.Sum(x => x.maxFieldTestItems)
+                                  }).First();
 
+                var virtualTestDto = new SetOfAdminSubjectDTO
+                {
+                    SegmentKey = combinedKey,
+                    TestAdminKey = testPackage.publisher,
+                    SubjectKey = testPackage.GetSubjectKey(),
+                    TestId = combinedId,
+                    StartAbility = ItemSelectionDefaults.START_ABILITY,
+                    StartInfo = ItemSelectionDefaults.START_INFO,
+                    MinItems = itemCounts.MinItemCount,
+                    MaxItems = itemCounts.MaxItemCount,
+                    Slope = ItemSelectionDefaults.SLOPE,
+                    Intercept = ItemSelectionDefaults.INTERCEPT,
+                    FieldTestStartPosition = null,
+                    FieldTestEndPosition = null,
+                    FieldTestMinItems = itemCounts.MinFieldTestItemCount,
+                    FieldTestMaxItems = itemCounts.MaxFieldTestItemCount,
+                    SelectionAlgorithm = SelectionAlgorithmTypes.VIRTUAL,
+                    BlueprintWeight = ItemSelectionDefaults.BLUEPRINT_WEIGHT,
+                    AbilityWeight = ItemSelectionDefaults.ABILITY_WEIGHT,
+                    CSet1Size = ItemSelectionDefaults.CSET1_SIZE,
+                    CSet2Random = ItemSelectionDefaults.CSET2_RANDOM,
+                    CSet2InitialRandom = ItemSelectionDefaults.CSET2_INITIAL_RANDOM,
+                    IsSegmented = true,
+                    ComputeAbilityEstimates = ItemSelectionDefaults.COMPUTE_ABILITY_ESTIMATES,
+                    TestVersion = (long)testPackage.version,
+                    ItemWeight = ItemSelectionDefaults.ITEM_WEIGHT,
+                    AbilityOffset = ItemSelectionDefaults.ABILITY_OFFSET,
+                    CSet1Order = ItemSelectionDefaults.CSET1_ORDER,
+                    RcAbilityWeight = ItemSelectionDefaults.RC_ABILITY_WEIGHT,
+                    PrecisionTarget = null,
+                    PrecisionTargetMetWeight = ItemSelectionDefaults.PRECISION_TARGET_MET_WEIGHT,
+                    PrecisionTargetNotMetWeight = ItemSelectionDefaults.PRECISION_TARGET_NOT_MET_WEIGHT,
+                    AdaptiveCut = null,
+                    TooCloseSEs = null,
+                    TerminationOverallInfo = ItemSelectionDefaults.TERMINATION_FLAGS,
+                    TerminationMinCount = ItemSelectionDefaults.TERMINATION_FLAGS,
+                    TerminationTooClose = ItemSelectionDefaults.TERMINATION_FLAGS,
+                    TerminationFlagsAnd = ItemSelectionDefaults.TERMINATION_FLAGS,
+                    BlueprintMetricFunction = ItemSelectionDefaults.BLUEPRINT_METRIC_FUNCTION,
+                    TestType = testPackage.type,
+                    Contract = testPackage.publisher,                    
+                };
+                setOfAdminSubjectsList.Add(virtualTestDto);
+            }
+            
             setOfAdminSubjectDao.Insert(setOfAdminSubjectsList);
 
             setOfAdminSubjectsList.Where(adminSubject => adminSubject.SelectionAlgorithm.ToLower().StartsWith("adaptive")).
@@ -528,19 +684,39 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 });
             
         }
-   
+
+        private SetOfTestGradeDTO CreateSetOfTestGrades(string id, string grade, string key)
+        {
+            return new SetOfTestGradeDTO()
+            {
+                TestId = id,
+                Grade = grade,
+                SegmentKey = key
+            };
+        }
+
         public void CreateSetOfTestGrades(TestPackage.TestPackage testPackage)
         {
+            var gradesList = new List<SetOfTestGradeDTO>();
             var grades = from test in testPackage.Test
                          from grade in test.Grades
-                         select new SetOfTestGradeDTO()
-                         {
-                             TestId = test.id,
-                             Grade = grade.value,
-                             SegmentKey = test.Key
-                         };
+                         select CreateSetOfTestGrades(test.id, grade.value, test.Key);
 
-            this.setOfTestGradeDao.Insert(grades.ToList());
+            gradesList.AddRange(grades);
+
+            if (testPackage.IsCombined())
+            {
+                var combinedId = testPackage.Blueprint.First(bp => bp.type.Equals("package")).id;
+                var combinedKey = Key(testPackage, combinedId);
+                var combinedGrades = from test in testPackage.Test
+                                     from grade in test.Grades
+                                     select CreateSetOfTestGrades(combinedId, grade.value, combinedKey);
+                gradesList.AddRange(combinedGrades);
+
+            }
+
+
+            this.setOfTestGradeDao.Insert(gradesList.ToList());
         }
 
         public void CreateTestFormItems(TestPackage.TestPackage testPackage, IList<TestFormDTO> testForms)
