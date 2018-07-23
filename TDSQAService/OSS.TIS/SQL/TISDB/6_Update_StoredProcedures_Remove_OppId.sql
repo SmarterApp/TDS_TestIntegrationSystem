@@ -1,4 +1,6 @@
-﻿-- Modifies TIS Stored Procedures to generate the OppId for each scored exam
+﻿
+
+-- Modifies TIS Stored Procedures to generate the OppId for each scored exam
 
 USE [OSS_TIS]
 GO
@@ -78,6 +80,7 @@ ALTER PROCEDURE [dbo].[InsertXmlRepository]
    ,@IsDemo bit
    ,@Contents XML
    ,@CallbackURL varchar(500)=null
+   ,@ScoreMode varchar(50)=null
 AS
 BEGIN
     
@@ -96,7 +99,8 @@ BEGIN
            ,[StatusDate]
            ,[isDemo]
            ,[Contents]
-           ,[CallbackURL])
+           ,[CallbackURL]
+		   ,[ScoreMode])
     SELECT 
         @Location, 
         @TestName, 
@@ -105,7 +109,10 @@ BEGIN
         @StatusDate,
         @IsDemo,
         CAST(replace(CAST(@Contents as varchar(MAX)), 'oppId="0"', concat('oppId="', @nextOppId, '"')) as XML),
-        @CallbackURL
+        @CallbackURL,
+		@ScoreMode
 
      SELECT @@identity
 END
+
+ALTER TABLE [dbo].[XMLRepository] ADD ScoreMode VARCHAR(50) NULL default ('default');  
