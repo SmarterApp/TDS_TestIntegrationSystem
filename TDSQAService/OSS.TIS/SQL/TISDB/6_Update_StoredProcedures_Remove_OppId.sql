@@ -81,8 +81,12 @@ ALTER PROCEDURE [dbo].[InsertXmlRepository]
 AS
 BEGIN
     
-    DECLARE @nextOppId VARCHAR(50)
-    SELECT @nextOppId = CAST(MAX(OppId)+1 as varchar(50)) FROM XMLRepository WHERE OppId < 5000000
+  DECLARE @nextOppId VARCHAR(50)
+
+    IF @OppId = 0 
+        SELECT @nextOppId = CAST(MAX(CAST(OppId as int))+1 as varchar(50)) FROM XMLRepository WHERE OppId < 5000000
+    ELSE
+        SET @nextOppId = @OppId
 
     INSERT INTO XMLRepository
            ([Location]

@@ -2,6 +2,7 @@
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.osstis.daos;
 using TDSQASystemAPI.DAL.osstis.dtos;
+using TDSQASystemAPI.TestPackage;
 
 namespace TDSQASystemAPI.BL.testpackage.osstis
 {
@@ -20,10 +21,10 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
             this.testPackageLookupDao = testPackageLookupDao;
         }
 
-        public void CreateTestNameLookup(TestPackage.TestPackage testPackage)
+        private void CreateTestNameLookup(string testPackageKey)
         {
             // If a test name lookup record for this test package already exists, exit
-            var existingTestNameLookup = testPackageLookupDao.Find(testPackage.GetTestPackageKey());
+            var existingTestNameLookup = testPackageLookupDao.Find(testPackageKey);
             if (existingTestNameLookup != null && existingTestNameLookup.Any())
             {
                 return;
@@ -32,8 +33,18 @@ namespace TDSQASystemAPI.BL.testpackage.osstis
             testPackageLookupDao.Insert(new TestNameLookupDTO
             {
                 InstanceName = INSTANCE_NAME,
-                TestName = testPackage.GetTestPackageKey()
+                TestName = testPackageKey
             });
+        }
+
+        public void CreateTestNameLookup(TestPackage.TestPackage testPackage)
+        {
+            CreateTestNameLookup(testPackage.GetTestPackageKey());
+
+            foreach (Test t in testPackage.Test)
+            {
+                CreateTestNameLookup(t.Key);
+            }                       
         }
     }
 }

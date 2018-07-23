@@ -106,6 +106,10 @@ namespace TDSQASystemAPI.BL.testpackage
 
             itembankAdministrationDataService.CreateAffinityGroups(testPackage);
 
+            if (testPackage.IsCombined())
+            {
+                updateConfigsDB.UpdateConfigs(testPackage.GetTestPackageKey());
+            }
             testPackage.Test.ForEach(test =>
             {
                 updateConfigsDB.UpdateConfigs(test.Key);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using TDSQASystemAPI.BL.testpackage.scoring;
 using TDSQASystemAPI.DAL;
 using TDSQASystemAPI.DAL.scoring.daos;
 using TDSQASystemAPI.DAL.scoring.dtos;
@@ -67,6 +68,17 @@ namespace TISUnitTests.daos.scoring
             new TestScoreFeatureDAO().Insert(new List<TestScoreFeatureDTO> { seedDataTestScoreFeature });
             new ComputationRuleParameterDAO().Insert(new List<ComputationRuleParameterDTO> { seedDataComputationRuleParameter });
         }
+
+        [TestMethod]
+        public void ShouldScrubAComputationRuleParameterValuIndex()
+        {
+            var scrubbed1 = ScoringConfigurationDataService.ScrubComputationRuleParameterValueIndex("SBAC-ICA-FIXED-G3M-COMBINED-MATH-3-DEV");
+            var scrubbed2 = ScoringConfigurationDataService.ScrubComputationRuleParameterValueIndex("SBAC-ICA-FIXED-G3M-Perf-OrderForm-COMBINED-MATH-3-DEV");
+
+            Assert.AreEqual(scrubbed1, "SBAC-ICA-FIXED-G3M-MATH-3-DEV-COMBINED");
+            Assert.AreEqual(scrubbed2, "SBAC-ICA-FIXED-G3M-Perf-OrderForm-MATH-3-DEV-COMBINED");
+        }
+
 
         [TestMethod]
         public void ShouldSaveAComputationRuleParameterValueDescRecord()

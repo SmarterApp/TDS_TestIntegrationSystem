@@ -18,6 +18,25 @@
         public const string TEST_PACKAGE_XSD_PROJECT_DESCRIPTION = "SBAC Test Package XSD Project";
 
         /// <summary>
+        /// The description of the project for <code>Assessment</code>s loaded into TIS.
+        /// </summary>
+        /// <remarks>
+        /// This project description is defined in
+        /// TDS_TestIntegrationSystem\TDSQAService\OSS.TIS\SQL\TISDB\8_oss_tis_add_new_project_and_metadata.sql
+        /// </remarks>
+        public const string TEST_PACKAGE_XSD_PROJECT_COMBINED_DESCRIPTION = "SBAC Test Package XSD Project Combined";
+
+        /// <summary>
+        /// The description of the project for <code>Assessment</code>s loaded into TIS.
+        /// </summary>
+        /// <remarks>
+        /// This project description is defined in
+        /// TDS_TestIntegrationSystem\TDSQAService\OSS.TIS\SQL\TISDB\9_oss_tis_add_new_project_and_metadata.sql
+        /// </remarks>
+        public const string TEST_PACKAGE_XSD_PROJECT_COMBINED_PENDING_DESCRIPTION = "SBAC Test Package XSD Project Combined Pending";
+    
+
+        /// <summary>
         /// Represents the project id of the "root" QC_ProjectMetadata record for the Assessment/status 
         /// combination.
         /// </summary>
