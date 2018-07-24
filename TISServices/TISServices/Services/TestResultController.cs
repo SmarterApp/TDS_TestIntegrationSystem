@@ -22,7 +22,7 @@ using TISServices.Authorization;
 
 namespace TISServices.Services
 {    
-    //[AuthorizeOpenAM]
+    [AuthorizeOpenAM]
     public class TestResultController : ApiController
     {
         public const string SCOREMODE_DEFAULT = "default";
