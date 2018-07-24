@@ -53,18 +53,10 @@ namespace TDSQASystemAPI.BL
 
         public long InsertXml(Location location, XmlDocument contents, ITestResultSerializerFactory serializerFactory)
         {
-            return InsertXml(location, contents, null, serializerFactory);
+            return InsertXml(location, contents, null, null, serializerFactory);
         }
 
-        //public long InsertXml(Location location, XmlDocument contents, string callbackURL)
-        //{
-        //    ITestResultSerializerFactory f = AIR.Common.ServiceLocator.Resolve<ITestResultSerializerFactory>();
-        //    if(f == null)
-        //        throw new ApplicationException("Cannot insert XML.  Must register a ITestResultSerializerFactory with the ServiceLocator.");
-        //    return InsertXml(location, contents, callbackURL, f);
-        //}
-
-        public long InsertXml(Location location, XmlDocument contents, string callbackURL, ITestResultSerializerFactory serializerFactory)
+        public long InsertXml(Location location, XmlDocument contents, string callbackURL, string scoremode, ITestResultSerializerFactory serializerFactory)
         {
             string testName = null;
             long testeeKey, oppId;
@@ -75,7 +67,7 @@ namespace TDSQASystemAPI.BL
             XMLAdapter adapter = serializerFactory.CreateDeserializer(contents);
             adapter.GetKeyValues(out testName, out oppId, out testeeKey, out statusDate, out isDemo);
 
-            return InsertXml(location, testName, oppId.ToString(), testeeKey, statusDate, isDemo, contents, callbackURL);
+            return InsertXml(location, testName, oppId.ToString(), testeeKey, statusDate, isDemo, contents, callbackURL, scoremode);
         }
 
         public long InsertXml(Location location, string testName, string oppId, long testeeKey, DateTime statusDate, bool isDemo, string contents)
@@ -87,12 +79,14 @@ namespace TDSQASystemAPI.BL
 
         public long InsertXml(Location location, string testName, string oppId, long testeeKey, DateTime statusDate, bool isDemo, XmlDocument contents)
         {
-            return InsertXml(location, testName, oppId, testeeKey, statusDate, isDemo, contents, null);
+            return InsertXml(location, testName, oppId, testeeKey, statusDate, isDemo, contents, null, null);
         }
-        public long InsertXml(Location location, string testName, string oppId, long testeeKey, DateTime statusDate, bool isDemo, XmlDocument contents, string callbackURL)
+
+        public long InsertXml(Location location, string testName, string oppId, long testeeKey, DateTime statusDate, bool isDemo, XmlDocument contents, string callbackURL, string scoremode)
         {
-            return xmlRepositoryDAL.InsertXml(location.ToString(), testName, oppId, testeeKey, statusDate, isDemo, contents, callbackURL);
+            return xmlRepositoryDAL.InsertXml(location.ToString(), testName, oppId, testeeKey, statusDate, isDemo, contents, callbackURL, scoremode);
         }
+
         public long InsertAndArchiveXML(long fileId, Location newFileLocation, XmlDocument contentsXml)
         {
             return xmlRepositoryDAL.InsertAndArchiveXML(fileId, Location.archive.ToString(), newFileLocation.ToString(), contentsXml);
