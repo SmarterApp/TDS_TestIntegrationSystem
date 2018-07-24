@@ -169,7 +169,8 @@ namespace TDSQASystemAPI.DAL
                         else repDataItem.SenderGUID = Guid.Parse(guid.ToString());
                         //get callbackURL, this is for OSS and will be null for Non-OSS tests
                         repDataItem.CallbackURL = rdr["CallbackURL"] == null? string.Empty: rdr["CallbackURL"].ToString();
-                        
+                        repDataItem.ScoreMode = rdr["ScoreMode"] == null ? "default" : rdr["ScoreMode"].ToString();
+
                         XMLRepositoryQ.Enqueue(repDataItem);
                     }
                 }

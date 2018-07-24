@@ -23,15 +23,17 @@ namespace TDSQASystemAPI.Data
         public long TesteeKey;
         public Guid? SenderGUID;
         public string CallbackURL;
+        public string ScoreMode;
 
 
-        public XmlRepositoryItem(long FileID, string OppID, long testeeKey, Guid? senderGUID, string callbackURL) 
+        public XmlRepositoryItem(long FileID, string OppID, long testeeKey, Guid? senderGUID, string callbackURL, string scoreMode) 
         {
             this.FileID = FileID;
             this.OppID = OppID;
             this.TesteeKey = testeeKey;
             this.SenderGUID = senderGUID;
             this.CallbackURL = callbackURL;
+            this.ScoreMode = scoreMode;
         }
     }
 }
