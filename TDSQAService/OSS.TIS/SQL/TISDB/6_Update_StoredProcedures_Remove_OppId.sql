@@ -1,4 +1,7 @@
 ﻿
+-- Add column for supporing rescoring of TRTs
+
+ALTER TABLE [dbo].[XMLRepository] ADD ScoreMode VARCHAR(50) NULL default ('default');  
 
 -- Modifies TIS Stored Procedures to generate the OppId for each scored exam
 
@@ -115,4 +118,3 @@ BEGIN
      SELECT @@identity
 END
 
-ALTER TABLE [dbo].[XMLRepository] ADD ScoreMode VARCHAR(50) NULL default ('default');  
