@@ -23,6 +23,7 @@ using AIR.Common;
 using OSS.TIS.DAL;
 using OSS.TIS.ART;
 using TDSQASystemAPI.Routing.Authorization;
+using TDSQASystemAPI.Routing;
 
 namespace OSS.TIS
 {
@@ -114,6 +115,17 @@ namespace OSS.TIS
         {
             isFatal = false;
             sendToModifiers = new TDSQASystemAPI.Routing.SendToModifiers();
+
+            if (xmlRepoItem.ScoreMode == "validate")
+            {
+                sendToModifiers[SendTo.Handscoring] = false;
+                sendToModifiers["HandscoringTSS"] = false;
+                sendToModifiers["HandscoringTDSUnscored"] = false;
+                sendToModifiers["DW1"] = false;
+                sendToModifiers["DW2"] = false;
+                sendToModifiers[SendTo.RB] = false;
+            }
+            
             return new List<TDSQASystemAPI.TestResults.ValidationRecord>();
         }
 
