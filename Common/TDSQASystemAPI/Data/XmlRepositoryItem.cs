@@ -18,6 +18,9 @@ namespace TDSQASystemAPI.Data
     //TODO: handle archive strategy here, possibly even with insert/archive capability and maintenance of arvhive fileID?
     public struct XmlRepositoryItem
     {
+        public const string SCOREMODE_DEFAULT = "default";
+        public const string SCOREMODE_VALIDATE = "validate";
+
         public long FileID;
         public string OppID;
         public long TesteeKey;

@@ -439,8 +439,19 @@ namespace TDSQASystemAPI
                             IAcknowledgementTarget ackTarget = ackTargetFactory.SelectTarget(xmlRepoItem);
                             try
                             {
+                                var ackMessage = new Message(tr.Opportunity.Key, accepted, message);
+                                if (!String.IsNullOrEmpty(xmlRepoItem.ScoreMode) && xmlRepoItem.ScoreMode.Equals(TDSQASystemAPI.Data.XmlRepositoryItem.SCOREMODE_VALIDATE))
+                                {
+                                    using (var stringWriter = new StringWriter())
+                                    using (var xmlTextWriter = XmlWriter.Create(stringWriter))
+                                    {
+                                        xml.WriteTo(xmlTextWriter);
+                                        xmlTextWriter.Flush();
+                                        ackMessage.trt = stringWriter.GetStringBuilder().ToString();
+                                    }
+                                }
                                 if (ackTarget == null
-                                    || !ackTarget.Send(new Message(tr.Opportunity.Key, accepted, message), xmlRepoItem))
+                                    || !ackTarget.Send(ackMessage, xmlRepoItem))
                                     Logger.Log(true, String.Format("Acknowledgement not sent for fileID: {0}", xmlRepoItem.FileID), EventLogEntryType.Information, false, true);
                             }
                             catch (Exception ex)

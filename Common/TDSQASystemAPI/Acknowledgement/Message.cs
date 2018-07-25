@@ -29,11 +29,15 @@ namespace TDSQASystemAPI.Acknowledgement
         [DataMember(EmitDefaultValue = false, Order = 3)]
         public string error { get; set; }
 
-        public Message(Guid oppKey, bool success, string error)
+        [DataMember(Order = 4)]
+        public string trt { get; set; }
+
+        public Message(Guid oppKey, bool success, string error, string trt = null)
         {
             this.oppKey = oppKey;
             this.success = success;
             this.error = error;
+            this.trt = trt;
         }
     }
 
