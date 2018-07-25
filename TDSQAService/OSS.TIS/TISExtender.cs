@@ -9,9 +9,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
 using System.Xml;
 using TDSQASystemAPI;
 using TDSQASystemAPI.Config;
@@ -22,13 +19,17 @@ using AIR.Configuration;
 using AIR.Common;
 using OSS.TIS.DAL;
 using OSS.TIS.ART;
-using TDSQASystemAPI.Routing.Authorization;
 using TDSQASystemAPI.Routing;
 
 namespace OSS.TIS
 {
     internal class TISExtender : ITISExtender
     {
+        public const string DW1 = "DW1";
+        public const string DW2 = "DW2";
+        public const string HANDSCORING_TDS_UNSCORED = "HandscoringTDSUnscored";
+        public const string HANDSCORING_TSS = "HandscoringTSS";
+
         #region ITISExtender Members
 
         public ITISExtenderState CreateStateContainer()
@@ -118,14 +119,14 @@ namespace OSS.TIS
 
             if (xmlRepoItem.ScoreMode == "validate")
             {
+                sendToModifiers[DW1] = false;
+                sendToModifiers[DW2] = false;
+                sendToModifiers[HANDSCORING_TDS_UNSCORED] = false;
+                sendToModifiers[HANDSCORING_TSS] = false;
                 sendToModifiers[SendTo.Handscoring] = false;
-                sendToModifiers["HandscoringTSS"] = false;
-                sendToModifiers["HandscoringTDSUnscored"] = false;
-                sendToModifiers["DW1"] = false;
-                sendToModifiers["DW2"] = false;
                 sendToModifiers[SendTo.RB] = false;
             }
-            
+
             return new List<TDSQASystemAPI.TestResults.ValidationRecord>();
         }
 
