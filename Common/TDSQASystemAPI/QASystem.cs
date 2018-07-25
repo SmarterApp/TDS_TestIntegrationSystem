@@ -445,7 +445,7 @@ namespace TDSQASystemAPI
                                     using (var stringWriter = new StringWriter())
                                     using (var xmlTextWriter = XmlWriter.Create(stringWriter))
                                     {
-                                        xml.WriteTo(xmlTextWriter);
+                                        tr.ToXml(serializerFactory).WriteTo(xmlTextWriter);                                        
                                         xmlTextWriter.Flush();
                                         ackMessage.trt = stringWriter.GetStringBuilder().ToString();
                                     }
