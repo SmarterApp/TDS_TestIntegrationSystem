@@ -53,6 +53,7 @@ namespace TISServices.Services
         /// 500: an unhandled exception occurred while attempting to insert the file into the database
         /// </returns>
         [HttpPost]
+        public HttpResponseMessage Submit(string statusCallback, string scoremode = SCOREMODE_DEFAULT)
         {
             Uri callBackUrl = null;
             Statistics.AddToReceivedRequestCount();
