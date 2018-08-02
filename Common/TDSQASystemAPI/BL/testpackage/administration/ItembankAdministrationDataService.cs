@@ -525,6 +525,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                       MaxFieldTestItemCount = g.Sum(x => x.maxFieldTestItems)
                                   }).First();
 
+                var segment = test.Segments.First();
+                var segmentBlueprint = segment.SegmentBlueprint.First(b => b.idRef.Equals(segment.id));
+                var itemSelectionProperties = segmentBlueprint.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim());
                 var virtualTestDto = new SetOfAdminSubjectDTO
                 {
                     SegmentKey = test.Key,
@@ -535,8 +538,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     StartInfo = ItemSelectionDefaults.START_INFO,
                     MinItems = itemCounts.MinItemCount,
                     MaxItems = itemCounts.MaxItemCount,
-                    Slope = ItemSelectionDefaults.SLOPE,
-                    Intercept = ItemSelectionDefaults.INTERCEPT,
+                    Slope = double.Parse(itemSelectionProperties.GetOrDefault("slope", ItemSelectionDefaults.SLOPE.ToString())),
+                    Intercept = double.Parse(itemSelectionProperties.GetOrDefault("intercept", ItemSelectionDefaults.INTERCEPT.ToString())),
                     FieldTestStartPosition = null,
                     FieldTestEndPosition = null,
                     FieldTestMinItems = itemCounts.MinFieldTestItemCount,
@@ -621,6 +624,10 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                       MaxFieldTestItemCount = g.Sum(x => x.maxFieldTestItems)
                                   }).First();
 
+                var firstSegment = testPackage.Test.First().Segments.First();
+                var firstSegmentBlueprint = firstSegment.SegmentBlueprint.First(b => b.idRef.Equals(firstSegment.id));
+                var combinedItemSelectionProperties = firstSegmentBlueprint.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim());
+
                 var virtualTestDto = new SetOfAdminSubjectDTO
                 {
                     SegmentKey = combinedKey,
@@ -631,8 +638,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     StartInfo = ItemSelectionDefaults.START_INFO,
                     MinItems = itemCounts.MinItemCount,
                     MaxItems = itemCounts.MaxItemCount,
-                    Slope = ItemSelectionDefaults.SLOPE,
-                    Intercept = ItemSelectionDefaults.INTERCEPT,
+                    Slope = double.Parse(combinedItemSelectionProperties.GetOrDefault("slope", ItemSelectionDefaults.SLOPE.ToString())),
+                    Intercept = double.Parse(combinedItemSelectionProperties.GetOrDefault("intercept", ItemSelectionDefaults.INTERCEPT.ToString())),
                     FieldTestStartPosition = null,
                     FieldTestEndPosition = null,
                     FieldTestMinItems = itemCounts.MinFieldTestItemCount,
