@@ -58,9 +58,10 @@ namespace TDSQASystemAPI.DAL
 
         public long InsertXml(string location, string testName, string oppId, long testeeKey, DateTime statusDate, bool isDemo, XmlDocument contents)
         {
-            return InsertXml(location, testName, oppId, testeeKey, statusDate, isDemo, contents, null);
+            return InsertXml(location, testName, oppId, testeeKey, statusDate, isDemo, contents, null, null);
         }
-        public long InsertXml(string location, string testName, string oppId, long testeeKey, DateTime statusDate, bool isDemo, XmlDocument contents, string callbackURL)
+
+        public long InsertXml(string location, string testName, string oppId, long testeeKey, DateTime statusDate, bool isDemo, XmlDocument contents, string callbackURL, string scoremode)
         {
             long fileId;
             using (DbCommand cmd = _db.GetStoredProcCommand("InsertXmlRepository"))
@@ -80,6 +81,8 @@ namespace TDSQASystemAPI.DAL
                 //Zach 12-5-2014: added for open source TDS->TIS
                 if (!string.IsNullOrEmpty(callbackURL))
                     _db.AddInParameter(cmd, "@CallbackURL", DbType.String, callbackURL);
+                if (!string.IsNullOrEmpty(scoremode))
+                    _db.AddInParameter(cmd, "@ScoreMode", DbType.String, scoremode);
                 fileId = Convert.ToInt64(_db.ExecuteScalar(cmd));
             }
             return fileId;
@@ -169,7 +172,8 @@ namespace TDSQASystemAPI.DAL
                         else repDataItem.SenderGUID = Guid.Parse(guid.ToString());
                         //get callbackURL, this is for OSS and will be null for Non-OSS tests
                         repDataItem.CallbackURL = rdr["CallbackURL"] == null? string.Empty: rdr["CallbackURL"].ToString();
-                        
+                        repDataItem.ScoreMode = rdr["ScoreMode"] == null ? "default" : rdr["ScoreMode"].ToString();
+
                         XMLRepositoryQ.Enqueue(repDataItem);
                     }
                 }

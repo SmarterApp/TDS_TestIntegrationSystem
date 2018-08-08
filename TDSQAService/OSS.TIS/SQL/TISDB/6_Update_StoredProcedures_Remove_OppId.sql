@@ -1,4 +1,9 @@
-﻿-- Modifies TIS Stored Procedures to generate the OppId for each scored exam
+﻿
+-- Add column for supporing rescoring of TRTs
+
+ALTER TABLE [dbo].[XMLRepository] ADD ScoreMode VARCHAR(50) NOT NULL default ('default');  
+
+-- Modifies TIS Stored Procedures to generate the OppId for each scored exam
 
 USE [OSS_TIS]
 GO
@@ -78,6 +83,7 @@ ALTER PROCEDURE [dbo].[InsertXmlRepository]
    ,@IsDemo bit
    ,@Contents XML
    ,@CallbackURL varchar(500)=null
+   ,@ScoreMode varchar(50)=null
 AS
 BEGIN
     
@@ -96,7 +102,8 @@ BEGIN
            ,[StatusDate]
            ,[isDemo]
            ,[Contents]
-           ,[CallbackURL])
+           ,[CallbackURL]
+		   ,[ScoreMode])
     SELECT 
         @Location, 
         @TestName, 
@@ -105,7 +112,38 @@ BEGIN
         @StatusDate,
         @IsDemo,
         CAST(replace(CAST(@Contents as varchar(MAX)), 'oppId="0"', concat('oppId="', @nextOppId, '"')) as XML),
-        @CallbackURL
+        @CallbackURL,
+		@ScoreMode
 
      SELECT @@identity
 END
+
+/****** Object:  StoredProcedure [dbo].[GetXMLRepository]    Script Date: 7/24/2018 4:19:14 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[GetXMLRepository] 
+	@InstanceName AS VARCHAR(50)
+AS
+BEGIN
+	
+	SET NOCOUNT ON;
+       
+    SELECT FileID,OppID,_efk_Testee,SenderBrokerGuid,CallbackURL,ScoreMode
+    FROM dbo.XMLRepository X
+	with(readpast)
+    INNER JOIN dbo.TestNameLookUp T
+	with (nolock)
+	ON X.TestName = T.TestName
+    WHERE T.InstanceName = @InstanceName AND X.Location = 'source'
+    ORDER BY StatusDate, DateRecorded
+
+END
+GO
+
+
+
+

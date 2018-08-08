@@ -25,13 +25,16 @@ namespace TISServices.Services
     [AuthorizeOpenAM]
     public class TestResultController : ApiController
     {
+        public const string SCOREMODE_DEFAULT = "default";
+        public const string SCOREMODE_VALIDATE = "validate";
+
         /// <summary>
         /// Receive a TDSReport from TDS in OSS format.  A callback URL is also provided (url encoded)
         /// which will be saved with the file and used to send a acknowledgement when TIS has processed the file.
         /// 
         /// REQUEST FORMAT:
         /// 
-        /// URL: http://<hostname>?statusCallback={statusCallbackUriEncoded}
+        /// URL: http://<hostname>?statusCallback={statusCallbackUriEncoded}&scoremode=validate
         /// Content-Type: application/xml
         /// Method:  POST
         /// Body: example
@@ -50,20 +53,16 @@ namespace TISServices.Services
         /// 500: an unhandled exception occurred while attempting to insert the file into the database
         /// </returns>
         [HttpPost]
-        public HttpResponseMessage Submit(string statusCallback)
+        public HttpResponseMessage Submit(string statusCallback, string scoremode = SCOREMODE_DEFAULT)
         {
             Uri callBackUrl = null;
             Statistics.AddToReceivedRequestCount();
-
-            //don't need this; qs params are wired to method params
-            //Dictionary<string, string> qsParams = Request.GetQueryStringParams();
 
             if (String.IsNullOrEmpty(statusCallback))
             {
                 TISServicesLogger.Log("Empty statusCallback.");
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "This request is not properly formatted.");
             }
-
             try
             {
                 // make sure it's a valid URI
@@ -73,6 +72,15 @@ namespace TISServices.Services
             {
                 TISServicesLogger.Log(String.Format("statusCallback could not be converted to a Uri: {0}", statusCallback));
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Illegal statusCallback format.");
+            }
+
+            if (String.IsNullOrEmpty(scoremode))
+            {
+                scoremode = SCOREMODE_DEFAULT;
+            }
+            else
+            {
+                TISServicesLogger.Log(String.Format("received a scoremode {0} TRT submission, callback: {1}", scoremode, statusCallback));
             }
 
             // check to make sure it's a valid XML doc.  XmlRep.InsertXml would do this anyway if we passed a string,
@@ -100,7 +108,7 @@ namespace TISServices.Services
 
             try
             {
-                new XmlRepository().InsertXml(XmlRepository.Location.source, doc, callBackUrl.AbsoluteUri, new TestResultSerializerFactory());
+                new XmlRepository().InsertXml(XmlRepository.Location.source, doc, callBackUrl.AbsoluteUri, scoremode, new TestResultSerializerFactory());
                 Statistics.AddToInsertedRequestCount();
             }
             catch (Exception ex)

@@ -60,7 +60,7 @@ namespace TISService
             TDSQASystemAPI.QASystem qaSystem = new TDSQASystemAPI.QASystem("TDSQC", "TDSQC");
 
             // submit the file
-            TDSQASystemAPI.QASystem.QAResult result = qaSystem.ReceiveTestResult(doc, new TDSQASystemAPI.Data.XmlRepositoryItem(fileID, oppId.ToString(), testeeKey, null, null));
+            TDSQASystemAPI.QASystem.QAResult result = qaSystem.ReceiveTestResult(doc, new TDSQASystemAPI.Data.XmlRepositoryItem(fileID, oppId.ToString(), testeeKey, null, null, "default"));
         }
     }
 }
