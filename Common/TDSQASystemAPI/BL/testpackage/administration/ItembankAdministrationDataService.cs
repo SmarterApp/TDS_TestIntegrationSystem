@@ -195,15 +195,19 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                                     {
                                         ItemKey = item.Key,
                                         DimensionKey = dimensionDto.ItemScoreDimensionKey,
-                                        MeasurementModelKey = dimensionDto.MeasurementModel
+                                        MeasurementModelKey = dimensionDto.MeasurementModel,
+                                        Dimension = dimensionDto.Dimension
                                     };
 
 
             var itemMeasurementParameters = from item in allItems
                                             from dimension in item.ItemScoreDimensions
                                             from param in dimension.ItemScoreParameter
-                                            join dimensionDto in scoreDimensionMap
-                                                on item.Key equals dimensionDto.ItemKey
+                                            from dimensionDto in scoreDimensionMap
+                                            where item.Key == dimensionDto.ItemKey && 
+                                            (                                                
+                                                (dimension.dimension?.ToString() ?? "").Equals(dimensionDto.Dimension)
+                                            )
                                             select new ItemMeasurementParameterDTO
                                             {
                                                 ItemScoreDimensionKey = dimensionDto.DimensionKey,
