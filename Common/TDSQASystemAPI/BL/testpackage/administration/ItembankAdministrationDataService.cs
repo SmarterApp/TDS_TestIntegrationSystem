@@ -507,7 +507,9 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                 from segment in test.Segments
                 let segBp = segment.SegmentBlueprint.First(b => b.idRef.Equals(segment.id))
                 let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
-                select CreateSetOfAdminSubjects(segment.Key, segment.id, segment.position, segment.algorithmType, testPackage, segBp, itemSelectionProperties, null);
+                let virtualTest = test.IsSegmented() ? test.Key : null
+                let position = test.IsSegmented() ? segment.position : 0
+                select CreateSetOfAdminSubjects(segment.Key, segment.id, position, segment.algorithmType, testPackage, segBp, itemSelectionProperties, virtualTest);
             
             setOfAdminSubjectsList.AddRange(segmentAdminSubjectDtos);
 
@@ -573,7 +575,7 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     BlueprintMetricFunction = ItemSelectionDefaults.BLUEPRINT_METRIC_FUNCTION,
                     TestType = testPackage.type,
                     Contract = testPackage.publisher,
-                    VirtualTest = test.Key
+                    VirtualTest = null
                 };
 
                 setOfAdminSubjectsList.Add(virtualTestDto);
@@ -605,9 +607,8 @@ namespace TDSQASystemAPI.BL.testpackage.administration
                     let itemSelectionProperties = segBp.ItemSelection.ToDictionary(isp => isp.name.ToLower().Trim(), isp => isp.value.Trim())
                     let segmentId = CombinedId(segment.id)
                     let segmentKey = Key(testPackage, segmentId)
-                    select CreateSetOfAdminSubjects(segmentKey, segmentId, testPosition, segment.algorithmType, testPackage, segBp, itemSelectionProperties, combinedKey);
-
-                    testPosition += 1;
+                    select CreateSetOfAdminSubjects(segmentKey, segmentId, testPosition++, segment.algorithmType, testPackage, segBp, itemSelectionProperties, combinedKey);
+                   
                     
                     setOfAdminSubjectsList.AddRange(segmentAdminSubjectDtos);
                 }
